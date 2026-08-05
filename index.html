@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Busque Torres — empresas, serviços e vagas em um só lugar.">
+  <meta name="theme-color" content="#081b33">
+  <title>Busque Torres — Tudo o que você procura em um só lugar</title>
+  <style>
+    :root{
+      --navy:#081b33;--navy2:#102d4f;--gold:#e6b84b;--gold2:#f3d184;
+      --bg:#f5f7fb;--surface:#fff;--text:#172033;--muted:#667085;
+      --line:#e6eaf0;--green:#20bf6b;--shadow:0 16px 40px rgba(8,27,51,.10);
+      --radius:22px;--max:1180px
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+    button,input,a{font:inherit}button,a{-webkit-tap-highlight-color:transparent}a{color:inherit}
+    :focus-visible{outline:3px solid rgba(230,184,75,.5);outline-offset:3px}
+    .shell{width:min(var(--max),calc(100% - 32px));margin:auto}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#06162b 0%,#0b2544 58%,#153d68 100%);color:#fff;padding:22px 0 88px}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+    .hero:before{width:420px;height:420px;right:-120px;top:-190px;background:rgba(230,184,75,.13)}
+    .hero:after{width:300px;height:300px;left:-150px;bottom:-170px;background:rgba(71,157,255,.12)}
+    .nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:900;letter-spacing:-.02em}
+    .brand-mark{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,var(--gold2),var(--gold));color:var(--navy);box-shadow:0 8px 24px rgba(230,184,75,.2)}
+    .brand-mark svg{width:25px;height:25px}.brand-name{font-size:1.05rem}.brand-name b{color:var(--gold2)}
+    .nav-cta{padding:11px 18px;border:1px solid rgba(255,255,255,.20);border-radius:999px;color:#fff;text-decoration:none;font-weight:800;background:rgba(255,255,255,.08);backdrop-filter:blur(10px)}
+    .nav-cta:hover{background:rgba(255,255,255,.14)}
+    .hero-copy{position:relative;z-index:2;max-width:790px;margin:70px auto 0;text-align:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);color:#dbe7f5;font-size:.82rem;font-weight:800}
+    .eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    h1{margin:20px 0 14px;font-size:clamp(2.3rem,6vw,4.5rem);line-height:1.02;letter-spacing:-.055em}
+    .hero-copy p{max-width:680px;margin:auto;color:#c7d5e6;font-size:clamp(1rem,2vw,1.15rem);line-height:1.65}
+    .search-wrap{position:relative;z-index:4;width:min(850px,calc(100% - 28px));margin:-38px auto 26px}
+    .search{display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid rgba(8,27,51,.08);border-radius:22px;box-shadow:0 20px 50px rgba(8,27,51,.18)}
+    .search-icon{display:grid;place-items:center;width:42px;color:#8993a4}.search-icon svg{width:22px;height:22px}
+    .search input{flex:1;min-width:0;border:0;outline:0;padding:14px 4px;font-size:1rem;color:var(--text)}
+    .search button{border:0;border-radius:15px;padding:14px 24px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);font-weight:900;cursor:pointer}
+    .search button:hover{filter:brightness(1.03);transform:translateY(-1px)}
+    .categories{position:relative;z-index:5;display:flex;gap:12px;overflow-x:auto;margin:0 0 14px;padding:4px 2px 18px;scrollbar-width:thin}
+    .cat{display:flex;align-items:center;flex:0 0 auto;border:1px solid var(--line);border-radius:15px;padding:10px 15px;background:#fff;color:#475467;font-weight:800;cursor:pointer;transition:.2s}.cat:hover,.cat.active{border-color:var(--navy);background:var(--navy);color:#fff;transform:translateY(-1px)}
+    .banner{position:relative;overflow:hidden;clear:both;min-height:330px;margin:0 0 44px;border-radius:28px;background:linear-gradient(120deg,#09203b,#123f68);box-shadow:var(--shadow);color:#fff}
+    .banner-media{position:absolute;inset:0;background:radial-gradient(circle at 88% 18%,rgba(230,184,75,.30),transparent 22%),radial-gradient(circle at 77% 80%,rgba(74,157,255,.20),transparent 28%)}
+    .banner-media:after{content:"";position:absolute;right:7%;top:12%;width:240px;height:240px;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 38px rgba(255,255,255,.035),0 0 0 78px rgba(255,255,255,.025)}
+    .banner-content{position:relative;z-index:2;max-width:720px;padding:56px 72px}
+    .badge{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:var(--gold);color:var(--navy);font-size:.73rem;font-weight:950;text-transform:uppercase;letter-spacing:.04em}
+    .banner h2{margin:18px 0 11px;font-size:clamp(1.9rem,4vw,3.1rem);line-height:1.08;letter-spacing:-.035em}.banner p{max-width:600px;margin:0 0 25px;color:#d4e1ef;line-height:1.65}
+    .banner-link{display:inline-flex;align-items:center;gap:9px;padding:12px 19px;border-radius:13px;background:#fff;color:var(--navy);text-decoration:none;font-weight:900}.banner-link:hover{transform:translateY(-2px)}
+    .banner-nav{position:absolute;right:22px;bottom:20px;z-index:4;display:flex;gap:8px}.banner-nav button{display:grid;place-items:center;width:42px;height:42px;border:1px solid rgba(255,255,255,.18);border-radius:13px;background:rgba(255,255,255,.09);color:#fff;cursor:pointer}.banner-nav button:hover{background:rgba(255,255,255,.16)}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{margin:0;color:var(--navy);font-size:clamp(1.55rem,3vw,2.1rem);letter-spacing:-.035em}.section-head p{margin:5px 0 0;color:var(--muted)}.count{font-size:.88rem;color:var(--muted);white-space:nowrap}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+    .card{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 7px 22px rgba(8,27,51,.055);transition:transform .24s,box-shadow .24s;cursor:pointer}.card:hover{transform:translateY(-6px);box-shadow:0 18px 38px rgba(8,27,51,.12)}
+    .cover{position:relative;height:220px;overflow:hidden;background:linear-gradient(135deg,#dbe8f6,#edf3fa);cursor:pointer}.cover>img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}.cover-fallback{position:absolute;z-index:0;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--cover1,#d8e6f4),var(--cover2,#eef3f8));font-size:2.35rem;font-weight:950;letter-spacing:-.04em;color:rgba(8,27,51,.72)}.cover.has-image .cover-fallback{display:none}.cover:after{content:"";position:absolute;inset:auto 0 0;height:58%;background:linear-gradient(transparent,rgba(5,20,39,.42))}
+    .premium{position:absolute;z-index:2;top:14px;right:14px;padding:6px 9px;border-radius:9px;background:rgba(8,27,51,.82);backdrop-filter:blur(8px);color:var(--gold2);font-size:.68rem;font-weight:950;text-transform:uppercase}
+    .logo{position:absolute;z-index:3;left:18px;bottom:-25px;display:grid;place-items:center;width:60px;height:60px;overflow:hidden;border:4px solid #fff;border-radius:17px;background:var(--navy);color:#fff;font-size:1.22rem;font-weight:950;box-shadow:0 8px 20px rgba(8,27,51,.20)}.logo img{width:100%;height:100%;object-fit:cover;display:block}
+    .card-body{padding:39px 19px 18px}.card-top{display:flex;justify-content:space-between;gap:10px}.card h3{margin:0;color:var(--navy);font-size:1.2rem;letter-spacing:-.02em}.rating{flex:0 0 auto;color:#986c00;font-size:.83rem;font-weight:900}.rating span{color:#f4b740}.tag{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:8px;background:#f2f5f8;color:#596579;font-size:.7rem;font-weight:900;text-transform:uppercase}.desc{min-height:66px;margin:14px 0;color:var(--muted);font-size:.9rem;line-height:1.55}.meta{display:flex;align-items:center;gap:7px;margin-bottom:15px;color:#5f6b7d;font-size:.84rem}.meta svg{width:16px;height:16px}.actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;text-decoration:none;font-size:.87rem;font-weight:900}.btn-outline{border:1px solid var(--line);color:var(--navy)}.btn-whats{background:var(--green);color:#fff}.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .empty{display:none;padding:55px 20px;border:2px dashed #d4dae3;border-radius:22px;background:#fff;text-align:center}.empty.show{display:block}.empty h3{margin:0 0 8px;color:var(--navy)}.empty p{margin:0;color:var(--muted)}
+    .join{position:relative;overflow:hidden;margin:48px 0 18px;padding:38px;border-radius:24px;background:linear-gradient(135deg,#fff,#f9fbfd);border:1px solid var(--line);box-shadow:0 10px 30px rgba(8,27,51,.06)}.join:after{content:"";position:absolute;width:180px;height:180px;right:-50px;bottom:-80px;border-radius:50%;background:rgba(230,184,75,.14)}.join-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px}.join h2{margin:0 0 8px;color:var(--navy);font-size:1.7rem}.join p{max-width:650px;margin:0;color:var(--muted);line-height:1.6}.join a{flex:0 0 auto;padding:13px 20px;border-radius:13px;background:var(--navy);color:var(--gold2);text-decoration:none;font-weight:900}
+    footer{margin-top:45px;padding:30px 20px;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:.84rem}footer b{color:#a57816}.site-footer{display:grid;gap:16px}.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 18px}.site-footer a,.site-footer button{border:0;background:none;padding:0;color:#52647a;text-decoration:none;cursor:pointer}.site-footer a:hover,.site-footer button:hover{text-decoration:underline}.site-footer small{display:block}
+    @media(max-width:920px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.banner-content{padding:50px}.join-inner{align-items:flex-start;flex-direction:column}}
+    @media(max-width:640px){.shell{width:min(100% - 20px,var(--max))}.nav{align-items:flex-start}.nav-actions{flex-wrap:wrap;justify-content:flex-end}.hero-copy{padding-inline:4px}.hero{padding-bottom:74px}.hero-copy{margin-top:52px}.brand-name{font-size:.95rem}.nav-cta{padding:10px 13px;font-size:.83rem}.search{padding:7px;border-radius:17px}.search-icon{display:none}.search input{padding:13px 9px;font-size:.92rem}.search button{padding:13px 15px;border-radius:12px}.banner{min-height:370px;border-radius:22px}.banner-content{padding:40px 27px 80px}.banner-media:after{right:-90px;top:70px}.grid{grid-template-columns:1fr}.section-head{align-items:flex-start;flex-direction:column;gap:7px}.cover{height:185px}.join{padding:28px 22px}.join a{width:100%;text-align:center}.actions{grid-template-columns:1fr 1.25fr}.categories{margin-bottom:12px;padding-bottom:14px}.banner{margin-top:0}}
+
+    .search .search-close{display:none;flex:0 0 auto;width:auto;height:46px;padding:0 16px;border:1px solid var(--line);border-radius:13px;background:#eef2f7;color:var(--navy);font-size:.85rem;font-weight:900;cursor:pointer;box-shadow:none}
+    .search .search-close:hover{background:#e4e9f0;filter:none;transform:none}
+    body.search-mode .search .search-close{display:inline-flex;align-items:center;justify-content:center}
+
+    @media(max-width:640px){
+      body.search-mode .search{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px}
+      body.search-mode .search input{min-width:0}
+      body.search-mode .search .search-close{height:44px;padding:0 11px;font-size:.78rem}
+    }
+
+    .search-mode-label{display:none;margin:0 0 18px;color:var(--muted);font-size:.95rem}
+    body.search-mode{overflow-x:hidden;background:#fff}
+
+    .banner-company-image{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:1;
+      z-index:0;
+      transition:opacity .35s ease;
+    }
+    .banner-company-image.trocando{opacity:0}
+    .banner:after{display:none}
+    .banner-content,.banner-nav{z-index:3}
+    .banner-content{
+      text-shadow:0 2px 10px rgba(0,0,0,.75);
+    }
+    .banner-content h2,
+    .banner-content p{
+      max-width:680px;
+    }
+    .banner-content .badge{
+      text-shadow:none;
+    }
+    .section-block{margin-top:42px}
+    .section-block:first-of-type{margin-top:0}
+    .section-note{margin:6px 0 0;color:var(--muted);line-height:1.5}
+    .master-empty{
+      display:none;
+      padding:26px;
+      border-radius:18px;
+      background:#fff8e6;
+      color:#7c5c0a;
+      text-align:center;
+      font-weight:800;
+    }
+    @media(max-width:640px){
+      .banner-content{
+        text-shadow:0 2px 12px rgba(0,0,0,.9);
+      }
+    }
+
+
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .jobs-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:var(--gold);color:var(--navy);font-weight:950;cursor:pointer;box-shadow:0 8px 24px rgba(230,184,75,.18)}
+    .jobs-btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+    .jobs-count{display:grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:var(--navy);color:#fff;font-size:.72rem}
+    .jobs-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(4,15,29,.72);backdrop-filter:blur(8px);padding:22px;overflow:auto}
+    .jobs-overlay.open{display:block}
+    .jobs-panel{width:min(980px,100%);margin:20px auto;overflow:hidden;border-radius:26px;background:#f7f9fc;box-shadow:0 30px 90px rgba(0,0,0,.35)}
+    .jobs-header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:25px 27px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff}
+    .jobs-header h2{margin:0;font-size:1.7rem}.jobs-header p{margin:5px 0 0;color:#cbd8e7}
+    .jobs-header-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+    .announce-job-btn{border:0;border-radius:12px;padding:11px 15px;background:var(--gold);color:var(--navy);font-weight:950;cursor:pointer}
+    .announce-job-btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+    .jobs-close,.job-detail-close{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;font-size:1.35rem;cursor:pointer}
+    .jobs-empty{margin:0 22px 22px}.jobs-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:22px}
+    .job-item{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;border:1px solid var(--line);border-radius:17px;padding:18px;background:#fff;text-align:left;cursor:pointer;transition:.2s;box-shadow:0 5px 16px rgba(8,27,51,.045)}
+    .job-item:hover{transform:translateY(-2px);border-color:#c9d2df;box-shadow:0 12px 24px rgba(8,27,51,.09)}
+    .job-item h3{margin:0 0 6px;color:var(--navy);font-size:1.05rem}.job-item p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.45}
+    .job-item-tag{flex:0 0 auto;padding:5px 8px;border-radius:8px;background:#edf7f1;color:#16824d;font-size:.68rem;font-weight:900;text-transform:uppercase}
+    .job-detail-layer{position:fixed;inset:0;z-index:1010;display:none;align-items:center;justify-content:center;background:rgba(4,15,29,.76);backdrop-filter:blur(10px);padding:20px}
+    .job-detail-layer.open{display:flex}
+    .job-detail-card{position:relative;width:min(620px,100%);max-height:90vh;overflow:auto;border-radius:25px;background:#fff;box-shadow:0 35px 100px rgba(0,0,0,.42)}
+    .job-detail-top{padding:28px 28px 24px;background:linear-gradient(135deg,#09203b,#123f68);color:#fff}
+    .job-detail-top h2{margin:11px 48px 7px 0;font-size:1.75rem}.job-detail-top p{margin:0;color:#d5e1ee}
+    .job-detail-close{position:absolute;right:18px;top:18px}
+    .job-detail-body{padding:25px 28px 29px}
+    .job-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
+    .job-info{padding:13px;border-radius:13px;background:#f4f7fa}.job-info small{display:block;margin-bottom:4px;color:var(--muted);font-weight:800}.job-info strong{color:var(--navy)}
+    .job-section{margin-top:20px}.job-section h3{margin:0 0 9px;color:var(--navy);font-size:1rem}.job-section p,.job-section ul{margin:0;color:#5f6b7d;line-height:1.65}.job-section ul{padding-left:20px}
+    .job-apply{display:flex;align-items:center;justify-content:center;margin-top:24px;padding:14px 18px;border-radius:13px;background:var(--green);color:#fff;text-decoration:none;font-weight:950}
+    body.modal-open{overflow:hidden}
+    @media(max-width:760px){.nav-actions{gap:6px;max-width:58%;justify-content:flex-end}.nav-cta{white-space:nowrap}.jobs-btn{padding:10px 12px;font-size:.8rem}.jobs-btn .jobs-label{display:none}.jobs-list{grid-template-columns:1fr;padding:14px}.jobs-panel{margin:0}.jobs-overlay{padding:10px}.job-info-grid{grid-template-columns:1fr}.job-detail-body,.job-detail-top{padding-left:20px;padding-right:20px}}
+
+
+    .job-form-layer{position:fixed;inset:0;z-index:1020;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,15,29,.80);backdrop-filter:blur(10px)}
+    .job-form-layer.open{display:flex}
+    .job-form-card{position:relative;width:min(720px,100%);max-height:92vh;overflow:auto;border-radius:25px;background:#fff;box-shadow:0 35px 100px rgba(0,0,0,.44)}
+    .job-form-head{padding:26px 28px;background:linear-gradient(135deg,#09203b,#123f68);color:#fff}
+    .job-form-head h2{margin:0 52px 7px 0;font-size:1.7rem}.job-form-head p{margin:0;color:#d5e1ee;line-height:1.5}
+    .job-form-close{position:absolute;right:18px;top:18px;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;font-size:1.35rem;cursor:pointer}
+    .job-form{padding:25px 28px 29px}
+    .job-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+    .job-field{display:flex;flex-direction:column;gap:7px}.job-field.full{grid-column:1/-1}
+    .job-field label,.job-duration-title{color:var(--navy);font-size:.86rem;font-weight:900}
+    .job-field input,.job-field select,.job-field textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fff;color:var(--text);outline:0}
+    .job-field textarea{min-height:105px;resize:vertical;line-height:1.5}
+    .job-field input:focus,.job-field select:focus,.job-field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(8,27,51,.09)}
+    .job-field small{color:var(--muted);line-height:1.4}
+    .job-duration{grid-column:1/-1;margin-top:2px}
+    .job-duration-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:9px}
+    .job-duration-option{position:relative}.job-duration-option input{position:absolute;opacity:0;pointer-events:none}
+    .job-duration-option label{display:block;border:2px solid var(--line);border-radius:11px;padding:12px;text-align:center;color:#475467;font-weight:900;cursor:pointer}
+    .job-duration-option input:checked+label{border-color:var(--navy);background:#f1f5f9;color:var(--navy)}
+    .job-form-terms{display:flex;align-items:flex-start;gap:10px;grid-column:1/-1;margin-top:3px;color:var(--muted);font-size:.84rem;line-height:1.45}
+    .job-form-terms input{width:18px;height:18px;margin-top:2px;accent-color:var(--navy)}
+    .job-submit{grid-column:1/-1;border:0;border-radius:12px;padding:14px 18px;background:var(--navy);color:var(--gold2);font-weight:950;cursor:pointer}
+    .job-submit:disabled{opacity:.65;cursor:not-allowed}
+    .job-form-message{display:none;margin:0 28px 25px;padding:14px 16px;border-radius:11px;line-height:1.5}
+    .job-form-message.show{display:block}.job-form-message.success{background:#eaf8f0;color:#137345;border:1px solid #b7e7ca}.job-form-message.error{background:#fff0f0;color:#a12626;border:1px solid #f0c1c1}
+    @media(max-width:760px){
+      .jobs-header{align-items:flex-start;padding:20px}.jobs-header-actions{flex-direction:column-reverse;align-items:flex-end}.announce-job-btn{padding:10px 12px;font-size:.78rem}
+      .job-form-layer{padding:8px;align-items:flex-end}.job-form-card{max-height:96vh;border-radius:22px 22px 0 0}.job-form-head,.job-form{padding-left:18px;padding-right:18px}.job-form-grid{grid-template-columns:1fr}.job-field.full,.job-duration,.job-form-terms,.job-submit{grid-column:1}.job-duration-options{grid-template-columns:1fr}.job-form-message{margin-left:18px;margin-right:18px}
+    }
+
+    body.search-mode .hero,body.search-mode #categories,body.search-mode #bannerSection,body.search-mode #joinSection,body.search-mode footer{display:none!important}
+    body.search-mode .search-wrap{position:sticky;top:0;z-index:50;width:100%;max-width:none;margin:0;padding:18px max(18px,calc((100% - 980px)/2));background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(8,27,51,.08);backdrop-filter:blur(12px)}
+    body.search-mode .search{max-width:980px;margin:0 auto;border-radius:18px;box-shadow:none;border:1px solid var(--line)}
+    body.search-mode .search-close{display:block}
+    body.search-mode main.shell{max-width:980px;padding-top:26px}
+    body.search-mode #companiesSection .section-head h2{font-size:1.55rem}
+    body.search-mode #companiesSection .section-head p{display:none}
+    body.search-mode .search-mode-label{display:block}
+    body.search-mode .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+    body.search-mode .card{animation:searchCardIn .22s ease both}
+    @keyframes searchCardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .search-hint{display:none;padding:54px 20px;text-align:center;color:var(--muted)}
+    .search-hint.show{display:block}
+    .search-hint strong{display:block;margin-bottom:8px;color:var(--navy);font-size:1.2rem}
+    @media(max-width:620px){.jobs-btn{min-height:42px}.search-close{flex:0 0 auto}.job-form-grid{grid-template-columns:1fr!important}.job-form-panel{max-height:94vh;overflow:auto}.job-form-actions,.job-form-footer{position:sticky;bottom:0;background:#fff}body.search-mode .search-wrap{padding:12px}.search-close{width:38px;height:38px}.search button{padding-inline:16px}}
+
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<header class="hero">
+  <div class="shell nav">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5h16M4 12h11M4 17.5h8" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></span><span class="brand-name">Busque <b>Torres</b></span></a>
+    <div class="nav-actions">
+      <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog">
+        <span class="jobs-label">TEMOS VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
+      </button>
+      <a class="nav-cta" href="cadastro.html">Cadastrar empresa</a>
+    </div>
+  </div>
+  <div class="hero-copy shell">
+    <div class="eyebrow"><span></span> Busque Torres</div>
+    <h1>Tudo o que você procura em um só lugar.</h1>
+    <p>Encontre empresas, profissionais, serviços e oportunidades em Torres, com contato rápido e direto.</p>
+  </div>
+</header>
+
+<div class="search-wrap">
+  <div class="search">
+    <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <input id="searchInput" type="search" placeholder="Busque por empresa, profissão ou serviço..." autocomplete="off">
+    <button id="searchButton" type="button">Buscar</button>
+    <button id="searchClose" class="search-close" type="button" aria-label="Fechar busca">Fechar</button>
+  </div>
+</div>
+
+<main class="shell">
+  <nav class="categories" id="categories" aria-label="Categorias">
+    <button class="cat active" data-category="todos">Todos</button>
+    <button class="cat" data-category="saude">Saúde</button>
+    <button class="cat" data-category="lojas">Lojas</button>
+    <button class="cat" data-category="servicos">Serviços</button>
+    <button class="cat" data-category="alimentacao">Alimentação</button>
+    <button class="cat" data-category="automotivo">Automotivo</button>
+    <button class="cat" data-category="esportes">Esportes</button>
+  </nav>
+
+  <section class="banner" id="bannerSection" aria-label="Anúncios patrocinados">
+    <img id="bannerImage" class="banner-company-image" alt="" hidden><div class="banner-media"></div>
+    <div class="banner-content">
+      <span class="badge">Patrocínio Master</span>
+      <h2 id="bannerTitle">Sua empresa pode ser o destaque da cidade.</h2>
+      <p id="bannerText">Ganhe visibilidade e fale diretamente com novos clientes da sua região.</p>
+      <a id="bannerLink" class="banner-link" href="https://wa.me/5551999999999" target="_blank" rel="noopener noreferrer">Conhecer empresa <span>→</span></a>
+    </div>
+    <div class="banner-nav">
+      <button id="bannerPrev" type="button" aria-label="Banner anterior">‹</button>
+      <button id="bannerNext" type="button" aria-label="Próximo banner">›</button>
+    </div>
+  </section>
+
+  
+  <section id="companiesSection">
+    <p class="search-mode-label" id="searchModeLabel">Resultados encontrados enquanto você digita.</p>
+
+    <div class="search-hint" id="searchHint">
+      <strong>O que você está procurando?</strong>
+      <span>Digite um produto, serviço ou nome de empresa. Ex.: ração, dentista, oficina.</span>
+    </div>
+
+    <div id="normalHomeContent">
+      <section class="section-block" id="featuredSection">
+        <div class="section-head">
+          <div>
+            <h2>Destaques fixos</h2>
+            <p class="section-note">As 3 empresas principais ficam fixas nesta área.</p>
+          </div>
+          <span class="count" id="featuredCount"></span>
+        </div>
+        <div class="grid" id="featuredCards"></div>
+      </section>
+    </div>
+
+    <div id="searchResultsContent" hidden>
+      <div class="section-head">
+        <div>
+          <h2>Resultados da busca</h2>
+          <p class="section-note">Resultados por nome, descrição, produtos, serviços e palavras-chave.</p>
+        </div>
+        <span class="count" id="resultCount"></span>
+      </div>
+      <div class="grid" id="cards"></div>
+    </div>
+
+    <div class="empty" id="empty">
+      <h3>Nenhuma empresa encontrada</h3>
+      <p>Tente pesquisar outro nome, serviço ou categoria.</p>
+    </div>
+  </section>
+
+  <section class="join" id="joinSection">
+    <div class="join-inner"><div><h2>Seu negócio também pode estar aqui.</h2><p>Crie seu anúncio e seja encontrado por pessoas que já estão procurando produtos e serviços na sua região.</p></div><a href="cadastro.html">Cadastrar meu negócio</a></div>
+  </section>
+</main>
+
+<div class="jobs-overlay" id="jobsOverlay" role="dialog" aria-modal="true" aria-labelledby="jobsTitle">
+  <div class="jobs-panel">
+    <div class="jobs-header">
+      <div><h2 id="jobsTitle">Temos Vagas</h2><p>Oportunidades reais publicadas pelas empresas da cidade.</p></div>
+      <div class="jobs-header-actions">
+        <button class="announce-job-btn" id="openJobForm" type="button">Anuncie sua vaga</button>
+        <button class="jobs-close" id="closeJobs" type="button" aria-label="Fechar vagas">×</button>
+      </div>
+    </div>
+    <div class="jobs-list" id="jobsList"></div><div class="empty jobs-empty" id="jobsEmpty"><h3>Nenhuma vaga disponível no momento</h3><p>Novas oportunidades aparecerão aqui após a aprovação.</p></div>
+  </div>
+</div>
+
+<div class="job-detail-layer" id="jobDetailLayer" role="dialog" aria-modal="true" aria-labelledby="jobDetailTitle">
+  <article class="job-detail-card">
+    <button class="job-detail-close" id="closeJobDetail" type="button" aria-label="Fechar detalhes">×</button>
+    <div class="job-detail-top"><span class="badge">Vaga aberta</span><h2 id="jobDetailTitle"></h2><p id="jobDetailCompany"></p></div>
+    <div class="job-detail-body">
+      <div class="job-info-grid">
+        <div class="job-info"><small>Salário</small><strong id="jobSalary"></strong></div>
+        <div class="job-info"><small>Local</small><strong id="jobLocation"></strong></div>
+        <div class="job-info"><small>Horário</small><strong id="jobSchedule"></strong></div>
+        <div class="job-info"><small>Contrato</small><strong id="jobContract"></strong></div>
+      </div>
+      <section class="job-section"><h3>Sobre a vaga</h3><p id="jobDescription"></p></section>
+      <section class="job-section"><h3>Requisitos</h3><ul id="jobRequirements"></ul></section>
+      <a class="job-apply" id="jobApply" target="_blank" rel="noopener noreferrer">Enviar currículo pelo WhatsApp</a>
+    </div>
+  </article>
+</div>
+
+
+<div class="job-form-layer" id="jobFormLayer" role="dialog" aria-modal="true" aria-labelledby="jobFormTitle">
+  <article class="job-form-card">
+    <button class="job-form-close" id="closeJobForm" type="button" aria-label="Fechar formulário">×</button>
+    <div class="job-form-head">
+      <h2 id="jobFormTitle">Anuncie sua vaga</h2>
+      <p>Preencha os dados abaixo. A vaga será enviada para análise antes de aparecer publicamente.</p>
+    </div>
+    <div class="job-form-message" id="jobFormMessage" role="status" aria-live="polite"></div>
+    <form class="job-form" id="jobForm" novalidate>
+      <div class="job-form-grid">
+        <div class="job-field"><label for="jobCompany">Empresa</label><input id="jobCompany" name="empresa" maxlength="90" required placeholder="Nome da empresa"></div>
+        <div class="job-field"><label for="jobRole">Cargo</label><input id="jobRole" name="cargo" maxlength="90" required placeholder="Ex.: Vendedor(a)"></div>
+        <div class="job-field"><label for="jobSalaryInput">Salário</label><input id="jobSalaryInput" name="salario" maxlength="60" placeholder="Ex.: R$ 2.000 ou A combinar"></div>
+        <div class="job-field"><label for="jobLocationInput">Local</label><input id="jobLocationInput" name="local" maxlength="100" required placeholder="Cidade, bairro ou endereço"></div>
+        <div class="job-field"><label for="jobScheduleInput">Horário</label><input id="jobScheduleInput" name="horario" maxlength="80" placeholder="Ex.: 08h às 18h"></div>
+        <div class="job-field"><label for="jobContractInput">Tipo de contratação</label><select id="jobContractInput" name="contrato" required><option value="">Selecione</option><option>CLT</option><option>Temporário</option><option>Estágio</option><option>Jovem Aprendiz</option><option>Freelancer</option><option>Autônomo</option><option>Outro</option></select></div>
+        <div class="job-field full"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
+        <div class="job-field full"><label for="jobRequirementsInput">Requisitos</label><textarea id="jobRequirementsInput" name="requisitos" maxlength="700" required placeholder="Informe um requisito por linha."></textarea></div>
+        <div class="job-field"><label for="jobWhatsappInput">WhatsApp para receber currículos</label><input id="jobWhatsappInput" name="whatsapp" type="tel" inputmode="numeric" maxlength="16" required placeholder="(51) 99999-9999"><small>Informe DDD e número.</small></div>
+        <div class="job-field"><label for="jobEmailInput">E-mail</label><input id="jobEmailInput" name="email" type="email" maxlength="120" placeholder="Opcional"></div>
+        <div class="job-duration">
+          <div class="job-duration-title">Tempo de anúncio</div>
+          <div class="job-duration-options">
+            <div class="job-duration-option"><input type="radio" id="duration1" name="duracao" value="1" required><label for="duration1">1 dia</label></div>
+            <div class="job-duration-option"><input type="radio" id="duration3" name="duracao" value="3"><label for="duration3">3 dias</label></div>
+            <div class="job-duration-option"><input type="radio" id="duration5" name="duracao" value="5"><label for="duration5">5 dias</label></div>
+          </div>
+        </div>
+        <label class="job-form-terms"><input id="jobTerms" type="checkbox" required><span>Declaro que as informações são verdadeiras e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span></label>
+        <button class="job-submit" id="jobSubmit" type="submit">Enviar para aprovação</button>
+      </div>
+    </form>
+  </article>
+</div>
+
+<footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
+
+<script src="supabase-config.js"></script>
+<script>
+"use strict";
+let JOBS=[];
+let registeredCompanies=[];
+let selected="todos",query="",bannerIndex=0,bannerTimer;
+const $=id=>document.getElementById(id);
+const DEFAULT_WHATS="https://wa.me/5551999999999?text="+encodeURIComponent("Olá, quero anunciar no Busque Torres.");
+const WHATS_MESSAGE="Olá, vim do Busque Torres e gostaria de mais informações.";
+const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"},saude:{name:"Saúde",c1:"#d9f2ef",c2:"#eefaf8"},beleza:{name:"Beleza",c1:"#f8dff0",c2:"#fff2f8"},pets:{name:"Pets",c1:"#e6f2dc",c2:"#f5faef"},automotivo:{name:"Automotivo",c1:"#dfe4ec",c2:"#f2f4f7"},construcao:{name:"Construção",c1:"#f1e4d2",c2:"#faf4ec"},casa:{name:"Casa e Lar",c1:"#e4e9f4",c2:"#f5f7fb"},comercio:{name:"Comércio",c1:"#f5e6d8",c2:"#fbf4ed"},tecnologia:{name:"Tecnologia",c1:"#dce8f5",c2:"#f0f5fa"},educacao:{name:"Educação",c1:"#ece1fa",c2:"#f8f3fd"},esportes:{name:"Esportes",c1:"#e3e0f6",c2:"#f3f1fb"},profissionais:{name:"Profissionais",c1:"#dfe9e5",c2:"#f2f7f5"},eventos:{name:"Eventos",c1:"#fbe5d5",c2:"#fff5ee"},turismo:{name:"Turismo",c1:"#dceff3",c2:"#eff9fb"},agro:{name:"Agro",c1:"#e4efd9",c2:"#f5faef"},transporte:{name:"Transporte",c1:"#e2e7ee",c2:"#f4f6f9"},industria:{name:"Indústria",c1:"#e6e2dd",c2:"#f5f3f0"},servicos:{name:"Serviços",c1:"#dce8f5",c2:"#f0f5fa"},publicos:{name:"Serviços Públicos",c1:"#e9e4dc",c2:"#f8f5f0"},religiao:{name:"Religião",c1:"#efe5f5",c2:"#faf5fc"},outros:{name:"Outros",c1:"#e5e7eb",c2:"#f6f7f9"}};
+
+function clean(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
+function onlyDigits(v){return String(v||"").replace(/\D/g,"")}
+function formatPhone(value){const n=onlyDigits(value).slice(0,11);if(n.length<=2)return n;if(n.length<=6)return `(${n.slice(0,2)}) ${n.slice(2)}`;if(n.length<=10)return `(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`;return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`}
+function phoneWithCountry(v){let n=onlyDigits(v);if(n.length===10||n.length===11)n="55"+n;return n}
+function whatsappUrl(phone,message=WHATS_MESSAGE){const n=phoneWithCountry(phone);return n?`https://wa.me/${n}?text=${encodeURIComponent(message)}`:DEFAULT_WHATS}
+function initials(name){return String(name||"Empresa").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()}
+function safeUrl(value,fallback=DEFAULT_WHATS){try{const u=new URL(value);return ["http:","https:"].includes(u.protocol)?u.href:fallback}catch{return fallback}}
+function safeMediaUrl(value){const v=String(value||"").trim();if(v.startsWith("data:image/"))return v;try{const u=new URL(v);return ["http:","https:"].includes(u.protocol)?u.href:""}catch{return ""}}
+function escapeHtml(v){const d=document.createElement("div");d.textContent=String(v||"");return d.innerHTML}
+function escapeJob(value){return escapeHtml(value)}
+function listItems(value){return String(value||"").split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)}
+
+function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",criadoEm:r.created_at,avaliacao:""}}
+function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:r.salario||"A combinar",local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||""}}
+
+async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
+async function loadJobs(){const rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc");JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);renderJobs()}
+function allCompanies(){return registeredCompanies}
+function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
+function abrirPerfil(company){window.location.href=profileUrl(company)}
+
+function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}"><div><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open")}
+function closeJobs(){$("jobsOverlay").classList.remove("open");document.body.classList.remove("modal-open")}
+function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;$("jobDescription").textContent=j.descricao;$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");$("jobApply").href=whatsappUrl(j.whatsapp,`Olá, vim do Busque Torres e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);$("jobDetailLayer").classList.add("open")}
+function closeJobDetail(){$("jobDetailLayer").classList.remove("open")}
+function openJobForm(){$("jobFormLayer").classList.add("open");document.body.classList.add("modal-open");$("jobCompany").focus()}
+function closeJobForm(){$("jobFormLayer").classList.remove("open");$("jobFormMessage").className="job-form-message";$("jobFormMessage").textContent="";if(!$("jobsOverlay").classList.contains("open"))document.body.classList.remove("modal-open")}
+function showJobFormMessage(type,text){const el=$("jobFormMessage");el.className=`job-form-message show ${type}`;el.textContent=text;el.scrollIntoView({behavior:"smooth",block:"nearest"})}
+
+$("jobWhatsappInput").addEventListener("input",e=>{e.target.value=formatPhone(e.target.value)});
+$("footerOpenJobs")?.addEventListener("click",()=>$("openJobForm").click());
+$("jobForm").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget,phone=onlyDigits(form.whatsapp.value),duration=form.querySelector('input[name="duracao"]:checked'),submit=$("jobSubmit");if(!form.checkValidity()){form.reportValidity();return}if(phone.length<10||phone.length>11){showJobFormMessage("error","Informe um WhatsApp válido com DDD.");$("jobWhatsappInput").focus();return}submit.disabled=true;submit.textContent="Enviando...";try{await BusqueAPI.rpc("enviar_vaga",{p_empresa_nome:form.empresa.value.trim(),p_cargo:form.cargo.value.trim(),p_local:form.local.value.trim(),p_contrato:form.contrato.value,p_descricao:form.descricao.value.trim(),p_requisitos:form.requisitos.value.trim(),p_whatsapp:phone,p_duracao_dias:Number(duration.value),p_salario:form.salario.value.trim()||null,p_horario:form.horario.value.trim()||null,p_email:form.email.value.trim()||null,p_empresa_id:null});form.reset();showJobFormMessage("success","Vaga enviada para aprovação. Ela aparecerá somente depois da análise da responsável.")}catch(error){console.error(error);showJobFormMessage("error","Não foi possível enviar a vaga. Verifique sua internet e tente novamente.")}finally{submit.disabled=false;submit.textContent="Enviar para aprovação"}});
+
+$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});$("jobsOverlay").addEventListener("click",e=>{if(e.target.id==="jobsOverlay")closeJobs()});$("jobDetailLayer").addEventListener("click",e=>{if(e.target.id==="jobDetailLayer")closeJobDetail()});$("jobFormLayer").addEventListener("click",e=>{if(e.target.id==="jobFormLayer")closeJobForm()});document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs()}});
+
+function card(company){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
+function searchableText(c){const info=categoryInfo[c.categoria];return clean([c.nome,c.descricao,c.cidade,c.bairro,c.categoria,c.subcategoria,info?info.name:"",c.produtos,c.servicos,c.endereco,c.email,c.site,c.horario].filter(Boolean).join(" "))}
+function ordenarDestaques(lista){return [...lista].sort((a,b)=>new Date(b.criadoEm||0)-new Date(a.criadoEm||0))}
+function obterDestaquesMaster(){return ordenarDestaques(allCompanies().filter(c=>c.master)).slice(0,8)}
+function obterDestaquesFixos(){return ordenarDestaques(allCompanies().filter(c=>c.premium)).slice(0,3)}
+function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map(card));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";atualizarBannersMaster(master)}
+function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(card));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
+function render(){const inSearch=document.body.classList.contains("search-mode");$("normalHomeContent").hidden=inSearch;$("searchResultsContent").hidden=!inSearch;$("searchHint").classList.toggle("show",inSearch&&!query);if(inSearch)renderSearch();else{$("empty").classList.remove("show");renderHome()}}
+let masterBanners=[];
+function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>({company,title:company.nome,text:company.descricao||"Conheça esta empresa Master.",link:profileUrl(company),image:safeMediaUrl(company.imagem)}));if(!masterBanners.length)masterBanners=[{company:null,title:"Sua empresa pode ser o destaque de Torres.",text:"O primeiro anúncio Master aparecerá aqui após aprovação.",link:"cadastro.html",image:""}];if(bannerIndex>=masterBanners.length)bannerIndex=0;showBanner();restartBanner()}
+function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage");imagem.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true}requestAnimationFrame(()=>imagem.classList.remove("trocando"))},180)}
+function moveBanner(step){if(masterBanners.length<=1)return;bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;showBanner();restartBanner()}
+function restartBanner(){clearInterval(bannerTimer);if(masterBanners.length>1)bannerTimer=setInterval(()=>moveBanner(1),4000)}
+
+$("categories").addEventListener("click",e=>{const b=e.target.closest(".cat");if(!b)return;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));b.classList.add("active");selected=b.dataset.category;if(selected!=="todos")document.body.classList.add("search-mode");render()});
+function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();window.scrollTo({top:0,behavior:"smooth"})}
+function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
+function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render()}
+$("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();openSearch();render()}});$("searchButton").addEventListener("click",()=>{openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
+
+async function iniciar(){try{await Promise.all([loadCompanies(),loadJobs()])}catch(error){console.error(error);$("empty").classList.add("show");$("empty").querySelector("h3").textContent="Não foi possível carregar os dados";$("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página."}render()}
+window.addEventListener("pageshow",iniciar);
+iniciar();
+
+</script>
+</body>
+</html>

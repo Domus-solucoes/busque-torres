@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Cadastre sua empresa ou serviço no Busque Torres."
+    >
+    <meta name="theme-color" content="#0a192f">
+
+    <title>Cadastre seu Negócio - Busque Torres</title>
+
+    <style>
+        :root {
+            --azul-escuro: #0a192f;
+            --azul: #172a45;
+            --dourado: #d4af37;
+            --dourado-claro: #e5c158;
+            --fundo: #f4f6f9;
+            --branco: #ffffff;
+            --texto: #1f2937;
+            --texto-suave: #64748b;
+            --borda: #cbd5e1;
+            --borda-clara: #e2e8f0;
+            --verde: #15803d;
+            --verde-claro: #dcfce7;
+            --vermelho: #b91c1c;
+            --vermelho-claro: #fee2e2;
+            --sombra: 0 8px 28px rgba(15, 23, 42, 0.10);
+            --raio: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top, rgba(212, 175, 55, 0.08), transparent 28%),
+                var(--fundo);
+            color: var(--texto);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea,
+        a {
+            font: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        a:focus-visible {
+            outline: 3px solid rgba(212, 175, 55, 0.45);
+            outline-offset: 3px;
+        }
+
+        .topo {
+            background: linear-gradient(135deg, var(--azul-escuro), var(--azul));
+            color: var(--branco);
+            padding: 26px 20px;
+        }
+
+        .topo-conteudo {
+            width: min(1000px, 100%);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+        }
+
+        .marca {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .marca-icone {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: var(--dourado);
+            color: var(--azul-escuro);
+            font-size: 1.25rem;
+            font-weight: 900;
+        }
+
+        .marca-texto {
+            color: var(--dourado);
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+
+        .voltar-topo {
+            color: #d7e0ea;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+
+        .voltar-topo:hover {
+            color: var(--branco);
+        }
+
+        main {
+            width: min(760px, calc(100% - 28px));
+            margin: 34px auto;
+        }
+
+        .form-container {
+            overflow: hidden;
+            border: 1px solid var(--borda-clara);
+            border-radius: var(--raio);
+            background: var(--branco);
+            box-shadow: var(--sombra);
+        }
+
+        .form-cabecalho {
+            padding: 34px 34px 24px;
+            border-top: 6px solid var(--dourado);
+            text-align: center;
+        }
+
+        .form-cabecalho h1 {
+            margin: 0;
+            color: var(--azul-escuro);
+            font-size: clamp(1.75rem, 4vw, 2.25rem);
+        }
+
+        .form-cabecalho p {
+            max-width: 570px;
+            margin: 12px auto 0;
+            color: var(--texto-suave);
+            line-height: 1.6;
+        }
+
+        .aviso {
+            margin: 0 34px 24px;
+            padding: 14px 16px;
+            border: 1px solid #fde68a;
+            border-radius: 10px;
+            background: #fffbeb;
+            color: #854d0e;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        form {
+            padding: 0 34px 34px;
+        }
+
+        .secao-titulo {
+            margin: 28px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--borda-clara);
+            color: var(--azul-escuro);
+            font-size: 1.05rem;
+            font-weight: 900;
+        }
+
+        .secao-titulo:first-of-type {
+            margin-top: 0;
+        }
+
+        .grid-dois {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label,
+        .grupo-titulo {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--azul-escuro);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .obrigatorio {
+            color: var(--vermelho);
+        }
+
+        .opcional {
+            color: var(--texto-suave);
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid var(--borda);
+            border-radius: 9px;
+            padding: 12px 13px;
+            background: var(--branco);
+            color: var(--texto);
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-group textarea {
+            min-height: 105px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--azul);
+            box-shadow: 0 0 0 3px rgba(23, 42, 69, 0.10);
+        }
+
+        .form-group input.invalido,
+        .form-group select.invalido,
+        .form-group textarea.invalido {
+            border-color: var(--vermelho);
+            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.08);
+        }
+
+        .ajuda {
+            margin: 6px 0 0;
+            color: var(--texto-suave);
+            font-size: 0.8rem;
+            line-height: 1.45;
+        }
+
+        .erro-campo {
+            display: none;
+            margin: 6px 0 0;
+            color: var(--vermelho);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .erro-campo.visivel {
+            display: block;
+        }
+
+        .contador {
+            margin-top: 6px;
+            color: var(--texto-suave);
+            text-align: right;
+            font-size: 0.78rem;
+        }
+
+        .contador.limite {
+            color: var(--vermelho);
+            font-weight: 800;
+        }
+
+        .planos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .plano-opcao {
+            position: relative;
+        }
+
+        .plano-opcao input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .plano-card {
+            display: block;
+            height: 100%;
+            padding: 17px;
+            border: 2px solid var(--borda-clara);
+            border-radius: 11px;
+            background: var(--branco);
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+
+        .plano-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--borda);
+        }
+
+        .plano-opcao input:checked + .plano-card {
+            border-color: var(--dourado);
+            background: #fffdf3;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.10);
+        }
+
+        .plano-master{border-color:#ead48b;background:#fffdf6}
+
+        .plano-nome {
+            display: block;
+            color: var(--azul-escuro);
+            font-weight: 900;
+        }
+
+        .plano-descricao {
+            display: block;
+            margin-top: 5px;
+            color: var(--texto-suave);
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+
+        .termos {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 24px 0 18px;
+            color: var(--texto-suave);
+            font-size: 0.86rem;
+            line-height: 1.45;
+        }
+
+        .legal-box{margin:20px 0;padding:16px;border:1px solid #e4e9f0;border-radius:14px;background:#f8fafc;color:#536174;font-size:.88rem;line-height:1.6}.legal-box strong{display:block;color:#081b33;margin-bottom:5px}.legal-box a{color:#0e4d82;font-weight:800}
+        .termos input {
+            width: 18px;
+            height: 18px;
+            margin: 2px 0 0;
+            accent-color: var(--azul-escuro);
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            background: var(--azul-escuro);
+            color: var(--dourado);
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--azul);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+            transform: none;
+        }
+
+        .mensagem {
+            display: none;
+            margin: 0 34px 30px;
+            padding: 16px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .mensagem.visivel {
+            display: block;
+        }
+
+        .mensagem.sucesso {
+            border: 1px solid #86efac;
+            background: var(--verde-claro);
+            color: var(--verde);
+        }
+
+        .mensagem.erro {
+            border: 1px solid #fca5a5;
+            background: var(--vermelho-claro);
+            color: var(--vermelho);
+        }
+
+        .mensagem strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1.35fr .65fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .upload-box {
+            position: relative;
+            overflow: hidden;
+            min-height: 190px;
+            border: 2px dashed var(--borda);
+            border-radius: 12px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: border-color .2s ease, background .2s ease, transform .2s ease;
+        }
+
+        .upload-box:hover {
+            border-color: var(--dourado);
+            background: #fffdf4;
+            transform: translateY(-1px);
+        }
+
+        .upload-box.logo-box {
+            min-height: 190px;
+        }
+
+        .upload-box input {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-placeholder,
+        .upload-preview {
+            width: 100%;
+            height: 100%;
+            min-height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-placeholder {
+            flex-direction: column;
+            gap: 8px;
+            padding: 22px;
+            color: var(--texto-suave);
+            text-align: center;
+        }
+
+        .upload-placeholder strong {
+            color: var(--azul-escuro);
+        }
+
+        .upload-preview {
+            display: none;
+            position: relative;
+            background: #e2e8f0;
+        }
+
+        .upload-preview.visivel {
+            display: flex;
+        }
+
+        .upload-preview img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .logo-box .upload-preview img {
+            object-fit: contain;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .upload-actions {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .mini-btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 8px 10px;
+            background: rgba(10,25,47,.90);
+            color: #fff;
+            font-size: .76rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .imagem-info {
+            margin: 7px 0 0;
+            color: var(--texto-suave);
+            font-size: .78rem;
+            line-height: 1.45;
+        }
+
+        .preview-anuncio {
+            margin: 26px 0 22px;
+            overflow: hidden;
+            border: 1px solid var(--borda-clara);
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(15,23,42,.08);
+        }
+
+        .preview-capa {
+            position: relative;
+            height: 210px;
+            background: linear-gradient(135deg, #dce5ef, #f2f5f8);
+        }
+
+        .preview-capa img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-logo {
+            position: absolute;
+            left: 20px;
+            bottom: -34px;
+            display: grid;
+            place-items: center;
+            width: 72px;
+            height: 72px;
+            overflow: hidden;
+            border: 4px solid #fff;
+            border-radius: 18px;
+            background: var(--azul-escuro);
+            color: #fff;
+            font-size: 1.25rem;
+            font-weight: 900;
+            box-shadow: 0 8px 20px rgba(15,23,42,.18);
+        }
+
+        .preview-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-corpo {
+            padding: 48px 20px 20px;
+        }
+
+        .preview-corpo h3 {
+            margin: 0 0 8px;
+            color: var(--azul-escuro);
+            font-size: 1.25rem;
+        }
+
+        .preview-corpo p {
+            margin: 0;
+            color: var(--texto-suave);
+            line-height: 1.5;
+        }
+
+        .preview-meta {
+            margin-top: 12px;
+            color: #475569;
+            font-size: .86rem;
+            font-weight: 700;
+        }
+
+        .preview-selo {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--dourado);
+            color: var(--azul-escuro);
+            font-size: .72rem;
+            font-weight: 900;
+            display: none;
+        }
+
+        .preview-selo.visivel {
+            display: block;
+        }
+
+        @media (max-width: 680px) {
+            .container{width:calc(100% - 18px)}
+            .form-card{border-radius:18px}
+            .form-body{padding-left:18px!important;padding-right:18px!important}
+            input,select,textarea{font-size:16px}
+            .wizard-actions{position:sticky;bottom:0;z-index:5;padding:12px 0;background:linear-gradient(transparent,#fff 25%)}
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        .wizard-progress{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:0 34px 28px}
+        .wizard-step-indicator{display:flex;flex-direction:column;align-items:center;gap:7px;color:var(--texto-suave);font-size:.72rem;font-weight:800;text-align:center}
+        .wizard-step-indicator span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#e2e8f0;color:#475569}
+        .wizard-step-indicator.ativo{color:var(--azul-escuro)}
+        .wizard-step-indicator.ativo span,.wizard-step-indicator.concluido span{background:var(--azul-escuro);color:var(--dourado)}
+        .form-etapa{display:none}
+        .form-etapa.ativa{display:block;animation:etapaEntrada .22s ease}
+        @keyframes etapaEntrada{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+        .wizard-actions{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+        .wizard-btn{border:0;border-radius:10px;padding:13px 20px;font-weight:900;cursor:pointer}
+        .wizard-prev{background:#eef2f7;color:#475569}
+        .wizard-next{margin-left:auto;background:var(--azul-escuro);color:var(--dourado)}
+        .subcategoria-hint{margin-top:6px;color:var(--texto-suave);font-size:.79rem}
+        @media(max-width:680px){.wizard-progress{margin-left:20px;margin-right:20px;gap:3px}.wizard-step-indicator{font-size:.62rem}.wizard-step-indicator span{width:30px;height:30px}}
+
+        footer {
+            padding: 26px 20px 34px;
+            color: var(--texto-suave);
+            text-align: center;
+            font-size: 0.84rem;
+        }
+
+        footer strong {
+            color: #a47f11;
+        }
+
+        @media (max-width: 680px) {
+            .topo-conteudo {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .grid-dois,
+            .planos {
+                grid-template-columns: 1fr;
+            }
+
+            .form-cabecalho,
+            form {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .aviso,
+            .mensagem {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topo">
+        <div class="topo-conteudo">
+            <a href="index.html" class="marca" aria-label="Voltar para o Guia Comercial">
+                <span class="marca-icone" aria-hidden="true">D</span>
+                <span class="marca-texto">Busque Torres</span>
+            </a>
+
+            <a href="index.html" class="voltar-topo">&larr; Voltar para a vitrine</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <div class="form-cabecalho">
+                <h1>Cadastre seu negócio</h1>
+                <p>
+                    Preencha os dados abaixo para enviar sua empresa ou serviço para publicação no Busque Torres.
+                </p>
+            </div>
+
+            <div class="aviso">
+                <strong>Importante:</strong>
+                confira os dados antes de enviar. As informações cadastradas serão usadas
+                exatamente como foram preenchidas pelo anunciante.
+            </div>
+
+            <div id="mensagemFormulario" class="mensagem" role="status" aria-live="polite"></div>
+
+            <form id="cadastroForm" novalidate>
+                <div class="wizard-progress" aria-label="Etapas do cadastro">
+                    <div class="wizard-step-indicator ativo" data-indicador="0"><span>1</span>Empresa</div>
+                    <div class="wizard-step-indicator" data-indicador="1"><span>2</span>Contato</div>
+                    <div class="wizard-step-indicator" data-indicador="2"><span>3</span>Oferta</div>
+                    <div class="wizard-step-indicator" data-indicador="3"><span>4</span>Imagens</div>
+                    <div class="wizard-step-indicator" data-indicador="4"><span>5</span>Plano</div>
+                </div>
+
+                <section class="form-etapa ativa" data-etapa="0">
+<div class="secao-titulo">Informações principais</div>
+
+                <div class="form-group">
+                    <label for="nome">
+                        Nome do estabelecimento ou profissional
+                        <span class="obrigatorio">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        maxlength="80"
+                        required
+                        autocomplete="organization"
+                        placeholder="Ex.: Clínica Sorriso ou João Eletricista"
+                    >
+                    <p class="erro-campo" id="erroNome"></p>
+                </div>
+
+                <div class="grid-dois">
+                    <div class="form-group">
+                        <label for="categoria">
+                            Categoria
+                            <span class="obrigatorio">*</span>
+                        </label>
+                        <select id="categoria" name="categoria" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="alimentacao">Alimentação</option>
+<option value="saude">Saúde</option>
+<option value="beleza">Beleza</option>
+<option value="pets">Pets</option>
+<option value="automotivo">Automotivo</option>
+<option value="construcao">Construção</option>
+<option value="casa">Casa e Lar</option>
+<option value="comercio">Comércio</option>
+<option value="tecnologia">Tecnologia</option>
+<option value="educacao">Educação</option>
+<option value="esportes">Esportes</option>
+<option value="profissionais">Profissionais</option>
+<option value="eventos">Eventos</option>
+<option value="turismo">Turismo</option>
+<option value="agro">Agro</option>
+<option value="transporte">Transporte</option>
+<option value="industria">Indústria</option>
+<option value="servicos">Serviços</option>
+<option value="publicos">Serviços Públicos</option>
+<option value="religiao">Religião</option>
+<option value="outros">Outros</option>
+                        </select>
+                        <p class="erro-campo" id="erroCategoria"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoria">
+                            Subcategoria / Nicho
+                            <span class="obrigatorio">*</span>
+                        </label>
+                        <select id="subcategoria" name="subcategoria" required disabled>
+                            <option value="">Escolha primeiro a categoria</option>
+                        </select>
+                        <p class="subcategoria-hint">Selecione o nicho que melhor representa a atividade principal.</p>
+                        <p class="erro-campo" id="erroSubcategoria"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cidade">
+                            Cidade
+                            <span class="obrigatorio">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="cidade"
+                            name="cidade"
+                            maxlength="60"
+                            required
+                            autocomplete="address-level2"
+                            placeholder="Ex.: Canoas"
+                        >
+                        <p class="erro-campo" id="erroCidade"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao">
+                        Breve descrição
+                        <span class="obrigatorio">*</span>
+                    </label>
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        maxlength="120"
+                        required
+                        placeholder="Ex.: Atendimento odontológico, implantes e estética dental com horário marcado."
+                    ></textarea>
+                    <div class="contador" id="contadorDescricao">0 de 120 caracteres</div>
+                    <p class="erro-campo" id="erroDescricao"></p>
+                </div>
+
+
+                
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-next">Continuar para contato</button></div>
+                </section>
+
+                <section class="form-etapa" data-etapa="1">
+<div class="secao-titulo">Contato e localização</div>
+
+                <div class="grid-dois">
+                    <div class="form-group">
+                        <label for="whatsapp">
+                            WhatsApp
+                            <span class="obrigatorio">*</span>
+                        </label>
+                        <input
+                            type="tel"
+                            id="whatsapp"
+                            name="whatsapp"
+                            inputmode="numeric"
+                            maxlength="16"
+                            required
+                            autocomplete="tel"
+                            placeholder="Ex.: (51) 99999-9999"
+                        >
+                        <p class="ajuda">
+                            Informe DDD e número. O sistema criará o link automaticamente.
+                        </p>
+                        <p class="erro-campo" id="erroWhatsapp"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bairro">
+                            Bairro
+                            <span class="opcional">(opcional)</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="bairro"
+                            name="bairro"
+                            maxlength="60"
+                            autocomplete="address-level3"
+                            placeholder="Ex.: Centro"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco">
+                        Endereço
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="endereco"
+                        name="endereco"
+                        maxlength="120"
+                        autocomplete="street-address"
+                        placeholder="Ex.: Rua Principal, 123"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="instagram">
+                        Instagram
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="instagram"
+                        name="instagram"
+                        maxlength="80"
+                        placeholder="Ex.: @minhaempresa"
+                    >
+                </div>
+
+                <div class="grid-dois">
+                    <div class="form-group">
+                        <label for="site">
+                            Site
+                            <span class="opcional">(opcional)</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="site"
+                            name="site"
+                            maxlength="140"
+                            inputmode="url"
+                            placeholder="Ex.: minhaempresa.com.br"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">
+                            E-mail
+                            <span class="opcional">(opcional)</span>
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            maxlength="120"
+                            autocomplete="email"
+                            placeholder="Ex.: contato@minhaempresa.com.br"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="horario">
+                        Horário de atendimento
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <textarea
+                        id="horario"
+                        name="horario"
+                        maxlength="260"
+                        rows="3"
+                        placeholder="Ex.: Segunda a sexta, das 8h às 18h. Sábado, das 8h às 12h."
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="mapa">
+                        Link do Google Maps
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="mapa"
+                        name="mapa"
+                        maxlength="500"
+                        inputmode="url"
+                        placeholder="Cole aqui o link de localização do Google Maps"
+                    >
+                    <p class="ajuda">
+                        No Google Maps, abra o local, clique em Compartilhar e copie o link.
+                    </p>
+                </div>
+
+                
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="button" class="wizard-btn wizard-next">Continuar para produtos</button></div>
+                </section>
+
+                <section class="form-etapa" data-etapa="2">
+<div class="secao-titulo">Produtos e serviços</div>
+
+                <div class="form-group">
+                    <label for="produtos">
+                        Produtos oferecidos
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <textarea
+                        id="produtos"
+                        name="produtos"
+                        maxlength="700"
+                        rows="5"
+                        placeholder="Ex.: Ração para cães, ração para gatos, acessórios, medicamentos veterinários..."
+                    ></textarea>
+                    <p class="ajuda">
+                        Separe os produtos por vírgula ou escreva um por linha. Eles também serão encontrados pela busca.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="servicos">
+                        Serviços oferecidos
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <textarea
+                        id="servicos"
+                        name="servicos"
+                        maxlength="700"
+                        rows="5"
+                        placeholder="Ex.: Entrega em domicílio, banho e tosa, atendimento agendado..."
+                    ></textarea>
+                    <p class="ajuda">
+                        Separe os serviços por vírgula ou escreva um por linha.
+                    </p>
+                </div>
+
+                
+                <div class="form-group">
+                    <label for="palavrasChave">
+                        Palavras-chave para a busca
+                        <span class="opcional">(opcional)</span>
+                    </label>
+                    <textarea
+                        id="palavrasChave"
+                        name="palavrasChave"
+                        maxlength="500"
+                        rows="4"
+                        placeholder="Ex.: ração, cachorro, gato, cavalo, Golden, Royal Canin, pet shop"
+                    ></textarea>
+                    <p class="ajuda">
+                        Essas palavras não aparecem no anúncio. Elas servem apenas para ajudar clientes a encontrarem sua empresa.
+                    </p>
+                </div>
+
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="button" class="wizard-btn wizard-next">Continuar para imagens</button></div>
+                </section>
+
+                <section class="form-etapa" data-etapa="3">
+<div class="secao-titulo">Imagens do anúncio</div>
+
+                <div class="upload-grid">
+                    <div>
+                        <label class="grupo-titulo" for="fotoCapa">
+                            Foto de capa
+                            <span class="obrigatorio">*</span>
+                        </label>
+
+                        <div class="upload-box" id="fotoCapaBox">
+                            <input
+                                type="file"
+                                id="fotoCapa"
+                                accept="image/jpeg,image/png,image/webp"
+                                aria-label="Selecionar foto de capa"
+                            >
+
+                            <div class="upload-placeholder" id="fotoCapaPlaceholder">
+                                
+                                <strong>Escolher foto de capa</strong>
+                                <span>Toque aqui para abrir a galeria ou câmera.</span>
+                            </div>
+
+                            <div class="upload-preview" id="fotoCapaPreview">
+                                <img id="fotoCapaImagem" alt="Prévia da foto de capa">
+                                <div class="upload-actions">
+                                    <button type="button" class="mini-btn" id="removerFotoCapa">
+                                        Remover
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="imagem-info">
+                            A foto será reduzida automaticamente e ficará salva somente neste aparelho.
+                        </p>
+                        <p class="erro-campo" id="erroFotoCapa"></p>
+                    </div>
+
+                    <div>
+                        <label class="grupo-titulo" for="logoEmpresa">
+                            Logotipo
+                            <span class="opcional">(opcional)</span>
+                        </label>
+
+                        <div class="upload-box logo-box" id="logoBox">
+                            <input
+                                type="file"
+                                id="logoEmpresa"
+                                accept="image/jpeg,image/png,image/webp"
+                                aria-label="Selecionar logotipo"
+                            >
+
+                            <div class="upload-placeholder" id="logoPlaceholder">
+                                
+                                <strong>Escolher logotipo</strong>
+                                <span>Imagem quadrada funciona melhor.</span>
+                            </div>
+
+                            <div class="upload-preview" id="logoPreview">
+                                <img id="logoImagem" alt="Prévia do logotipo">
+                                <div class="upload-actions">
+                                    <button type="button" class="mini-btn" id="removerLogo">
+                                        Remover
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="imagem-info">
+                            JPG, PNG ou WebP. O sistema fará a compressão automaticamente.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="preview-anuncio" aria-label="Prévia do anúncio">
+                    <div class="preview-capa">
+                        <img id="previewCardCapa" alt="" hidden>
+                        <span class="preview-selo" id="previewSelo">Destaque</span>
+
+                        <div class="preview-logo" id="previewCardLogo">
+                            <span id="previewIniciais">SE</span>
+                            <img id="previewLogoImagem" alt="" hidden>
+                        </div>
+                    </div>
+
+                    <div class="preview-corpo">
+                        <h3 id="previewNome">Sua empresa</h3>
+                        <p id="previewDescricao">
+                            A descrição do seu negócio aparecerá aqui.
+                        </p>
+                        <div class="preview-meta" id="previewLocal">
+                            Sua cidade
+                        </div>
+                    </div>
+                </div>
+
+                
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="button" class="wizard-btn wizard-next">Continuar para plano</button></div>
+                </section>
+
+                <section class="form-etapa" data-etapa="4">
+<div class="secao-titulo">Tipo de anúncio</div>
+
+                <div class="planos" role="radiogroup" aria-label="Tipo de anúncio">
+                    <div class="plano-opcao">
+                        <input
+                            type="radio"
+                            id="planoComum"
+                            name="plano"
+                            value="comum"
+                            checked
+                        >
+                        <label for="planoComum" class="plano-card">
+                            <span class="plano-nome">Anúncio comum</span>
+                            <span class="plano-descricao">
+                                Empresa exibida normalmente na categoria selecionada.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="plano-opcao">
+                        <input
+                            type="radio"
+                            id="planoDestaque"
+                            name="plano"
+                            value="destaque"
+                        >
+                        <label for="planoDestaque" class="plano-card">
+                            <span class="plano-nome">Quero destaque</span>
+                            <span class="plano-descricao">
+                                Solicitação de anúncio Premium para aparecer com maior visibilidade.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="plano-opcao">
+                        <input
+                            type="radio"
+                            id="planoMaster"
+                            name="plano"
+                            value="master"
+                        >
+                        <label for="planoMaster" class="plano-card plano-master">
+                            <span class="plano-nome">Anúncio Master</span>
+                            <span class="plano-descricao">
+                                Exibição no carrossel principal, além da busca e do perfil da empresa.
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="legal-box"><strong>Antes de enviar</strong>O anúncio só será publicado depois do pagamento e da aprovação administrativa. O período de 30 dias começa na publicação. Correções solicitadas não exigem novo pagamento.</div>
+                <label class="termos">
+                    <input type="checkbox" id="termos" required>
+                    <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
+                </label>
+                <label class="termos">
+                    <input type="checkbox" id="responsabilidadeConteudo" required>
+                    <span>Declaro que as informações e imagens são verdadeiras, adequadas e de uso autorizado.</span>
+                </label>
+                <p class="erro-campo" id="erroTermos"></p>
+
+                
+            
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="submit" class="submit-btn" id="submitBtn">Cadastrar negócio</button></div>
+                </section>
+</form>
+        </section>
+    </main>
+
+    <footer>Busque Torres &bull; <a href="contato.html">Contato</a> &bull; <a href="termos.html">Termos</a> &bull; <a href="privacidade.html">Privacidade</a> &bull; <a href="politica-comercial.html">Comercial</a> &bull; <a href="politica-conteudo.html">Conteúdo</a><br>Desenvolvido por <strong>DOMUS SISTEMAS</strong></footer>
+
+    <script src="supabase-config.js"></script>
+    <script>
+        "use strict";
+
+        const CONFIG = {
+            chaveCadastros: "novos_cadastros",
+            codigoPais: "55",
+            mensagemWhatsapp:
+                "Olá, vim do Busque Torres e gostaria de mais informações."
+        };
+
+        const form = document.getElementById("cadastroForm");
+        const descricao = document.getElementById("descricao");
+        const contadorDescricao = document.getElementById("contadorDescricao");
+        const whatsapp = document.getElementById("whatsapp");
+        const mensagemFormulario = document.getElementById("mensagemFormulario");
+        const submitBtn = document.getElementById("submitBtn");
+
+        const campos = {
+            nome: document.getElementById("nome"),
+            categoria: document.getElementById("categoria"),
+            subcategoria: document.getElementById("subcategoria"),
+            cidade: document.getElementById("cidade"),
+            descricao: document.getElementById("descricao"),
+            whatsapp: document.getElementById("whatsapp"),
+            bairro: document.getElementById("bairro"),
+            endereco: document.getElementById("endereco"),
+            instagram: document.getElementById("instagram"),
+            site: document.getElementById("site"),
+            email: document.getElementById("email"),
+            horario: document.getElementById("horario"),
+            mapa: document.getElementById("mapa"),
+            produtos: document.getElementById("produtos"),
+            servicos: document.getElementById("servicos"),
+            palavrasChave: document.getElementById("palavrasChave"),
+            termos: document.getElementById("termos"),
+            responsabilidadeConteudo: document.getElementById("responsabilidadeConteudo"),
+            fotoCapa: document.getElementById("fotoCapa"),
+            logoEmpresa: document.getElementById("logoEmpresa")
+        };
+
+        const erros = {
+            nome: document.getElementById("erroNome"),
+            categoria: document.getElementById("erroCategoria"),
+            subcategoria: document.getElementById("erroSubcategoria"),
+            cidade: document.getElementById("erroCidade"),
+            descricao: document.getElementById("erroDescricao"),
+            whatsapp: document.getElementById("erroWhatsapp"),
+            termos: document.getElementById("erroTermos")
+        };
+
+
+        let fotoCapaBase64 = "";
+        let logoBase64 = "";
+
+        const elementosImagem = {
+            fotoCapa: document.getElementById("fotoCapa"),
+            fotoCapaPlaceholder: document.getElementById("fotoCapaPlaceholder"),
+            fotoCapaPreview: document.getElementById("fotoCapaPreview"),
+            fotoCapaImagem: document.getElementById("fotoCapaImagem"),
+            removerFotoCapa: document.getElementById("removerFotoCapa"),
+            logoEmpresa: document.getElementById("logoEmpresa"),
+            logoPlaceholder: document.getElementById("logoPlaceholder"),
+            logoPreview: document.getElementById("logoPreview"),
+            logoImagem: document.getElementById("logoImagem"),
+            removerLogo: document.getElementById("removerLogo"),
+            previewCardCapa: document.getElementById("previewCardCapa"),
+            previewLogoImagem: document.getElementById("previewLogoImagem"),
+            previewIniciais: document.getElementById("previewIniciais"),
+            previewNome: document.getElementById("previewNome"),
+            previewDescricao: document.getElementById("previewDescricao"),
+            previewLocal: document.getElementById("previewLocal"),
+            previewSelo: document.getElementById("previewSelo"),
+            erroFotoCapa: document.getElementById("erroFotoCapa")
+        };
+
+        function obterIniciais(nome) {
+            const partes = limparTexto(nome).split(" ").filter(Boolean);
+
+            if (!partes.length) {
+                return "SE";
+            }
+
+            if (partes.length === 1) {
+                return partes[0].slice(0, 2).toUpperCase();
+            }
+
+            return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+        }
+
+        function comprimirImagem(arquivo, larguraMaxima, alturaMaxima, qualidade) {
+            return new Promise((resolve, reject) => {
+                if (!arquivo || !arquivo.type.startsWith("image/")) {
+                    reject(new Error("Selecione um arquivo de imagem válido."));
+                    return;
+                }
+
+                const leitor = new FileReader();
+
+                leitor.onload = () => {
+                    const imagem = new Image();
+
+                    imagem.onload = () => {
+                        const proporcao = Math.min(
+                            larguraMaxima / imagem.width,
+                            alturaMaxima / imagem.height,
+                            1
+                        );
+
+                        const largura = Math.max(1, Math.round(imagem.width * proporcao));
+                        const altura = Math.max(1, Math.round(imagem.height * proporcao));
+
+                        const canvas = document.createElement("canvas");
+                        canvas.width = largura;
+                        canvas.height = altura;
+
+                        const contexto = canvas.getContext("2d", { alpha: false });
+                        contexto.fillStyle = "#ffffff";
+                        contexto.fillRect(0, 0, largura, altura);
+                        contexto.drawImage(imagem, 0, 0, largura, altura);
+
+                        resolve(canvas.toDataURL("image/jpeg", qualidade));
+                    };
+
+                    imagem.onerror = () => reject(new Error("Não foi possível abrir esta imagem."));
+                    imagem.src = leitor.result;
+                };
+
+                leitor.onerror = () => reject(new Error("Não foi possível ler esta imagem."));
+                leitor.readAsDataURL(arquivo);
+            });
+        }
+
+        function atualizarPreviewAnuncio() {
+            const nome = limparTexto(campos.nome.value) || "Sua empresa";
+            const descricaoTexto =
+                limparTexto(campos.descricao.value) ||
+                "A descrição do seu negócio aparecerá aqui.";
+
+            const local = [
+                limparTexto(campos.bairro.value),
+                limparTexto(campos.cidade.value)
+            ].filter(Boolean).join(" • ") || "Sua cidade";
+
+            elementosImagem.previewNome.textContent = nome;
+            elementosImagem.previewDescricao.textContent = descricaoTexto;
+            elementosImagem.previewLocal.textContent = local;
+            elementosImagem.previewIniciais.textContent = obterIniciais(nome);
+
+            const plano = document.querySelector('input[name="plano"]:checked');
+            const planoComSelo = plano && ["destaque", "master"].includes(plano.value);
+            elementosImagem.previewSelo.classList.toggle("visivel", Boolean(planoComSelo));
+            elementosImagem.previewSelo.textContent =
+                plano && plano.value === "master" ? "Master" : "Destaque";
+        }
+
+        function mostrarFotoCapa(base64) {
+            fotoCapaBase64 = base64;
+            elementosImagem.fotoCapaImagem.src = base64;
+            elementosImagem.fotoCapaPlaceholder.style.display = "none";
+            elementosImagem.fotoCapaPreview.classList.add("visivel");
+
+            elementosImagem.previewCardCapa.src = base64;
+            elementosImagem.previewCardCapa.hidden = false;
+
+            elementosImagem.erroFotoCapa.textContent = "";
+            elementosImagem.erroFotoCapa.classList.remove("visivel");
+        }
+
+        function removerFotoCapa() {
+            fotoCapaBase64 = "";
+            elementosImagem.fotoCapa.value = "";
+            elementosImagem.fotoCapaImagem.removeAttribute("src");
+            elementosImagem.fotoCapaPreview.classList.remove("visivel");
+            elementosImagem.fotoCapaPlaceholder.style.display = "flex";
+
+            elementosImagem.previewCardCapa.removeAttribute("src");
+            elementosImagem.previewCardCapa.hidden = true;
+        }
+
+        function mostrarLogo(base64) {
+            logoBase64 = base64;
+            elementosImagem.logoImagem.src = base64;
+            elementosImagem.logoPlaceholder.style.display = "none";
+            elementosImagem.logoPreview.classList.add("visivel");
+
+            elementosImagem.previewLogoImagem.src = base64;
+            elementosImagem.previewLogoImagem.hidden = false;
+            elementosImagem.previewIniciais.hidden = true;
+        }
+
+        function removerLogo() {
+            logoBase64 = "";
+            elementosImagem.logoEmpresa.value = "";
+            elementosImagem.logoImagem.removeAttribute("src");
+            elementosImagem.logoPreview.classList.remove("visivel");
+            elementosImagem.logoPlaceholder.style.display = "flex";
+
+            elementosImagem.previewLogoImagem.removeAttribute("src");
+            elementosImagem.previewLogoImagem.hidden = true;
+            elementosImagem.previewIniciais.hidden = false;
+        }
+
+        elementosImagem.fotoCapa.addEventListener("change", async evento => {
+            const arquivo = evento.target.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            if (arquivo.size > 10 * 1024 * 1024) {
+                elementosImagem.erroFotoCapa.textContent =
+                    "A imagem original deve ter no máximo 10 MB.";
+                elementosImagem.erroFotoCapa.classList.add("visivel");
+                evento.target.value = "";
+                return;
+            }
+
+            try {
+                const base64 = await comprimirImagem(arquivo, 960, 640, 0.68);
+                mostrarFotoCapa(base64);
+            } catch (erro) {
+                elementosImagem.erroFotoCapa.textContent = erro.message;
+                elementosImagem.erroFotoCapa.classList.add("visivel");
+            }
+        });
+
+        elementosImagem.logoEmpresa.addEventListener("change", async evento => {
+            const arquivo = evento.target.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            if (arquivo.size > 6 * 1024 * 1024) {
+                mostrarMensagem(
+                    "erro",
+                    "Logotipo muito grande",
+                    "Escolha uma imagem de até 6 MB."
+                );
+                evento.target.value = "";
+                return;
+            }
+
+            try {
+                const base64 = await comprimirImagem(arquivo, 320, 320, 0.74);
+                mostrarLogo(base64);
+            } catch (erro) {
+                mostrarMensagem("erro", "Imagem inválida", erro.message);
+            }
+        });
+
+        elementosImagem.removerFotoCapa.addEventListener("click", evento => {
+            evento.stopPropagation();
+            removerFotoCapa();
+        });
+
+        elementosImagem.removerLogo.addEventListener("click", evento => {
+            evento.stopPropagation();
+            removerLogo();
+        });
+
+        [
+            campos.nome,
+            campos.descricao,
+            campos.cidade,
+            campos.bairro
+        ].forEach(campo => campo.addEventListener("input", atualizarPreviewAnuncio));
+
+        document.querySelectorAll('input[name="plano"]').forEach(opcao => {
+            opcao.addEventListener("change", atualizarPreviewAnuncio);
+        });
+
+        function limparTexto(texto) {
+            return String(texto || "")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function apenasNumeros(valor) {
+            return String(valor || "").replace(/\D/g, "");
+        }
+
+        function formatarWhatsapp(valor) {
+            const numeros = apenasNumeros(valor).slice(0, 11);
+
+            if (numeros.length <= 2) {
+                return numeros;
+            }
+
+            if (numeros.length <= 6) {
+                return "(" + numeros.slice(0, 2) + ") " + numeros.slice(2);
+            }
+
+            if (numeros.length <= 10) {
+                return (
+                    "(" +
+                    numeros.slice(0, 2) +
+                    ") " +
+                    numeros.slice(2, 6) +
+                    "-" +
+                    numeros.slice(6)
+                );
+            }
+
+            return (
+                "(" +
+                numeros.slice(0, 2) +
+                ") " +
+                numeros.slice(2, 7) +
+                "-" +
+                numeros.slice(7)
+            );
+        }
+
+        function criarLinkWhatsapp(numero) {
+            const numeros = apenasNumeros(numero);
+            const numeroInternacional = CONFIG.codigoPais + numeros;
+            const mensagem = encodeURIComponent(CONFIG.mensagemWhatsapp);
+
+            return (
+                "https://wa.me/" +
+                numeroInternacional +
+                "?text=" +
+                mensagem
+            );
+        }
+
+        function normalizarInstagram(valor) {
+            const texto = limparTexto(valor);
+
+            if (!texto) {
+                return "";
+            }
+
+            if (texto.startsWith("http://") || texto.startsWith("https://")) {
+                return texto;
+            }
+
+            const usuario = texto.replace(/^@/, "").replace(/\s/g, "");
+
+            return "https://instagram.com/" + usuario;
+        }
+
+        function normalizarUrl(valor) {
+            const texto = limparTexto(valor);
+
+            if (!texto) {
+                return "";
+            }
+
+            if (texto.startsWith("http://") || texto.startsWith("https://")) {
+                return texto;
+            }
+
+            return "https://" + texto;
+        }
+
+        function gerarIdCadastro() {
+            return (
+                "cad_" +
+                Date.now() +
+                "_" +
+                Math.random().toString(36).slice(2, 8)
+            );
+        }
+
+        function mostrarErro(campo, mensagem) {
+            const elemento = campos[campo];
+            const erro = erros[campo];
+
+            if (elemento && elemento.classList) {
+                elemento.classList.add("invalido");
+                elemento.setAttribute("aria-invalid", "true");
+            }
+
+            if (erro) {
+                erro.textContent = mensagem;
+                erro.classList.add("visivel");
+            }
+        }
+
+        function limparErro(campo) {
+            const elemento = campos[campo];
+            const erro = erros[campo];
+
+            if (elemento && elemento.classList) {
+                elemento.classList.remove("invalido");
+                elemento.removeAttribute("aria-invalid");
+            }
+
+            if (erro) {
+                erro.textContent = "";
+                erro.classList.remove("visivel");
+            }
+        }
+
+        function limparTodosErros() {
+            Object.keys(erros).forEach(limparErro);
+        }
+
+        function mostrarMensagem(tipo, titulo, texto) {
+            mensagemFormulario.className = "mensagem visivel " + tipo;
+            mensagemFormulario.innerHTML =
+                "<strong>" + titulo + "</strong><span>" + texto + "</span>";
+
+            mensagemFormulario.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+        function validarFormulario() {
+            limparTodosErros();
+
+            let valido = true;
+            let primeiroCampoInvalido = null;
+
+            const nome = limparTexto(campos.nome.value);
+            const cidade = limparTexto(campos.cidade.value);
+            const descricaoTexto = limparTexto(campos.descricao.value);
+            const numeroWhatsapp = apenasNumeros(campos.whatsapp.value);
+
+            if (nome.length < 3) {
+                mostrarErro("nome", "Informe um nome com pelo menos 3 caracteres.");
+                primeiroCampoInvalido ||= campos.nome;
+                valido = false;
+            }
+
+            if (!campos.categoria.value) {
+                mostrarErro("categoria", "Selecione uma categoria.");
+                primeiroCampoInvalido ||= campos.categoria;
+                valido = false;
+            }
+
+            if (!campos.subcategoria.value) {
+                mostrarErro("subcategoria", "Selecione uma subcategoria.");
+                primeiroCampoInvalido ||= campos.subcategoria;
+                valido = false;
+            }
+
+            if (cidade.length < 2) {
+                mostrarErro("cidade", "Informe a cidade.");
+                primeiroCampoInvalido ||= campos.cidade;
+                valido = false;
+            }
+
+            if (descricaoTexto.length < 15) {
+                mostrarErro(
+                    "descricao",
+                    "Escreva uma descrição com pelo menos 15 caracteres."
+                );
+                primeiroCampoInvalido ||= campos.descricao;
+                valido = false;
+            }
+
+            if (descricaoTexto.length > 120) {
+                mostrarErro(
+                    "descricao",
+                    "A descrição pode ter no máximo 120 caracteres."
+                );
+                primeiroCampoInvalido ||= campos.descricao;
+                valido = false;
+            }
+
+            if (numeroWhatsapp.length < 10 || numeroWhatsapp.length > 11) {
+                mostrarErro(
+                    "whatsapp",
+                    "Informe um WhatsApp válido com DDD."
+                );
+                primeiroCampoInvalido ||= campos.whatsapp;
+                valido = false;
+            }
+
+            if (!fotoCapaBase64) {
+                elementosImagem.erroFotoCapa.textContent = "Selecione uma foto de capa para o anúncio.";
+                elementosImagem.erroFotoCapa.classList.add("visivel");
+                primeiroCampoInvalido ||= campos.fotoCapa;
+                valido = false;
+            }
+
+            if (!campos.termos.checked || !campos.responsabilidadeConteudo.checked) {
+                mostrarErro("termos", "Você precisa aceitar as regras e confirmar a responsabilidade pelo conteúdo.");
+                primeiroCampoInvalido ||= !campos.termos.checked ? campos.termos : campos.responsabilidadeConteudo;
+                valido = false;
+            }
+
+            if (!valido && primeiroCampoInvalido) {
+                primeiroCampoInvalido.focus();
+            }
+
+            return valido;
+        }
+
+        const BANCO_LOCAL = {
+            nome: "vitrine_local_db",
+            versao: 1,
+            loja: "cadastros"
+        };
+
+        function abrirBancoLocal() {
+            return new Promise((resolve, reject) => {
+                const requisicao = indexedDB.open(
+                    BANCO_LOCAL.nome,
+                    BANCO_LOCAL.versao
+                );
+
+                requisicao.onupgradeneeded = evento => {
+                    const banco = evento.target.result;
+
+                    if (!banco.objectStoreNames.contains(BANCO_LOCAL.loja)) {
+                        banco.createObjectStore(BANCO_LOCAL.loja, {
+                            keyPath: "id"
+                        });
+                    }
+                };
+
+                requisicao.onsuccess = () => resolve(requisicao.result);
+                requisicao.onerror = () => reject(requisicao.error);
+            });
+        }
+
+        async function salvarCadastro(cadastro) {
+            const banco = await abrirBancoLocal();
+
+            return new Promise((resolve, reject) => {
+                const transacao = banco.transaction(
+                    BANCO_LOCAL.loja,
+                    "readwrite"
+                );
+
+                transacao.objectStore(BANCO_LOCAL.loja).put(cadastro);
+
+                transacao.oncomplete = () => {
+                    banco.close();
+                    resolve();
+                };
+
+                transacao.onerror = () => {
+                    banco.close();
+                    reject(transacao.error);
+                };
+            });
+        }
+
+
+        function enviarCadastroParaVitrine(cadastro) {
+            const pacote = {
+                tipo: "vitrine_local_novo_cadastro",
+                cadastro
+            };
+
+            window.name = JSON.stringify(pacote);
+        }
+
+        function montarCadastro() {
+            const planoSelecionado = document.querySelector(
+                'input[name="plano"]:checked'
+            );
+
+            const numeroWhatsapp = apenasNumeros(campos.whatsapp.value);
+
+            return {
+                id: gerarIdCadastro(),
+                nome: limparTexto(campos.nome.value),
+                categoria: campos.categoria.value,
+                subcategoria: campos.subcategoria.value,
+                descricao: limparTexto(campos.descricao.value),
+                cidade: limparTexto(campos.cidade.value),
+                bairro: limparTexto(campos.bairro.value),
+                endereco: limparTexto(campos.endereco.value),
+                whatsappNumero: numeroWhatsapp,
+                whatsappLink: criarLinkWhatsapp(numeroWhatsapp),
+                instagram: normalizarInstagram(campos.instagram.value),
+                site: normalizarUrl(campos.site.value),
+                email: limparTexto(campos.email.value),
+                horario: limparTexto(campos.horario.value),
+                mapa: normalizarUrl(campos.mapa.value),
+                produtos: limparTexto(campos.produtos.value),
+                servicos: limparTexto(campos.servicos.value),
+                palavrasChave: limparTexto(campos.palavrasChave.value),
+                imagem: fotoCapaBase64,
+                logo: logoBase64,
+                planoSolicitado: planoSelecionado
+                    ? planoSelecionado.value
+                    : "comum",
+                premium: Boolean(
+                    planoSelecionado && ["destaque", "master"].includes(planoSelecionado.value)
+                ),
+                master: Boolean(planoSelecionado && planoSelecionado.value === "master"),
+                status: "ativo",
+                ativo: true,
+                criadoEm: new Date().toISOString(),
+                origem: "formulario_publico"
+            };
+        }
+
+        function atualizarContadorDescricao() {
+            const quantidade = descricao.value.length;
+
+            contadorDescricao.textContent =
+                quantidade + " de 120 caracteres";
+
+            contadorDescricao.classList.toggle(
+                "limite",
+                quantidade >= 115
+            );
+
+            if (quantidade <= 120) {
+                limparErro("descricao");
+            }
+        }
+
+
+        const SUBCATEGORIAS = {"alimentacao": ["Restaurante", "Lanchonete", "Hamburgueria", "Pizzaria", "Churrascaria", "Padaria", "Confeitaria", "Cafeteria", "Sorveteria", "Açaiteria", "Marmitaria", "Pastelaria", "Sushi", "Food truck", "Distribuidora de bebidas", "Mercado", "Supermercado", "Mercearia", "Hortifruti", "Casa de carnes"], "saude": ["Clínica médica", "Hospital", "Farmácia", "Odontologia", "Psicologia", "Psiquiatria", "Nutrição", "Fisioterapia", "Quiropraxia", "Fonoaudiologia", "Laboratório", "Ótica", "Enfermagem", "Terapias", "Home care"], "beleza": ["Salão de beleza", "Barbearia", "Manicure e pedicure", "Estética", "Massagem", "Podologia", "Maquiagem", "Depilação", "Sobrancelhas e cílios", "Tatuagem e piercing", "Cosméticos", "Spa", "Bronzeamento"], "pets": ["Pet shop", "Clínica veterinária", "Banho e tosa", "Hotel para pets", "Rações", "Adestramento", "Passeador de cães", "Creche para pets", "Veterinário rural", "Acessórios para animais"], "automotivo": ["Oficina mecânica", "Auto elétrica", "Autopeças", "Pneus", "Chapeação e pintura", "Lavagem automotiva", "Guincho", "Som automotivo", "Insulfilm", "Auto center", "Despachante", "Revenda de veículos", "Motos e peças", "Bicicletaria"], "construcao": ["Construtora", "Pedreiro", "Eletricista", "Encanador", "Pintor", "Gesseiro", "Serralheria", "Vidraçaria", "Marmoraria", "Marcenaria", "Madeireira", "Materiais de construção", "Esquadrias", "Telhados", "Arquitetura", "Engenharia", "Terraplenagem", "Energia solar"], "casa": ["Móveis", "Decoração", "Colchões", "Eletrodomésticos", "Cortinas e persianas", "Limpeza residencial", "Jardinagem", "Dedetização", "Mudanças", "Chaveiro", "Ar-condicionado", "Piscinas", "Segurança eletrônica", "Internet residencial"], "comercio": ["Loja de roupas femininas", "Loja de roupas masculinas", "Loja infantil", "Calçados", "Bolsas e acessórios", "Joalheria", "Bijuterias", "Moda íntima", "Uniformes", "Papelaria", "Presentes", "Armarinho", "Eletrônicos", "Celulares", "Utilidades domésticas", "Brechó", "Loja de variedades"], "tecnologia": ["Informática", "Assistência técnica", "Celulares", "Desenvolvimento de software", "Marketing digital", "Design gráfico", "Criação de sites", "Provedor de internet", "Impressão 3D", "Automação", "Segurança da informação", "Suporte técnico"], "educacao": ["Escola", "Educação infantil", "Faculdade", "Curso técnico", "Curso de idiomas", "Reforço escolar", "Autoescola", "Professor particular", "Música", "Dança", "Informática", "Preparatório para concursos"], "esportes": ["Academia", "Personal trainer", "Pilates", "Yoga", "CrossFit", "Treinamento funcional", "Artes marciais", "Futebol", "Natação", "Dança", "Artigos esportivos", "Pesca e camping", "Quadra esportiva"], "profissionais": ["Advocacia", "Contabilidade", "Imobiliária", "Corretor de imóveis", "Seguros", "Consultoria", "Fotografia", "Videomaker", "Arquitetura", "Engenharia", "Recursos humanos", "Tradução", "Despachante documental", "Cerimonialista"], "eventos": ["Buffet", "Decoração de festas", "Fotografia de eventos", "Filmagem", "DJ", "Som e iluminação", "Locação de equipamentos", "Salão de festas", "Brinquedos para festas", "Doces e bolos", "Convites e personalizados", "Bandas e músicos"], "turismo": ["Hotel", "Pousada", "Agência de viagens", "Transporte turístico", "Passeios", "Camping", "Aluguel por temporada", "Guia turístico", "Restaurante turístico"], "agro": ["Agropecuária", "Rações", "Máquinas agrícolas", "Sementes", "Fertilizantes", "Irrigação", "Veterinário rural", "Produtos veterinários", "Cooperativa", "Silagem", "Serviços agrícolas"], "transporte": ["Táxi", "Transporte por aplicativo", "Frete", "Transportadora", "Motoboy", "Van escolar", "Ônibus e excursões", "Mudanças", "Entrega rápida", "Locação de veículos"], "industria": ["Metalúrgica", "Indústria de alimentos", "Confecção", "Gráfica", "Embalagens", "Móveis planejados", "Plásticos", "Química", "Madeireira", "Manutenção industrial"], "servicos": ["Limpeza", "Jardinagem", "Costura", "Lavanderia", "Conserto de eletrodomésticos", "Chaveiro", "Segurança", "Portaria", "Locação de equipamentos", "Reparos gerais", "Serviços domésticos", "Manutenção predial"], "publicos": ["Prefeitura", "Câmara de vereadores", "Polícia", "Bombeiros", "Correios", "Cartório", "Hospital público", "Posto de saúde", "Escola pública", "Assistência social"], "religiao": ["Igreja católica", "Igreja evangélica", "Centro espírita", "Templo religioso", "Comunidade religiosa", "Livraria religiosa"], "outros": ["Profissional autônomo", "Associação", "ONG", "Cooperativa", "Serviço diverso", "Outro nicho"]};
+        let etapaAtual = 0;
+        const etapasFormulario = [...document.querySelectorAll(".form-etapa")];
+        const indicadoresEtapa = [...document.querySelectorAll(".wizard-step-indicator")];
+
+        function carregarSubcategorias() {
+            const categoria = campos.categoria.value;
+            const opcoes = SUBCATEGORIAS[categoria] || [];
+            campos.subcategoria.innerHTML = "";
+
+            const inicial = document.createElement("option");
+            inicial.value = "";
+            inicial.textContent = opcoes.length
+                ? "Selecione seu nicho"
+                : "Escolha primeiro a categoria";
+            campos.subcategoria.appendChild(inicial);
+
+            opcoes.forEach(nome => {
+                const option = document.createElement("option");
+                option.value = nome;
+                option.textContent = nome;
+                campos.subcategoria.appendChild(option);
+            });
+
+            campos.subcategoria.disabled = opcoes.length === 0;
+            limparErro("categoria");
+            limparErro("subcategoria");
+        }
+
+        function mostrarEtapa(numero) {
+            etapaAtual = Math.max(0, Math.min(numero, etapasFormulario.length - 1));
+            etapasFormulario.forEach((etapa, indice) => {
+                etapa.classList.toggle("ativa", indice === etapaAtual);
+            });
+            indicadoresEtapa.forEach((indicador, indice) => {
+                indicador.classList.toggle("ativo", indice === etapaAtual);
+                indicador.classList.toggle("concluido", indice < etapaAtual);
+            });
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function validarEtapaAtual() {
+            const etapa = etapasFormulario[etapaAtual];
+            const obrigatorios = [...etapa.querySelectorAll("[required]")];
+
+            for (const campo of obrigatorios) {
+                if (campo.type === "checkbox" && !campo.checked) {
+                    campo.focus();
+                    return false;
+                }
+                if (!campo.value || !campo.checkValidity()) {
+                    campo.reportValidity();
+                    campo.focus();
+                    return false;
+                }
+            }
+
+            if (etapaAtual === 0) {
+                const nome = limparTexto(campos.nome.value);
+                if (nome.length < 3) {
+                    mostrarErro("nome", "Informe um nome com pelo menos 3 caracteres.");
+                    campos.nome.focus();
+                    return false;
+                }
+                if (!campos.subcategoria.value) {
+                    mostrarErro("subcategoria", "Selecione uma subcategoria.");
+                    campos.subcategoria.focus();
+                    return false;
+                }
+            }
+
+            if (etapaAtual === 1) {
+                const numero = apenasNumeros(campos.whatsapp.value);
+                if (numero.length < 10 || numero.length > 11) {
+                    mostrarErro("whatsapp", "Informe um WhatsApp válido com DDD.");
+                    campos.whatsapp.focus();
+                    return false;
+                }
+            }
+
+            if (etapaAtual === 3 && !fotoCapaBase64) {
+                elementosImagem.erroFotoCapa.textContent = "Selecione uma foto de capa para continuar.";
+                elementosImagem.erroFotoCapa.classList.add("visivel");
+                campos.fotoCapa.focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener("click", evento => {
+            if (evento.target.closest(".wizard-next")) {
+                if (validarEtapaAtual()) mostrarEtapa(etapaAtual + 1);
+            }
+            if (evento.target.closest(".wizard-prev")) {
+                mostrarEtapa(etapaAtual - 1);
+            }
+        });
+
+        descricao.addEventListener("input", atualizarContadorDescricao);
+
+        whatsapp.addEventListener("input", evento => {
+            evento.target.value = formatarWhatsapp(evento.target.value);
+            limparErro("whatsapp");
+        });
+
+        campos.nome.addEventListener("input", () => limparErro("nome"));
+        campos.categoria.addEventListener("change", carregarSubcategorias);
+        campos.subcategoria.addEventListener("change", () => limparErro("subcategoria"));
+        campos.cidade.addEventListener("input", () => limparErro("cidade"));
+        campos.termos.addEventListener("change", () => limparErro("termos"));
+        campos.responsabilidadeConteudo.addEventListener("change", () => limparErro("termos"));
+
+        form.addEventListener("submit", async evento => {
+            evento.preventDefault();
+            mensagemFormulario.className = "mensagem";
+            mensagemFormulario.innerHTML = "";
+            if (!validarFormulario()) {
+                mostrarMensagem("erro", "Revise os dados", "Existem campos que precisam ser corrigidos antes do envio.");
+                return;
+            }
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Enviando...";
+            try {
+                const c = montarCadastro();
+                await BusqueAPI.rpc("enviar_empresa", {
+                    p_nome: c.nome,
+                    p_categoria: c.categoria,
+                    p_subcategoria: c.subcategoria,
+                    p_descricao: c.descricao,
+                    p_whatsapp: c.whatsappNumero,
+                    p_cidade: c.cidade,
+                    p_bairro: c.bairro || null,
+                    p_endereco: c.endereco || null,
+                    p_instagram: c.instagram || null,
+                    p_site: c.site || null,
+                    p_email: c.email || null,
+                    p_horario: c.horario || null,
+                    p_mapa_url: c.mapa || null,
+                    p_produtos: c.produtos || null,
+                    p_servicos: c.servicos || null,
+                    p_palavras_chave: c.palavrasChave || null,
+                    p_imagem_url: c.imagem || null,
+                    p_logo_url: c.logo || null,
+                    p_plano: c.planoSolicitado
+                });
+                form.reset();
+                removerFotoCapa();
+                removerLogo();
+                carregarSubcategorias();
+                mostrarEtapa(0);
+                mostrarMensagem("sucesso", "Cadastro enviado!", "As informações foram recebidas e aguardam aprovação. A empresa ainda não aparece publicamente.");
+            } catch (erro) {
+                console.error("Erro ao enviar cadastro:", erro);
+                mostrarMensagem("erro", "Não foi possível enviar", "Verifique sua internet e tente novamente. Nenhum cadastro duplicado foi criado nesta tentativa.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Cadastrar negócio";
+            }
+        });
+
+        atualizarContadorDescricao();
+        carregarSubcategorias();
+        mostrarEtapa(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+BUSQUE TORRES — DEPLOY FINAL REVISADO
+
+ESTE É O ZIP QUE DEVE SER ENVIADO PARA A HOSPEDAGEM.
+
+Arquivos principais:
+- index.html: site público
+- cadastro.html: cadastro de empresas
+- empresa.html: perfil público
+- renovar.html: renovação e pagamento
+- bt-gestao-8472.html: Painel Administrativo reservado
+
+Painel Administrativo:
+https://SEU-ENDERECO/bt-gestao-8472.html
+
+Antes de testar pagamentos, execute o pacote separado:
+BUSQUE-TORRES-SUPABASE-FINAL.zip
+
+Não coloque o Access Token do Mercado Pago em nenhum arquivo HTML.
