@@ -108,16 +108,48 @@
   const $=id=>document.getElementById(id);
   const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const digits=v=>String(v||"").replace(/\D/g,"");
-  const date=v=>v?new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short"}).format(new Date(v)):"—";
+  function parseDateValue(value){
+    if(!value)return null;
+    const text=String(value).trim();
+    const dateOnly=text.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(dateOnly){
+      const [,year,month,day]=dateOnly;
+      return {date:new Date(Number(year),Number(month)-1,Number(day),12,0,0),dateOnly:true};
+    }
+    const parsed=new Date(text);
+    return Number.isNaN(parsed.getTime())?null:{date:parsed,dateOnly:false};
+  }
+  function date(value){
+    const parsed=parseDateValue(value);
+    if(!parsed)return "—";
+    return new Intl.DateTimeFormat("pt-BR",parsed.dateOnly
+      ?{dateStyle:"short"}
+      :{dateStyle:"short",timeStyle:"short",timeZone:"America/Sao_Paulo"}
+    ).format(parsed.date);
+  }
   const plan=v=>({comum:"Comum",destaque:"Destaque",master:"Master"}[v]||v||"Comum");
   function daysUntil(value){
-    if(!value)return null;
-    const target=new Date(value);
-    if(Number.isNaN(target.getTime()))return null;
-    const todayParts=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
-    const targetParts=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(target);
-    const toUtc=parts=>{const values=Object.fromEntries(parts.filter(x=>x.type!=="literal").map(x=>[x.type,Number(x.value)]));return Date.UTC(values.year,values.month-1,values.day)};
-    return Math.round((toUtc(targetParts)-toUtc(todayParts))/86400000);
+    const parsed=parseDateValue(value);
+    if(!parsed)return null;
+    const partsFormatter=new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"});
+    const toUtc=parts=>{
+      const values=Object.fromEntries(parts.filter(x=>x.type!=="literal").map(x=>[x.type,Number(x.value)]));
+      return Date.UTC(values.year,values.month-1,values.day);
+    };
+    const todayUtc=toUtc(partsFormatter.formatToParts(new Date()));
+    let targetUtc;
+    if(parsed.dateOnly){
+      targetUtc=Date.UTC(parsed.date.getFullYear(),parsed.date.getMonth(),parsed.date.getDate());
+    }else{
+      targetUtc=toUtc(partsFormatter.formatToParts(parsed.date));
+    }
+    return Math.round((targetUtc-todayUtc)/86400000);
+  }
+  function addDaysIso(baseValue,days){
+    const parsed=parseDateValue(baseValue);
+    const base=parsed?.date&&parsed.date.getTime()>Date.now()?parsed.date:new Date();
+    const result=new Date(base.getTime()+days*86400000);
+    return result.toISOString();
   }
   function renewalCompanies(){
     return state.companies.filter(c=>{
@@ -135,9 +167,35 @@
   async function rpc(name,params={}){return api(`rpc/${encodeURIComponent(name)}`,{method:"POST",body:JSON.stringify(params)})}
   function saveSession(session){state.session=session;localStorage.setItem(SESSION_KEY,JSON.stringify(session))}
   function clearSession(){state.session=null;localStorage.removeItem(SESSION_KEY)}
-  async function verifyAdmin(){const rows=await api("administradores?select=user_id,nome,ativo");if(!Array.isArray(rows)||!rows.length||!rows[0].ativo)throw new Error("Este usuário não está autorizado como administrador.");return rows[0]}
-  async function startAdmin(){ensureConfig();await getUser();await verifyAdmin();$("loginPage").hidden=true;$("adminApp").hidden=false;$("adminEmail").textContent=state.session.user?.email||"Administrador";await loadAll()}
-  async function restoreSession(){try{const saved=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");if(!saved?.access_token)return;state.session=saved;await startAdmin()}catch{clearSession()}}
+  async function verifyAdmin(userId){
+    if(!userId)throw new Error("Não foi possível identificar o usuário autenticado.");
+    const rows=await api(`administradores?select=user_id,nome,ativo&user_id=eq.${encodeURIComponent(userId)}&limit=1`);
+    if(!Array.isArray(rows)||!rows.length||!rows[0].ativo)throw new Error("Este usuário não está autorizado como administrador.");
+    return rows[0];
+  }
+  async function startAdmin(){
+    ensureConfig();
+    const user=await getUser();
+    await verifyAdmin(user.id);
+    if(state.session)state.session.user=user;
+    $("loginPage").hidden=true;
+    $("adminApp").hidden=false;
+    $("adminEmail").textContent=user.email||"Administrador";
+    await loadAll();
+  }
+  async function restoreSession(){
+    try{
+      const saved=JSON.parse(localStorage.getItem(SESSION_KEY)||"null");
+      if(!saved?.access_token)return;
+      state.session=saved;
+      await startAdmin();
+    }catch(error){
+      console.warn("Não foi possível restaurar a sessão administrativa:",error);
+      clearSession();
+      $("loginPage").hidden=false;
+      $("adminApp").hidden=true;
+    }
+  }
   async function loadAll(){
     setLoading();
     try{
@@ -190,18 +248,52 @@
     $("sectionTitle").textContent=title;$("sectionSubtitle").textContent=subtitle;$("content").innerHTML=html||'<div class="empty"><strong>Nenhum registro nesta área</strong><span>Quando houver novos dados, eles aparecerão aqui.</span></div>'
   }
   async function patch(table,id,payload){return api(`${table}?id=eq.${encodeURIComponent(id)}`,{method:"PATCH",body:JSON.stringify(payload)})}
-  function findCompany(id){return state.companies.find(x=>x.id===id)}function findJob(id){return state.jobs.find(x=>x.id===id)}function findPayment(id){return state.payments.find(x=>x.id===id)}
+  function sameId(a,b){return String(a??"")===String(b??"")}
+  function findCompany(id){return state.companies.find(x=>sameId(x.id,id))}
+  function findJob(id){return state.jobs.find(x=>sameId(x.id,id))}
+  function findPayment(id){return state.payments.find(x=>sameId(x.id,id))}
   function openWhatsApp(phone,message){const n=digits(phone);if(!n){toast("WhatsApp não informado.","error");return}window.open(`https://wa.me/55${n.replace(/^55/,"")}?text=${encodeURIComponent(message)}`,"_blank","noopener")}
   function openReasonModal(kind,item,mode){state.modal={kind,item,mode};const isCorrection=mode==="correct";$("modalTitle").textContent=isCorrection?"Solicitar correção":"Reprovar cadastro";$("modalText").textContent=isCorrection?"A justificativa será salva e o WhatsApp será aberto com a mensagem pronta.":"Use a reprovação para conteúdo falso, proibido ou que não possa ser corrigido.";$("modalReason").value="";$("modalConfirm").textContent=isCorrection?"Salvar e abrir WhatsApp":"Reprovar e abrir WhatsApp";$("modalConfirm").className=`confirm ${isCorrection?'':'danger'}`;$("modalBackdrop").hidden=false;setTimeout(()=>$("modalReason").focus(),30)}
   function closeModal(){state.modal=null;$("modalBackdrop").hidden=true}
   async function confirmReason(){const reason=$("modalReason").value.trim();if(reason.length<5){toast("Escreva uma justificativa mais clara.","error");return}const {kind,item,mode}=state.modal;$("modalConfirm").disabled=true;try{const isCompany=kind==="company",table=isCompany?"empresas":"vagas",statusReject=isCompany?"rejeitado":"rejeitada",prefix=mode==="correct"?"[CORREÇÃO] ":"[REPROVADO] ";await patch(table,item.id,{status:mode==="correct"?"pendente":statusReject,motivo_status:prefix+reason});const message=mode==="correct"?`Olá, aqui é da equipe do Busque Torres. Precisamos de uma correção no seu ${isCompany?'anúncio':'cadastro de vaga'}: ${reason}. Não será necessário pagar novamente. Após o ajuste, faremos uma nova análise.`:`Olá, aqui é da equipe do Busque Torres. Seu ${isCompany?'anúncio':'cadastro de vaga'} foi reprovado pelo seguinte motivo: ${reason}.`;closeModal();openWhatsApp(item.whatsapp,message);toast(mode==="correct"?"Correção registrada.":"Cadastro reprovado.");await loadAll()}catch(error){toast(error.message,"error")}finally{$("modalConfirm").disabled=false}}
   async function copyText(value){try{await navigator.clipboard.writeText(value);toast("Link copiado.")}catch{window.prompt("Copie o link:",value)}}
-  function renewalMessage(c){const d=daysUntil(c.data_vencimento);const price={comum:"R$ 9,90",destaque:"R$ 29,90",master:"R$ 49,90"}[c.plano]||"valor vigente";const timing=d!==null&&d>=0?`vence em ${d} dia${d===1?"":"s"}`:"está vencido";return `Olá! Seu anúncio no Busque Torres ${timing}. Para renovar por mais 30 dias no plano ${plan(c.plano)}, acesse o link abaixo:
+  function configuredPrice(planName){
+    const field={comum:"preco_comum",destaque:"preco_destaque",master:"preco_master"}[planName];
+    const value=field?state.commercial?.[field]:null;
+    return Number.isFinite(Number(value))?money(value):"valor vigente";
+  }
+  function billingStartLabel(){
+    return state.commercial?.data_inicio_cobranca?date(state.commercial.data_inicio_cobranca):"data informada no sistema";
+  }
+  function renewalMessage(c){
+    const d=daysUntil(c.data_vencimento);
+    const timing=d!==null&&d>=0?`vence em ${d} dia${d===1?"":"s"}`:"está vencido";
+    return `Olá! Seu anúncio no Busque Torres ${timing}. Para renovar por mais 30 dias no plano ${plan(c.plano)}, acesse o link abaixo:
 
 ${renewalUrl(c)}
 
-Valor da renovação a partir de 10/09/2026: ${price}.`}
-  async function handleAction(action,id){const company=findCompany(id),job=findJob(id);try{if(action.includes("company")&&!company&&action!=="copy-checkout")throw new Error("Empresa não localizada. Atualize os dados do painel.");if(action.includes("job")&&!job)throw new Error("Vaga não localizada. Atualize os dados do painel.");if(action==="approve-company"){if(!confirm(`Liberar os primeiros 30 dias gratuitos para ${company.nome}, no plano ${plan(company.plano_solicitado)}?`))return;await patch("empresas",id,{status:"ativo",ativo:true,plano:company.plano_solicitado,pagamento_confirmado:true,motivo_status:null});toast("Empresa publicada com 30 dias gratuitos.")}else if(action==="correct-company")return openReasonModal("company",company,"correct");else if(action==="reject-company")return openReasonModal("company",company,"reject");else if(action==="whatsapp-company")return openWhatsApp(company.whatsapp,"Olá, aqui é da equipe do Busque Torres. Estamos entrando em contato sobre o cadastro da sua empresa.");else if(action==="approve-job"){if(!confirm(`Publicar a vaga ${job.cargo} por ${job.duracao_dias} dia(s)?`))return;await patch("vagas",id,{status:"ativa",motivo_status:null});toast("Vaga publicada.")}else if(action==="correct-job")return openReasonModal("job",job,"correct");else if(action==="reject-job")return openReasonModal("job",job,"reject");else if(action==="whatsapp-job")return openWhatsApp(job.whatsapp,"Olá, aqui é da equipe do Busque Torres. Estamos entrando em contato sobre a vaga enviada.");else if(action==="renew-company"){if(!confirm("Renovar esta empresa por mais 30 dias a partir de agora?"))return;await patch("empresas",id,{status:"vencido"});await patch("empresas",id,{status:"ativo",pagamento_confirmado:true});toast("Empresa renovada por 30 dias.")}else if(action==="suspend-company"){if(!confirm("Suspender esta empresa da vitrine?"))return;await patch("empresas",id,{status:"suspenso"});toast("Empresa suspensa.")}else if(action==="renew-job"){if(!confirm("Republicar esta vaga pelo período original?"))return;await patch("vagas",id,{status:"encerrada"});await patch("vagas",id,{status:"ativa"});toast("Vaga republicada.")}else if(action==="close-job"){if(!confirm("Encerrar esta vaga?"))return;await patch("vagas",id,{status:"encerrada"});toast("Vaga encerrada.")}else if(action==="send-renewal"){if(!company)return toast("Empresa não localizada.","error");return openWhatsApp(company.whatsapp,renewalMessage(company))}else if(action==="copy-renewal"){if(!company)return toast("Empresa não localizada.","error");return copyText(renewalUrl(company))}else if(action==="copy-checkout"){const payment=findPayment(id);if(payment?.checkout_url)return copyText(payment.checkout_url)}await loadAll()}catch(error){console.error(error);toast(error.message,"error")}}
+Valor da renovação a partir de ${billingStartLabel()}: ${configuredPrice(c.plano)}.`;
+  }
+  async function handleAction(action,id){const company=findCompany(id),job=findJob(id);try{if(action.includes("company")&&!company&&action!=="copy-checkout")throw new Error("Empresa não localizada. Atualize os dados do painel.");if(action.includes("job")&&!job)throw new Error("Vaga não localizada. Atualize os dados do painel.");if(action==="approve-company"){
+      if(!confirm(`Liberar os primeiros 30 dias gratuitos para ${company.nome}, no plano ${plan(company.plano_solicitado)}?`))return;
+      const approvalPayload={
+        status:"ativo",
+        ativo:true,
+        plano:company.plano_solicitado||company.plano||"comum",
+        pagamento_confirmado:true,
+        motivo_status:null,
+        data_vencimento:addDaysIso(null,Number(state.commercial?.primeiros_dias_gratis||30)),
+        codigo_renovacao:company.codigo_renovacao||crypto.randomUUID(),
+        updated_at:new Date().toISOString()
+      };
+      await patch("empresas",id,approvalPayload);
+      toast(`Empresa publicada por ${Number(state.commercial?.primeiros_dias_gratis||30)} dias gratuitos.`)
+    }else if(action==="correct-company")return openReasonModal("company",company,"correct");else if(action==="reject-company")return openReasonModal("company",company,"reject");else if(action==="whatsapp-company")return openWhatsApp(company.whatsapp,"Olá, aqui é da equipe do Busque Torres. Estamos entrando em contato sobre o cadastro da sua empresa.");else if(action==="approve-job"){if(!confirm(`Publicar a vaga ${job.cargo} por ${job.duracao_dias} dia(s)?`))return;await patch("vagas",id,{status:"ativa",motivo_status:null});toast("Vaga publicada.")}else if(action==="correct-job")return openReasonModal("job",job,"correct");else if(action==="reject-job")return openReasonModal("job",job,"reject");else if(action==="whatsapp-job")return openWhatsApp(job.whatsapp,"Olá, aqui é da equipe do Busque Torres. Estamos entrando em contato sobre a vaga enviada.");else if(action==="renew-company"){if(!confirm("Renovar esta empresa por mais 30 dias a partir de agora?"))return;await patch("empresas",id,{status:"vencido"});await patch("empresas",id,{status:"ativo",pagamento_confirmado:true});toast("Empresa renovada por 30 dias.")}else if(action==="suspend-company"){if(!confirm("Suspender esta empresa da vitrine?"))return;await patch("empresas",id,{status:"suspenso"});toast("Empresa suspensa.")}else if(action==="renew-job"){if(!confirm("Republicar esta vaga pelo período original?"))return;await patch("vagas",id,{status:"encerrada"});await patch("vagas",id,{status:"ativa"});toast("Vaga republicada.")}else if(action==="close-job"){if(!confirm("Encerrar esta vaga?"))return;await patch("vagas",id,{status:"encerrada"});toast("Vaga encerrada.")}else if(action==="send-renewal"){if(!company)return toast("Empresa não localizada.","error");return openWhatsApp(company.whatsapp,renewalMessage(company))}else if(action==="copy-renewal"){if(!company)return toast("Empresa não localizada.","error");return copyText(renewalUrl(company))}else if(action==="copy-checkout"){
+      const payment=findPayment(id);
+      if(!payment?.checkout_url)return toast("Este pagamento não possui link de checkout disponível.","error");
+      return copyText(payment.checkout_url)
+    }
+    await loadAll()}catch(error){console.error(error);toast(error.message,"error")}}
   $("loginForm").addEventListener("submit",async e=>{e.preventDefault();ensureConfig();const btn=$("loginButton");btn.disabled=true;btn.textContent="Entrando...";$("loginMessage").hidden=true;try{const session=await login(e.currentTarget.email.value.trim(),e.currentTarget.password.value);saveSession(session);await startAdmin()}catch(error){clearSession();loginMessage(error.message,"error")}finally{btn.disabled=false;btn.textContent="Entrar"}});
   $("logoutButton").addEventListener("click",()=>{clearSession();location.reload()});$("refreshButton").addEventListener("click",loadAll);document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");state.tab=btn.dataset.tab;renderContent()}));$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn)handleAction(btn.dataset.action,btn.dataset.id)});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});restoreSession();
   </script>
