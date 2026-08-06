@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /bt-gestao-8472.html
+
+Sitemap: https://busquetorres.com.br/sitemap.xml
