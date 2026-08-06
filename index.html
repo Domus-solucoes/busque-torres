@@ -154,10 +154,10 @@
     .job-detail-body{padding:25px 28px 29px}
     .job-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
     .job-info{padding:13px;border-radius:13px;background:#f4f7fa}.job-info small{display:block;margin-bottom:4px;color:var(--muted);font-weight:800}.job-info strong{color:var(--navy)}
-    .job-section{margin-top:20px}.job-section h3{margin:0 0 9px;color:var(--navy);font-size:1rem}.job-section p,.job-section ul{margin:0;color:#5f6b7d;line-height:1.65}.job-section ul{padding-left:20px}
+    .job-section{margin-top:22px}.job-section h3{margin:0 0 11px;color:var(--navy);font-size:1rem}.job-section p,.job-section ul{margin:0;color:#5f6b7d;line-height:1.72}.job-section ul{padding-left:20px}.job-description{display:grid;gap:12px;padding:16px 17px;border:1px solid #e4e9f0;border-radius:15px;background:#f7f9fc;color:#536174}.job-description p{margin:0;line-height:1.78;white-space:pre-line}.job-description p+p{padding-top:12px;border-top:1px solid #e6ebf1}
     .job-apply{display:flex;align-items:center;justify-content:center;margin-top:24px;padding:14px 18px;border-radius:13px;background:var(--green);color:#fff;text-decoration:none;font-weight:950}
     body.modal-open{overflow:hidden}
-    @media(max-width:760px){.nav-actions{gap:6px;max-width:58%;justify-content:flex-end}.nav-cta{white-space:nowrap}.jobs-btn{padding:10px 12px;font-size:.8rem}.jobs-btn .jobs-label{display:none}.jobs-list{grid-template-columns:1fr;padding:14px}.jobs-panel{margin:0}.jobs-overlay{padding:10px}.job-info-grid{grid-template-columns:1fr}.job-detail-body,.job-detail-top{padding-left:20px;padding-right:20px}}
+    @media(max-width:760px){.nav{align-items:center;flex-wrap:nowrap}.nav-actions{gap:6px;max-width:58%;justify-content:flex-end}.nav-cta{white-space:nowrap}.jobs-btn{padding:10px 12px;font-size:.76rem;white-space:nowrap}.jobs-btn .jobs-label{display:inline}.jobs-list{grid-template-columns:1fr;padding:14px}.jobs-panel{margin:0}.jobs-overlay{padding:10px}.job-info-grid{grid-template-columns:1fr}.job-detail-body,.job-detail-top{padding-left:20px;padding-right:20px}}
 
 
     .job-form-layer{position:fixed;inset:0;z-index:1020;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,15,29,.80);backdrop-filter:blur(10px)}
@@ -212,16 +212,14 @@
 <body>
 <header class="hero">
   <div class="shell nav">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5h16M4 12h11M4 17.5h8" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg></span><span class="brand-name">Busque <b>Torres</b></span></a>
+    <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog" aria-label="Abrir vagas disponíveis">
+      <span class="jobs-label">BUSQUE VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
+    </button>
     <div class="nav-actions">
-      <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog">
-        <span class="jobs-label">TEMOS VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
-      </button>
       <a class="nav-cta" href="cadastro.html">Cadastrar empresa</a>
     </div>
   </div>
   <div class="hero-copy shell">
-    <div class="eyebrow"><span></span> Busque Torres</div>
     <h1>Tudo o que você procura em um só lugar.</h1>
     <p>Encontre empresas, profissionais, serviços e oportunidades em Torres, com contato rápido e direto.</p>
   </div>
@@ -329,7 +327,7 @@
         <div class="job-info"><small>Horário</small><strong id="jobSchedule"></strong></div>
         <div class="job-info"><small>Contrato</small><strong id="jobContract"></strong></div>
       </div>
-      <section class="job-section"><h3>Sobre a vaga</h3><p id="jobDescription"></p></section>
+      <section class="job-section"><h3>Sobre a vaga</h3><div id="jobDescription" class="job-description"></div></section>
       <section class="job-section"><h3>Requisitos</h3><ul id="jobRequirements"></ul></section>
       <a class="job-apply" id="jobApply" target="_blank" rel="noopener noreferrer">Enviar currículo pelo WhatsApp</a>
     </div>
@@ -353,7 +351,7 @@
         <div class="job-field"><label for="jobLocationInput">Local</label><input id="jobLocationInput" name="local" maxlength="100" required placeholder="Cidade, bairro ou endereço"></div>
         <div class="job-field"><label for="jobScheduleInput">Horário</label><input id="jobScheduleInput" name="horario" maxlength="80" placeholder="Ex.: 08h às 18h"></div>
         <div class="job-field"><label for="jobContractInput">Tipo de contratação</label><select id="jobContractInput" name="contrato" required><option value="">Selecione</option><option>CLT</option><option>Temporário</option><option>Estágio</option><option>Jovem Aprendiz</option><option>Freelancer</option><option>Autônomo</option><option>Outro</option></select></div>
-        <div class="job-field full"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
+        <div class="job-field full"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" minlength="20" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
         <div class="job-field full"><label for="jobRequirementsInput">Requisitos</label><textarea id="jobRequirementsInput" name="requisitos" maxlength="700" required placeholder="Informe um requisito por linha."></textarea></div>
         <div class="job-field"><label for="jobWhatsappInput">WhatsApp para receber currículos</label><input id="jobWhatsappInput" name="whatsapp" type="tel" inputmode="numeric" maxlength="16" required placeholder="(51) 99999-9999"><small>Informe DDD e número.</small></div>
         <div class="job-field"><label for="jobEmailInput">E-mail</label><input id="jobEmailInput" name="email" type="email" maxlength="120" placeholder="Opcional"></div>
@@ -388,6 +386,17 @@ const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"}
 function clean(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
 function onlyDigits(v){return String(v||"").replace(/\D/g,"")}
 function formatPhone(value){const n=onlyDigits(value).slice(0,11);if(n.length<=2)return n;if(n.length<=6)return `(${n.slice(0,2)}) ${n.slice(2)}`;if(n.length<=10)return `(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`;return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`}
+const VALID_BRAZIL_DDDS=new Set(["11","12","13","14","15","16","17","18","19","21","22","24","27","28","31","32","33","34","35","37","38","41","42","43","44","45","46","47","48","49","51","53","54","55","61","62","63","64","65","66","67","68","69","71","73","74","75","77","79","81","82","83","84","85","86","87","88","89","91","92","93","94","95","96","97","98","99"]);
+function whatsappValidationMessage(value){
+  const n=onlyDigits(value);
+  if(!n)return "Informe o WhatsApp com DDD.";
+  if(n.length!==10&&n.length!==11)return "O WhatsApp deve ter DDD e 10 ou 11 números.";
+  if(!VALID_BRAZIL_DDDS.has(n.slice(0,2)))return "Informe um DDD brasileiro válido.";
+  if(/^(\d)\1+$/.test(n))return "Informe um número de WhatsApp válido.";
+  if(n.length===11&&n[2]!=="9")return "Celular com 11 números deve começar com 9 depois do DDD.";
+  if(n.length===10&&!/[2-5]/.test(n[2]))return "Este número parece ser um celular sem o nono dígito.";
+  return "";
+}
 function phoneWithCountry(v){let n=onlyDigits(v);if(n.length===10||n.length===11)n="55"+n;return n}
 function whatsappUrl(phone,message=WHATS_MESSAGE){const n=phoneWithCountry(phone);return n?`https://wa.me/${n}?text=${encodeURIComponent(message)}`:DEFAULT_WHATS}
 function initials(name){return String(name||"Empresa").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase()}
@@ -396,9 +405,27 @@ function safeMediaUrl(value){const v=String(value||"").trim();if(v.startsWith("d
 function escapeHtml(v){const d=document.createElement("div");d.textContent=String(v||"");return d.innerHTML}
 function escapeJob(value){return escapeHtml(value)}
 function listItems(value){return String(value||"").split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)}
+function salaryNumber(value){
+  const raw=String(value??"").trim();
+  if(!raw)return null;
+  if(/a\s*combinar|não\s*informado|nao\s*informado/i.test(raw))return null;
+  let normalized=raw.replace(/R\$|\s/g,"");
+  if(normalized.includes(",")){normalized=normalized.replace(/\./g,"").replace(",",".")}
+  else if(/^\d{1,3}(?:\.\d{3})+$/.test(normalized)){normalized=normalized.replace(/\./g,"")}
+  normalized=normalized.replace(/[^0-9.-]/g,"");
+  const n=Number(normalized);
+  return Number.isFinite(n)?n:null;
+}
+function formatSalary(value){
+  const raw=String(value??"").trim();
+  if(!raw)return "A combinar";
+  if(/a\s*combinar/i.test(raw))return "A combinar";
+  const n=salaryNumber(raw);
+  return n===null?raw:new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(n);
+}
 
 function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",criadoEm:r.created_at,avaliacao:""}}
-function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:r.salario||"A combinar",local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||""}}
+function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||""}}
 
 async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
 async function loadJobs(){const rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc");JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);renderJobs()}
@@ -409,17 +436,115 @@ function abrirPerfil(company){window.location.href=profileUrl(company)}
 function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}"><div><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
 function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open")}
 function closeJobs(){$("jobsOverlay").classList.remove("open");document.body.classList.remove("modal-open")}
-function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;$("jobDescription").textContent=j.descricao;$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");$("jobApply").href=whatsappUrl(j.whatsapp,`Olá, vim do Busque Torres e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);$("jobDetailLayer").classList.add("open")}
+function descriptionBlocks(value){
+  const text=String(value||"").replace(/\r\n?/g,"\n").trim();
+  if(!text)return ["Descrição não informada."];
+  let blocks=text.split(/\n\s*\n|\n+/).map(x=>x.trim()).filter(Boolean);
+  if(blocks.length===1&&text.length>110){
+    const divided=text.split(/(?<=[.!?])\s+|(?<=[a-záéíóúâêôãõç])\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-záéíóúâêôãõç]{2,})/u).map(x=>x.trim()).filter(Boolean);
+    if(divided.length>1)blocks=divided;
+  }
+  return blocks;
+}
+function renderJobDescription(value){
+  const box=$("jobDescription");
+  box.replaceChildren(...descriptionBlocks(value).map(text=>{const paragraph=document.createElement("p");paragraph.textContent=text;return paragraph}));
+}
+function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;renderJobDescription(j.descricao);$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");$("jobApply").href=whatsappUrl(j.whatsapp,`Olá, vim do Busque Torres e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);$("jobDetailLayer").classList.add("open")}
 function closeJobDetail(){$("jobDetailLayer").classList.remove("open")}
 function openJobForm(){$("jobFormLayer").classList.add("open");document.body.classList.add("modal-open");$("jobCompany").focus()}
 function closeJobForm(){$("jobFormLayer").classList.remove("open");$("jobFormMessage").className="job-form-message";$("jobFormMessage").textContent="";if(!$("jobsOverlay").classList.contains("open"))document.body.classList.remove("modal-open")}
 function showJobFormMessage(type,text){const el=$("jobFormMessage");el.className=`job-form-message show ${type}`;el.textContent=text;el.scrollIntoView({behavior:"smooth",block:"nearest"})}
 
-$("jobWhatsappInput").addEventListener("input",e=>{e.target.value=formatPhone(e.target.value)});
+$("jobWhatsappInput").addEventListener("input",e=>{e.target.value=formatPhone(e.target.value);e.target.setCustomValidity("")});
+$("jobWhatsappInput").addEventListener("blur",e=>{e.target.setCustomValidity(whatsappValidationMessage(e.target.value))});
+$("jobSalaryInput").addEventListener("focus",e=>{if(!e.target.value.trim())e.target.value="R$ "});
+$("jobSalaryInput").addEventListener("blur",e=>{const raw=e.target.value.trim();e.target.value=raw&&raw!=="R$"?formatSalary(raw):""});
 $("footerOpenJobs")?.addEventListener("click",()=>$("openJobForm").click());
-$("jobForm").addEventListener("submit",async e=>{e.preventDefault();const form=e.currentTarget,phone=onlyDigits(form.whatsapp.value),duration=form.querySelector('input[name="duracao"]:checked'),submit=$("jobSubmit");if(!form.checkValidity()){form.reportValidity();return}if(phone.length<10||phone.length>11){showJobFormMessage("error","Informe um WhatsApp válido com DDD.");$("jobWhatsappInput").focus();return}submit.disabled=true;submit.textContent="Enviando...";try{await BusqueAPI.rpc("enviar_vaga",{p_empresa_nome:form.empresa.value.trim(),p_cargo:form.cargo.value.trim(),p_local:form.local.value.trim(),p_contrato:form.contrato.value,p_descricao:form.descricao.value.trim(),p_requisitos:form.requisitos.value.trim(),p_whatsapp:phone,p_duracao_dias:Number(duration.value),p_salario:form.salario.value.trim()||null,p_horario:form.horario.value.trim()||null,p_email:form.email.value.trim()||null,p_empresa_id:null});form.reset();showJobFormMessage("success","Vaga enviada para aprovação. Ela aparecerá somente depois da análise da responsável.")}catch(error){console.error(error);showJobFormMessage("error","Não foi possível enviar a vaga. Verifique sua internet e tente novamente.")}finally{submit.disabled=false;submit.textContent="Enviar para aprovação"}});
+$("jobForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const form=e.currentTarget;
+  const phone=onlyDigits(form.whatsapp.value);
+  const duration=form.querySelector('input[name="duracao"]:checked');
+  const submit=$("jobSubmit");
 
-$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});$("jobsOverlay").addEventListener("click",e=>{if(e.target.id==="jobsOverlay")closeJobs()});$("jobDetailLayer").addEventListener("click",e=>{if(e.target.id==="jobDetailLayer")closeJobDetail()});$("jobFormLayer").addEventListener("click",e=>{if(e.target.id==="jobFormLayer")closeJobForm()});document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs()}});
+  if(!form.checkValidity()){form.reportValidity();return}
+  const whatsappError=whatsappValidationMessage(form.whatsapp.value);
+  if(whatsappError){
+    $("jobWhatsappInput").setCustomValidity(whatsappError);
+    showJobFormMessage("error",whatsappError);
+    $("jobWhatsappInput").focus();
+    $("jobWhatsappInput").reportValidity();
+    return;
+  }
+  $("jobWhatsappInput").setCustomValidity("");
+  if(!duration){
+    showJobFormMessage("error","Escolha o tempo do anúncio.");
+    return;
+  }
+
+  const description=form.descricao.value.trim();
+  if(description.length<20){
+    showJobFormMessage("error","A descrição da vaga precisa ter pelo menos 20 caracteres.");
+    form.descricao.focus();
+    return;
+  }
+
+  const payload={
+    p_empresa_nome:form.empresa.value.trim(),
+    p_cargo:form.cargo.value.trim(),
+    p_local:form.local.value.trim(),
+    p_contrato:form.contrato.value,
+    p_descricao:description,
+    p_requisitos:form.requisitos.value.trim(),
+    p_whatsapp:phone,
+    p_duracao_dias:Number(duration.value),
+    p_salario:form.salario.value.trim()?formatSalary(form.salario.value):null,
+    p_horario:form.horario.value.trim()||null,
+    p_email:form.email.value.trim()||null
+  };
+
+  submit.disabled=true;
+  submit.textContent="Enviando...";
+
+  try{
+    try{
+      // Versão atual da função: sem o parâmetro opcional de empresa vinculada.
+      await BusqueAPI.rpc("enviar_vaga",payload);
+    }catch(firstError){
+      const message=String(firstError?.message||"");
+      // Compatibilidade com a versão anterior da função no Supabase.
+      if(/function|schema cache|PGRST202|could not find/i.test(message)){
+        await BusqueAPI.rpc("enviar_vaga",{...payload,p_empresa_id:null});
+      }else{
+        throw firstError;
+      }
+    }
+
+    form.reset();
+    showJobFormMessage("success","Vaga enviada para aprovação. Ela aparecerá somente depois da análise da responsável.");
+  }catch(error){
+    console.error("Erro ao enviar vaga:",error);
+    const detail=String(error?.message||"").trim();
+    let message;
+    if(/vagas_descricao_check/i.test(detail)){
+      message="A descrição da vaga precisa ter pelo menos 20 caracteres.";
+    }else if(/Failed to fetch|NetworkError|Load failed/i.test(detail)){
+      message="Não foi possível conectar ao sistema. Confira sua internet e tente novamente.";
+    }else{
+      message=`Não foi possível enviar a vaga. ${detail||"Revise os dados e tente novamente."}`;
+    }
+    showJobFormMessage("error",message);
+  }finally{
+    submit.disabled=false;
+    submit.textContent="Enviar para aprovação";
+  }
+});
+
+$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
+// Os modais de vagas fecham apenas pelo botão X ou pela tecla Esc.
+// Isso evita fechamentos acidentais ao copiar e colar ou clicar fora do formulário.
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs()}});
 
 function card(company){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
 function searchableText(c){const info=categoryInfo[c.categoria];return clean([c.nome,c.descricao,c.cidade,c.bairro,c.categoria,c.subcategoria,info?info.name:"",c.produtos,c.servicos,c.endereco,c.email,c.site,c.horario].filter(Boolean).join(" "))}
