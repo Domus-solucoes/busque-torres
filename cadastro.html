@@ -411,6 +411,39 @@
             margin-bottom: 4px;
         }
 
+        .sucesso-cadastro {
+            margin: 0 34px 30px;
+            padding: 28px;
+            border: 1px solid #86efac;
+            border-radius: 14px;
+            background: #f0fdf4;
+            color: #14532d;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(20,83,45,.10);
+        }
+
+        .sucesso-cadastro[hidden] { display: none !important; }
+        .sucesso-cadastro .sucesso-icone { font-size: 2.4rem; line-height: 1; margin-bottom: 10px; }
+        .sucesso-cadastro h2 { margin: 0 0 8px; color: #14532d; font-size: 1.45rem; }
+        .sucesso-cadastro p { margin: 0 auto 18px; max-width: 620px; line-height: 1.65; }
+        .sucesso-acoes { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .sucesso-acoes a, .sucesso-acoes button {
+            border: 0; border-radius: 10px; padding: 12px 16px; font: inherit; font-weight: 800; cursor: pointer; text-decoration: none;
+        }
+        .sucesso-acoes a { background: var(--azul-escuro); color: var(--dourado); }
+        .sucesso-acoes button { background: #fff; color: var(--azul-escuro); border: 1px solid var(--borda); }
+
+        .aviso-gratuidade {
+            margin: 0 0 18px; padding: 16px 18px; border-radius: 12px;
+            background: #ecfdf5; border: 1px solid #86efac; color: #14532d; line-height: 1.55;
+        }
+        .aviso-gratuidade strong { display: block; margin-bottom: 4px; font-size: 1.02rem; }
+        .tabela-planos { width: 100%; border-collapse: collapse; margin: 0 0 20px; font-size: .94rem; }
+        .tabela-planos th, .tabela-planos td { padding: 12px 10px; border: 1px solid var(--borda); text-align: left; vertical-align: top; }
+        .tabela-planos th { background: #f8fafc; color: var(--azul-escuro); }
+        .tabela-planos strong { color: var(--azul-escuro); }
+        .tabela-planos-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 4px; }
+
 
         .upload-grid {
             display: grid;
@@ -706,6 +739,16 @@
             </div>
 
             <div id="mensagemFormulario" class="mensagem" role="status" aria-live="polite"></div>
+
+            <section id="sucessoCadastro" class="sucesso-cadastro" role="status" aria-live="assertive" tabindex="-1" hidden>
+                <div class="sucesso-icone" aria-hidden="true">✓</div>
+                <h2>Cadastro enviado com sucesso!</h2>
+                <p>Recebemos os dados da sua empresa. Agora nossa equipe fará a análise antes da publicação. Caso seja necessário algum ajuste, entraremos em contato pelo WhatsApp informado.</p>
+                <div class="sucesso-acoes">
+                    <a href="index.html">Voltar para o Busque Torres</a>
+                    <button type="button" id="novoCadastroBtn">Cadastrar outra empresa</button>
+                </div>
+            </section>
 
             <form id="cadastroForm" novalidate>
                 <div class="wizard-progress" aria-label="Etapas do cadastro">
@@ -1120,6 +1163,22 @@
                 <section class="form-etapa" data-etapa="4">
 <div class="secao-titulo">Tipo de anúncio</div>
 
+                <div class="aviso-gratuidade">
+                    <strong>🎉 Lançamento: cadastro gratuito até 10/09/2026</strong>
+                    Empresas cadastradas e aprovadas até essa data recebem os primeiros 30 dias sem cobrança. Depois desse período promocional, passam a valer os valores abaixo.
+                </div>
+
+                <div class="tabela-planos-wrap" aria-label="Valores dos planos">
+                    <table class="tabela-planos">
+                        <thead><tr><th>Plano</th><th>Valor</th><th>O que inclui</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Normal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de cadastro, presença nas buscas e categorias.</td></tr>
+                            <tr><td><strong>Destaque</strong></td><td><strong>R$ 15,90</strong></td><td>30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Master</strong></td><td><strong>R$ 25,90</strong></td><td>30 dias de cadastro + 7 dias no banner MASTER, conforme disponibilidade.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="planos" role="radiogroup" aria-label="Tipo de anúncio">
                     <div class="plano-opcao">
                         <input
@@ -1130,9 +1189,9 @@
                             checked
                         >
                         <label for="planoComum" class="plano-card">
-                            <span class="plano-nome">Anúncio comum</span>
+                            <span class="plano-nome">Normal — R$ 9,90</span>
                             <span class="plano-descricao">
-                                Empresa exibida normalmente na categoria selecionada.
+                                30 dias de cadastro com presença nas buscas e categorias.
                             </span>
                         </label>
                     </div>
@@ -1145,9 +1204,9 @@
                             value="destaque"
                         >
                         <label for="planoDestaque" class="plano-card">
-                            <span class="plano-nome">Quero destaque</span>
+                            <span class="plano-nome">Destaque — R$ 15,90</span>
                             <span class="plano-descricao">
-                                Solicitação de anúncio Premium para aparecer com maior visibilidade.
+                                30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.
                             </span>
                         </label>
                     </div>
@@ -1160,15 +1219,15 @@
                             value="master"
                         >
                         <label for="planoMaster" class="plano-card plano-master">
-                            <span class="plano-nome">Anúncio Master</span>
+                            <span class="plano-nome">MASTER — R$ 25,90</span>
                             <span class="plano-descricao">
-                                Exibição no carrossel principal, além da busca e do perfil da empresa.
+                                30 dias de cadastro + 7 dias no banner principal MASTER, conforme disponibilidade.
                             </span>
                         </label>
                     </div>
                 </div>
 
-                <div class="legal-box"><strong>Antes de enviar</strong>O anúncio só será publicado depois do pagamento e da aprovação administrativa. O período de 30 dias começa na publicação. Correções solicitadas não exigem novo pagamento.</div>
+                <div class="legal-box"><strong>Antes de enviar</strong>Até 10/09/2026, empresas cadastradas e aprovadas participam da campanha de lançamento com os primeiros 30 dias gratuitos. O período começa na publicação. Após o período promocional, os valores e condições do plano escolhido serão informados antes de qualquer cobrança. Correções solicitadas não exigem novo pagamento.</div>
                 <label class="termos">
                     <input type="checkbox" id="termos" required>
                     <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
@@ -1205,6 +1264,8 @@
         const contadorDescricao = document.getElementById("contadorDescricao");
         const whatsapp = document.getElementById("whatsapp");
         const mensagemFormulario = document.getElementById("mensagemFormulario");
+        const sucessoCadastro = document.getElementById("sucessoCadastro");
+        const novoCadastroBtn = document.getElementById("novoCadastroBtn");
         const submitBtn = document.getElementById("submitBtn");
 
         const campos = {
@@ -1310,7 +1371,13 @@
                         contexto.fillRect(0, 0, largura, altura);
                         contexto.drawImage(imagem, 0, 0, largura, altura);
 
-                        resolve(canvas.toDataURL("image/jpeg", qualidade));
+                        let resultado;
+                        try {
+                            resultado = canvas.toDataURL("image/webp", qualidade);
+                        } catch (erro) {
+                            resultado = canvas.toDataURL("image/jpeg", qualidade);
+                        }
+                        resolve(resultado);
                     };
 
                     imagem.onerror = () => reject(new Error("Não foi possível abrir esta imagem."));
@@ -1408,7 +1475,7 @@
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 960, 640, 0.68);
+                const base64 = await comprimirImagem(arquivo, 900, 600, 0.60);
                 mostrarFotoCapa(base64);
             } catch (erro) {
                 elementosImagem.erroFotoCapa.textContent = erro.message;
@@ -1434,7 +1501,7 @@
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 320, 320, 0.74);
+                const base64 = await comprimirImagem(arquivo, 240, 240, 0.68);
                 mostrarLogo(base64);
             } catch (erro) {
                 mostrarMensagem("erro", "Imagem inválida", erro.message);
@@ -1683,67 +1750,6 @@
             return valido;
         }
 
-        const BANCO_LOCAL = {
-            nome: "vitrine_local_db",
-            versao: 1,
-            loja: "cadastros"
-        };
-
-        function abrirBancoLocal() {
-            return new Promise((resolve, reject) => {
-                const requisicao = indexedDB.open(
-                    BANCO_LOCAL.nome,
-                    BANCO_LOCAL.versao
-                );
-
-                requisicao.onupgradeneeded = evento => {
-                    const banco = evento.target.result;
-
-                    if (!banco.objectStoreNames.contains(BANCO_LOCAL.loja)) {
-                        banco.createObjectStore(BANCO_LOCAL.loja, {
-                            keyPath: "id"
-                        });
-                    }
-                };
-
-                requisicao.onsuccess = () => resolve(requisicao.result);
-                requisicao.onerror = () => reject(requisicao.error);
-            });
-        }
-
-        async function salvarCadastro(cadastro) {
-            const banco = await abrirBancoLocal();
-
-            return new Promise((resolve, reject) => {
-                const transacao = banco.transaction(
-                    BANCO_LOCAL.loja,
-                    "readwrite"
-                );
-
-                transacao.objectStore(BANCO_LOCAL.loja).put(cadastro);
-
-                transacao.oncomplete = () => {
-                    banco.close();
-                    resolve();
-                };
-
-                transacao.onerror = () => {
-                    banco.close();
-                    reject(transacao.error);
-                };
-            });
-        }
-
-
-        function enviarCadastroParaVitrine(cadastro) {
-            const pacote = {
-                tipo: "vitrine_local_novo_cadastro",
-                cadastro
-            };
-
-            window.name = JSON.stringify(pacote);
-        }
-
         function montarCadastro() {
             const planoSelecionado = document.querySelector(
                 'input[name="plano"]:checked'
@@ -1954,7 +1960,16 @@
                 removerLogo();
                 carregarSubcategorias();
                 mostrarEtapa(0);
-                mostrarMensagem("sucesso", "Cadastro enviado!", "As informações foram recebidas e aguardam aprovação. A empresa ainda não aparece publicamente.");
+
+                // Confirmação persistente e compatível com Safari/macOS/iOS.
+                // Em vez de depender apenas de um aviso com scroll suave, esconde o formulário
+                // e exibe um painel de sucesso que permanece visível até a ação do usuário.
+                form.hidden = true;
+                mensagemFormulario.className = "mensagem";
+                mensagemFormulario.innerHTML = "";
+                sucessoCadastro.hidden = false;
+                window.scrollTo({ top: 0, behavior: "auto" });
+                setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
             } catch (erro) {
                 console.error("Erro ao enviar cadastro:", erro);
                 mostrarMensagem("erro", "Não foi possível enviar", "Verifique sua internet e tente novamente. Nenhum cadastro duplicado foi criado nesta tentativa.");
@@ -1962,6 +1977,18 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Cadastrar negócio";
             }
+        });
+
+        novoCadastroBtn.addEventListener("click", () => {
+            sucessoCadastro.hidden = true;
+            form.hidden = false;
+            form.reset();
+            removerFotoCapa();
+            removerLogo();
+            carregarSubcategorias();
+            mostrarEtapa(0);
+            window.scrollTo({ top: 0, behavior: "auto" });
+            setTimeout(() => campos.nome.focus({ preventScroll: true }), 0);
         });
 
         atualizarContadorDescricao();

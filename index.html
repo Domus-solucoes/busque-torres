@@ -38,6 +38,10 @@
     .brand-mark svg{width:25px;height:25px}.brand-name{font-size:1.05rem}.brand-name b{color:var(--gold2)}
     .nav-cta{padding:11px 18px;border:1px solid rgba(255,255,255,.20);border-radius:999px;color:#fff;text-decoration:none;font-weight:800;background:rgba(255,255,255,.08);backdrop-filter:blur(10px)}
     .nav-cta:hover{background:rgba(255,255,255,.14)}
+    .nav-cta.nav-cta-gold{border-color:rgba(230,184,75,.55);background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);box-shadow:0 9px 22px rgba(230,184,75,.22)}
+    .nav-cta.nav-cta-gold:hover{background:linear-gradient(135deg,var(--gold2),var(--gold));filter:brightness(1.04)}
+    .plans-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.10);color:#fff;font-weight:900;cursor:pointer;backdrop-filter:blur(10px)}
+    .plans-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
     .hero-copy{position:relative;z-index:2;max-width:790px;margin:70px auto 0;text-align:center}
     .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);color:#dbe7f5;font-size:.82rem;font-weight:800}
     .eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--gold)}
@@ -62,10 +66,10 @@
     .section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:18px}.section-head h2{margin:0;color:var(--navy);font-size:clamp(1.55rem,3vw,2.1rem);letter-spacing:-.035em}.section-head p{margin:5px 0 0;color:var(--muted)}.count{font-size:.88rem;color:var(--muted);white-space:nowrap}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
     .card{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 7px 22px rgba(8,27,51,.055);transition:transform .24s,box-shadow .24s;cursor:pointer}.card:hover{transform:translateY(-6px);box-shadow:0 18px 38px rgba(8,27,51,.12)}
-    .cover{position:relative;height:220px;overflow:hidden;background:linear-gradient(135deg,#dbe8f6,#edf3fa);cursor:pointer}.cover>img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}.cover-fallback{position:absolute;z-index:0;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--cover1,#d8e6f4),var(--cover2,#eef3f8));font-size:2.35rem;font-weight:950;letter-spacing:-.04em;color:rgba(8,27,51,.72)}.cover.has-image .cover-fallback{display:none}.cover:after{content:"";position:absolute;inset:auto 0 0;height:58%;background:linear-gradient(transparent,rgba(5,20,39,.42))}
+    .cover{position:relative;height:220px;overflow:hidden;background:linear-gradient(135deg,var(--cover1,#dbe8f6),var(--cover2,#edf3fa));cursor:pointer;content-visibility:auto;contain-intrinsic-size:220px 360px}.cover .cover-main,.cover.fit-contain .cover-main,.cover.fit-cover .cover-main{position:absolute;z-index:1;inset:50% auto auto 50%;display:block;width:auto!important;height:auto!important;max-width:calc(100% - 16px)!important;max-height:calc(100% - 16px)!important;object-fit:contain!important;object-position:center!important;padding:0!important;transform:translate(-50%,-50%);opacity:0;transition:opacity .18s ease}.cover .cover-main.loaded{opacity:1}.cover-fallback{position:absolute;z-index:0;inset:0;display:grid;place-items:center;background:linear-gradient(135deg,var(--cover1,#d8e6f4),var(--cover2,#eef3f8));font-size:2.35rem;font-weight:950;letter-spacing:-.04em;color:rgba(8,27,51,.72)}.cover.has-image .cover-fallback{display:none}.cover:after{content:"";position:absolute;z-index:2;inset:auto 0 0;height:42%;background:linear-gradient(transparent,rgba(5,20,39,.24));pointer-events:none}
     .premium{position:absolute;z-index:2;top:14px;right:14px;padding:6px 9px;border-radius:9px;background:rgba(8,27,51,.82);backdrop-filter:blur(8px);color:var(--gold2);font-size:.68rem;font-weight:950;text-transform:uppercase}
-    .logo{position:absolute;z-index:3;left:18px;bottom:-25px;display:grid;place-items:center;width:60px;height:60px;overflow:hidden;border:4px solid #fff;border-radius:17px;background:var(--navy);color:#fff;font-size:1.22rem;font-weight:950;box-shadow:0 8px 20px rgba(8,27,51,.20)}.logo img{width:100%;height:100%;object-fit:cover;display:block}
-    .card-body{padding:39px 19px 18px}.card-top{display:flex;justify-content:space-between;gap:10px}.card h3{margin:0;color:var(--navy);font-size:1.2rem;letter-spacing:-.02em}.rating{flex:0 0 auto;color:#986c00;font-size:.83rem;font-weight:900}.rating span{color:#f4b740}.tag{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:8px;background:#f2f5f8;color:#596579;font-size:.7rem;font-weight:900;text-transform:uppercase}.desc{min-height:66px;margin:14px 0;color:var(--muted);font-size:.9rem;line-height:1.55}.meta{display:flex;align-items:center;gap:7px;margin-bottom:15px;color:#5f6b7d;font-size:.84rem}.meta svg{width:16px;height:16px}.actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;text-decoration:none;font-size:.87rem;font-weight:900}.btn-outline{border:1px solid var(--line);color:var(--navy)}.btn-whats{background:var(--green);color:#fff}.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .logo{position:absolute;z-index:4;left:16px;bottom:14px;display:grid;place-items:center;width:60px;height:60px;overflow:hidden;border:4px solid #fff;border-radius:17px;background:var(--navy);color:#fff;font-size:1.22rem;font-weight:950;box-shadow:0 8px 20px rgba(8,27,51,.28)}.logo img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;background:#fff}
+    .card-body{padding:20px 19px 18px}.card-top{display:flex;justify-content:space-between;gap:10px}.card h3{margin:0;color:var(--navy);font-size:1.2rem;letter-spacing:-.02em}.rating{flex:0 0 auto;color:#986c00;font-size:.83rem;font-weight:900}.rating span{color:#f4b740}.tag{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:8px;background:#f2f5f8;color:#596579;font-size:.7rem;font-weight:900;text-transform:uppercase}.desc{min-height:66px;margin:14px 0;color:var(--muted);font-size:.9rem;line-height:1.55}.meta{display:flex;align-items:center;gap:7px;margin-bottom:15px;color:#5f6b7d;font-size:.84rem}.meta svg{width:16px;height:16px}.actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;text-decoration:none;font-size:.87rem;font-weight:900}.btn-outline{border:1px solid var(--line);color:var(--navy)}.btn-whats{background:var(--green);color:#fff}.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
     .empty{display:none;padding:55px 20px;border:2px dashed #d4dae3;border-radius:22px;background:#fff;text-align:center}.empty.show{display:block}.empty h3{margin:0 0 8px;color:var(--navy)}.empty p{margin:0;color:var(--muted)}
     .join{position:relative;overflow:hidden;margin:48px 0 18px;padding:38px;border-radius:24px;background:linear-gradient(135deg,#fff,#f9fbfd);border:1px solid var(--line);box-shadow:0 10px 30px rgba(8,27,51,.06)}.join:after{content:"";position:absolute;width:180px;height:180px;right:-50px;bottom:-80px;border-radius:50%;background:rgba(230,184,75,.14)}.join-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px}.join h2{margin:0 0 8px;color:var(--navy);font-size:1.7rem}.join p{max-width:650px;margin:0;color:var(--muted);line-height:1.6}.join a{flex:0 0 auto;padding:13px 20px;border-radius:13px;background:var(--navy);color:var(--gold2);text-decoration:none;font-weight:900}
     footer{margin-top:45px;padding:30px 20px;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:.84rem}footer b{color:#a57816}.site-footer{display:grid;gap:16px}.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 18px}.site-footer a,.site-footer button{border:0;background:none;padding:0;color:#52647a;text-decoration:none;cursor:pointer}.site-footer a:hover,.site-footer button:hover{text-decoration:underline}.site-footer small{display:block}
@@ -85,17 +89,32 @@
     .search-mode-label{display:none;margin:0 0 18px;color:var(--muted);font-size:.95rem}
     body.search-mode{overflow-x:hidden;background:#fff}
 
-    .banner-company-image{
+    .banner-company-bg{
       position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
+      inset:-24px;
+      width:calc(100% + 48px);
+      height:calc(100% + 48px);
       object-fit:cover;
-      opacity:1;
+      filter:blur(22px) brightness(.48);
+      transform:scale(1.08);
+      opacity:.9;
       z-index:0;
       transition:opacity .35s ease;
     }
-    .banner-company-image.trocando{opacity:0}
+    .banner-company-image{
+      position:absolute;
+      inset:0 0 0 auto;
+      width:52%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      opacity:.96;
+      z-index:1;
+      transition:opacity .35s ease;
+      padding:18px;
+    }
+    .banner-company-image.trocando,.banner-company-bg.trocando{opacity:0}
+    @media(max-width:760px){.banner-company-image{width:100%;opacity:.28;padding:12px}.banner-company-bg{filter:blur(20px) brightness(.42)}}
     .banner:after{display:none}
     .banner-content,.banner-nav{z-index:3}
     .banner-content{
@@ -144,6 +163,7 @@
     .job-item{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;border:1px solid var(--line);border-radius:17px;padding:18px;background:#fff;text-align:left;cursor:pointer;transition:.2s;box-shadow:0 5px 16px rgba(8,27,51,.045)}
     .job-item:hover{transform:translateY(-2px);border-color:#c9d2df;box-shadow:0 12px 24px rgba(8,27,51,.09)}
     .job-item h3{margin:0 0 6px;color:var(--navy);font-size:1.05rem}.job-item p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.45}
+    .job-item-media{flex:0 0 94px;width:94px;height:94px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#eef3f8}.job-item-media img{width:100%;height:100%;object-fit:cover;display:block}.job-item-content{flex:1;min-width:0}
     .job-item-tag{flex:0 0 auto;padding:5px 8px;border-radius:8px;background:#edf7f1;color:#16824d;font-size:.68rem;font-weight:900;text-transform:uppercase}
     .job-detail-layer{position:fixed;inset:0;z-index:1010;display:none;align-items:center;justify-content:center;background:rgba(4,15,29,.76);backdrop-filter:blur(10px);padding:20px}
     .job-detail-layer.open{display:flex}
@@ -152,12 +172,13 @@
     .job-detail-top h2{margin:11px 48px 7px 0;font-size:1.75rem}.job-detail-top p{margin:0;color:#d5e1ee}
     .job-detail-close{position:absolute;right:18px;top:18px}
     .job-detail-body{padding:25px 28px 29px}
+    .job-detail-image{margin:0 0 20px;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#eef3f8}.job-detail-image img{width:100%;max-height:430px;display:block;object-fit:contain;background:#f8fafc}
     .job-info-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px}
     .job-info{padding:13px;border-radius:13px;background:#f4f7fa}.job-info small{display:block;margin-bottom:4px;color:var(--muted);font-weight:800}.job-info strong{color:var(--navy)}
     .job-section{margin-top:22px}.job-section h3{margin:0 0 11px;color:var(--navy);font-size:1rem}.job-section p,.job-section ul{margin:0;color:#5f6b7d;line-height:1.72}.job-section ul{padding-left:20px}.job-description{display:grid;gap:12px;padding:16px 17px;border:1px solid #e4e9f0;border-radius:15px;background:#f7f9fc;color:#536174}.job-description p{margin:0;line-height:1.78;white-space:pre-line}.job-description p+p{padding-top:12px;border-top:1px solid #e6ebf1}
     .job-apply{display:flex;align-items:center;justify-content:center;margin-top:24px;padding:14px 18px;border-radius:13px;background:var(--green);color:#fff;text-decoration:none;font-weight:950}
     body.modal-open{overflow:hidden}
-    @media(max-width:760px){.nav{align-items:center;flex-wrap:nowrap}.nav-actions{gap:6px;max-width:58%;justify-content:flex-end}.nav-cta{white-space:nowrap}.jobs-btn{padding:10px 12px;font-size:.76rem;white-space:nowrap}.jobs-btn .jobs-label{display:inline}.jobs-list{grid-template-columns:1fr;padding:14px}.jobs-panel{margin:0}.jobs-overlay{padding:10px}.job-info-grid{grid-template-columns:1fr}.job-detail-body,.job-detail-top{padding-left:20px;padding-right:20px}}
+    @media(max-width:760px){.nav{align-items:center;flex-wrap:nowrap}.nav-actions{gap:6px;max-width:none;justify-content:flex-end}.nav-cta{white-space:nowrap}.jobs-btn{padding:10px 12px;font-size:.76rem;white-space:nowrap}.jobs-btn .jobs-label{display:inline}.jobs-list{grid-template-columns:1fr;padding:14px}.jobs-panel{margin:0}.jobs-overlay{padding:10px}.job-item-media{width:74px;height:74px;flex-basis:74px}.job-info-grid{grid-template-columns:1fr}.job-detail-body,.job-detail-top{padding-left:20px;padding-right:20px}}
 
 
     .job-form-layer{position:fixed;inset:0;z-index:1020;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,15,29,.80);backdrop-filter:blur(10px)}
@@ -174,6 +195,7 @@
     .job-field textarea{min-height:105px;resize:vertical;line-height:1.5}
     .job-field input:focus,.job-field select:focus,.job-field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(8,27,51,.09)}
     .job-field small{color:var(--muted);line-height:1.4}
+    .job-mode{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px;border:1px solid var(--line);border-radius:14px;background:#f5f7fa}.job-mode button{border:0;border-radius:10px;padding:11px 12px;background:transparent;color:#536174;font-weight:900;cursor:pointer}.job-mode button.active{background:var(--navy);color:#fff}.job-image-box{grid-column:1/-1;padding:14px;border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc}.job-image-box input{background:#fff}.job-image-preview{display:none;margin-top:12px}.job-image-preview.show{display:block}.job-image-preview img{width:100%;max-height:320px;object-fit:contain;display:block;border:1px solid var(--line);border-radius:12px;background:#fff}.job-image-preview-actions{display:flex;justify-content:flex-end;margin-top:8px}.job-image-preview-actions button{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff;color:#344559;font-weight:800}.job-manual-field.image-mode-hidden{display:none!important}.image-mode-note{display:none;grid-column:1/-1;padding:13px 14px;border-radius:12px;background:#fff8e6;color:#73520b;line-height:1.5}.image-mode-note.show{display:block}
     .job-duration{grid-column:1/-1;margin-top:2px}
     .job-duration-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:9px}
     .job-duration-option{position:relative}.job-duration-option input{position:absolute;opacity:0;pointer-events:none}
@@ -206,6 +228,12 @@
     .search-hint strong{display:block;margin-bottom:8px;color:var(--navy);font-size:1.2rem}
     @media(max-width:620px){.jobs-btn{min-height:42px}.search-close{flex:0 0 auto}.job-form-grid{grid-template-columns:1fr!important}.job-form-panel{max-height:94vh;overflow:auto}.job-form-actions,.job-form-footer{position:sticky;bottom:0;background:#fff}body.search-mode .search-wrap{padding:12px}.search-close{width:38px;height:38px}.search button{padding-inline:16px}}
 
+    .plans-overlay{position:fixed;inset:0;z-index:1040;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,15,29,.80);backdrop-filter:blur(10px)}
+    .plans-overlay.open{display:flex}.plans-card{position:relative;width:min(760px,100%);max-height:92vh;overflow:auto;border-radius:25px;background:#fff;box-shadow:0 35px 100px rgba(0,0,0,.42)}
+    .plans-head{padding:27px 28px;background:linear-gradient(135deg,#09203b,#123f68);color:#fff}.plans-head h2{margin:0 50px 7px 0;font-size:1.8rem}.plans-head p{margin:0;color:#d5e1ee;line-height:1.5}.plans-close{position:absolute;right:18px;top:18px;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;font-size:1.35rem;cursor:pointer}
+    .plans-body{padding:24px 28px 29px}.launch-note{padding:14px 16px;border-radius:14px;background:#fff8e6;border:1px solid #f2dfab;color:#72530b;font-weight:850;line-height:1.5}.plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}.plan-public{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.plan-public.master{border-color:#ead48b;background:#fffdf6}.plan-public h3{margin:0 0 5px;color:var(--navy)}.plan-public .price{font-size:1.45rem;font-weight:950;color:var(--navy)}.plan-public p{margin:8px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
+    .rotation-box{margin-top:20px;padding:18px;border-radius:16px;background:#f5f8fb;border:1px solid var(--line)}.rotation-box h3{margin:0 0 7px;color:var(--navy)}.rotation-box p{margin:0;color:var(--muted);line-height:1.55}.rotation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.rotation-item{padding:11px 12px;border-radius:12px;background:#fff;border:1px solid #e5eaf0;color:#344559;font-weight:800}.rotation-item small{display:block;margin-top:3px;color:#7a8798;font-weight:700}.plans-warning{margin-top:14px;color:#667085;font-size:.82rem;line-height:1.5}
+    @media(max-width:760px){.plans-grid,.rotation-list{grid-template-columns:1fr}.plans-body,.plans-head{padding-left:18px;padding-right:18px}.plans-btn{padding:10px 9px;font-size:.72rem}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
@@ -216,7 +244,8 @@
       <span class="jobs-label">BUSQUE VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
     </button>
     <div class="nav-actions">
-      <a class="nav-cta" href="cadastro.html">Cadastrar empresa</a>
+      <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog">Planos e valores</button>
+      <a class="nav-cta nav-cta-gold" href="cadastro.html">Cadastrar empresa</a>
     </div>
   </div>
   <div class="hero-copy shell">
@@ -246,7 +275,7 @@
   </nav>
 
   <section class="banner" id="bannerSection" aria-label="Anúncios patrocinados">
-    <img id="bannerImage" class="banner-company-image" alt="" hidden><div class="banner-media"></div>
+    <img id="bannerImageBg" class="banner-company-bg" alt="" aria-hidden="true" decoding="async" hidden><img id="bannerImage" class="banner-company-image" alt="" decoding="async" fetchpriority="high" hidden><div class="banner-media"></div>
     <div class="banner-content">
       <span class="badge">Patrocínio Master</span>
       <h2 id="bannerTitle">Sua empresa pode ser o destaque da cidade.</h2>
@@ -303,6 +332,22 @@
   </section>
 </main>
 
+<div class="plans-overlay" id="plansOverlay" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
+  <article class="plans-card">
+    <button class="plans-close" id="closePlans" type="button" aria-label="Fechar planos">×</button>
+    <div class="plans-head"><h2 id="plansTitle">Planos e valores</h2><p>Veja os valores antes de cadastrar sua empresa, sem sair desta página.</p></div>
+    <div class="plans-body">
+      <div class="launch-note">Cadastro gratuito até <strong>10/09/2026</strong>. Empresas cadastradas e aprovadas até essa data recebem os primeiros 30 dias gratuitos.</div>
+      <div class="plans-grid">
+        <article class="plan-public"><h3>Normal</h3><div class="price">R$ 9,90</div><p>30 dias de cadastro, perfil completo e presença nas buscas e categorias.</p></article>
+        <article class="plan-public"><h3>Destaque</h3><div class="price">R$ 15,90</div><p>30 dias de cadastro + 7 dias em uma das 3 posições de Destaque, conforme disponibilidade.</p></article>
+        <article class="plan-public master"><h3>MASTER</h3><div class="price">R$ 25,90</div><p>30 dias de cadastro + 7 dias em uma das 3 posições MASTER do banner principal, conforme disponibilidade.</p></article>
+      </div>
+      <div class="rotation-box"><h3>Próximas trocas de Destaque e MASTER</h3><p>Cada posição especial fica ativa por 7 dias. Abaixo estão as próximas janelas previstas do calendário comercial.</p><div class="rotation-list" id="rotationList"></div><div class="plans-warning">As datas mostram as janelas previstas. A posição e a semana dependem de disponibilidade e são confirmadas pela equipe antes da ativação. A reserva automática ainda não está disponível.</div></div>
+    </div>
+  </article>
+</div>
+
 <div class="jobs-overlay" id="jobsOverlay" role="dialog" aria-modal="true" aria-labelledby="jobsTitle">
   <div class="jobs-panel">
     <div class="jobs-header">
@@ -321,6 +366,7 @@
     <button class="job-detail-close" id="closeJobDetail" type="button" aria-label="Fechar detalhes">×</button>
     <div class="job-detail-top"><span class="badge">Vaga aberta</span><h2 id="jobDetailTitle"></h2><p id="jobDetailCompany"></p></div>
     <div class="job-detail-body">
+      <div class="job-detail-image" id="jobDetailImageWrap" hidden><img id="jobDetailImage" alt="Imagem da vaga"></div>
       <div class="job-info-grid">
         <div class="job-info"><small>Salário</small><strong id="jobSalary"></strong></div>
         <div class="job-info"><small>Local</small><strong id="jobLocation"></strong></div>
@@ -345,16 +391,19 @@
     <div class="job-form-message" id="jobFormMessage" role="status" aria-live="polite"></div>
     <form class="job-form" id="jobForm" novalidate>
       <div class="job-form-grid">
+        <div class="job-mode" aria-label="Modo de publicação"><button id="jobModeManual" class="active" type="button">Preencher a vaga</button><button id="jobModeImage" type="button">Usar arte pronta</button></div>
+        <div class="image-mode-note" id="jobImageModeNote">Envie a arte pronta da vaga. Para publicar, serão obrigatórios somente empresa, WhatsApp, tempo do anúncio e a imagem. Você pode usar uma única arte com várias vagas.</div>
         <div class="job-field"><label for="jobCompany">Empresa</label><input id="jobCompany" name="empresa" maxlength="90" required placeholder="Nome da empresa"></div>
-        <div class="job-field"><label for="jobRole">Cargo</label><input id="jobRole" name="cargo" maxlength="90" required placeholder="Ex.: Vendedor(a)"></div>
-        <div class="job-field"><label for="jobSalaryInput">Salário</label><input id="jobSalaryInput" name="salario" maxlength="60" placeholder="Ex.: R$ 2.000 ou A combinar"></div>
-        <div class="job-field"><label for="jobLocationInput">Local</label><input id="jobLocationInput" name="local" maxlength="100" required placeholder="Cidade, bairro ou endereço"></div>
-        <div class="job-field"><label for="jobScheduleInput">Horário</label><input id="jobScheduleInput" name="horario" maxlength="80" placeholder="Ex.: 08h às 18h"></div>
-        <div class="job-field"><label for="jobContractInput">Tipo de contratação</label><select id="jobContractInput" name="contrato" required><option value="">Selecione</option><option>CLT</option><option>Temporário</option><option>Estágio</option><option>Jovem Aprendiz</option><option>Freelancer</option><option>Autônomo</option><option>Outro</option></select></div>
-        <div class="job-field full"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" minlength="20" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
-        <div class="job-field full"><label for="jobRequirementsInput">Requisitos</label><textarea id="jobRequirementsInput" name="requisitos" maxlength="700" required placeholder="Informe um requisito por linha."></textarea></div>
+        <div class="job-field job-manual-field"><label for="jobRole">Cargo</label><input id="jobRole" name="cargo" maxlength="90" required placeholder="Ex.: Vendedor(a)"></div>
+        <div class="job-field job-manual-field"><label for="jobSalaryInput">Salário</label><input id="jobSalaryInput" name="salario" maxlength="60" placeholder="Ex.: R$ 2.000 ou A combinar"></div>
+        <div class="job-field job-manual-field"><label for="jobLocationInput">Local</label><input id="jobLocationInput" name="local" maxlength="100" required placeholder="Cidade, bairro ou endereço"></div>
+        <div class="job-field job-manual-field"><label for="jobScheduleInput">Horário</label><input id="jobScheduleInput" name="horario" maxlength="80" placeholder="Ex.: 08h às 18h"></div>
+        <div class="job-field job-manual-field"><label for="jobContractInput">Tipo de contratação</label><select id="jobContractInput" name="contrato" required><option value="">Selecione</option><option>CLT</option><option>Temporário</option><option>Estágio</option><option>Jovem Aprendiz</option><option>Freelancer</option><option>Autônomo</option><option>Outro</option></select></div>
+        <div class="job-field full job-manual-field"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" minlength="20" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
+        <div class="job-field full job-manual-field"><label for="jobRequirementsInput">Requisitos</label><textarea id="jobRequirementsInput" name="requisitos" maxlength="700" required placeholder="Informe um requisito por linha."></textarea></div>
         <div class="job-field"><label for="jobWhatsappInput">WhatsApp para receber currículos</label><input id="jobWhatsappInput" name="whatsapp" type="tel" inputmode="numeric" maxlength="16" required placeholder="(51) 99999-9999"><small>Informe DDD e número.</small></div>
-        <div class="job-field"><label for="jobEmailInput">E-mail</label><input id="jobEmailInput" name="email" type="email" maxlength="120" placeholder="Opcional"></div>
+        <div class="job-field job-manual-field"><label for="jobEmailInput">E-mail</label><input id="jobEmailInput" name="email" type="email" maxlength="120" placeholder="Opcional"></div>
+        <div class="job-image-box"><label for="jobImageInput"><strong>Imagem da vaga</strong> <span style="color:#667085;font-weight:600">(opcional no formulário normal; obrigatória em “Usar arte pronta”)</span></label><input id="jobImageInput" type="file" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG ou WebP. A imagem será otimizada antes do envio.</small><div class="job-image-preview" id="jobImagePreview"><img id="jobImagePreviewImg" alt="Pré-visualização da vaga"><div class="job-image-preview-actions"><button id="jobImageRemove" type="button">Remover imagem</button></div></div></div>
         <div class="job-duration">
           <div class="job-duration-title">Tempo de anúncio</div>
           <div class="job-duration-options">
@@ -363,7 +412,7 @@
             <div class="job-duration-option"><input type="radio" id="duration5" name="duracao" value="5"><label for="duration5">5 dias</label></div>
           </div>
         </div>
-        <label class="job-form-terms"><input id="jobTerms" type="checkbox" required><span>Declaro que as informações são verdadeiras e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span></label>
+        <label class="job-form-terms"><input id="jobTerms" type="checkbox" required><span>Declaro que as informações e imagens enviadas são verdadeiras, adequadas e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span></label>
         <button class="job-submit" id="jobSubmit" type="submit">Enviar para aprovação</button>
       </div>
     </form>
@@ -378,6 +427,7 @@
 let JOBS=[];
 let registeredCompanies=[];
 let selected="todos",query="",bannerIndex=0,bannerTimer;
+let jobPublishMode="manual",jobImageData="";
 const $=id=>document.getElementById(id);
 const DEFAULT_WHATS="https://wa.me/5551999999999?text="+encodeURIComponent("Olá, quero anunciar no Busque Torres.");
 const WHATS_MESSAGE="Olá, vim do Busque Torres e gostaria de mais informações.";
@@ -425,15 +475,19 @@ function formatSalary(value){
 }
 
 function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",criadoEm:r.created_at,avaliacao:""}}
-function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||""}}
+function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
 async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
-async function loadJobs(){const rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc");JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);renderJobs()}
+async function loadJobs(){let rows;try{rows=await BusqueAPI.rpc("buscar_vagas_publicas_com_imagem",{})}catch(error){console.warn("Consulta de vagas com imagem indisponível; usando consulta atual.",error);rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc")}JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);renderJobs()}
 function allCompanies(){return registeredCompanies}
 function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
 function abrirPerfil(company){window.location.href=profileUrl(company)}
 
-function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}"><div><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function formatDateBR(date){return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date)}
+function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 3 posições MASTER</small></div>`}).join("")}
+function openPlans(){renderRotationDates();$("plansOverlay").classList.add("open");document.body.classList.add("modal-open")}
+function closePlans(){$("plansOverlay").classList.remove("open");if(!$("jobsOverlay").classList.contains("open")&&!$("jobFormLayer").classList.contains("open")&&!$("jobDetailLayer").classList.contains("open"))document.body.classList.remove("modal-open")}
 function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open")}
 function closeJobs(){$("jobsOverlay").classList.remove("open");document.body.classList.remove("modal-open")}
 function descriptionBlocks(value){
@@ -450,12 +504,19 @@ function renderJobDescription(value){
   const box=$("jobDescription");
   box.replaceChildren(...descriptionBlocks(value).map(text=>{const paragraph=document.createElement("p");paragraph.textContent=text;return paragraph}));
 }
-function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;renderJobDescription(j.descricao);$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");$("jobApply").href=whatsappUrl(j.whatsapp,`Olá, vim do Busque Torres e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);$("jobDetailLayer").classList.add("open")}
+function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;const iw=$("jobDetailImageWrap"),ii=$("jobDetailImage");if(j.imagem){ii.src=j.imagem;ii.alt=`Imagem da vaga ${j.cargo}`;iw.hidden=false}else{ii.removeAttribute("src");iw.hidden=true}renderJobDescription(j.descricao);$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");$("jobApply").href=whatsappUrl(j.whatsapp,`Olá, vim do Busque Torres e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);$("jobDetailLayer").classList.add("open")}
 function closeJobDetail(){$("jobDetailLayer").classList.remove("open")}
 function openJobForm(){$("jobFormLayer").classList.add("open");document.body.classList.add("modal-open");$("jobCompany").focus()}
 function closeJobForm(){$("jobFormLayer").classList.remove("open");$("jobFormMessage").className="job-form-message";$("jobFormMessage").textContent="";if(!$("jobsOverlay").classList.contains("open"))document.body.classList.remove("modal-open")}
 function showJobFormMessage(type,text){const el=$("jobFormMessage");el.className=`job-form-message show ${type}`;el.textContent=text;el.scrollIntoView({behavior:"smooth",block:"nearest"})}
 
+function setJobMode(mode){jobPublishMode=mode==="image"?"image":"manual";$("jobModeManual").classList.toggle("active",jobPublishMode==="manual");$("jobModeImage").classList.toggle("active",jobPublishMode==="image");$("jobImageModeNote").classList.toggle("show",jobPublishMode==="image");document.querySelectorAll(".job-manual-field").forEach(el=>el.classList.toggle("image-mode-hidden",jobPublishMode==="image"));const requiredIds=["jobRole","jobLocationInput","jobContractInput","jobDescriptionInput","jobRequirementsInput"];requiredIds.forEach(id=>{const el=$(id);if(el)el.required=jobPublishMode==="manual"});if(jobPublishMode==="image"){$("jobRole").value="Vagas disponíveis";$("jobLocationInput").value="Torres/RS";$("jobContractInput").value="Outro";$("jobDescriptionInput").value="Confira as oportunidades na imagem publicada.";$("jobRequirementsInput").value="Consulte a imagem da vaga."}else{if($("jobRole").value==="Vagas disponíveis")$("jobRole").value="";if($("jobLocationInput").value==="Torres/RS")$("jobLocationInput").value="";if($("jobContractInput").value==="Outro")$("jobContractInput").value="";if($("jobDescriptionInput").value==="Confira as oportunidades na imagem publicada.")$("jobDescriptionInput").value="";if($("jobRequirementsInput").value==="Consulte a imagem da vaga.")$("jobRequirementsInput").value=""}}
+function resetJobImage(){jobImageData="";$("jobImageInput").value="";$("jobImagePreviewImg").removeAttribute("src");$("jobImagePreview").classList.remove("show")}
+async function compressJobImage(file){if(!file||!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");if(file.size>8*1024*1024)throw new Error("A imagem deve ter no máximo 8 MB.");const src=await new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>fail(new Error("Não foi possível ler a imagem."));r.readAsDataURL(file)});const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>fail(new Error("Não foi possível abrir a imagem."));i.src=src});const max=1200,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);let out=c.toDataURL("image/webp",.72);if(!out.startsWith("data:image/webp"))out=c.toDataURL("image/jpeg",.72);return out}
+$("jobModeManual").addEventListener("click",()=>setJobMode("manual"));
+$("jobModeImage").addEventListener("click",()=>setJobMode("image"));
+$("jobImageInput").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file){resetJobImage();return}try{jobImageData=await compressJobImage(file);$("jobImagePreviewImg").src=jobImageData;$("jobImagePreview").classList.add("show");showJobFormMessage("success","Imagem pronta para enviar.")}catch(err){resetJobImage();showJobFormMessage("error",err.message)}});
+$("jobImageRemove").addEventListener("click",()=>resetJobImage());
 $("jobWhatsappInput").addEventListener("input",e=>{e.target.value=formatPhone(e.target.value);e.target.setCustomValidity("")});
 $("jobWhatsappInput").addEventListener("blur",e=>{e.target.setCustomValidity(whatsappValidationMessage(e.target.value))});
 $("jobSalaryInput").addEventListener("focus",e=>{if(!e.target.value.trim())e.target.value="R$ "});
@@ -483,8 +544,14 @@ $("jobForm").addEventListener("submit",async e=>{
     return;
   }
 
+  if(jobPublishMode==="image"&&!jobImageData){
+    showJobFormMessage("error","No modo arte pronta, selecione a imagem da vaga.");
+    $("jobImageInput").focus();
+    return;
+  }
+
   const description=form.descricao.value.trim();
-  if(description.length<20){
+  if(jobPublishMode==="manual"&&description.length<20){
     showJobFormMessage("error","A descrição da vaga precisa ter pelo menos 20 caracteres.");
     form.descricao.focus();
     return;
@@ -501,27 +568,24 @@ $("jobForm").addEventListener("submit",async e=>{
     p_duracao_dias:Number(duration.value),
     p_salario:form.salario.value.trim()?formatSalary(form.salario.value):null,
     p_horario:form.horario.value.trim()||null,
-    p_email:form.email.value.trim()||null
+    p_email:form.email.value.trim()||null,
+    p_imagem_url:jobImageData||null
   };
 
   submit.disabled=true;
   submit.textContent="Enviando...";
 
   try{
-    try{
-      // Versão atual da função: sem o parâmetro opcional de empresa vinculada.
-      await BusqueAPI.rpc("enviar_vaga",payload);
-    }catch(firstError){
-      const message=String(firstError?.message||"");
-      // Compatibilidade com a versão anterior da função no Supabase.
-      if(/function|schema cache|PGRST202|could not find/i.test(message)){
-        await BusqueAPI.rpc("enviar_vaga",{...payload,p_empresa_id:null});
-      }else{
-        throw firstError;
-      }
+    if(jobImageData){
+      await BusqueAPI.rpc("enviar_vaga_com_imagem",payload);
+    }else{
+      const legacy={...payload};delete legacy.p_imagem_url;
+      try{await BusqueAPI.rpc("enviar_vaga",legacy)}catch(firstError){const message=String(firstError?.message||"");if(/function|schema cache|PGRST202|could not find/i.test(message)){await BusqueAPI.rpc("enviar_vaga",{...legacy,p_empresa_id:null})}else{throw firstError}}
     }
 
     form.reset();
+    resetJobImage();
+    setJobMode("manual");
     showJobFormMessage("success","Vaga enviada para aprovação. Ela aparecerá somente depois da análise da responsável.");
   }catch(error){
     console.error("Erro ao enviar vaga:",error);
@@ -541,22 +605,23 @@ $("jobForm").addEventListener("submit",async e=>{
   }
 });
 
-$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
+$("openPlans").addEventListener("click",openPlans);$("closePlans").addEventListener("click",closePlans);$("plansOverlay").addEventListener("click",e=>{if(e.target===$("plansOverlay"))closePlans()});$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
 // Os modais de vagas fecham apenas pelo botão X ou pela tecla Esc.
 // Isso evita fechamentos acidentais ao copiar e colar ou clicar fora do formulário.
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs();else if($("plansOverlay").classList.contains("open"))closePlans()}});
 
-function card(company){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="lazy" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
+function applyCardImageFit(article){const cover=article.querySelector(".cover"),img=article.querySelector(".cover-main");if(!cover||!img)return;cover.classList.remove("fit-cover");cover.classList.add("fit-contain");img.style.objectFit="contain"}
+function card(company,priority=false){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img class="cover-main" src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" fetchpriority="${priority?"high":"low"}" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;applyCardImageFit(article);const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
 function searchableText(c){const info=categoryInfo[c.categoria];return clean([c.nome,c.descricao,c.cidade,c.bairro,c.categoria,c.subcategoria,info?info.name:"",c.produtos,c.servicos,c.endereco,c.email,c.site,c.horario].filter(Boolean).join(" "))}
 function ordenarDestaques(lista){return [...lista].sort((a,b)=>new Date(b.criadoEm||0)-new Date(a.criadoEm||0))}
 function obterDestaquesMaster(){return ordenarDestaques(allCompanies().filter(c=>c.master)).slice(0,8)}
 function obterDestaquesFixos(){return ordenarDestaques(allCompanies().filter(c=>c.premium)).slice(0,3)}
-function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map(card));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";atualizarBannersMaster(master)}
-function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(card));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
+function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map((company,index)=>card(company,index<3)));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";atualizarBannersMaster(master)}
+function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(company=>card(company,false)));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
 function render(){const inSearch=document.body.classList.contains("search-mode");$("normalHomeContent").hidden=inSearch;$("searchResultsContent").hidden=!inSearch;$("searchHint").classList.toggle("show",inSearch&&!query);if(inSearch)renderSearch();else{$("empty").classList.remove("show");renderHome()}}
 let masterBanners=[];
 function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>({company,title:company.nome,text:company.descricao||"Conheça esta empresa Master.",link:profileUrl(company),image:safeMediaUrl(company.imagem)}));if(!masterBanners.length)masterBanners=[{company:null,title:"Sua empresa pode ser o destaque de Torres.",text:"O primeiro anúncio Master aparecerá aqui após aprovação.",link:"cadastro.html",image:""}];if(bannerIndex>=masterBanners.length)bannerIndex=0;showBanner();restartBanner()}
-function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage");imagem.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true}requestAnimationFrame(()=>imagem.classList.remove("trocando"))},180)}
+function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage"),fundo=$("bannerImageBg");imagem.classList.add("trocando");fundo.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false;fundo.src=b.image;fundo.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true;fundo.removeAttribute("src");fundo.hidden=true}requestAnimationFrame(()=>{imagem.classList.remove("trocando");fundo.classList.remove("trocando")})},180)}
 function moveBanner(step){if(masterBanners.length<=1)return;bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;showBanner();restartBanner()}
 function restartBanner(){clearInterval(bannerTimer);if(masterBanners.length>1)bannerTimer=setInterval(()=>moveBanner(1),4000)}
 
