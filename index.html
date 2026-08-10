@@ -325,7 +325,7 @@
 </head>
 <body>
 <header class="hero" id="top">
-  <img class="hero-city-art" src="assets/torres-hero.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
+  <img class="hero-city-art" id="heroCityArt" src="assets/torres-hero.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
   <div class="hero-city-shade" aria-hidden="true"></div>
   <div class="shell nav">
     <a class="brand" href="#top" aria-label="Busque Torres - início">
@@ -438,15 +438,15 @@
 <div class="plans-overlay" id="plansOverlay" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
   <article class="plans-card">
     <button class="plans-close" id="closePlans" type="button" aria-label="Fechar planos">×</button>
-    <div class="plans-head"><h2 id="plansTitle">Planos e valores</h2><p>Veja os valores antes de cadastrar sua empresa, sem sair desta página.</p></div>
+    <div class="plans-head"><h2 id="plansTitle">Divulgue sua empresa no Busque Torres</h2><p>Escolha o plano que combina com a visibilidade que você quer.</p></div>
     <div class="plans-body">
-      <div class="launch-note">Cadastro gratuito até <strong>10/09/2026</strong>. Empresas cadastradas e aprovadas até essa data recebem os primeiros 30 dias gratuitos.</div>
+      <div class="launch-note">🎁 <strong>Cadastre-se agora e ganhe os primeiros 30 dias grátis.</strong><br><span style="font-weight:700">Válido para empresas cadastradas e aprovadas até 10/09/2026.</span></div>
       <div class="plans-grid">
-        <article class="plan-public"><h3>Normal</h3><div class="price">R$ 9,90</div><p>30 dias de cadastro, perfil completo e presença nas buscas e categorias.</p></article>
-        <article class="plan-public"><h3>Destaque</h3><div class="price">R$ 15,90</div><p>30 dias de cadastro + 7 dias em uma das 3 posições de Destaque, conforme disponibilidade.</p></article>
-        <article class="plan-public master"><h3>MASTER</h3><div class="price">R$ 25,90</div><p>30 dias de cadastro + 7 dias em uma das 3 posições MASTER do banner principal, conforme disponibilidade.</p></article>
+        <article class="plan-public"><h3>Normal</h3><div class="price">R$ 9,90</div><p>30 dias no Busque Torres, com perfil completo e presença nas buscas.</p></article>
+        <article class="plan-public"><h3>Destaque</h3><div class="price">R$ 15,90</div><p>30 dias no Busque Torres + 7 dias em posição de Destaque.</p></article>
+        <article class="plan-public master"><h3>MASTER</h3><div class="price">R$ 25,90</div><p>30 dias no Busque Torres + 7 dias em posição MASTER.</p></article>
       </div>
-      <div class="rotation-box"><h3>Próximas trocas de Destaque e MASTER</h3><p>Cada posição especial fica ativa por 7 dias. Abaixo estão as próximas janelas previstas do calendário comercial.</p><div class="rotation-list" id="rotationList"></div><div class="plans-warning">As datas mostram as janelas previstas. A posição e a semana dependem de disponibilidade e são confirmadas pela equipe antes da ativação. A reserva automática ainda não está disponível.</div></div>
+      <div class="plans-warning" style="margin-top:16px">Destaque e MASTER têm vagas limitadas e são ativados conforme disponibilidade.</div>
     </div>
   </article>
 </div>
@@ -589,6 +589,7 @@ function formatSalary(value){
 function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",criadoEm:r.created_at,avaliacao:""}}
 function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
+async function loadHeroBanner(){try{const rows=await BusqueAPI.rpc("banner_publico_atual",{});const banner=Array.isArray(rows)?rows[0]:rows;if(banner?.imagem_url){const url=safeMediaUrl(banner.imagem_url);if(url){const img=$("heroCityArt");img.src=url;img.alt=banner.nome?`Banner ${banner.nome}`:"";img.removeAttribute("aria-hidden")}}}catch(error){console.warn("Banner dinâmico indisponível; usando imagem padrão do site.",error?.message||error)}}
 async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
 async function loadJobs(){let rows;try{rows=await BusqueAPI.rpc("buscar_vagas_publicas_com_imagem",{})}catch(error){console.warn("Consulta de vagas com imagem indisponível; usando consulta atual.",error);rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc")}JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);renderJobs()}
 function allCompanies(){return registeredCompanies}
@@ -746,7 +747,7 @@ function closeSearch(){document.body.classList.remove("search-mode");$("searchIn
 function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render()}
 $("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();render()}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
-async function iniciar(){try{await Promise.all([loadCompanies(),loadJobs()])}catch(error){console.error(error);$("empty").classList.add("show");$("empty").querySelector("h3").textContent="Não foi possível carregar os dados";$("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página."}render()}
+async function iniciar(){try{await Promise.all([loadCompanies(),loadJobs(),loadHeroBanner()])}catch(error){console.error(error);$("empty").classList.add("show");$("empty").querySelector("h3").textContent="Não foi possível carregar os dados";$("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página."}render()}
 window.addEventListener("pageshow",iniciar);
 iniciar();
 
