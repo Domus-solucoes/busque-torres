@@ -1,0 +1,11 @@
+.git
+.git/**
+.github
+.github/**
+.wrangler
+.wrangler/**
+wrangler.jsonc
+README.md
+LEIA-ME-DEPLOY.txt
+*.sql
+*.zip
