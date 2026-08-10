@@ -35,7 +35,10 @@
     .refresh{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 14px;font-weight:850;color:var(--navy)}
     .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:0 5px 18px rgba(7,28,52,.04)}.stat small{font-weight:800;color:var(--muted)}.stat strong{display:block;font-size:31px;margin-top:7px}.stat.pending strong{color:var(--orange)}.stat.active strong{color:var(--green)}.stat.warning strong{color:var(--orange)}.stat.expired strong{color:var(--red)}
     .tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px;margin-bottom:18px}.tab{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 15px;font-weight:850;color:#425168}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-    .section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:24px 0 14px}.section-head h2{margin:0;font-size:23px}.section-head span{color:var(--muted);font-size:14px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:24px 0 14px}.section-head h2{margin:0;font-size:23px}.section-head span{color:var(--muted);font-size:14px}.metrics-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.metric-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.metric-box small{display:block;color:var(--muted);font-weight:750;margin-bottom:5px}.metric-box strong{font-size:26px;color:var(--navy)}
+    .metrics-browser{display:grid;grid-template-columns:minmax(280px,380px) minmax(0,1fr);gap:16px;align-items:start;margin-top:18px}.metrics-picker,.metrics-detail{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 20px rgba(7,28,52,.05)}.metrics-picker{overflow:hidden}.metrics-search{padding:16px;border-bottom:1px solid var(--line)}.metrics-search label{margin:0 0 8px}.metrics-search input{padding-left:42px;background:#fff}.metrics-search-wrap{position:relative}.metrics-search-wrap:before{content:"⌕";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:24px;color:var(--muted);pointer-events:none}.metrics-result-count{display:block;color:var(--muted);font-size:12px;font-weight:750;margin-top:8px}.metrics-company-list{max-height:520px;overflow:auto;padding:8px}.metrics-company-btn{width:100%;border:0;background:transparent;border-radius:12px;padding:12px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--text)}.metrics-company-btn:hover,.metrics-company-btn.active{background:#f1f5fa}.metrics-company-btn strong{display:block;font-size:14px}.metrics-company-btn small{display:block;color:var(--muted);margin-top:3px}.metrics-company-btn .likes{white-space:nowrap;color:#a92545;font-weight:900;font-size:13px}.metrics-detail{min-height:310px;padding:20px}.metrics-detail-empty{min-height:270px;display:grid;place-items:center;text-align:center;color:var(--muted);padding:30px}.metrics-detail-empty strong{display:block;color:var(--text);font-size:20px;margin-bottom:7px}.metrics-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.metrics-detail-head h3{margin:0;font-size:24px}.metrics-detail-head p{margin:6px 0 0;color:var(--muted)}.metrics-detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.metrics-detail-card{background:#f7f9fc;border-radius:13px;padding:15px}.metrics-detail-card small{display:block;color:var(--muted);font-weight:750;margin-bottom:6px}.metrics-detail-card strong{font-size:24px;color:var(--navy)}.metrics-detail-card.like strong{color:#a92545}.metrics-detail-note{margin-top:16px;color:var(--muted);font-size:13px;line-height:1.5}
+    @media(max-width:900px){.metrics-browser{grid-template-columns:1fr}.metrics-company-list{max-height:340px}.metrics-detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:700px){.metrics-summary{grid-template-columns:1fr 1fr}.metrics-detail-grid{grid-template-columns:1fr 1fr}}
     .cards{display:grid;gap:15px}.record{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 6px 20px rgba(7,28,52,.05);overflow:hidden}.record-top{padding:18px 20px;display:flex;justify-content:space-between;gap:18px}.record-title h3{margin:0 0 7px;font-size:20px}.record-title p{margin:0;color:var(--muted);line-height:1.5}.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.25px}.badge.pending{background:var(--orange-soft);color:var(--orange)}.badge.paid{background:var(--green-soft);color:var(--green)}.badge.unpaid{background:var(--red-soft);color:var(--red)}.badge.plan{background:var(--blue-soft);color:var(--blue)}.badge.correction{background:#f3edff;color:#6942a3}
     .record-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 20px 18px}.detail{background:#f7f9fc;border-radius:11px;padding:11px 12px;min-width:0}.detail small{display:block;color:var(--muted);font-weight:750;margin-bottom:4px}.detail div{font-size:14px;overflow-wrap:anywhere;white-space:pre-line}.record-media{padding:0 20px 18px}.record-media figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:15px;background:#f7f9fc}.record-media img{display:block;width:100%;max-height:360px;object-fit:contain;background:#eef3f8}.record-media figcaption{padding:10px 12px;color:var(--muted);font-size:13px;font-weight:750}.record-description{padding:0 20px 18px;line-height:1.6;color:#364559;white-space:pre-line}
     .actions{display:flex;gap:9px;flex-wrap:wrap;padding:15px 20px;background:#f9fbfd;border-top:1px solid var(--line)}.action{border:0;border-radius:10px;padding:10px 13px;font-weight:900}.action.pay{background:var(--blue-soft);color:var(--blue)}.action.approve{background:var(--green);color:#fff}.action.correct{background:var(--orange-soft);color:#9a5900}.action.reject{background:var(--red);color:#fff}.action.view{background:#e9eef4;color:#26374b}.action.renewal{background:var(--gold);color:#192335}.action:disabled{opacity:.45;cursor:not-allowed}
@@ -80,7 +83,7 @@
         <button class="tab" data-tab="companies-active" type="button">Empresas ativas</button>
         <button class="tab" data-tab="renewals" type="button">Renovações</button>
         <button class="tab" data-tab="finance" type="button">Financeiro</button>
-        <button class="tab" data-tab="jobs-active" type="button">Vagas ativas</button>
+        <button class="tab" data-tab="jobs-active" type="button">Vagas ativas</button><button class="tab" data-tab="metrics" type="button">Acessos</button>
       </nav>
       <section><div class="section-head"><div><h2 id="sectionTitle">Empresas pendentes</h2><span id="sectionSubtitle">Cadastros aguardando análise.</span></div></div><div id="content" class="cards"></div></section>
     </main>
@@ -98,7 +101,7 @@
   <script src="supabase-config.js"></script>
   <script>
   "use strict";
-  const state={session:null,companies:[],jobs:[],payments:[],commercial:null,tab:"companies-pending",modal:null};
+  const state={session:null,companies:[],jobs:[],payments:[],commercial:null,metrics:null,tab:"companies-pending",modal:null};
   function ensureConfig(){
     if(typeof BUSQUE_SUPABASE_URL!=="string"||!BUSQUE_SUPABASE_URL.trim()||typeof BUSQUE_SUPABASE_KEY!=="string"||!BUSQUE_SUPABASE_KEY.trim()){
       throw new Error("Configuração do Supabase não encontrada. Verifique o arquivo supabase-config.js.");
@@ -196,6 +199,7 @@
       state.jobs=Array.isArray(jobs)?jobs:[];
       state.payments=Array.isArray(payments)?payments:[];
       state.commercial=Array.isArray(configs)?configs[0]:null;
+      try{state.metrics=await rpc("metricas_resumo_admin",{})}catch(metricError){state.metrics=null;console.warn("Métricas ainda não disponíveis:",metricError?.message||metricError)}
       renderStats();renderContent();
     }catch(error){
       console.error(error);toast(error.message,"error");
@@ -219,6 +223,40 @@
   function paymentStatusLabel(v){return ({criado:"Criado",pendente:"Pendente",aprovado:"Aprovado",rejeitado:"Rejeitado",cancelado:"Cancelado",expirado:"Expirado",reembolsado:"Reembolsado",erro:"Erro"}[v]||v)}
   function paymentCard(p){const c=findCompany(p.empresa_id);const cls=p.status==="aprovado"?"paid":p.status==="pendente"?"pending":"unpaid";return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(c?.nome||"Empresa não localizada")}</h3><p>Renovação · ${safe(plan(p.plano))}</p><div class="badges"><span class="badge ${cls}">${safe(paymentStatusLabel(p.status))}</span><span class="badge plan">${safe(money(p.valor))}</span></div></div><div><small>Criado em</small><br><strong>${safe(date(p.created_at))}</strong></div></div><div class="record-details"><div class="detail"><small>ID Mercado Pago</small><div>${safe(p.mercado_pago_payment_id||p.mercado_pago_preference_id||"—")}</div></div><div class="detail"><small>Pago em</small><div>${safe(date(p.pago_em))}</div></div><div class="detail"><small>Referência</small><div>${safe(p.external_reference)}</div></div><div class="detail"><small>Erro</small><div>${safe(p.erro_detalhe||"—")}</div></div></div>${p.checkout_url&&p.status==="pendente"?`<div class="actions"><button class="action view" data-action="copy-checkout" data-id="${p.id}">Copiar checkout</button></div>`:""}</article>`}
   function activeJobCard(j){return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(j.cargo)}</h3><p>${safe(j.empresa_nome)} · expira em ${safe(date(j.expira_em))}</p></div><span class="badge paid">Ativa</span></div>${jobMedia(j)}<div class="actions"><button class="action approve" data-action="renew-job" data-id="${j.id}">Republicar</button><button class="action reject" data-action="close-job" data-id="${j.id}">Encerrar</button></div></article>`}
+  function metricNumber(v){return Number(v||0).toLocaleString("pt-BR")}
+  function metricCompanies(){
+    const companies=Array.isArray(state.metrics?.empresas)?state.metrics.empresas:[];
+    return [...companies].sort((a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt-BR",{sensitivity:"base"}));
+  }
+  function metricCompanyButton(c){
+    return `<button class="metrics-company-btn" type="button" data-action="show-metric-company" data-id="${safe(c.empresa_id)}"><span><strong>${safe(c.nome||"Empresa")}</strong><small>Clique para ver o desempenho</small></span><span class="likes">♥ ${metricNumber(c.curtidas)}</span></button>`;
+  }
+  function filterMetricCompanies(query=""){
+    const list=$("metricCompanyList"),count=$("metricCompanyCount");if(!list||!count)return;
+    const q=String(query||"").trim().toLocaleLowerCase("pt-BR");
+    const companies=metricCompanies().filter(c=>!q||String(c.nome||"").toLocaleLowerCase("pt-BR").includes(q));
+    count.textContent=`${companies.length} empresa${companies.length===1?"":"s"} encontrada${companies.length===1?"":"s"}`;
+    list.innerHTML=companies.length?companies.map(metricCompanyButton).join(""):'<div class="empty" style="padding:24px 12px"><strong>Nenhuma empresa encontrada</strong><span>Tente outro nome.</span></div>';
+  }
+  function showMetricCompany(id){
+    const detail=$("metricCompanyDetail");if(!detail)return;
+    const c=metricCompanies().find(x=>sameId(x.empresa_id,id));
+    if(!c){detail.innerHTML='<div class="metrics-detail-empty"><div><strong>Empresa não localizada</strong><span>Atualize os dados do painel e tente novamente.</span></div></div>';return}
+    document.querySelectorAll(".metrics-company-btn").forEach(btn=>btn.classList.toggle("active",sameId(btn.dataset.id,id)));
+    const company=findCompany(id);
+    const status=company?.status?({ativo:"Ativa",pendente:"Pendente",vencido:"Vencida",suspenso:"Suspensa",rejeitado:"Rejeitada"}[company.status]||company.status):"Ativa";
+    const planLabel=company?.plano?plan(company.plano):"Plano não informado";
+    detail.innerHTML=`<div class="metrics-detail-head"><div><h3>${safe(c.nome||"Empresa")}</h3><p>${safe(planLabel)} · ${safe(status)}</p></div><span class="badge plan">Desempenho</span></div><div class="metrics-detail-grid"><div class="metrics-detail-card"><small>Perfis abertos neste mês</small><strong>${metricNumber(c.acessos_perfil_mes)}</strong></div><div class="metrics-detail-card"><small>WhatsApp neste mês</small><strong>${metricNumber(c.whatsapp_mes)}</strong></div><div class="metrics-detail-card like"><small>Curtidas atuais</small><strong>♥ ${metricNumber(c.curtidas)}</strong></div><div class="metrics-detail-card"><small>Acessos ao perfil — total</small><strong>${metricNumber(c.acessos_perfil)}</strong></div><div class="metrics-detail-card"><small>Cliques no WhatsApp — total</small><strong>${metricNumber(c.whatsapp)}</strong></div></div><div class="metrics-detail-note">Os números desta empresa são exibidos somente aqui no painel administrativo. No site público aparece apenas o total de curtidas.</div>`;
+    if(window.innerWidth<901)detail.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function metricsHtml(){
+    const m=state.metrics;if(!m)return '<div class="empty"><strong>Métricas ainda não disponíveis</strong><span>Execute o SQL do contador no Supabase e clique em Atualizar dados.</span></div>';
+    const g=m.geral||{},a=m.acoes_mes||{},companies=metricCompanies();
+    const top=`<div class="metrics-summary"><div class="metric-box"><small>Acessos hoje</small><strong>${metricNumber(g.hoje)}</strong></div><div class="metric-box"><small>Últimos 7 dias</small><strong>${metricNumber(g.ultimos_7_dias)}</strong></div><div class="metric-box"><small>Este mês</small><strong>${metricNumber(g.mes_atual)}</strong></div><div class="metric-box"><small>Total acumulado</small><strong>${metricNumber(g.total)}</strong></div></div><div class="metrics-summary"><div class="metric-box"><small>Buscas no mês</small><strong>${metricNumber(a.buscas)}</strong></div><div class="metric-box"><small>Perfis abertos</small><strong>${metricNumber(a.perfis)}</strong></div><div class="metric-box"><small>Cliques WhatsApp</small><strong>${metricNumber(a.whatsapp)}</strong></div><div class="metric-box"><small>Vagas abertas</small><strong>${metricNumber(a.vagas)}</strong></div></div>`;
+    if(!companies.length)return top+'<div class="empty"><strong>Ainda não há dados por empresa</strong><span>Os acessos começarão a aparecer após a publicação desta versão.</span></div>';
+    const browser=`<div class="metrics-browser"><section class="metrics-picker"><div class="metrics-search"><label for="metricCompanySearch">Pesquisar empresa</label><div class="metrics-search-wrap"><input id="metricCompanySearch" type="search" placeholder="Digite o nome da empresa..." autocomplete="off"></div><span class="metrics-result-count" id="metricCompanyCount">${companies.length} empresa${companies.length===1?"":"s"} cadastrada${companies.length===1?"":"s"}</span></div><div class="metrics-company-list" id="metricCompanyList">${companies.map(metricCompanyButton).join("")}</div></section><section class="metrics-detail" id="metricCompanyDetail"><div class="metrics-detail-empty"><div><strong>Selecione uma empresa</strong><span>Pesquise pelo nome e clique na empresa para abrir acessos, WhatsApp e curtidas.</span></div></div></section></div>`;
+    return top+browser;
+  }
   function renderContent(){
     let list=[],title="",subtitle="",html="";
     if(state.tab==="companies-pending"){
@@ -231,6 +269,8 @@
       list=renewalCompanies().sort((a,b)=>new Date(a.data_vencimento||0)-new Date(b.data_vencimento||0));title="Renovações";subtitle="Links permanentes e avisos de vencimento.";html=list.map(renewalCard).join("")
     }else if(state.tab==="finance"){
       list=state.payments;const approved=list.filter(p=>p.status==="aprovado");const total=approved.reduce((sum,p)=>sum+Number(p.valor||0),0);title="Financeiro";subtitle=`${approved.length} pagamento(s) aprovado(s) · Total recebido: ${money(total)}`;html=list.map(paymentCard).join("")
+    }else if(state.tab==="metrics"){
+      title="Métricas e desempenho";subtitle="Acessos, interações e curtidas das empresas.";html=metricsHtml()
     }else{
       list=state.jobs.filter(x=>x.status==="ativa");title="Vagas ativas";subtitle="Vagas disponíveis publicamente.";html=list.map(activeJobCard).join("")
     }
@@ -301,7 +341,7 @@ Plano atual: ${plan(atual)}`,atual==="master"?"3":atual==="destaque"?"2":"1");
     }
     await loadAll()}catch(error){console.error(error);toast(error.message,"error")}}
   $("loginForm").addEventListener("submit",async e=>{e.preventDefault();ensureConfig();const btn=$("loginButton");btn.disabled=true;btn.textContent="Entrando...";$("loginMessage").hidden=true;try{const session=await login(e.currentTarget.email.value.trim(),e.currentTarget.password.value);saveSession(session);await startAdmin()}catch(error){clearSession();loginMessage(error.message,"error")}finally{btn.disabled=false;btn.textContent="Entrar"}});
-  $("logoutButton").addEventListener("click",()=>{clearSession();location.reload()});$("refreshButton").addEventListener("click",loadAll);document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");state.tab=btn.dataset.tab;renderContent()}));$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn)handleAction(btn.dataset.action,btn.dataset.id)});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+  $("logoutButton").addEventListener("click",()=>{clearSession();location.reload()});$("refreshButton").addEventListener("click",loadAll);document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));btn.classList.add("active");state.tab=btn.dataset.tab;renderContent()}));$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(!btn)return;if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);handleAction(btn.dataset.action,btn.dataset.id)});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")filterMetricCompanies(e.target.value)});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
   </script>
 </body>
 </html>

@@ -29,7 +29,10 @@
     :focus-visible{outline:3px solid rgba(230,184,75,.5);outline-offset:3px}
     .shell{width:min(var(--max),calc(100% - 32px));margin:auto}
     .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#06162b 0%,#0b2544 58%,#153d68 100%);color:#fff;padding:22px 0 88px}
-    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+    .hero-city-art{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%;opacity:1;pointer-events:none}
+    .hero-city-shade{display:none}
+    .hero .nav,.hero .mobile-brand-strip,.hero .hero-copy{position:relative;z-index:2}
+    .hero:before,.hero:after{display:none}
     .hero:before{width:420px;height:420px;right:-120px;top:-190px;background:rgba(230,184,75,.13)}
     .hero:after{width:300px;height:300px;left:-150px;bottom:-170px;background:rgba(71,157,255,.12)}
     .nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -42,7 +45,7 @@
     .nav-cta.nav-cta-gold:hover{background:linear-gradient(135deg,var(--gold2),var(--gold));filter:brightness(1.04)}
     .plans-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.10);color:#fff;font-weight:900;cursor:pointer;backdrop-filter:blur(10px)}
     .plans-btn:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
-    .hero-copy{position:relative;z-index:2;max-width:790px;margin:70px auto 0;text-align:center}
+    .hero-copy{position:relative;z-index:2;max-width:790px;margin:70px auto 0;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.82),0 1px 2px rgba(0,0,0,.95)}
     .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);color:#dbe7f5;font-size:.82rem;font-weight:800}
     .eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--gold)}
     h1{margin:20px 0 14px;font-size:clamp(2.3rem,6vw,4.5rem);line-height:1.02;letter-spacing:-.055em}
@@ -234,21 +237,114 @@
     .plans-body{padding:24px 28px 29px}.launch-note{padding:14px 16px;border-radius:14px;background:#fff8e6;border:1px solid #f2dfab;color:#72530b;font-weight:850;line-height:1.5}.plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}.plan-public{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.plan-public.master{border-color:#ead48b;background:#fffdf6}.plan-public h3{margin:0 0 5px;color:var(--navy)}.plan-public .price{font-size:1.45rem;font-weight:950;color:var(--navy)}.plan-public p{margin:8px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
     .rotation-box{margin-top:20px;padding:18px;border-radius:16px;background:#f5f8fb;border:1px solid var(--line)}.rotation-box h3{margin:0 0 7px;color:var(--navy)}.rotation-box p{margin:0;color:var(--muted);line-height:1.55}.rotation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.rotation-item{padding:11px 12px;border-radius:12px;background:#fff;border:1px solid #e5eaf0;color:#344559;font-weight:800}.rotation-item small{display:block;margin-top:3px;color:#7a8798;font-weight:700}.plans-warning{margin-top:14px;color:#667085;font-size:.82rem;line-height:1.5}
     @media(max-width:760px){.plans-grid,.rotation-list{grid-template-columns:1fr}.plans-body,.plans-head{padding-left:18px;padding-right:18px}.plans-btn{padding:10px 9px;font-size:.72rem}}
+    .mobile-brand-strip,.mobile-bottom-nav{display:none}
+
+    @media(max-width:640px){
+      body{padding-bottom:76px;background:#f6f7f9}
+      .shell{width:min(100% - 24px,var(--max))}
+      .hero{padding:14px 0 62px;border-radius:0 0 26px 26px}
+      .hero:before{width:250px;height:250px;right:-110px;top:-130px}
+      .hero:after{width:220px;height:220px;left:-110px;bottom:-125px}
+      .nav{align-items:center;gap:10px}
+      .brand{gap:9px;min-width:0}
+      .brand-mark{width:39px;height:39px;border-radius:12px;font-size:.78rem;letter-spacing:-.03em}
+      .brand-name{font-size:.9rem;white-space:nowrap}
+      .nav-actions{display:flex;gap:7px;margin-left:auto}
+      .nav-actions .plans-btn,.nav-actions .nav-cta{display:none}
+      .jobs-btn{padding:9px 11px;font-size:.72rem;border-radius:12px;box-shadow:none}
+      .jobs-btn .jobs-label{display:none}
+      .jobs-count{min-width:28px;height:28px}
+      .mobile-brand-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding:10px 13px;border:1px solid rgba(255,255,255,.13);border-radius:14px;background:rgba(255,255,255,.07);backdrop-filter:blur(10px)}
+      .mobile-brand-strip strong{font-size:.78rem;color:var(--gold2);letter-spacing:.03em}
+      .mobile-brand-strip span{font-size:.69rem;color:#c9d7e6;white-space:nowrap}
+      .hero-copy{margin-top:25px;padding-inline:2px;text-align:left}
+      .hero-copy .eyebrow{font-size:.72rem;padding:6px 9px}
+      h1{margin:13px 0 9px;font-size:2rem;line-height:1.04;letter-spacing:-.045em}
+      .hero-copy p{font-size:.91rem;line-height:1.48;margin:0;color:#d0dae6}
+      .search-wrap{width:calc(100% - 24px);margin:-29px auto 14px}
+      .search{padding:6px;border-radius:16px;box-shadow:0 12px 30px rgba(8,27,51,.16)}
+      .search input{padding:12px 9px;font-size:.9rem}
+      .search button{padding:12px 14px;border-radius:11px;font-size:.82rem}
+      .categories{gap:8px;margin:0 -12px 11px;padding:3px 12px 12px;scrollbar-width:none}
+      .categories::-webkit-scrollbar{display:none}
+      .cat{padding:9px 13px;border-radius:999px;font-size:.79rem;box-shadow:0 3px 10px rgba(8,27,51,.035)}
+      .banner{min-height:270px;margin-bottom:30px;border-radius:20px}
+      .banner-content{max-width:82%;padding:25px 20px 68px}
+      .banner h2{margin:12px 0 8px;font-size:1.55rem;line-height:1.08}
+      .banner p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:16px;font-size:.85rem;line-height:1.45}
+      .banner-link{padding:10px 14px;border-radius:11px;font-size:.82rem}
+      .badge{padding:6px 9px;font-size:.64rem}
+      .banner-nav{right:14px;bottom:14px}.banner-nav button{width:36px;height:36px;border-radius:11px}
+      .banner-company-image{opacity:.24!important;padding:8px!important}
+      .section-head{margin-bottom:13px}
+      .section-head h2{font-size:1.35rem}
+      .section-head p{font-size:.82rem;line-height:1.4}
+      #featuredSection .section-head .count{display:none}
+      #featuredSection .grid{display:flex;overflow-x:auto;gap:13px;margin:0 -12px;padding:2px 12px 12px;scroll-snap-type:x proximity;scrollbar-width:none}
+      #featuredSection .grid::-webkit-scrollbar{display:none}
+      #featuredSection .card{flex:0 0 min(82vw,330px);scroll-snap-align:start;border-radius:18px}
+      #featuredSection .cover{height:160px}
+      #featuredSection .card-body{padding:15px}
+      #featuredSection .desc{min-height:0;margin:10px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+      #featuredSection .logo{width:52px;height:52px;left:12px;bottom:11px;border-width:3px;border-radius:14px}
+      #searchResultsContent .grid{grid-template-columns:1fr;gap:13px}
+      #searchResultsContent .cover{height:165px}
+      .join{margin-top:30px;padding:23px 19px;border-radius:20px}
+      .join h2{font-size:1.35rem}.join p{font-size:.88rem}.join a{padding:12px 15px}
+      footer{margin-bottom:0;padding-bottom:24px}
+      .mobile-bottom-nav{position:fixed;z-index:900;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:7px;border:1px solid rgba(8,27,51,.09);border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 12px 36px rgba(8,27,51,.22);backdrop-filter:blur(16px)}
+      .mobile-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:51px;border:0;border-radius:14px;background:transparent;color:#667085;text-decoration:none;cursor:pointer}
+      .mobile-nav-item span{font-size:1.25rem;line-height:1}
+      .mobile-nav-item b{font-size:.66rem;font-weight:900}
+      .mobile-nav-item.is-active,.mobile-nav-item:active{background:#f0f3f7;color:var(--navy)}
+      body.search-mode{padding-bottom:76px}
+      body.search-mode .mobile-bottom-nav{display:grid!important}
+      body.search-mode .search-wrap{padding:10px 12px}
+      body.search-mode main.shell{padding-top:18px}
+    }
+
+    .access-counter{display:flex;justify-content:center}
+    .access-counter-btn{border:1px solid var(--line)!important;background:#fff!important;padding:8px 12px!important;border-radius:999px!important;color:#52647a!important;font-weight:800!important;text-decoration:none!important}
+    .access-counter-btn:hover{background:#f7f9fc!important;text-decoration:none!important}
+    .access-overlay{position:fixed;inset:0;z-index:1500;background:rgba(4,18,36,.68);display:none;align-items:center;justify-content:center;padding:18px}
+    .access-overlay.open{display:flex}
+    .access-modal{width:min(430px,100%);background:#fff;border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.25);padding:24px;color:var(--text);text-align:left}
+    .access-modal-head{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .access-modal h3{margin:0;color:var(--navy);font-size:1.25rem}
+    .access-modal-close{border:0;background:#eef2f7;width:38px;height:38px;border-radius:50%;font-size:1.3rem;cursor:pointer;color:var(--navy)}
+    .access-modal p{margin:8px 0 18px;color:var(--muted);font-size:.9rem}
+    .access-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+    .access-stat{padding:15px 8px;border:1px solid var(--line);border-radius:15px;text-align:center;background:#f9fbfd}
+    .access-stat strong{display:block;color:var(--navy);font-size:1.45rem}
+    .access-stat span{font-size:.72rem;color:var(--muted);font-weight:800}
+    .access-note{display:block;margin-top:14px!important;text-align:center;color:#7a8798!important;font-size:.72rem!important}
+    @media(max-width:640px){.hero-city-art{object-position:62% 50%;opacity:1}.hero-city-shade{display:none}.access-modal{padding:20px 15px}.access-stat strong{font-size:1.25rem}.access-stat{padding-inline:4px}}
+
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
-<header class="hero">
+<header class="hero" id="top">
+  <img class="hero-city-art" src="assets/torres-hero.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
+  <div class="hero-city-shade" aria-hidden="true"></div>
   <div class="shell nav">
-    <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog" aria-label="Abrir vagas disponíveis">
-      <span class="jobs-label">BUSQUE VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
-    </button>
+    <a class="brand" href="#top" aria-label="Busque Torres - início">
+      <span class="brand-mark" aria-hidden="true">BT</span>
+      <span class="brand-name">BUSQUE <b>TORRES</b></span>
+    </a>
     <div class="nav-actions">
+      <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog" aria-label="Abrir vagas disponíveis">
+        <span class="jobs-label">BUSQUE VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
+      </button>
       <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog">Planos e valores</button>
       <a class="nav-cta nav-cta-gold" href="cadastro.html">Cadastrar empresa</a>
     </div>
   </div>
+  <div class="mobile-brand-strip shell" aria-hidden="true">
+    <strong>BUSQUE TORRES</strong><span>Comércio • Serviços • Vagas</span>
+  </div>
   <div class="hero-copy shell">
+    <span class="eyebrow"><span></span> Guia local de Torres/RS</span>
     <h1>Tudo o que você procura em um só lugar.</h1>
     <p>Encontre empresas, profissionais, serviços e oportunidades em Torres, com contato rápido e direto.</p>
   </div>
@@ -331,6 +427,13 @@
     <div class="join-inner"><div><h2>Seu negócio também pode estar aqui.</h2><p>Crie seu anúncio e seja encontrado por pessoas que já estão procurando produtos e serviços na sua região.</p></div><a href="cadastro.html">Cadastrar meu negócio</a></div>
   </section>
 </main>
+
+<nav class="mobile-bottom-nav" aria-label="Navegação principal no celular">
+  <a href="#top" class="mobile-nav-item is-active" aria-label="Início"><span>⌂</span><b>Início</b></a>
+  <button type="button" id="mobileSearch" class="mobile-nav-item" aria-label="Buscar"><span>⌕</span><b>Buscar</b></button>
+  <button type="button" id="mobileJobs" class="mobile-nav-item" aria-label="Vagas"><span>▣</span><b>Vagas</b></button>
+  <a href="cadastro.html" class="mobile-nav-item" aria-label="Cadastrar"><span>＋</span><b>Cadastrar</b></a>
+</nav>
 
 <div class="plans-overlay" id="plansOverlay" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
   <article class="plans-card">
@@ -419,7 +522,8 @@
   </article>
 </div>
 
-<footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
+<footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><div class="access-counter"><button class="access-counter-btn" id="openAccessCounter" type="button">📊 Acessos do Busque Torres</button></div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
+<div class="access-overlay" id="accessOverlay" aria-hidden="true"><div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="accessTitle"><div class="access-modal-head"><h3 id="accessTitle">Acessos do Busque Torres</h3><button class="access-modal-close" id="closeAccessCounter" type="button" aria-label="Fechar">×</button></div><p>Visualizações registradas na página inicial.</p><div class="access-stats"><div class="access-stat"><strong id="accessToday">—</strong><span>HOJE</span></div><div class="access-stat"><strong id="accessWeek">—</strong><span>7 DIAS</span></div><div class="access-stat"><strong id="accessMonth">—</strong><span>ESTE MÊS</span></div></div><small class="access-note">Cada carregamento da página inicial é contabilizado nesta primeira versão.</small></div></div>
 
 <script src="supabase-config.js"></script>
 <script>
@@ -433,7 +537,14 @@ const DEFAULT_WHATS="https://wa.me/5551999999999?text="+encodeURIComponent("Olá
 const WHATS_MESSAGE="Olá, vim do Busque Torres e gostaria de mais informações.";
 const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"},saude:{name:"Saúde",c1:"#d9f2ef",c2:"#eefaf8"},beleza:{name:"Beleza",c1:"#f8dff0",c2:"#fff2f8"},pets:{name:"Pets",c1:"#e6f2dc",c2:"#f5faef"},automotivo:{name:"Automotivo",c1:"#dfe4ec",c2:"#f2f4f7"},construcao:{name:"Construção",c1:"#f1e4d2",c2:"#faf4ec"},casa:{name:"Casa e Lar",c1:"#e4e9f4",c2:"#f5f7fb"},comercio:{name:"Comércio",c1:"#f5e6d8",c2:"#fbf4ed"},tecnologia:{name:"Tecnologia",c1:"#dce8f5",c2:"#f0f5fa"},educacao:{name:"Educação",c1:"#ece1fa",c2:"#f8f3fd"},esportes:{name:"Esportes",c1:"#e3e0f6",c2:"#f3f1fb"},profissionais:{name:"Profissionais",c1:"#dfe9e5",c2:"#f2f7f5"},eventos:{name:"Eventos",c1:"#fbe5d5",c2:"#fff5ee"},turismo:{name:"Turismo",c1:"#dceff3",c2:"#eff9fb"},agro:{name:"Agro",c1:"#e4efd9",c2:"#f5faef"},transporte:{name:"Transporte",c1:"#e2e7ee",c2:"#f4f6f9"},industria:{name:"Indústria",c1:"#e6e2dd",c2:"#f5f3f0"},servicos:{name:"Serviços",c1:"#dce8f5",c2:"#f0f5fa"},publicos:{name:"Serviços Públicos",c1:"#e9e4dc",c2:"#f8f5f0"},religiao:{name:"Religião",c1:"#efe5f5",c2:"#faf5fc"},outros:{name:"Outros",c1:"#e5e7eb",c2:"#f6f7f9"}};
 
-function clean(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
+async function registrarMetrica(evento,empresaId=null,pagina="index"){
+  try{await BusqueAPI.rpc("registrar_metrica",{p_evento:evento,p_empresa_id:empresaId?String(empresaId):null,p_pagina:pagina})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}
+}
+async function carregarContadorPublico(){
+  try{const rows=await BusqueAPI.rpc("metricas_publicas",{}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
+}
+function abrirContador(){carregarContadorPublico();$("accessOverlay").classList.add("open");$("accessOverlay").setAttribute("aria-hidden","false")}
+function fecharContador(){$("accessOverlay").classList.remove("open");$("accessOverlay").setAttribute("aria-hidden","true")}
 function onlyDigits(v){return String(v||"").replace(/\D/g,"")}
 function formatPhone(value){const n=onlyDigits(value).slice(0,11);if(n.length<=2)return n;if(n.length<=6)return `(${n.slice(0,2)}) ${n.slice(2)}`;if(n.length<=10)return `(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`;return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`}
 const VALID_BRAZIL_DDDS=new Set(["11","12","13","14","15","16","17","18","19","21","22","24","27","28","31","32","33","34","35","37","38","41","42","43","44","45","46","47","48","49","51","53","54","55","61","62","63","64","65","66","67","68","69","71","73","74","75","77","79","81","82","83","84","85","86","87","88","89","91","92","93","94","95","96","97","98","99"]);
@@ -453,6 +564,7 @@ function initials(name){return String(name||"Empresa").split(/\s+/).filter(Boole
 function safeUrl(value,fallback=DEFAULT_WHATS){try{const u=new URL(value);return ["http:","https:"].includes(u.protocol)?u.href:fallback}catch{return fallback}}
 function safeMediaUrl(value){const v=String(value||"").trim();if(v.startsWith("data:image/"))return v;try{const u=new URL(v);return ["http:","https:"].includes(u.protocol)?u.href:""}catch{return ""}}
 function escapeHtml(v){const d=document.createElement("div");d.textContent=String(v||"");return d.innerHTML}
+function clean(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
 function escapeJob(value){return escapeHtml(value)}
 function listItems(value){return String(value||"").split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean)}
 function salaryNumber(value){
@@ -521,7 +633,7 @@ $("jobWhatsappInput").addEventListener("input",e=>{e.target.value=formatPhone(e.
 $("jobWhatsappInput").addEventListener("blur",e=>{e.target.setCustomValidity(whatsappValidationMessage(e.target.value))});
 $("jobSalaryInput").addEventListener("focus",e=>{if(!e.target.value.trim())e.target.value="R$ "});
 $("jobSalaryInput").addEventListener("blur",e=>{const raw=e.target.value.trim();e.target.value=raw&&raw!=="R$"?formatSalary(raw):""});
-$("footerOpenJobs")?.addEventListener("click",()=>$("openJobForm").click());
+$("footerOpenJobs")?.addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");$("openJobForm").click()});
 $("jobForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const form=e.currentTarget;
@@ -605,13 +717,16 @@ $("jobForm").addEventListener("submit",async e=>{
   }
 });
 
-$("openPlans").addEventListener("click",openPlans);$("closePlans").addEventListener("click",closePlans);$("plansOverlay").addEventListener("click",e=>{if(e.target===$("plansOverlay"))closePlans()});$("openJobs").addEventListener("click",openJobs);$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
+$("openAccessCounter").addEventListener("click",abrirContador);$("closeAccessCounter").addEventListener("click",fecharContador);$("accessOverlay").addEventListener("click",e=>{if(e.target===$("accessOverlay"))fecharContador()});
+$("openPlans").addEventListener("click",openPlans);$("closePlans").addEventListener("click",closePlans);$("plansOverlay").addEventListener("click",e=>{if(e.target===$("plansOverlay"))closePlans()});$("openJobs").addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");openJobs()});$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
+if($("mobileSearch"))$("mobileSearch").addEventListener("click",()=>{openSearch();setTimeout(()=>$("searchInput").focus(),80)});
+if($("mobileJobs"))$("mobileJobs").addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");openJobs()});
 // Os modais de vagas fecham apenas pelo botão X ou pela tecla Esc.
 // Isso evita fechamentos acidentais ao copiar e colar ou clicar fora do formulário.
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs();else if($("plansOverlay").classList.contains("open"))closePlans()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if($("accessOverlay").classList.contains("open"))fecharContador();else if($("jobFormLayer").classList.contains("open"))closeJobForm();else if($("jobDetailLayer").classList.contains("open"))closeJobDetail();else if($("jobsOverlay").classList.contains("open"))closeJobs();else if($("plansOverlay").classList.contains("open"))closePlans()}});
 
 function applyCardImageFit(article){const cover=article.querySelector(".cover"),img=article.querySelector(".cover-main");if(!cover||!img)return;cover.classList.remove("fit-cover");cover.classList.add("fit-contain");img.style.objectFit="contain"}
-function card(company,priority=false){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img class="cover-main" src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" fetchpriority="${priority?"high":"low"}" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;applyCardImageFit(article);const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
+function card(company,priority=false){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.dataset.companyId=String(company.id);article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img class="cover-main" src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" fetchpriority="${priority?"high":"low"}" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;applyCardImageFit(article);const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
 function searchableText(c){const info=categoryInfo[c.categoria];return clean([c.nome,c.descricao,c.cidade,c.bairro,c.categoria,c.subcategoria,info?info.name:"",c.produtos,c.servicos,c.endereco,c.email,c.site,c.horario].filter(Boolean).join(" "))}
 function ordenarDestaques(lista){return [...lista].sort((a,b)=>new Date(b.criadoEm||0)-new Date(a.criadoEm||0))}
 function obterDestaquesMaster(){return ordenarDestaques(allCompanies().filter(c=>c.master)).slice(0,8)}
@@ -629,12 +744,15 @@ $("categories").addEventListener("click",e=>{const b=e.target.closest(".cat");if
 function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();window.scrollTo({top:0,behavior:"smooth"})}
 function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
 function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render()}
-$("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();openSearch();render()}});$("searchButton").addEventListener("click",()=>{openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
+$("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();render()}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
 async function iniciar(){try{await Promise.all([loadCompanies(),loadJobs()])}catch(error){console.error(error);$("empty").classList.add("show");$("empty").querySelector("h3").textContent="Não foi possível carregar os dados";$("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página."}render()}
 window.addEventListener("pageshow",iniciar);
 iniciar();
 
+
+document.addEventListener("click",e=>{const whats=e.target.closest("a.btn-whats");if(whats){const id=whats.closest(".card")?.dataset.companyId||null;registrarMetrica("clicou_whatsapp",id,"index")}});
+registrarMetrica("visita_site",null,"index");
 </script>
 </body>
 </html>
