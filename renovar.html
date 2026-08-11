@@ -20,8 +20,11 @@
 </style>
 </head>
 <body><main class="card"><header class="head"><div class="brand">BUSQUE <span>TORRES</span></div><p>Tudo o que você procura em um só lugar.</p></header><section class="body"><div id="loading" class="loading">Buscando seu anúncio...</div><div id="error" class="error" hidden></div><div id="content" hidden><span id="plan" class="plan"></span><h1 id="name"></h1><p id="statusText"></p><div class="summary"><div class="item"><small>Plano atual</small><strong id="planName"></strong></div><div class="item"><small>Valor por 30 dias</small><strong id="price"></strong></div><div class="item"><small>Vencimento</small><strong id="expires"></strong></div><div class="item"><small>Situação</small><strong id="status"></strong></div></div><div class="notice" id="notice"></div><label class="terms"><input id="accept" type="checkbox"><span>Li e aceito os <a href="termos.html" target="_blank">Termos de Uso</a>, a <a href="privacidade.html" target="_blank">Política de Privacidade</a> e a <a href="politica-comercial.html" target="_blank">Política Comercial</a>.</span></label><button id="payButton" class="button" type="button" disabled>Renovar anúncio</button><div id="result" class="result" hidden></div><a class="back" href="index.html">Voltar ao Busque Torres</a></div></section></main>
-<script src="supabase-config.js"></script><script>
+<script src="supabase-config.js"></script>
+<script src="site-config.js"></script><script>
 "use strict";
+const SITE=BusqueSite.current();
+BusqueSite.applyBranding();
 const $=id=>document.getElementById(id);
 const prices={comum:"R$ 9,90",destaque:"R$ 15,90",master:"R$ 25,90"};
 const labels={comum:"Comum",destaque:"Destaque",master:"Master"};

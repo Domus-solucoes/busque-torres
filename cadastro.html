@@ -825,7 +825,7 @@
 
                     <div class="form-group">
                         <label for="cidade">
-                            Cidade
+                            Cidade / Localidade
                             <span class="obrigatorio">*</span>
                         </label>
                         <input
@@ -835,8 +835,9 @@
                             maxlength="60"
                             required
                             autocomplete="address-level2"
-                            placeholder="Ex.: Canoas"
+                            placeholder="Ex.: Caxias do Sul, Farroupilha, Passo de Torres..."
                         >
+                        <p class="subcategoria-hint">Pode informar uma cidade ou localidade próxima. O anúncio continuará vinculado ao <strong id="cidadePlataformaHint">Busque local</strong>.</p>
                         <p class="erro-campo" id="erroCidade"></p>
                     </div>
                 </div>
@@ -1249,14 +1250,18 @@
     <footer>Busque Torres &bull; <a href="contato.html">Contato</a> &bull; <a href="termos.html">Termos</a> &bull; <a href="privacidade.html">Privacidade</a> &bull; <a href="politica-comercial.html">Comercial</a> &bull; <a href="politica-conteudo.html">Conteúdo</a><br>Desenvolvido por <strong>DOMUS SISTEMAS</strong></footer>
 
     <script src="supabase-config.js"></script>
+<script src="site-config.js"></script>
     <script>
         "use strict";
+
+        const SITE=BusqueSite.current();
+BusqueSite.applyBranding();
 
         const CONFIG = {
             chaveCadastros: "novos_cadastros",
             codigoPais: "55",
             mensagemWhatsapp:
-                "Olá, vim do Busque Torres e gostaria de mais informações."
+                `Olá, vim do ${SITE.name} e gostaria de mais informações.`
         };
 
         const form = document.getElementById("cadastroForm");
@@ -1908,6 +1913,10 @@
             }
         });
 
+        campos.cidade.value = SITE.city;
+        const cidadePlataformaHint = document.getElementById("cidadePlataformaHint");
+        if (cidadePlataformaHint) cidadePlataformaHint.textContent = SITE.name;
+
         descricao.addEventListener("input", atualizarContadorDescricao);
 
         whatsapp.addEventListener("input", evento => {
@@ -1934,7 +1943,8 @@
             submitBtn.textContent = "Enviando...";
             try {
                 const c = montarCadastro();
-                await BusqueAPI.rpc("enviar_empresa", {
+                await BusqueAPI.rpc("enviar_empresa_cidade", {
+                    p_cidade_id: SITE.id,
                     p_nome: c.nome,
                     p_categoria: c.categoria,
                     p_subcategoria: c.subcategoria,
@@ -1956,6 +1966,7 @@
                     p_plano: c.planoSolicitado
                 });
                 form.reset();
+                campos.cidade.value = SITE.city;
                 removerFotoCapa();
                 removerLogo();
                 carregarSubcategorias();
