@@ -9,3 +9,4 @@ Principais ajustes desta versão:
 - pacote público sem scripts SQL ou documentação técnica interna.
 
 Os dados oficiais do sistema permanecem no Supabase.
+Deploy Cloudflare Busque Caxias
