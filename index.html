@@ -535,7 +535,6 @@
 <div class="access-overlay" id="accessOverlay" aria-hidden="true"><div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="accessTitle"><div class="access-modal-head"><h3 id="accessTitle">Acessos do Busque Torres</h3><button class="access-modal-close" id="closeAccessCounter" type="button" aria-label="Fechar">×</button></div><p>Visualizações registradas na página inicial.</p><div class="access-stats"><div class="access-stat"><strong id="accessToday">—</strong><span>HOJE</span></div><div class="access-stat"><strong id="accessWeek">—</strong><span>7 DIAS</span></div><div class="access-stat"><strong id="accessMonth">—</strong><span>ESTE MÊS</span></div></div><small class="access-note">Cada carregamento da página inicial é contabilizado nesta primeira versão.</small></div></div>
 
 <script src="supabase-config.js"></script>
-<script src="site-config.js"></script>
 <script>
 "use strict";
 let JOBS=[];
@@ -544,17 +543,16 @@ let selected="todos",query="",bannerIndex=0,bannerTimer;
 let jobPublishMode="manual",jobImageData="";
 let initPromise=null,jobsLoadPromise=null,jobsLoaded=false,jobsLoadScheduled=false;
 const $=id=>document.getElementById(id);
-const SITE=BusqueSite.current();
-BusqueSite.applyBranding();
+const SITE={id:"torres",name:"Busque Torres",city:"Torres",cityUf:"Torres/RS"};
 const DEFAULT_WHATS="https://wa.me/5551999999999?text="+encodeURIComponent(`Olá, quero anunciar no ${SITE.name}.`);
 const WHATS_MESSAGE=`Olá, vim do ${SITE.name} e gostaria de mais informações.`;
 const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"},saude:{name:"Saúde",c1:"#d9f2ef",c2:"#eefaf8"},beleza:{name:"Beleza",c1:"#f8dff0",c2:"#fff2f8"},pets:{name:"Pets",c1:"#e6f2dc",c2:"#f5faef"},automotivo:{name:"Automotivo",c1:"#dfe4ec",c2:"#f2f4f7"},construcao:{name:"Construção",c1:"#f1e4d2",c2:"#faf4ec"},casa:{name:"Casa e Lar",c1:"#e4e9f4",c2:"#f5f7fb"},comercio:{name:"Comércio",c1:"#f5e6d8",c2:"#fbf4ed"},tecnologia:{name:"Tecnologia",c1:"#dce8f5",c2:"#f0f5fa"},educacao:{name:"Educação",c1:"#ece1fa",c2:"#f8f3fd"},esportes:{name:"Esportes",c1:"#e3e0f6",c2:"#f3f1fb"},profissionais:{name:"Profissionais",c1:"#dfe9e5",c2:"#f2f7f5"},eventos:{name:"Eventos",c1:"#fbe5d5",c2:"#fff5ee"},turismo:{name:"Turismo",c1:"#dceff3",c2:"#eff9fb"},agro:{name:"Agro",c1:"#e4efd9",c2:"#f5faef"},transporte:{name:"Transporte",c1:"#e2e7ee",c2:"#f4f6f9"},industria:{name:"Indústria",c1:"#e6e2dd",c2:"#f5f3f0"},servicos:{name:"Serviços",c1:"#dce8f5",c2:"#f0f5fa"},publicos:{name:"Serviços Públicos",c1:"#e9e4dc",c2:"#f8f5f0"},religiao:{name:"Religião",c1:"#efe5f5",c2:"#faf5fc"},outros:{name:"Outros",c1:"#e5e7eb",c2:"#f6f7f9"}};
 
 async function registrarMetrica(evento,empresaId=null,pagina="index"){
-  try{await BusqueAPI.rpc("registrar_metrica_cidade",{p_cidade_id:SITE.id,p_evento:evento,p_empresa_id:empresaId?String(empresaId):null,p_pagina:pagina})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}
+  try{await BusqueAPI.rpc("registrar_metrica",{p_evento:evento,p_empresa_id:empresaId?String(empresaId):null,p_pagina:pagina})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}
 }
 async function carregarContadorPublico(){
-  try{const rows=await BusqueAPI.rpc("metricas_publicas_cidade",{p_cidade_id:SITE.id}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
+  try{const rows=await BusqueAPI.rpc("metricas_publicas",{}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
 }
 function abrirContador(){carregarContadorPublico();$("accessOverlay").classList.add("open");$("accessOverlay").setAttribute("aria-hidden","false")}
 function fecharContador(){$("accessOverlay").classList.remove("open");$("accessOverlay").setAttribute("aria-hidden","true")}
@@ -603,41 +601,36 @@ function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcate
 function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
 async function loadHeroBanner(){
-  const img=$("heroCityArt");
-  if(SITE.defaultHero){
-    img.src=SITE.defaultHero;
-    img.hidden=false;
-    img.alt="";
-    img.setAttribute("aria-hidden","true");
-  }else{
-    img.hidden=true;
-    img.removeAttribute("src");
-    img.alt="";
-    img.setAttribute("aria-hidden","true");
-  }
   try{
-    const rows=await BusqueAPI.rpc("banner_publico_atual_cidade",{p_cidade_id:SITE.id});
+    const rows=await BusqueAPI.rpc("banner_publico_atual",{});
     const banner=Array.isArray(rows)?rows[0]:rows;
     if(banner?.imagem_url){
       const url=safeMediaUrl(banner.imagem_url);
       if(url){
+        const img=$("heroCityArt");
         img.src=url;
         img.hidden=false;
-        img.alt=banner.nome?`Banner ${banner.nome}`:`Banner ${SITE.name}`;
+        img.alt=banner.nome?`Banner ${banner.nome}`:"";
         img.removeAttribute("aria-hidden");
       }
     }
   }catch(error){
-    console.warn("Banner dinâmico indisponível; usando imagem padrão do site.",error?.message||error);
+    console.warn("Banner dinâmico indisponível; usando o fundo padrão do site.",error?.message||error);
   }
 }
-async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas_cidade",{p_cidade_id:SITE.id,p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
+async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
 async function loadJobs(){
   if(jobsLoaded)return JOBS;
   if(jobsLoadPromise)return jobsLoadPromise;
   jobsLoadPromise=(async()=>{
     try{
-      const rows=await BusqueAPI.rpc("buscar_vagas_publicas_cidade",{p_cidade_id:SITE.id});
+      let rows;
+      try{
+        rows=await BusqueAPI.rpc("buscar_vagas_publicas_com_imagem",{});
+      }catch(firstError){
+        console.warn("Consulta de vagas com imagem indisponível; usando consulta atual.",firstError);
+        rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc");
+      }
       JOBS=(Array.isArray(rows)?rows:[]).map(mapJob);
       jobsLoaded=true;
     }catch(error){
@@ -657,7 +650,7 @@ function scheduleJobsLoad(){
   else setTimeout(run,250);
 }
 function allCompanies(){return registeredCompanies}
-function profileUrl(company){return BusqueSite.cityUrl(`empresa.html?id=${encodeURIComponent(company.id)}`)}
+function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
 function abrirPerfil(company){window.location.href=profileUrl(company)}
 
 function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
@@ -754,10 +747,10 @@ $("jobForm").addEventListener("submit",async e=>{
 
   try{
     if(jobImageData){
-      await BusqueAPI.rpc("enviar_vaga_com_imagem_cidade",{...payload,p_cidade_id:SITE.id});
+      await BusqueAPI.rpc("enviar_vaga_com_imagem",payload);
     }else{
       const legacy={...payload};delete legacy.p_imagem_url;
-      await BusqueAPI.rpc("enviar_vaga_cidade",{...legacy,p_cidade_id:SITE.id});
+      try{await BusqueAPI.rpc("enviar_vaga",legacy)}catch(firstError){const message=String(firstError?.message||"");if(/function|schema cache|PGRST202|could not find/i.test(message)){await BusqueAPI.rpc("enviar_vaga",{...legacy,p_empresa_id:null})}else{throw firstError}}
     }
 
     form.reset();
@@ -800,7 +793,7 @@ function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFi
 function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(company=>card(company,false)));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
 function render(){const inSearch=document.body.classList.contains("search-mode");$("normalHomeContent").hidden=inSearch;$("searchResultsContent").hidden=!inSearch;$("searchHint").classList.toggle("show",inSearch&&!query);if(inSearch)renderSearch();else{$("empty").classList.remove("show");renderHome()}}
 let masterBanners=[];
-function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>({company,title:company.nome,text:company.descricao||"Conheça esta empresa Master.",link:profileUrl(company),image:safeMediaUrl(company.imagem)}));if(!masterBanners.length)masterBanners=[{company:null,title:`Sua empresa pode ser o destaque de ${SITE.city}.`,text:"O primeiro anúncio Master aparecerá aqui após aprovação.",link:BusqueSite.cityUrl("cadastro.html"),image:""}];if(bannerIndex>=masterBanners.length)bannerIndex=0;showBanner();restartBanner()}
+function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>({company,title:company.nome,text:company.descricao||"Conheça esta empresa Master.",link:profileUrl(company),image:safeMediaUrl(company.imagem)}));if(!masterBanners.length)masterBanners=[{company:null,title:`Sua empresa pode ser o destaque de ${SITE.city}.`,text:"O primeiro anúncio Master aparecerá aqui após aprovação.",link:"cadastro.html",image:""}];if(bannerIndex>=masterBanners.length)bannerIndex=0;showBanner();restartBanner()}
 function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage"),fundo=$("bannerImageBg");imagem.classList.add("trocando");fundo.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false;fundo.src=b.image;fundo.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true;fundo.removeAttribute("src");fundo.hidden=true}requestAnimationFrame(()=>{imagem.classList.remove("trocando");fundo.classList.remove("trocando")})},180)}
 function moveBanner(step){if(masterBanners.length<=1)return;bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;showBanner();restartBanner()}
 function restartBanner(){clearInterval(bannerTimer);if(masterBanners.length>1)bannerTimer=setInterval(()=>moveBanner(1),4000)}
