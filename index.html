@@ -239,6 +239,12 @@
     .rotation-box{margin-top:20px;padding:18px;border-radius:16px;background:#f5f8fb;border:1px solid var(--line)}.rotation-box h3{margin:0 0 7px;color:var(--navy)}.rotation-box p{margin:0;color:var(--muted);line-height:1.55}.rotation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.rotation-item{padding:11px 12px;border-radius:12px;background:#fff;border:1px solid #e5eaf0;color:#344559;font-weight:800}.rotation-item small{display:block;margin-top:3px;color:#7a8798;font-weight:700}.plans-warning{margin-top:14px;color:#667085;font-size:.82rem;line-height:1.5}
     @media(max-width:760px){.plans-grid,.rotation-list{grid-template-columns:1fr}.plans-body,.plans-head{padding-left:18px;padding-right:18px}.plans-btn{padding:10px 9px;font-size:.72rem}}
     .mobile-bottom-nav{display:none}
+    .mobile-business-cta-wrap{display:none}
+    .mobile-business-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:13px 15px;border-radius:16px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy);text-decoration:none;box-shadow:0 10px 24px rgba(230,184,75,.28)}
+    .mobile-business-cta-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .mobile-business-cta-copy small{font-size:.63rem;font-weight:900;letter-spacing:.06em}
+    .mobile-business-cta-copy strong{font-size:.98rem;line-height:1.1;letter-spacing:-.01em}
+    .mobile-business-cta-arrow{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border-radius:12px;background:var(--navy);color:#fff;font-size:1.15rem;font-weight:900}
 
     @media(max-width:640px){
       body{padding-bottom:76px;background:#f6f7f9}
@@ -263,6 +269,9 @@
       .search{padding:6px;border-radius:16px;box-shadow:0 12px 30px rgba(8,27,51,.16)}
       .search input{padding:12px 9px;font-size:.9rem}
       .search button{padding:12px 14px;border-radius:11px;font-size:.82rem}
+      .mobile-business-cta-wrap{display:block;width:calc(100% - 24px);margin:-2px auto 14px}
+      .mobile-business-cta{min-height:62px}
+      body.search-mode .mobile-business-cta-wrap{display:none!important}
       .categories{gap:8px;margin:0 -12px 11px;padding:3px 12px 12px;scrollbar-width:none}
       .categories::-webkit-scrollbar{display:none}
       .cat{padding:9px 13px;border-radius:999px;font-size:.79rem;box-shadow:0 3px 10px rgba(8,27,51,.035)}
@@ -338,7 +347,6 @@
     </div>
   </div>
   <div class="hero-copy shell">
-    <span class="eyebrow"><span></span> Guia local de Torres e região</span>
     <h1>Tudo o que você procura em um só lugar.</h1>
     <p>Encontre empresas, profissionais, serviços e oportunidades em Torres, com contato rápido e direto.</p>
   </div>
@@ -351,6 +359,13 @@
     <button id="searchButton" type="button">Buscar</button>
     <button id="searchClose" class="search-close" type="button" aria-label="Fechar busca">Fechar</button>
   </div>
+</div>
+
+<div class="mobile-business-cta-wrap">
+  <a class="mobile-business-cta" href="cadastro.html" aria-label="Cadastrar sua empresa">
+    <span class="mobile-business-cta-copy"><small>ANUNCIE NO BUSQUE</small><strong>CADASTRE SUA EMPRESA</strong></span>
+    <span class="mobile-business-cta-arrow" aria-hidden="true">→</span>
+  </a>
 </div>
 
 <main class="shell">
