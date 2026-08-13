@@ -74,6 +74,7 @@
     .premium{position:absolute;z-index:2;top:14px;right:14px;padding:6px 9px;border-radius:9px;background:rgba(8,27,51,.82);backdrop-filter:blur(8px);color:var(--gold2);font-size:.68rem;font-weight:950;text-transform:uppercase}
     .logo{position:absolute;z-index:4;left:16px;bottom:14px;display:grid;place-items:center;width:60px;height:60px;overflow:hidden;border:4px solid #fff;border-radius:17px;background:var(--navy);color:#fff;font-size:1.22rem;font-weight:950;box-shadow:0 8px 20px rgba(8,27,51,.28)}.logo img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;background:#fff}
     .card-body{padding:20px 19px 18px}.card-top{display:flex;justify-content:space-between;gap:10px}.card h3{margin:0;color:var(--navy);font-size:1.2rem;letter-spacing:-.02em}.rating{flex:0 0 auto;color:#986c00;font-size:.83rem;font-weight:900}.rating span{color:#f4b740}.tag{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:8px;background:#f2f5f8;color:#596579;font-size:.7rem;font-weight:900;text-transform:uppercase}.desc{min-height:66px;margin:14px 0;color:var(--muted);font-size:.9rem;line-height:1.55}.meta{display:flex;align-items:center;gap:7px;margin-bottom:15px;color:#5f6b7d;font-size:.84rem}.meta svg{width:16px;height:16px}.actions{display:grid;grid-template-columns:1fr 1.3fr;gap:9px}.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px 10px;border-radius:12px;text-decoration:none;font-size:.87rem;font-weight:900}.btn-outline{border:1px solid var(--line);color:var(--navy)}.btn-whats{background:var(--green);color:#fff}.btn:hover{transform:translateY(-1px);filter:brightness(.98)}
+    .normal-companies-section{margin-top:46px}.normal-companies-more{display:flex;justify-content:center;margin-top:24px}.normal-companies-more button{border:1px solid var(--navy);border-radius:13px;padding:12px 22px;background:#fff;color:var(--navy);font-weight:900;cursor:pointer}.normal-companies-more button:hover{background:var(--navy);color:#fff}.normal-companies-more button[hidden]{display:none!important}
     .empty{display:none;padding:55px 20px;border:2px dashed #d4dae3;border-radius:22px;background:#fff;text-align:center}.empty.show{display:block}.empty h3{margin:0 0 8px;color:var(--navy)}.empty p{margin:0;color:var(--muted)}
     .join{position:relative;overflow:hidden;margin:48px 0 18px;padding:38px;border-radius:24px;background:linear-gradient(135deg,#fff,#f9fbfd);border:1px solid var(--line);box-shadow:0 10px 30px rgba(8,27,51,.06)}.join:after{content:"";position:absolute;width:180px;height:180px;right:-50px;bottom:-80px;border-radius:50%;background:rgba(230,184,75,.14)}.join-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:24px}.join h2{margin:0 0 8px;color:var(--navy);font-size:1.7rem}.join p{max-width:650px;margin:0;color:var(--muted);line-height:1.6}.join a{flex:0 0 auto;padding:13px 20px;border-radius:13px;background:var(--navy);color:var(--gold2);text-decoration:none;font-weight:900}
     footer{margin-top:45px;padding:30px 20px;border-top:1px solid var(--line);color:var(--muted);text-align:center;font-size:.84rem}footer b{color:#a57816}.site-footer{display:grid;gap:16px}.site-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px 18px}.site-footer a,.site-footer button{border:0;background:none;padding:0;color:#52647a;text-decoration:none;cursor:pointer}.site-footer a:hover,.site-footer button:hover{text-decoration:underline}.site-footer small{display:block}
@@ -118,7 +119,7 @@
       padding:18px;
     }
     .banner-company-image.trocando,.banner-company-bg.trocando{opacity:0}
-    @media(max-width:760px){.banner-company-image{width:100%;opacity:.28;padding:12px}.banner-company-bg{filter:blur(20px) brightness(.42)}}
+    @media(max-width:760px){.banner-company-image{width:100%;opacity:.98;padding:10px;filter:none}.banner-company-bg{filter:blur(16px) brightness(.68);opacity:1}.banner-media{display:none}}
     .banner:after{display:none}
     .banner-content,.banner-nav{z-index:3}
     .banner-content{
@@ -282,7 +283,9 @@
       .banner-link{padding:10px 14px;border-radius:11px;font-size:.82rem}
       .badge{padding:6px 9px;font-size:.64rem}
       .banner-nav{right:14px;bottom:14px}.banner-nav button{width:36px;height:36px;border-radius:11px}
-      .banner-company-image{opacity:.24!important;padding:8px!important}
+      .banner-company-image{opacity:.98!important;padding:8px!important;filter:none!important}
+      .banner-company-bg{filter:blur(16px) brightness(.68)!important;opacity:1!important}
+      .banner-media{display:none!important}
       .section-head{margin-bottom:13px}
       .section-head h2{font-size:1.35rem}
       .section-head p{font-size:.82rem;line-height:1.4}
@@ -294,6 +297,10 @@
       #featuredSection .card-body{padding:15px}
       #featuredSection .desc{min-height:0;margin:10px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
       #featuredSection .logo{width:52px;height:52px;left:12px;bottom:11px;border-width:3px;border-radius:14px}
+      #normalCompaniesSection{margin-top:34px}
+      #normalCompanyCards{grid-template-columns:1fr;gap:13px}
+      #normalCompanyCards .cover{height:165px}
+      #normalCompanyCards .card-body{padding:16px}
       #searchResultsContent .grid{grid-template-columns:1fr;gap:13px}
       #searchResultsContent .cover{height:165px}
       .join{margin-top:30px;padding:23px 19px;border-radius:20px}
@@ -413,6 +420,18 @@
         </div>
         <div class="grid" id="featuredCards"></div>
       </section>
+
+      <section class="section-block normal-companies-section" id="normalCompaniesSection">
+        <div class="section-head">
+          <div>
+            <h2>Empresas da cidade</h2>
+            <p class="section-note">Outros negócios de Torres aparecem aqui em ordem alternada para dar visibilidade a todos.</p>
+          </div>
+          <span class="count" id="normalCompaniesCount"></span>
+        </div>
+        <div class="grid" id="normalCompanyCards"></div>
+        <div class="normal-companies-more"><button id="loadMoreCompanies" type="button">Ver mais empresas</button></div>
+      </section>
     </div>
 
     <div id="searchResultsContent" hidden>
@@ -455,7 +474,7 @@
         <article class="plan-public"><h3>Destaque</h3><div class="price">R$ 15,90</div><p>30 dias no Busque Torres + 7 dias em posição de Destaque.</p></article>
         <article class="plan-public master"><h3>MASTER</h3><div class="price">R$ 25,90</div><p>30 dias no Busque Torres + 7 dias em posição MASTER.</p></article>
       </div>
-      <div class="plans-warning" style="margin-top:16px">Destaque e MASTER têm vagas limitadas e são ativados conforme disponibilidade.</div>
+      <div class="plans-warning" style="margin-top:16px">Destaque tem 3 posições e MASTER tem 4 posições por período, ativadas conforme disponibilidade.</div>
     </div>
   </article>
 </div>
@@ -541,6 +560,8 @@ let JOBS=[];
 let registeredCompanies=[];
 let selected="todos",query="",bannerIndex=0,bannerTimer;
 let jobPublishMode="manual",jobImageData="";
+const NORMAL_PAGE_SIZE=12;
+let normalVisible=NORMAL_PAGE_SIZE,normalOrder=[];
 let initPromise=null,jobsLoadPromise=null,jobsLoaded=false,jobsLoadScheduled=false;
 const $=id=>document.getElementById(id);
 const SITE={id:"torres",name:"Busque Torres",city:"Torres",cityUf:"Torres/RS"};
@@ -597,7 +618,7 @@ function formatSalary(value){
   return n===null?raw:new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(n);
 }
 
-function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",criadoEm:r.created_at,avaliacao:""}}
+function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",destaque:r.plano==="destaque",criadoEm:r.created_at,avaliacao:""}}
 function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
 async function loadHeroBanner(){
@@ -655,7 +676,7 @@ function abrirPerfil(company){window.location.href=profileUrl(company)}
 
 function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
 function formatDateBR(date){return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date)}
-function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 3 posições MASTER</small></div>`}).join("")}
+function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 4 posições MASTER</small></div>`}).join("")}
 function openPlans(){renderRotationDates();$("plansOverlay").classList.add("open");document.body.classList.add("modal-open")}
 function closePlans(){$("plansOverlay").classList.remove("open");if(!$("jobsOverlay").classList.contains("open")&&!$("jobFormLayer").classList.contains("open")&&!$("jobDetailLayer").classList.contains("open"))document.body.classList.remove("modal-open")}
 function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open");if(!jobsLoaded)loadJobs()}
@@ -787,9 +808,13 @@ function applyCardImageFit(article){const cover=article.querySelector(".cover"),
 function card(company,priority=false){const info=categoryInfo[company.categoria]||{name:"Empresa",c1:"#dce5ef",c2:"#f2f5f8"};const article=document.createElement("article");article.className="card";article.dataset.companyId=String(company.id);article.tabIndex=0;article.setAttribute("role","link");article.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);const location=[company.bairro,company.cidade].filter(Boolean).join(" • ")||"Atendimento local";const media=safeMediaUrl(company.imagem);const image=media?`<img class="cover-main" src="${media}" alt="Foto de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" fetchpriority="${priority?"high":"low"}" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.remove('has-image')">`:"";const logoMedia=safeMediaUrl(company.logo);const logo=logoMedia?`<img src="${logoMedia}" alt="Logotipo de ${escapeHtml(company.nome)}" loading="${priority?"eager":"lazy"}" decoding="async" onerror="this.remove();this.parentElement.textContent='${initials(company.nome)}'">`:initials(company.nome);article.innerHTML=`<div class="cover ${media?'has-image':''}" style="--cover1:${info.c1};--cover2:${info.c2}">${image}<div class="cover-fallback" aria-hidden="true">${initials(company.nome)}</div>${company.master?'<span class="premium">Master</span>':company.premium?'<span class="premium">Destaque</span>':''}<span class="logo">${logo}</span></div><div class="card-body"><div class="card-top"><h3>${escapeHtml(company.nome)}</h3></div><span class="tag">${escapeHtml(company.subcategoria||info.name)}</span><p class="desc">${escapeHtml(company.descricao||"Conheça este estabelecimento local.")}</p><div class="meta">${escapeHtml(location)}</div><div class="actions"><a class="btn btn-outline" href="${profileUrl(company)}">Ver perfil</a><a class="btn btn-whats" href="${company.whatsappLink}" target="_blank" rel="noopener noreferrer">WhatsApp</a></div></div>`;applyCardImageFit(article);const open=()=>abrirPerfil(company);article.addEventListener("click",e=>{if(e.target.closest("a,button"))return;open()});article.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open()}});return article}
 function searchableText(c){const info=categoryInfo[c.categoria];return clean([c.nome,c.descricao,c.cidade,c.bairro,c.categoria,c.subcategoria,info?info.name:"",c.produtos,c.servicos,c.endereco,c.email,c.site,c.horario].filter(Boolean).join(" "))}
 function ordenarDestaques(lista){return [...lista].sort((a,b)=>new Date(b.criadoEm||0)-new Date(a.criadoEm||0))}
-function obterDestaquesMaster(){return ordenarDestaques(allCompanies().filter(c=>c.master)).slice(0,8)}
-function obterDestaquesFixos(){return ordenarDestaques(allCompanies().filter(c=>c.premium)).slice(0,3)}
-function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map((company,index)=>card(company,index<3)));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";atualizarBannersMaster(master)}
+function obterDestaquesMaster(){return ordenarDestaques(allCompanies().filter(c=>c.master)).slice(0,4)}
+function obterDestaquesFixos(){return ordenarDestaques(allCompanies().filter(c=>c.destaque)).slice(0,3)}
+function normalSeed(){try{let seed=sessionStorage.getItem("busque_normal_seed");if(!seed){seed=String(Math.floor(Math.random()*2147483647));sessionStorage.setItem("busque_normal_seed",seed)}return Number(seed)||1}catch{return 1}}
+function hashNormal(value,seed){let h=2166136261^seed;for(const ch of String(value)){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function prepararOrdemNormais(){const seed=normalSeed();normalOrder=allCompanies().filter(c=>!c.master&&!c.destaque).sort((a,b)=>hashNormal(a.id,seed)-hashNormal(b.id,seed))}
+function renderNormalCompanies(){if(!normalOrder.length)prepararOrdemNormais();const section=$("normalCompaniesSection"),grid=$("normalCompanyCards"),count=$("normalCompaniesCount"),more=$("loadMoreCompanies");const total=normalOrder.length;if(!total){section.hidden=true;grid.replaceChildren();count.textContent="";more.hidden=true;return}section.hidden=false;const visible=normalOrder.slice(0,normalVisible);grid.replaceChildren(...visible.map(company=>card(company,false)));count.textContent=`${total} empresa${total===1?"":"s"}`;more.hidden=visible.length>=total;more.textContent=visible.length<total?`Ver mais empresas (${total-visible.length})`:"Todas as empresas exibidas"}
+function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map((company,index)=>card(company,index<3)));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";prepararOrdemNormais();renderNormalCompanies();atualizarBannersMaster(master)}
 function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(company=>card(company,false)));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
 function render(){const inSearch=document.body.classList.contains("search-mode");$("normalHomeContent").hidden=inSearch;$("searchResultsContent").hidden=!inSearch;$("searchHint").classList.toggle("show",inSearch&&!query);if(inSearch)renderSearch();else{$("empty").classList.remove("show");renderHome()}}
 let masterBanners=[];
@@ -797,6 +822,8 @@ function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>
 function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage"),fundo=$("bannerImageBg");imagem.classList.add("trocando");fundo.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false;fundo.src=b.image;fundo.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true;fundo.removeAttribute("src");fundo.hidden=true}requestAnimationFrame(()=>{imagem.classList.remove("trocando");fundo.classList.remove("trocando")})},180)}
 function moveBanner(step){if(masterBanners.length<=1)return;bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;showBanner();restartBanner()}
 function restartBanner(){clearInterval(bannerTimer);if(masterBanners.length>1)bannerTimer=setInterval(()=>moveBanner(1),4000)}
+
+$("loadMoreCompanies")?.addEventListener("click",()=>{normalVisible+=NORMAL_PAGE_SIZE;renderNormalCompanies()});
 
 $("categories").addEventListener("click",e=>{const b=e.target.closest(".cat");if(!b)return;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));b.classList.add("active");selected=b.dataset.category;if(selected!=="todos")document.body.classList.add("search-mode");render()});
 function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();window.scrollTo({top:0,behavior:"smooth"})}
