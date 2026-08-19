@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Redefinir senha | Busque Torres</title>
+  <style>
+    :root{--navy:#071b33;--navy2:#0b294c;--gold:#f5b51b;--text:#172033;--muted:#667085;--line:#e5e7eb;--danger:#b42318;--ok:#067647}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(145deg,#06172b,#0d3159);color:var(--text);display:grid;place-items:center;padding:24px}
+    .card{width:min(100%,460px);background:#fff;border-radius:20px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+    .brand{font-size:1.35rem;font-weight:900;letter-spacing:.02em;color:var(--navy);margin-bottom:24px}.brand b{color:#c88a00}
+    h1{font-size:1.65rem;margin:0 0 8px;color:var(--navy)}
+    p{line-height:1.5;color:var(--muted);margin:0 0 22px}
+    label{display:block;font-size:.9rem;font-weight:800;margin:14px 0 7px}
+    input{width:100%;height:48px;border:1px solid var(--line);border-radius:11px;padding:0 13px;font-size:1rem;outline:none}
+    input:focus{border-color:#8ba4bd;box-shadow:0 0 0 3px rgba(13,49,89,.09)}
+    button{width:100%;height:50px;border:0;border-radius:11px;background:var(--gold);color:#1c2634;font-size:1rem;font-weight:900;cursor:pointer;margin-top:18px}
+    button:disabled{opacity:.6;cursor:wait}
+    .msg{margin-top:16px;padding:12px 14px;border-radius:10px;font-size:.92rem;line-height:1.45;background:#f8fafc;color:var(--muted)}
+    .msg.error{background:#fef3f2;color:var(--danger)}.msg.ok{background:#ecfdf3;color:var(--ok)}
+    .back{display:block;text-align:center;margin-top:18px;color:var(--navy2);font-weight:800;text-decoration:none}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">BUSQUE <b>TORRES</b></div>
+    <h1>Redefinir senha</h1>
+    <p>Digite uma nova senha para o acesso administrativo.</p>
+
+    <form id="resetForm" hidden>
+      <label for="password">Nova senha</label>
+      <input id="password" type="password" minlength="8" autocomplete="new-password" required>
+
+      <label for="confirmPassword">Confirmar nova senha</label>
+      <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+
+      <button id="saveButton" type="submit">Salvar nova senha</button>
+    </form>
+
+    <div id="message" class="msg">Validando o link de recuperação...</div>
+    <a class="back" href="bt-gestao-8472.html">Voltar ao painel administrativo</a>
+  </main>
+
+  <script src="supabase-config.js"></script>
+  <script>
+  (()=>{
+    "use strict";
+    const form=document.getElementById("resetForm");
+    const message=document.getElementById("message");
+    const button=document.getElementById("saveButton");
+    const password=document.getElementById("password");
+    const confirmPassword=document.getElementById("confirmPassword");
+
+    function show(text,type=""){
+      message.textContent=text;
+      message.className=`msg${type?" "+type:""}`;
+      message.hidden=false;
+    }
+
+    const hash=new URLSearchParams(location.hash.replace(/^#/,""));
+    const accessToken=hash.get("access_token");
+    const type=hash.get("type");
+    const errorDescription=hash.get("error_description") || new URLSearchParams(location.search).get("error_description");
+
+    if(errorDescription){
+      show(decodeURIComponent(errorDescription.replace(/\+/g," ")),"error");
+      return;
+    }
+
+    if(!accessToken || (type && type!=="recovery")){
+      show("Este link de recuperação é inválido ou expirou. Solicite um novo e-mail de recuperação no Supabase.","error");
+      return;
+    }
+
+    form.hidden=false;
+    show("Link confirmado. Agora escolha a nova senha.");
+
+    form.addEventListener("submit",async(event)=>{
+      event.preventDefault();
+      const value=password.value;
+      if(value.length<8){show("A senha precisa ter pelo menos 8 caracteres.","error");return;}
+      if(value!==confirmPassword.value){show("As duas senhas não são iguais.","error");return;}
+
+      button.disabled=true;
+      button.textContent="Salvando...";
+      try{
+        const response=await fetch(`${BUSQUE_SUPABASE_URL}/auth/v1/user`,{
+          method:"PUT",
+          headers:{
+            apikey:BUSQUE_SUPABASE_KEY,
+            Authorization:`Bearer ${accessToken}`,
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({password:value})
+        });
+        const data=await response.json().catch(()=>({}));
+        if(!response.ok) throw new Error(data?.msg||data?.message||data?.error_description||"Não foi possível alterar a senha.");
+        form.hidden=true;
+        history.replaceState(null,"",location.pathname);
+        show("Senha alterada com sucesso. Já pode entrar no painel administrativo com a nova senha.","ok");
+      }catch(err){
+        show(err?.message||"Não foi possível alterar a senha.","error");
+      }finally{
+        button.disabled=false;
+        button.textContent="Salvar nova senha";
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
