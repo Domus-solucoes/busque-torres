@@ -15,6 +15,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Busque Torres — empresas, serviços e vagas em um só lugar.">
+  <link rel="preconnect" href="https://xwkmsqawiimouilldwit.supabase.co" crossorigin>
+  <link rel="dns-prefetch" href="//xwkmsqawiimouilldwit.supabase.co">
   <meta name="theme-color" content="#081b33">
   <title>Busque Torres — Tudo o que você procura em um só lugar</title>
   <style>
@@ -563,7 +565,7 @@ let selected="todos",query="",bannerIndex=0,bannerTimer;
 let jobPublishMode="manual",jobImageData="";
 const NORMAL_PAGE_SIZE=12;
 let normalVisible=NORMAL_PAGE_SIZE,normalOrder=[];
-let initPromise=null,jobsLoadPromise=null,jobsLoaded=false,jobsLoadScheduled=false;
+let initPromise=null,jobsLoadPromise=null,jobsLoaded=false,jobsLoadScheduled=false,jobsRendered=false,searchRenderFrame=0;
 const $=id=>document.getElementById(id);
 const SITE={id:"torres",name:"Busque Torres",city:"Torres",cityUf:"Torres/RS"};
 const DEFAULT_WHATS="https://wa.me/5551999999999?text="+encodeURIComponent(`Olá, quero anunciar no ${SITE.name}.`);
@@ -659,7 +661,8 @@ async function loadJobs(){
       console.warn("Consulta de vagas indisponível.",error);
       JOBS=[];
     }
-    renderJobs();
+    $("jobsCount").textContent=String(JOBS.length);
+    if($("jobsOverlay").classList.contains("open"))renderJobs();
     return JOBS;
   })();
   try{return await jobsLoadPromise}finally{jobsLoadPromise=null}
@@ -675,12 +678,12 @@ function allCompanies(){return registeredCompanies}
 function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
 function abrirPerfil(company){window.location.href=profileUrl(company)}
 
-function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy" decoding="async"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0);jobsRendered=true}
 function formatDateBR(date){return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date)}
 function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 4 posições MASTER</small></div>`}).join("")}
 function openPlans(){renderRotationDates();$("plansOverlay").classList.add("open");document.body.classList.add("modal-open")}
 function closePlans(){$("plansOverlay").classList.remove("open");if(!$("jobsOverlay").classList.contains("open")&&!$("jobFormLayer").classList.contains("open")&&!$("jobDetailLayer").classList.contains("open"))document.body.classList.remove("modal-open")}
-function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open");if(!jobsLoaded)loadJobs()}
+function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open");if(jobsLoaded&&!jobsRendered)renderJobs();else if(!jobsLoaded)loadJobs()}
 function closeJobs(){$("jobsOverlay").classList.remove("open");document.body.classList.remove("modal-open")}
 function descriptionBlocks(value){
   const text=String(value||"").replace(/\r\n?/g,"\n").trim();
@@ -830,13 +833,21 @@ $("loadMoreCompanies")?.addEventListener("click",()=>{normalVisible+=NORMAL_PAGE
 $("categories").addEventListener("click",e=>{const b=e.target.closest(".cat");if(!b)return;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));b.classList.add("active");selected=b.dataset.category;if(selected!=="todos")document.body.classList.add("search-mode");render()});
 function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();window.scrollTo({top:0,behavior:"smooth"})}
 function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
-function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render()}
+function updateSearch(){
+  query=clean($("searchInput").value);
+  if(!document.body.classList.contains("search-mode")){openSearch();return}
+  cancelAnimationFrame(searchRenderFrame);
+  searchRenderFrame=requestAnimationFrame(render);
+}
 $("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();render()}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
+function runWhenIdle(fn,timeout=1400){
+  if("requestIdleCallback" in window)window.requestIdleCallback(fn,{timeout});
+  else setTimeout(fn,350);
+}
 async function iniciar(){
   if(initPromise)return initPromise;
   initPromise=(async()=>{
-    const heroPromise=loadHeroBanner();
     try{
       await loadCompanies();
     }catch(error){
@@ -846,8 +857,8 @@ async function iniciar(){
       $("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página.";
     }
     render();
-    scheduleJobsLoad();
-    await heroPromise;
+    runWhenIdle(()=>loadHeroBanner(),1200);
+    runWhenIdle(()=>scheduleJobsLoad(),1800);
   })();
   return initPromise;
 }
@@ -861,7 +872,7 @@ window.addEventListener("pageshow",e=>{
 
 
 document.addEventListener("click",e=>{const whats=e.target.closest("a.btn-whats");if(whats){const id=whats.closest(".card")?.dataset.companyId||null;registrarMetrica("clicou_whatsapp",id,"index")}});
-registrarMetrica("visita_site",null,"index");
+runWhenIdle(()=>registrarMetrica("visita_site",null,"index"),2200);
 </script>
 </body>
 </html>
