@@ -20,6 +20,8 @@
         content="Cadastre sua empresa ou serviço no Busque Torres."
     >
     <meta name="theme-color" content="#0a192f">
+    <link rel="preconnect" href="https://xwkmsqawiimouilldwit.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="//xwkmsqawiimouilldwit.supabase.co">
 
     <title>Cadastre seu Negócio - Busque Torres</title>
 
@@ -1487,7 +1489,7 @@
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 900, 600, 0.60);
+                const base64 = await comprimirImagem(arquivo, 800, 540, 0.56);
                 mostrarFotoCapa(base64);
             } catch (erro) {
                 elementosImagem.erroFotoCapa.textContent = erro.message;
@@ -1513,7 +1515,7 @@
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 240, 240, 0.68);
+                const base64 = await comprimirImagem(arquivo, 200, 200, 0.62);
                 mostrarLogo(base64);
             } catch (erro) {
                 mostrarMensagem("erro", "Imagem inválida", erro.message);

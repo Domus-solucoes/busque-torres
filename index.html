@@ -16,6 +16,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Busque Torres — empresas, serviços e vagas em um só lugar.">
   <meta name="theme-color" content="#081b33">
+  <link rel="preconnect" href="https://xwkmsqawiimouilldwit.supabase.co" crossorigin>
+  <link rel="dns-prefetch" href="//xwkmsqawiimouilldwit.supabase.co">
   <title>Busque Torres — Tudo o que você procura em um só lugar</title>
   <style>
     :root{
@@ -50,8 +52,12 @@
     .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.07);color:#dbe7f5;font-size:.82rem;font-weight:800}
     .eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--gold)}
     h1{margin:20px 0 14px;font-size:clamp(2.3rem,6vw,4.5rem);line-height:1.02;letter-spacing:-.055em}
-    .hero-copy p{max-width:680px;margin:auto;color:#c7d5e6;font-size:clamp(1rem,2vw,1.15rem);line-height:1.65}
+    .hero-copy p{display:inline-block;max-width:680px;margin:auto;padding:12px 18px;border-radius:22px;background:rgba(255,255,255,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#17304d;font-size:clamp(1rem,2vw,1.15rem);line-height:1.55;box-shadow:0 10px 28px rgba(8,27,51,.18);text-shadow:none}
     .search-wrap{position:relative;z-index:4;width:min(850px,calc(100% - 28px));margin:-38px auto 26px}
+    body.hero-promo .hero{height:auto;min-height:0;padding:0;aspect-ratio:8/3;border-radius:0;background:var(--navy)}
+    body.hero-promo .home-nav,body.hero-promo .hero-copy,body.hero-promo .search-wrap,body.hero-promo .mobile-business-cta-wrap{display:none!important}
+    body.hero-promo .hero-city-art{object-fit:contain;object-position:center!important;background:var(--navy);opacity:1!important}
+    body.hero-promo .hero-city-shade{display:none!important}
     .search{display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid rgba(8,27,51,.08);border-radius:22px;box-shadow:0 20px 50px rgba(8,27,51,.18)}
     .search-icon{display:grid;place-items:center;width:42px;color:#8993a4}.search-icon svg{width:22px;height:22px}
     .search input{flex:1;min-width:0;border:0;outline:0;padding:14px 4px;font-size:1rem;color:var(--text)}
@@ -265,12 +271,13 @@
       .hero-copy{margin-top:25px;padding-inline:2px;text-align:left}
       .hero-copy .eyebrow{font-size:.72rem;padding:6px 9px}
       h1{margin:13px 0 9px;font-size:2rem;line-height:1.04;letter-spacing:-.045em}
-      .hero-copy p{font-size:.91rem;line-height:1.48;margin:0;color:#d0dae6}
+      .hero-copy p{font-size:.91rem;line-height:1.45;margin:0;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.9);color:#17304d;box-shadow:0 8px 22px rgba(8,27,51,.16);text-shadow:none}
       .search-wrap{width:calc(100% - 24px);margin:-29px auto 14px}
       .search{padding:6px;border-radius:16px;box-shadow:0 12px 30px rgba(8,27,51,.16)}
       .search input{padding:12px 9px;font-size:.9rem}
       .search button{padding:12px 14px;border-radius:11px;font-size:.82rem}
       .mobile-business-cta-wrap{display:block;width:calc(100% - 24px);margin:-2px auto 14px}
+      body.hero-promo .hero{aspect-ratio:4/5;max-height:78vh}
       .mobile-business-cta{min-height:62px}
       body.search-mode .mobile-business-cta-wrap{display:none!important}
       .categories{gap:8px;margin:0 -12px 11px;padding:3px 12px 12px;scrollbar-width:none}
@@ -623,20 +630,22 @@ function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcate
 function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
 async function loadHeroBanner(){
+  const img=$("heroCityArt");
+  document.body.classList.remove("hero-promo");
   try{
-    const rows=await BusqueAPI.rpc("banner_publico_atual",{});
-    const banner=Array.isArray(rows)?rows[0]:rows;
+    const banner=await BusqueAPI.rpc("banner_publico_atual_cidade",{p_cidade_id:"torres"});
     if(banner?.imagem_url){
       const url=safeMediaUrl(banner.imagem_url);
       if(url){
-        const img=$("heroCityArt");
         img.src=url;
         img.hidden=false;
         img.alt=banner.nome?`Banner ${banner.nome}`:"";
         img.removeAttribute("aria-hidden");
+        document.body.classList.toggle("hero-promo",banner.tipo==="temporario");
       }
     }
   }catch(error){
+    document.body.classList.remove("hero-promo");
     console.warn("Banner dinâmico indisponível; usando o fundo padrão do site.",error?.message||error);
   }
 }
@@ -704,7 +713,7 @@ function showJobFormMessage(type,text){const el=$("jobFormMessage");el.className
 
 function setJobMode(mode){jobPublishMode=mode==="image"?"image":"manual";$("jobModeManual").classList.toggle("active",jobPublishMode==="manual");$("jobModeImage").classList.toggle("active",jobPublishMode==="image");$("jobImageModeNote").classList.toggle("show",jobPublishMode==="image");document.querySelectorAll(".job-manual-field").forEach(el=>el.classList.toggle("image-mode-hidden",jobPublishMode==="image"));const requiredIds=["jobRole","jobLocationInput","jobContractInput","jobDescriptionInput","jobRequirementsInput"];requiredIds.forEach(id=>{const el=$(id);if(el)el.required=jobPublishMode==="manual"});if(jobPublishMode==="image"){$("jobRole").value="Vagas disponíveis";$("jobLocationInput").value=SITE.cityUf;$("jobContractInput").value="Outro";$("jobDescriptionInput").value="Confira as oportunidades na imagem publicada.";$("jobRequirementsInput").value="Consulte a imagem da vaga."}else{if($("jobRole").value==="Vagas disponíveis")$("jobRole").value="";if($("jobLocationInput").value===SITE.cityUf)$("jobLocationInput").value="";if($("jobContractInput").value==="Outro")$("jobContractInput").value="";if($("jobDescriptionInput").value==="Confira as oportunidades na imagem publicada.")$("jobDescriptionInput").value="";if($("jobRequirementsInput").value==="Consulte a imagem da vaga.")$("jobRequirementsInput").value=""}}
 function resetJobImage(){jobImageData="";$("jobImageInput").value="";$("jobImagePreviewImg").removeAttribute("src");$("jobImagePreview").classList.remove("show")}
-async function compressJobImage(file){if(!file||!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");if(file.size>8*1024*1024)throw new Error("A imagem deve ter no máximo 8 MB.");const src=await new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>fail(new Error("Não foi possível ler a imagem."));r.readAsDataURL(file)});const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>fail(new Error("Não foi possível abrir a imagem."));i.src=src});const max=1200,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);let out=c.toDataURL("image/webp",.72);if(!out.startsWith("data:image/webp"))out=c.toDataURL("image/jpeg",.72);return out}
+async function compressJobImage(file){if(!file||!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");if(file.size>8*1024*1024)throw new Error("A imagem deve ter no máximo 8 MB.");const src=await new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>fail(new Error("Não foi possível ler a imagem."));r.readAsDataURL(file)});const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>fail(new Error("Não foi possível abrir a imagem."));i.src=src});const max=1000,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);let out=c.toDataURL("image/webp",.64);if(!out.startsWith("data:image/webp"))out=c.toDataURL("image/jpeg",.64);return out}
 $("jobModeManual").addEventListener("click",()=>setJobMode("manual"));
 $("jobModeImage").addEventListener("click",()=>setJobMode("image"));
 $("jobImageInput").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file){resetJobImage();return}try{jobImageData=await compressJobImage(file);$("jobImagePreviewImg").src=jobImageData;$("jobImagePreview").classList.add("show");showJobFormMessage("success","Imagem pronta para enviar.")}catch(err){resetJobImage();showJobFormMessage("error",err.message)}});
