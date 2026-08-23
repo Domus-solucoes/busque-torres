@@ -264,7 +264,7 @@
       .brand-mark{display:none!important}
       .brand-name{font-size:.9rem;white-space:nowrap}
       .nav-actions{display:flex;gap:7px;margin-left:auto;flex:0 0 auto}
-      .nav-actions .plans-btn,.nav-actions .nav-cta{display:none}
+      .nav-actions .nav-cta{display:none}.nav-actions .plans-btn{display:inline-flex;min-height:42px;padding:7px 10px;border-radius:14px;font-size:.68rem;line-height:1;white-space:nowrap;box-shadow:none}
       .jobs-btn{min-width:96px;padding:7px 10px;border-radius:14px;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;line-height:1}
       .jobs-btn .jobs-label{display:block;font-size:.62rem;letter-spacing:.025em;white-space:nowrap}
       .jobs-count{min-width:30px;height:30px;padding:0 8px;font-size:.8rem}
@@ -357,7 +357,7 @@
       <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog" aria-label="Abrir vagas disponíveis">
         <span class="jobs-label">TEMOS VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
       </button>
-      <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog">Planos e valores</button>
+      <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog" aria-label="Abrir planos e valores">PLANOS</button>
       <a class="nav-cta nav-cta-gold" href="cadastro.html">Cadastrar empresa</a>
     </div>
   </div>
@@ -478,11 +478,11 @@
     <div class="plans-body">
       <div class="launch-note">🎁 <strong>Cadastre-se agora e ganhe os primeiros 30 dias grátis.</strong><br><span style="font-weight:700">Válido para empresas cadastradas e aprovadas até 10/09/2026.</span></div>
       <div class="plans-grid">
-        <article class="plan-public"><h3>Normal</h3><div class="price">R$ 9,90</div><p>30 dias no Busque Torres, com perfil completo e presença nas buscas.</p></article>
-        <article class="plan-public"><h3>Destaque</h3><div class="price">R$ 15,90</div><p>30 dias no Busque Torres + 7 dias em posição de Destaque.</p></article>
-        <article class="plan-public master"><h3>MASTER</h3><div class="price">R$ 25,90</div><p>30 dias no Busque Torres + 7 dias em posição MASTER.</p></article>
+        <article class="plan-public"><h3>Mensal</h3><div class="price">R$ 9,90</div><p>30 dias de anúncio após o período gratuito.</p></article>
+        <article class="plan-public"><h3>Trimestral</h3><div class="price">R$ 24,90</div><p>90 dias + 1 semana de Destaque, agendada conforme disponibilidade.</p></article>
+        <article class="plan-public master"><h3>Anual</h3><div class="price">R$ 89,90</div><p>365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano.</p></article>
       </div>
-      <div class="plans-warning" style="margin-top:16px">Destaque tem 3 posições e MASTER tem 4 posições por período, ativadas conforme disponibilidade.</div>
+      <div class="plans-warning" style="margin-top:16px">Os primeiros 30 dias são gratuitos para novos cadastros aprovados. Semanas de Destaque e MASTER são programadas pela equipe conforme disponibilidade.</div>
     </div>
   </article>
 </div>

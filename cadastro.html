@@ -1175,73 +1175,51 @@
                 </section>
 
                 <section class="form-etapa" data-etapa="4">
-<div class="secao-titulo">Tipo de anúncio</div>
+<div class="secao-titulo">Escolha como pretende continuar no Busque</div>
 
                 <div class="aviso-gratuidade">
-                    <strong>🎉 Lançamento: cadastro gratuito até 10/09/2026</strong>
-                    Empresas cadastradas e aprovadas até essa data recebem os primeiros 30 dias sem cobrança. Depois desse período promocional, passam a valer os valores abaixo.
+                    <strong>🎉 Os primeiros 30 dias continuam gratuitos</strong>
+                    O período gratuito começa quando o cadastro é aprovado e publicado. Você escolhe agora a modalidade que pretende usar depois do teste, mas nenhuma cobrança é feita neste cadastro.
                 </div>
 
-                <div class="tabela-planos-wrap" aria-label="Valores dos planos">
+                <div class="tabela-planos-wrap" aria-label="Modalidades de assinatura">
                     <table class="tabela-planos">
-                        <thead><tr><th>Plano</th><th>Valor</th><th>O que inclui</th></tr></thead>
+                        <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui após o período gratuito</th></tr></thead>
                         <tbody>
-                            <tr><td><strong>Normal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de cadastro, presença nas buscas e categorias.</td></tr>
-                            <tr><td><strong>Destaque</strong></td><td><strong>R$ 15,90</strong></td><td>30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.</td></tr>
-                            <tr><td><strong>Master</strong></td><td><strong>R$ 25,90</strong></td><td>30 dias de cadastro + 7 dias no banner MASTER, conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Mensal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de anúncio no Busque, com perfil e presença nas buscas e categorias.</td></tr>
+                            <tr><td><strong>Trimestral</strong></td><td><strong>R$ 24,90</strong></td><td>90 dias de anúncio + 1 semana em Destaque, agendada pela equipe conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Anual</strong></td><td><strong>R$ 89,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER e 2 semanas em Destaque ao longo do ano, agendadas pela equipe conforme disponibilidade.</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="planos" role="radiogroup" aria-label="Tipo de anúncio">
+                <div class="planos" role="radiogroup" aria-label="Modalidade pretendida de assinatura">
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoComum"
-                            name="plano"
-                            value="comum"
-                            checked
-                        >
-                        <label for="planoComum" class="plano-card">
-                            <span class="plano-nome">Normal — R$ 9,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro com presença nas buscas e categorias.
-                            </span>
+                        <input type="radio" id="assinaturaMensal" name="assinatura_periodo" value="mensal" checked>
+                        <label for="assinaturaMensal" class="plano-card">
+                            <span class="plano-nome">Mensal — R$ 9,90</span>
+                            <span class="plano-descricao">30 dias após o período gratuito. Sem bônus premium automático.</span>
                         </label>
                     </div>
 
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoDestaque"
-                            name="plano"
-                            value="destaque"
-                        >
-                        <label for="planoDestaque" class="plano-card">
-                            <span class="plano-nome">Destaque — R$ 15,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.
-                            </span>
+                        <input type="radio" id="assinaturaTrimestral" name="assinatura_periodo" value="trimestral">
+                        <label for="assinaturaTrimestral" class="plano-card">
+                            <span class="plano-nome">Trimestral — R$ 24,90</span>
+                            <span class="plano-descricao">90 dias + 1 semana de Destaque, com data definida pela equipe conforme agenda disponível.</span>
                         </label>
                     </div>
 
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoMaster"
-                            name="plano"
-                            value="master"
-                        >
-                        <label for="planoMaster" class="plano-card plano-master">
-                            <span class="plano-nome">MASTER — R$ 25,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro + 7 dias no banner principal MASTER, conforme disponibilidade.
-                            </span>
+                        <input type="radio" id="assinaturaAnual" name="assinatura_periodo" value="anual">
+                        <label for="assinaturaAnual" class="plano-card plano-master">
+                            <span class="plano-nome">Anual — R$ 89,90</span>
+                            <span class="plano-descricao">365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano, programadas pela equipe.</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="legal-box"><strong>Antes de enviar</strong>Até 10/09/2026, empresas cadastradas e aprovadas participam da campanha de lançamento com os primeiros 30 dias gratuitos. O período começa na publicação. Após o período promocional, os valores e condições do plano escolhido serão informados antes de qualquer cobrança. Correções solicitadas não exigem novo pagamento.</div>
+                <div class="legal-box"><strong>Antes de enviar</strong>O cadastro aprovado recebe inicialmente 30 dias gratuitos. A modalidade escolhida fica registrada como intenção para continuidade e poderá ser ajustada pela equipe antes da contratação. Destaque e MASTER são benefícios de exposição com agenda controlada pela equipe e sujeitos à disponibilidade. Nenhuma cobrança é feita automaticamente neste formulário.</div>
                 <label class="termos">
                     <input type="checkbox" id="termos" required>
                     <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
@@ -1419,11 +1397,8 @@
             elementosImagem.previewLocal.textContent = local;
             elementosImagem.previewIniciais.textContent = obterIniciais(nome);
 
-            const plano = document.querySelector('input[name="plano"]:checked');
-            const planoComSelo = plano && ["destaque", "master"].includes(plano.value);
-            elementosImagem.previewSelo.classList.toggle("visivel", Boolean(planoComSelo));
-            elementosImagem.previewSelo.textContent =
-                plano && plano.value === "master" ? "Master" : "Destaque";
+            elementosImagem.previewSelo.classList.remove("visivel");
+            elementosImagem.previewSelo.textContent = "";
         }
 
         function mostrarFotoCapa(base64) {
@@ -1539,7 +1514,7 @@
             campos.bairro
         ].forEach(campo => campo.addEventListener("input", atualizarPreviewAnuncio));
 
-        document.querySelectorAll('input[name="plano"]').forEach(opcao => {
+        document.querySelectorAll('input[name="assinatura_periodo"]').forEach(opcao => {
             opcao.addEventListener("change", atualizarPreviewAnuncio);
         });
 
@@ -1765,8 +1740,8 @@
         }
 
         function montarCadastro() {
-            const planoSelecionado = document.querySelector(
-                'input[name="plano"]:checked'
+            const assinaturaSelecionada = document.querySelector(
+                'input[name="assinatura_periodo"]:checked'
             );
 
             const numeroWhatsapp = apenasNumeros(campos.whatsapp.value);
@@ -1792,13 +1767,10 @@
                 palavrasChave: limparTexto(campos.palavrasChave.value),
                 imagem: fotoCapaBase64,
                 logo: logoBase64,
-                planoSolicitado: planoSelecionado
-                    ? planoSelecionado.value
-                    : "comum",
-                premium: Boolean(
-                    planoSelecionado && ["destaque", "master"].includes(planoSelecionado.value)
-                ),
-                master: Boolean(planoSelecionado && planoSelecionado.value === "master"),
+                planoSolicitado: "comum",
+                assinaturaPeriodo: assinaturaSelecionada ? assinaturaSelecionada.value : "mensal",
+                premium: false,
+                master: false,
                 status: "ativo",
                 ativo: true,
                 criadoEm: new Date().toISOString(),
@@ -1968,6 +1940,11 @@
                     p_imagem_url: c.imagem || null,
                     p_logo_url: c.logo || null,
                     p_plano: c.planoSolicitado
+                });
+                await BusqueAPI.rpc("registrar_preferencia_assinatura", {
+                    p_whatsapp: c.whatsappNumero,
+                    p_cidade: c.cidade,
+                    p_periodo: c.assinaturaPeriodo
                 });
                 form.reset();
                 removerFotoCapa();
