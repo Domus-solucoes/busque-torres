@@ -641,11 +641,33 @@ function formatSalary(value){
 function mapCompany(r){return {id:r.id,nome:r.nome,categoria:r.categoria,subcategoria:r.subcategoria,descricao:r.descricao,whatsapp:r.whatsapp,whatsappNumero:r.whatsapp,whatsappLink:whatsappUrl(r.whatsapp),instagram:r.instagram||"",site:r.site||"",email:r.email||"",cidade:r.cidade||"",bairro:r.bairro||"",endereco:r.endereco||"",horario:r.horario||"",mapa:r.mapa_url||"",produtos:r.produtos||"",servicos:r.servicos||"",imagem:r.imagem_url||"",logo:r.logo_url||"",planoSolicitado:r.plano,premium:["destaque","master"].includes(r.plano),master:r.plano==="master",destaque:r.plano==="destaque",criadoEm:r.created_at,avaliacao:""}}
 function mapJob(r){return {id:String(r.id),empresa:r.empresa_nome,cargo:r.cargo,salario:formatSalary(r.salario),local:r.local,horario:r.horario||"A combinar",contrato:r.contrato,descricao:r.descricao,requisitos:listItems(r.requisitos),whatsapp:r.whatsapp,email:r.email||"",imagem:safeMediaUrl(r.imagem_url||"")}}
 
+const BT_CACHE_PREFIX="bt-public-v1:";
+function btCacheGet(key,ttlMs){
+  try{
+    const raw=sessionStorage.getItem(BT_CACHE_PREFIX+key);
+    if(!raw)return null;
+    const item=JSON.parse(raw);
+    if(!item||typeof item.t!=="number"||(Date.now()-item.t)>ttlMs){sessionStorage.removeItem(BT_CACHE_PREFIX+key);return null}
+    return item.v;
+  }catch(_){return null}
+}
+function btCacheSet(key,value){
+  try{sessionStorage.setItem(BT_CACHE_PREFIX+key,JSON.stringify({t:Date.now(),v:value}))}catch(_){}
+  return value;
+}
+async function btCachedRpc(cacheKey,ttlMs,rpcName,params={}){
+  const cached=btCacheGet(cacheKey,ttlMs);
+  if(cached!==null)return cached;
+  const value=await BusqueAPI.rpc(rpcName,params);
+  btCacheSet(cacheKey,value);
+  return value;
+}
+
 async function loadHeroBanner(){
   const img=$("heroCityArt");
   document.body.classList.remove("hero-promo");
   try{
-    const banner=await BusqueAPI.rpc("banner_publico_atual_cidade",{p_cidade_id:"torres"});
+    const banner=await btCachedRpc("banner-torres",300000,"banner_publico_atual_cidade",{p_cidade_id:"torres"});
     if(banner?.imagem_url){
       const url=safeMediaUrl(banner.imagem_url);
       if(url){
@@ -662,7 +684,7 @@ async function loadHeroBanner(){
   }
 }
 async function aplicarAgendaPremiumAtual(){
-  const rows=await BusqueAPI.rpc("premium_publico_hoje",{});
+  const rows=await btCachedRpc("premium-hoje",60000,"premium_publico_hoje",{});
   const agenda=new Map((Array.isArray(rows)?rows:[]).map(r=>[String(r.empresa_id),String(r.tipo||"")]));
   registeredCompanies.forEach(company=>{
     company.master=false;
@@ -674,7 +696,7 @@ async function aplicarAgendaPremiumAtual(){
   });
 }
 async function loadCompanies(){
-  const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});
+  const rows=await btCachedRpc("empresas",300000,"buscar_empresas",{p_termo:""});
   registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany);
   try{
     await aplicarAgendaPremiumAtual();
@@ -689,7 +711,7 @@ async function loadJobs(){
     try{
       let rows;
       try{
-        rows=await BusqueAPI.rpc("buscar_vagas_publicas_com_imagem",{});
+        rows=await btCachedRpc("vagas-publicas",180000,"buscar_vagas_publicas_com_imagem",{});
       }catch(firstError){
         console.warn("Consulta de vagas com imagem indisponível; usando consulta atual.",firstError);
         rows=await BusqueAPI.select("vagas_publicas","select=*&order=publicada_em.desc");
