@@ -26,7 +26,7 @@
     input,textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:#fff;color:var(--text);outline:none}
     input:focus,textarea:focus,select:focus{border-color:#7da6d0;box-shadow:0 0 0 3px rgba(36,105,178,.12)}
     .primary{width:100%;border:0;border-radius:12px;background:var(--gold);color:#172033;font-weight:900;padding:14px;margin-top:20px}
-    .primary:hover{filter:brightness(.97)}.primary:disabled{opacity:.55;cursor:not-allowed}
+    .primary:hover{filter:brightness(.97)}.primary:disabled{opacity:.55;cursor:not-allowed}.password-recovery{width:100%;border:0;background:transparent;color:var(--blue);font-weight:850;padding:11px 4px 0;text-decoration:underline;text-underline-offset:3px}
     .form-message{margin-top:14px;padding:12px;border-radius:10px;font-size:14px;line-height:1.45}.form-message.error{background:var(--red-soft);color:#9d2424}.form-message.success{background:var(--green-soft);color:#11683e}
     .app{min-height:100vh}.topbar{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;border-bottom:1px solid rgba(255,255,255,.1)}
     .topbar-inner{max-width:1360px;margin:auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.topbar .brand{color:#fff}.topbar .brand span{color:var(--gold)}
@@ -91,6 +91,7 @@
       <label for="password">Senha</label>
       <input id="password" name="password" type="password" autocomplete="current-password" required>
       <button id="loginButton" class="primary" type="submit">Entrar</button>
+      <button id="recoverPasswordButton" class="password-recovery" type="button">Esqueci / quero alterar minha senha</button>
       <div id="loginMessage" hidden></div>
     </form>
   </section>
@@ -263,6 +264,11 @@
   async function authRequest(path,options={}){const r=await fetch(`${BUSQUE_SUPABASE_URL}/auth/v1/${path}`,{...options,headers:{apikey:BUSQUE_SUPABASE_KEY,"Content-Type":"application/json",...(options.headers||{})}});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.msg||data.message||data.error_description||"Não foi possível autenticar.");return data}
   async function api(path,options={}){if(!state.session?.access_token)throw new Error("Sessão administrativa encerrada.");const r=await fetch(`${BUSQUE_SUPABASE_URL}/rest/v1/${path}`,{...options,headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${state.session.access_token}`,"Content-Type":"application/json",Prefer:"return=representation",...(options.headers||{})}});const raw=await r.text();let data=null;if(raw){try{data=JSON.parse(raw)}catch{data=raw}}if(!r.ok)throw new Error(data?.message||data?.hint||`Erro ${r.status}.`);return data}
   async function login(email,password){return authRequest("token?grant_type=password",{method:"POST",body:JSON.stringify({email,password})})}
+  async function enviarRecuperacaoSenha(email){
+    const redirectTo=new URL("redefinir-senha.html",location.href);
+    redirectTo.search="";redirectTo.hash="";
+    return authRequest(`recover?redirect_to=${encodeURIComponent(redirectTo.href)}`,{method:"POST",body:JSON.stringify({email})});
+  }
   async function getUser(){return authRequest("user",{headers:{Authorization:`Bearer ${state.session.access_token}`}})}
   async function rpc(name,params={}){return api(`rpc/${encodeURIComponent(name)}`,{method:"POST",body:JSON.stringify(params)})}
   function saveSession(session){state.session=session}
@@ -573,6 +579,25 @@ Atual: ${subscription(atual)}`,atual==="anual"?"3":atual==="trimestral"?"2":"1")
     }
     await loadAll({sync:false})}catch(error){console.error(error);toast(error.message,"error")}}
   $("loginForm").addEventListener("submit",async e=>{e.preventDefault();ensureConfig();const btn=$("loginButton");btn.disabled=true;btn.textContent="Entrando...";$("loginMessage").hidden=true;try{const session=await login(e.currentTarget.email.value.trim(),e.currentTarget.password.value);saveSession(session);await startAdmin()}catch(error){clearSession();loginMessage(error.message,"error")}finally{btn.disabled=false;btn.textContent="Entrar"}});
+  $("recoverPasswordButton").addEventListener("click",async()=>{
+    ensureConfig();
+    const email=$("email").value.trim();
+    if(!email)return loginMessage("Digite o e-mail do usuário antes de solicitar a alteração da senha.","error");
+    const btn=$("recoverPasswordButton");
+    btn.disabled=true;
+    const original=btn.textContent;
+    btn.textContent="Enviando e-mail...";
+    $("loginMessage").hidden=true;
+    try{
+      await enviarRecuperacaoSenha(email);
+      loginMessage("E-mail enviado. Abra o link recebido para definir a nova senha.","success");
+    }catch(error){
+      loginMessage(error.message,"error");
+    }finally{
+      btn.disabled=false;
+      btn.textContent=original;
+    }
+  });
   $("adminCitySelect").addEventListener("change",async e=>{try{e.target.disabled=true;await switchAdminCity(e.target.value)}catch(error){console.error(error);toast(error.message,"error");e.target.value=ADMIN_CITY_ID}finally{e.target.disabled=false}});
   $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();if(e.target.closest("#crmSave"))return saveCrmLead();if(e.target.closest("#crmCancelEdit"))return crmCancelEdit()});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);if(e.target.id==="crmSearch"){state.crmSearch=e.target.value;const list=$("crmList");if(list){const rows=crmFilteredRows();list.innerHTML=rows.length?rows.map(crmCard).join(""):'<div class="empty"><strong>Nenhum contato encontrado</strong><span>Ajuste os filtros ou cadastre um novo contato.</span></div>'}}});$("content").addEventListener("change",e=>{if(e.target.id==="crmStatusFilter"){state.crmStatusFilter=e.target.value;return renderContent()}if(e.target.id==="crmReturnFilter"){state.crmReturnFilter=e.target.value;return renderContent()}if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeCompanyEditor();closePanelMenu()}});
   </script>

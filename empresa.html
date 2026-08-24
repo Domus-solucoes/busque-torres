@@ -69,6 +69,29 @@ async function loadLikeState(){if(!currentCompanyId)return;try{const rows=await 
 async function toggleLike(){if(!currentCompanyId)return;const btn=$("likeButton");btn.disabled=true;try{const rows=await BusqueAPI.rpc("alternar_curtida_empresa",{p_empresa_id:String(currentCompanyId),p_visitante_token:likeToken()}),r=Array.isArray(rows)?rows[0]:rows;if(r)renderLikeState(r.total,r.curtiu)}catch(error){console.error(error);alert("Não foi possível registrar sua curtida agora. Tente novamente.")}finally{btn.disabled=false}}
 $("likeButton").addEventListener("click",toggleLike);
 function show(c){const info=categoryInfo[c.categoria]||{name:"Empresa"};$("name").textContent=c.nome||"Empresa";document.title=(c.nome||"Empresa")+" — Busque Torres";$("category").textContent=c.subcategoria?info.name+" • "+c.subcategoria:info.name;$("fallback").textContent=initials(c.nome);$("description").textContent=c.descricao||"Conheça esta empresa local.";$("location").textContent=[c.bairro,c.cidade].filter(Boolean).join(" • ")||"Atendimento local";$("address").textContent=[c.endereco,c.bairro,c.cidade].filter(Boolean).join(" • ")||"Endereço não informado";const w=whats(c.whatsapp);$("whatsapp").href=w;$("phone").href=w;$("phone").textContent=c.whatsapp||"Abrir WhatsApp";const ig=instagramUrl(c.instagram);if(ig){$("instagram").href=ig;$("instagram").hidden=false}const site=safe(c.site);if(site){$("site").href=site;$("site").hidden=false;$("siteWrap").hidden=false;$("siteDetail").href=site;$("siteDetail").textContent=c.site}if(c.email){const mail="mailto:"+c.email;$("emailButton").href=mail;$("emailButton").hidden=false;$("emailWrap").hidden=false;$("emailLink").href=mail;$("emailLink").textContent=c.email}if(c.horario){$("hours").textContent=c.horario;$("hoursWrap").hidden=false}const map=safe(c.mapa_url);if(map){$("mapButton").href=map;$("mapButton").hidden=false}fillChips("products","productsBox",c.produtos);fillChips("services","servicesBox",c.servicos);$("premium").hidden=!["destaque","master"].includes(c.plano);$("premium").textContent=c.plano==="master"?"Master":"Destaque";$("initials").textContent=initials(c.nome);const cover=media(c.imagem_url);if(cover){$("coverBg").src=cover;$("coverBg").hidden=false;$("coverImage").src=cover;$("coverImage").alt="Foto de "+c.nome;$("coverImage").hidden=false;$("cover").classList.add("has-image")}const logo=media(c.logo_url);if(logo){$("logoImage").src=logo;$("logoImage").alt="Logotipo de "+c.nome;$("logoImage").hidden=false;$("initials").hidden=true}$("profile").hidden=false}
-(async()=>{const id=new URLSearchParams(location.search).get("id");if(!id){$("notFound").classList.add("show");return}try{const rows=await BusqueAPI.select("empresas_publicas",`select=*&id=eq.${encodeURIComponent(id)}&limit=1`);if(Array.isArray(rows)&&rows[0]){currentCompanyId=rows[0].id;show(rows[0]);loadLikeState();await registrarMetrica("abriu_empresa",rows[0].id);await carregarVisualizacoesPerfil();$("whatsapp").addEventListener("click",()=>registrarMetrica("clicou_whatsapp",rows[0].id));$("phone").addEventListener("click",()=>registrarMetrica("clicou_whatsapp",rows[0].id))}else $("notFound").classList.add("show")}catch(error){console.error(error);$("notFound").classList.add("show")}})();
+(async()=>{
+  const id=new URLSearchParams(location.search).get("id");
+  if(!id){$("notFound").classList.add("show");return}
+  try{
+    const rows=await BusqueAPI.select("empresas_publicas",`select=*&id=eq.${encodeURIComponent(id)}&limit=1`);
+    if(Array.isArray(rows)&&rows[0]){
+      const company={...rows[0]};
+      try{
+        const premiumRows=await BusqueAPI.rpc("premium_publico_hoje",{});
+        const premium=(Array.isArray(premiumRows)?premiumRows:[]).find(r=>String(r.empresa_id)===String(company.id));
+        company.plano=premium?.tipo||"comum";
+      }catch(error){
+        console.warn("Agenda Premium pública indisponível no perfil; mantendo classificação atual.",error?.message||error);
+      }
+      currentCompanyId=company.id;
+      show(company);
+      loadLikeState();
+      await registrarMetrica("abriu_empresa",company.id);
+      await carregarVisualizacoesPerfil();
+      $("whatsapp").addEventListener("click",()=>registrarMetrica("clicou_whatsapp",company.id));
+      $("phone").addEventListener("click",()=>registrarMetrica("clicou_whatsapp",company.id));
+    }else $("notFound").classList.add("show")
+  }catch(error){console.error(error);$("notFound").classList.add("show")}
+})();
 </script>
 </body></html>

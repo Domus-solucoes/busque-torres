@@ -19,6 +19,18 @@
   <link rel="preconnect" href="https://xwkmsqawiimouilldwit.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//xwkmsqawiimouilldwit.supabase.co">
   <title>Busque Torres — Tudo o que você procura em um só lugar</title>
+<script>
+(()=>{
+  const hashParams=new URLSearchParams(location.hash.replace(/^#/,""));
+  const queryParams=new URLSearchParams(location.search);
+  if(hashParams.get("type")==="recovery" || queryParams.get("type")==="recovery"){
+    const target=new URL("redefinir-senha.html",location.href);
+    target.search=location.search;
+    target.hash=location.hash;
+    location.replace(target.href);
+  }
+})();
+</script>
   <style>
     :root{
       --navy:#081b33;--navy2:#102d4f;--gold:#e6b84b;--gold2:#f3d184;
@@ -649,7 +661,27 @@ async function loadHeroBanner(){
     console.warn("Banner dinâmico indisponível; usando o fundo padrão do site.",error?.message||error);
   }
 }
-async function loadCompanies(){const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany)}
+async function aplicarAgendaPremiumAtual(){
+  const rows=await BusqueAPI.rpc("premium_publico_hoje",{});
+  const agenda=new Map((Array.isArray(rows)?rows:[]).map(r=>[String(r.empresa_id),String(r.tipo||"")]));
+  registeredCompanies.forEach(company=>{
+    company.master=false;
+    company.destaque=false;
+    company.premium=false;
+    const tipo=agenda.get(String(company.id));
+    if(tipo==="master"){company.master=true;company.premium=true}
+    else if(tipo==="destaque"){company.destaque=true;company.premium=true}
+  });
+}
+async function loadCompanies(){
+  const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:""});
+  registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany);
+  try{
+    await aplicarAgendaPremiumAtual();
+  }catch(error){
+    console.warn("Agenda Premium pública indisponível; mantendo classificação atual das empresas.",error?.message||error);
+  }
+}
 async function loadJobs(){
   if(jobsLoaded)return JOBS;
   if(jobsLoadPromise)return jobsLoadPromise;
