@@ -695,13 +695,44 @@ async function aplicarAgendaPremiumAtual(){
     else if(tipo==="destaque"){company.destaque=true;company.premium=true}
   });
 }
+async function aplicarImagensPremiumAtual(){
+  const rows=await btCachedRpc("imagens-premium-hoje-v1",60000,"buscar_imagens_premium_home",{});
+  const imagens=new Map((Array.isArray(rows)?rows:[]).map(r=>[String(r.empresa_id),{imagem:r.imagem_url||"",logo:r.logo_url||""}]));
+  registeredCompanies.forEach(company=>{
+    if(!company.master&&!company.destaque)return;
+    const media=imagens.get(String(company.id));
+    if(media){company.imagem=media.imagem;company.logo=media.logo}
+  });
+}
 async function loadCompanies(){
-  const rows=await btCachedRpc("empresas",300000,"buscar_empresas",{p_termo:""});
+  let rows;
+  try{
+    rows=await btCachedRpc("empresas-home-v2",300000,"buscar_empresas_home",{p_termo:""});
+  }catch(error){
+    console.warn("Consulta leve da home indisponível; usando consulta anterior como contingência.",error?.message||error);
+    rows=await btCachedRpc("empresas-fallback-v1",60000,"buscar_empresas",{p_termo:""});
+  }
   registeredCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany);
   try{
     await aplicarAgendaPremiumAtual();
   }catch(error){
     console.warn("Agenda Premium pública indisponível; mantendo classificação atual das empresas.",error?.message||error);
+  }
+  try{
+    await aplicarImagensPremiumAtual();
+  }catch(error){
+    console.warn("Imagens Premium indisponíveis; tentando preservar o visual com a consulta anterior.",error?.message||error);
+    try{
+      const fallback=await btCachedRpc("empresas-imagens-fallback-v1",60000,"buscar_empresas",{p_termo:""});
+      const imagens=new Map((Array.isArray(fallback)?fallback:[]).map(r=>[String(r.id),{imagem:r.imagem_url||"",logo:r.logo_url||""}]));
+      registeredCompanies.forEach(company=>{
+        if(!company.master&&!company.destaque)return;
+        const media=imagens.get(String(company.id));
+        if(media){company.imagem=media.imagem;company.logo=media.logo}
+      });
+    }catch(fallbackError){
+      console.warn("Não foi possível recuperar as imagens Premium pela consulta anterior.",fallbackError?.message||fallbackError);
+    }
   }
 }
 async function loadJobs(){
