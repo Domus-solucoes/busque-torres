@@ -914,9 +914,97 @@ function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFi
 function renderSearch(){let list=allCompanies();if(query)list=list.filter(c=>searchableText(c).includes(query));else list=[];if(selected!=="todos")list=list.filter(c=>c.categoria===selected);list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));$("cards").replaceChildren(...list.map(company=>card(company,false)));$("resultCount").textContent=query?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";$("empty").classList.toggle("show",Boolean(query)&&list.length===0)}
 function render(){const inSearch=document.body.classList.contains("search-mode");$("normalHomeContent").hidden=inSearch;$("searchResultsContent").hidden=!inSearch;$("searchHint").classList.toggle("show",inSearch&&!query);if(inSearch)renderSearch();else{$("empty").classList.remove("show");renderHome()}}
 let masterBanners=[];
-function atualizarBannersMaster(destaques){masterBanners=destaques.map(company=>({company,title:company.nome,text:company.descricao||"Conheça esta empresa Master.",link:profileUrl(company),image:safeMediaUrl(company.imagem)}));if(!masterBanners.length)masterBanners=[{company:null,title:`Sua empresa pode ser o destaque de ${SITE.city}.`,text:"O primeiro anúncio Master aparecerá aqui após aprovação.",link:"cadastro.html",image:""}];if(bannerIndex>=masterBanners.length)bannerIndex=0;showBanner();restartBanner()}
-function showBanner(){const b=masterBanners[bannerIndex]||masterBanners[0];if(!b)return;$("bannerTitle").textContent=b.title;$("bannerText").textContent=b.text;$("bannerLink").href=b.link;$("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;const imagem=$("bannerImage"),fundo=$("bannerImageBg");imagem.classList.add("trocando");fundo.classList.add("trocando");setTimeout(()=>{if(b.image){imagem.src=b.image;imagem.alt=`Foto de ${b.title}`;imagem.hidden=false;fundo.src=b.image;fundo.hidden=false}else{imagem.removeAttribute("src");imagem.alt="";imagem.hidden=true;fundo.removeAttribute("src");fundo.hidden=true}requestAnimationFrame(()=>{imagem.classList.remove("trocando");fundo.classList.remove("trocando")})},180)}
-function moveBanner(step){if(masterBanners.length<=1)return;bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;showBanner();restartBanner()}
+const masterImageReady=new Map();
+let bannerRenderToken=0;
+
+function prepararImagemMaster(src){
+  if(!src)return Promise.resolve();
+  if(masterImageReady.has(src))return masterImageReady.get(src);
+  const promise=new Promise(resolve=>{
+    const img=new Image();
+    let finished=false;
+    const done=()=>{if(finished)return;finished=true;resolve()};
+    img.onload=done;
+    img.onerror=done;
+    img.src=src;
+    if(img.complete)done();
+    else if(typeof img.decode==="function")img.decode().then(done).catch(()=>{});
+  });
+  masterImageReady.set(src,promise);
+  return promise;
+}
+
+function atualizarBannersMaster(destaques){
+  masterBanners=destaques.map(company=>({
+    company,
+    title:company.nome,
+    text:company.descricao||"Conheça esta empresa Master.",
+    link:profileUrl(company),
+    image:safeMediaUrl(company.imagem)
+  }));
+  if(!masterBanners.length)masterBanners=[{
+    company:null,
+    title:`Sua empresa pode ser o destaque de ${SITE.city}.`,
+    text:"O primeiro anúncio Master aparecerá aqui após aprovação.",
+    link:"cadastro.html",
+    image:""
+  }];
+  if(bannerIndex>=masterBanners.length)bannerIndex=0;
+
+  // Pré-decodifica as imagens MASTER já recebidas pela home.
+  // Isso não faz nova consulta ao Supabase nem aumenta o egress do banco.
+  masterBanners.forEach(b=>{if(b.image)prepararImagemMaster(b.image)});
+
+  showBanner();
+  restartBanner();
+}
+
+async function showBanner(){
+  const b=masterBanners[bannerIndex]||masterBanners[0];
+  if(!b)return;
+
+  const token=++bannerRenderToken;
+  const imagem=$("bannerImage"),fundo=$("bannerImageBg");
+
+  // Mantém o MASTER atual visível enquanto a próxima imagem termina de decodificar.
+  if(b.image)await prepararImagemMaster(b.image);
+  if(token!==bannerRenderToken)return;
+
+  $("bannerTitle").textContent=b.title;
+  $("bannerText").textContent=b.text;
+  $("bannerLink").href=b.link;
+  $("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;
+
+  if(b.image){
+    imagem.src=b.image;
+    imagem.alt=`Foto de ${b.title}`;
+    imagem.hidden=false;
+    fundo.src=b.image;
+    fundo.hidden=false;
+  }else{
+    imagem.removeAttribute("src");
+    imagem.alt="";
+    imagem.hidden=true;
+    fundo.removeAttribute("src");
+    fundo.hidden=true;
+  }
+
+  // Fade curto somente depois que a nova imagem já está pronta.
+  imagem.classList.add("trocando");
+  fundo.classList.add("trocando");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(token!==bannerRenderToken)return;
+    imagem.classList.remove("trocando");
+    fundo.classList.remove("trocando");
+  }));
+}
+
+function moveBanner(step){
+  if(masterBanners.length<=1)return;
+  bannerIndex=(bannerIndex+step+masterBanners.length)%masterBanners.length;
+  showBanner();
+  restartBanner();
+}
 function restartBanner(){clearInterval(bannerTimer);if(masterBanners.length>1)bannerTimer=setInterval(()=>moveBanner(1),4000)}
 
 $("loadMoreCompanies")?.addEventListener("click",()=>{normalVisible+=NORMAL_PAGE_SIZE;renderNormalCompanies()});
