@@ -119,7 +119,7 @@
         <button class="tab" data-tab="jobs-pending" type="button">Vagas pendentes</button>
         <button class="tab" data-tab="companies-active" type="button">Empresas ativas</button>
         <button class="tab" data-tab="renewals" type="button">Renovações</button>
-        <button class="tab" data-tab="finance" type="button">Financeiro</button>
+        <button class="tab" data-tab="finance" type="button">Financeiro</button><button class="tab" data-tab="promotions" type="button">Promoções</button>
         <button class="tab" data-tab="jobs-active" type="button">Vagas ativas</button><button class="tab" data-tab="crm" type="button">Comercial / CRM</button><button class="tab" data-tab="agenda-premium" type="button">Agenda Premium</button><button class="tab" data-tab="pdf-comercial" type="button">PDF / Comercial</button><button class="tab" data-tab="metrics" type="button">Acessos</button><button class="tab" data-tab="banners" type="button">Banner da Home</button><button class="tab" data-tab="activities" data-owner-only hidden type="button">Atividade</button>
       </nav>
       <section><div class="section-head"><div><h2 id="sectionTitle">Empresas pendentes</h2><span id="sectionSubtitle">Cadastros aguardando análise.</span></div></div><div id="content" class="cards"></div></section>
@@ -134,7 +134,7 @@
         <button class="panel-menu-item" data-tab="jobs-pending" type="button">Vagas pendentes</button>
         <button class="panel-menu-item" data-tab="companies-active" type="button">Empresas ativas</button>
         <button class="panel-menu-item" data-tab="renewals" type="button">Renovações</button>
-        <button class="panel-menu-item" data-tab="finance" type="button">Financeiro</button>
+        <button class="panel-menu-item" data-tab="finance" type="button">Financeiro</button><button class="panel-menu-item" data-tab="promotions" type="button">Promoções</button>
         <button class="panel-menu-item" data-tab="jobs-active" type="button">Vagas ativas</button>
         <button class="panel-menu-item" data-tab="crm" type="button">Comercial / CRM</button>
         <button class="panel-menu-item" data-tab="agenda-premium" type="button">Agenda Premium</button>
@@ -196,7 +196,7 @@
   };
   let ADMIN_CITY_ID="torres";
   const MAX_MASTER=4,MAX_DESTAQUE=3;
-  const state={session:null,adminProfile:null,adminSessionId:null,heartbeatTimer:null,companies:[],jobs:[],payments:[],commercial:null,metrics:null,banners:[],leads:[],renewalAlerts:[],admins:[],premiumAgenda:[],auditSessions:[],auditActivities:[],editingCompany:null,editingLead:null,crmSearch:"",crmStatusFilter:"todos",crmReturnFilter:"todos",crmShowRenewals:false,tab:"companies-pending",modal:null,loaded:{pendingCompanies:false,pendingJobs:false,activeJobs:false,finance:false,metrics:false,banners:false,crm:false,agenda:false,activities:false},syncRunning:false};
+  const state={session:null,adminProfile:null,adminSessionId:null,heartbeatTimer:null,companies:[],jobs:[],payments:[],commercial:null,catalog:[],metrics:null,banners:[],leads:[],renewalAlerts:[],admins:[],premiumAgenda:[],promotions:[],auditSessions:[],auditActivities:[],editingCompany:null,editingLead:null,crmSearch:"",crmStatusFilter:"todos",crmReturnFilter:"todos",crmShowRenewals:false,tab:"companies-pending",modal:null,loaded:{pendingCompanies:false,pendingJobs:false,activeJobs:false,finance:false,metrics:false,banners:false,crm:false,agenda:false,promotions:false,activities:false},syncRunning:false};
   const cityConfig=()=>CITIES[ADMIN_CITY_ID]||CITIES.torres;
   const cityName=()=>cityConfig().name;
   function ensureConfig(){
@@ -229,7 +229,7 @@
   }
   const plan=v=>({comum:"Comum",destaque:"Destaque",master:"Master"}[v]||v||"Comum");
   const subscription=v=>({mensal:"Mensal",trimestral:"Trimestral",anual:"Anual"}[v]||v||"Mensal");
-  const subscriptionPrice=v=>({mensal:"R$ 9,90",trimestral:"R$ 24,90",anual:"R$ 89,90"}[v]||"R$ 9,90");
+  const subscriptionPrice=v=>{const code={mensal:"assinatura_mensal",trimestral:"assinatura_trimestral",anual:"assinatura_anual"}[v]||"assinatura_mensal",item=(state.catalog||[]).find(x=>x.codigo===code);return item?money(item.valor):({mensal:"R$ 9,90",trimestral:"R$ 24,90",anual:"R$ 89,90"}[v]||"R$ 9,90")};
   function subscriptionBenefits(v){return v==="anual"?{master:3,destaque:2}:v==="trimestral"?{master:0,destaque:1}:{master:0,destaque:0}}
   function daysUntil(value){
     const parsed=parseDateValue(value);
@@ -302,16 +302,17 @@
   const JOB_BASE_FIELDS="id,empresa_nome,cargo,local,whatsapp,salario,horario,contrato,email,duracao_dias,status,expira_em,motivo_status,created_at,cidade_id";
   function cityFilter(){return `cidade_id=eq.${encodeURIComponent(ADMIN_CITY_ID)}`}
   function mergeRows(base,details){const map=new Map((details||[]).map(x=>[String(x.id),x]));return (base||[]).map(x=>Object.assign({},x,map.get(String(x.id))||{}))}
-  function resetLazyData(){state.loaded={pendingCompanies:false,pendingJobs:false,activeJobs:false,finance:false,metrics:false,banners:false,crm:false,agenda:false,activities:false};state.payments=[];state.metrics=null;state.banners=[];state.leads=[];state.renewalAlerts=[];state.admins=[];state.premiumAgenda=[];state.auditSessions=[];state.auditActivities=[]}
+  function resetLazyData(){state.loaded={pendingCompanies:false,pendingJobs:false,activeJobs:false,finance:false,metrics:false,banners:false,crm:false,agenda:false,activities:false};state.payments=[];state.metrics=null;state.banners=[];state.leads=[];state.renewalAlerts=[];state.admins=[];state.premiumAgenda=[];state.promotions=[];state.auditSessions=[];state.auditActivities=[]}
   async function loadBase(){
-    const [companies,jobs,configs]=await Promise.all([
+    const [companies,jobs,configs,catalog]=await Promise.all([
       api(`empresas?select=${COMPANY_BASE_FIELDS}&${cityFilter()}&order=created_at.desc`),
       api(`vagas?select=${JOB_BASE_FIELDS}&${cityFilter()}&order=created_at.desc`),
-      api("configuracoes_comerciais?select=id,preco_comum,preco_destaque,preco_master,primeiros_dias_gratis,data_inicio_cobranca,cobranca_ativa&limit=1")
+      api("configuracoes_comerciais?select=id,preco_comum,preco_destaque,preco_master,primeiros_dias_gratis,data_inicio_cobranca,cobranca_ativa&limit=1"),
+      rpc("catalogo_comercial_publico",{p_cidade_id:ADMIN_CITY_ID}).catch(()=>[])
     ]);
     state.companies=Array.isArray(companies)?companies:[];
     state.jobs=Array.isArray(jobs)?jobs:[];
-    state.commercial=Array.isArray(configs)?configs[0]:null;
+    state.commercial=Array.isArray(configs)?configs[0]:null;state.catalog=Array.isArray(catalog)?catalog:[];
   }
   async function refreshStatusesAfterSync(){
     if(state.syncRunning)return;state.syncRunning=true;
@@ -324,11 +325,13 @@
   async function loadPendingCompanyDetails(force=false){if(state.loaded.pendingCompanies&&!force)return;const rows=await api(`empresas?select=id,descricao,produtos,servicos,imagem_url,logo_url&${cityFilter()}&status=eq.pendente&order=created_at.desc`);state.companies=mergeRows(state.companies,Array.isArray(rows)?rows:[]);state.loaded.pendingCompanies=true}
   async function loadPendingJobDetails(force=false){if(state.loaded.pendingJobs&&!force)return;const rows=await api(`vagas?select=id,descricao,requisitos,imagem_url&${cityFilter()}&status=eq.pendente&order=created_at.desc`);state.jobs=mergeRows(state.jobs,Array.isArray(rows)?rows:[]);state.loaded.pendingJobs=true}
   async function loadActiveJobDetails(force=false){if(state.loaded.activeJobs&&!force)return;const rows=await api(`vagas?select=id,imagem_url&${cityFilter()}&status=eq.ativa&order=created_at.desc`);state.jobs=mergeRows(state.jobs,Array.isArray(rows)?rows:[]);state.loaded.activeJobs=true}
-  async function loadFinance(force=false){if(state.loaded.finance&&!force)return;if(!cityConfig().paymentsReady){state.payments=[];state.loaded.finance=true;return}const rows=await api(`pagamentos?select=id,empresa_id,status,plano,valor,created_at,pago_em,mercado_pago_payment_id,mercado_pago_preference_id,external_reference,erro_detalhe,checkout_url&${cityFilter()}&order=created_at.desc`);state.payments=Array.isArray(rows)?rows:[];state.loaded.finance=true}
+  async function loadFinance(force=false){if(state.loaded.finance&&!force)return;if(!cityConfig().paymentsReady){state.payments=[];state.loaded.finance=true;return}const rows=await api(`pagamentos?select=id,empresa_id,tipo,produto_codigo,quantidade,status,plano,valor,created_at,pago_em,mercado_pago_payment_id,mercado_pago_preference_id,external_reference,erro_detalhe,checkout_url&${cityFilter()}&order=created_at.desc`);state.payments=Array.isArray(rows)?rows:[];state.loaded.finance=true}
   async function loadMetrics(force=false){if(state.loaded.metrics&&!force)return;try{state.metrics=ADMIN_CITY_ID==="torres"?await rpc("metricas_resumo_admin",{}):await rpc("metricas_resumo_admin_cidade",{p_cidade_id:ADMIN_CITY_ID});state.loaded.metrics=true}catch(error){state.metrics=null;console.warn("Métricas ainda não disponíveis:",error?.message||error);throw error}}
   async function loadBanners(force=false){if(state.loaded.banners&&!force)return;const rows=await api(`banners_site?select=id,nome,tipo,imagem_url,storage_path,inicio_em,fim_em,ativo,created_at,updated_at&${cityFilter()}&order=created_at.desc`);state.banners=Array.isArray(rows)?rows:[];state.loaded.banners=true}
   async function loadCrm(force=false){if(state.loaded.crm&&!force)return;const userId=state.session?.user?.id||"";const [rows,alerts,admins]=await Promise.all([api(`crm_leads?select=id,cidade_id,empresa_nome,contato_nome,whatsapp,email,instagram,categoria,origem,status,observacoes,proximo_contato,ultimo_contato,historico,created_at,updated_at&${cityFilter()}&order=updated_at.desc`),api(`crm_alertas_vencimento?select=id,empresa_id,user_id,vencimento,visto_em,cidade_id&${cityFilter()}&order=visto_em.desc`).catch(()=>[]),api("administradores?select=user_id,nome,ativo").catch(()=>[])]);state.leads=Array.isArray(rows)?rows:[];state.renewalAlerts=Array.isArray(alerts)?alerts:[];state.admins=Array.isArray(admins)?admins:[];state.loaded.crm=true}
   async function loadPremiumAgenda(force=false){if(state.loaded.agenda&&!force)return;const rows=await api("agenda_premium_painel?select=id,empresa_id,empresa_nome,tipo,slot,data_inicio,data_fim,status,origem,valor,observacoes,created_at&order=data_inicio.asc");state.premiumAgenda=Array.isArray(rows)?rows:[];state.loaded.agenda=true}
+
+  async function loadPromotions(force=false){if(state.loaded.promotions&&!force)return;const rows=await api(`promocoes?select=id,empresa_id,titulo,descricao,imagem_url,status,duracao_dias,publicada_em,expira_em,motivo_status,pagamento_confirmado,pagamento_id,pago_em,created_at,cidade_id&${cityFilter()}&order=created_at.desc`);state.promotions=Array.isArray(rows)?rows:[];state.loaded.promotions=true}
   async function loadActivities(force=false){if(!isOwner())throw new Error("Esta área é exclusiva do proprietário do painel.");if(state.loaded.activities&&!force)return;const [sessions,activities]=await Promise.all([api("admin_sessoes_painel?select=id,user_id,administrador_nome,papel,iniciado_em,ultima_atividade_em,encerrado_em,quantidade_atividades&order=iniciado_em.desc&limit=100"),api("admin_atividades_painel?select=id,user_id,administrador_nome,papel,sessao_id,acao,entidade,entidade_id,titulo,detalhes,created_at&order=created_at.desc&limit=500")]);state.auditSessions=Array.isArray(sessions)?sessions:[];state.auditActivities=Array.isArray(activities)?activities:[];state.loaded.activities=true}
 
   async function ensureTabData(tab,force=false){
@@ -340,6 +343,7 @@
     if(tab==="banners")return loadBanners(force);
     if(tab==="crm")return loadCrm(force);
     if(tab==="agenda-premium")return loadPremiumAgenda(force);
+    if(tab==="promotions")return loadPromotions(force);
     if(tab==="activities")return loadActivities(force);
   }
   function updateCityUi(){
@@ -391,7 +395,9 @@
   function renewalCard(c){const r=renewalStatus(c);return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(c.nome)}</h3><p>${safe(plan(c.plano))} · ${safe(r.text)}</p><div class="badges"><span class="badge ${r.cls}">${safe(r.label)}</span><span class="badge plan">${safe(c.whatsapp)}</span></div></div><div><small>Vencimento</small><br><strong>${safe(date(c.data_vencimento))}</strong></div></div><div class="record-details"><div class="detail"><small>Link permanente</small><div>${safe(renewalUrl(c))}</div></div><div class="detail"><small>Plano</small><div>${safe(plan(c.plano))}</div></div><div class="detail"><small>Situação</small><div>${safe(c.status)}</div></div></div><div class="actions"><button class="action renewal" data-action="send-renewal" data-id="${c.id}">Enviar pelo WhatsApp</button><button class="action view" data-action="copy-renewal" data-id="${c.id}">Copiar link</button></div></article>`}
   const money=v=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(v||0));
   function paymentStatusLabel(v){return ({criado:"Criado",pendente:"Pendente",aprovado:"Aprovado",rejeitado:"Rejeitado",cancelado:"Cancelado",expirado:"Expirado",reembolsado:"Reembolsado",erro:"Erro"}[v]||v)}
-  function paymentCard(p){const c=findCompany(p.empresa_id);const cls=p.status==="aprovado"?"paid":p.status==="pendente"?"pending":"unpaid";return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(c?.nome||"Empresa não localizada")}</h3><p>Renovação · ${safe(plan(p.plano))}</p><div class="badges"><span class="badge ${cls}">${safe(paymentStatusLabel(p.status))}</span><span class="badge plan">${safe(money(p.valor))}</span></div></div><div><small>Criado em</small><br><strong>${safe(date(p.created_at))}</strong></div></div><div class="record-details"><div class="detail"><small>ID Mercado Pago</small><div>${safe(p.mercado_pago_payment_id||p.mercado_pago_preference_id||"—")}</div></div><div class="detail"><small>Pago em</small><div>${safe(date(p.pago_em))}</div></div><div class="detail"><small>Referência</small><div>${safe(p.external_reference)}</div></div><div class="detail"><small>Erro</small><div>${safe(p.erro_detalhe||"—")}</div></div></div>${p.checkout_url&&p.status==="pendente"?`<div class="actions"><button class="action view" data-action="copy-checkout" data-id="${p.id}">Copiar checkout</button></div>`:""}</article>`}
+  function paymentCard(p){const c=findCompany(p.empresa_id);const cls=p.status==="aprovado"?"paid":p.status==="pendente"?"pending":"unpaid",tipo=({renovacao:"Assinatura",premium_extra:"Visibilidade extra",promocao_dia:"Promoção do Dia"}[p.tipo]||p.tipo||"Pagamento"),produto=p.produto_codigo||p.plano;return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(c?.nome||"Empresa não localizada")}</h3><p>${safe(tipo)} · ${safe(produto)}${Number(p.quantidade||1)>1?` × ${Number(p.quantidade)}`:""}</p><div class="badges"><span class="badge ${cls}">${safe(paymentStatusLabel(p.status))}</span><span class="badge plan">${safe(money(p.valor))}</span></div></div><div><small>Criado em</small><br><strong>${safe(date(p.created_at))}</strong></div></div><div class="record-details"><div class="detail"><small>ID Mercado Pago</small><div>${safe(p.mercado_pago_payment_id||p.mercado_pago_preference_id||"—")}</div></div><div class="detail"><small>Pago em</small><div>${safe(date(p.pago_em))}</div></div><div class="detail"><small>Referência</small><div>${safe(p.external_reference)}</div></div><div class="detail"><small>Erro</small><div>${safe(p.erro_detalhe||"—")}</div></div></div>${p.checkout_url&&p.status==="pendente"?`<div class="actions"><button class="action view" data-action="copy-checkout" data-id="${p.id}">Copiar checkout</button></div>`:""}</article>`}
+
+  function promotionCard(p){const c=findCompany(p.empresa_id),paid=p.pagamento_confirmado;return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(p.titulo)}</h3><p>${safe(c?.nome||"Empresa") } · ${p.duracao_dias} dia(s)</p><div class="badges"><span class="badge ${paid?'paid':'pending'}">${paid?'PAGA':'AGUARDANDO PAGAMENTO'}</span><span class="badge plan">${safe(p.status)}</span></div></div><div><small>Enviada em</small><br><strong>${safe(date(p.created_at))}</strong></div></div>${p.imagem_url?`<img src="${safe(p.imagem_url)}" alt="" style="width:100%;max-height:280px;object-fit:contain;background:#f5f7fa;border-radius:14px;margin:12px 0">`:''}<div class="record-details"><div class="detail"><small>Descrição</small><div>${safe(p.descricao||'—')}</div></div><div class="detail"><small>Pago em</small><div>${safe(date(p.pago_em))}</div></div><div class="detail"><small>Publicação</small><div>${safe(date(p.publicada_em))}</div></div><div class="detail"><small>Expira</small><div>${safe(date(p.expira_em))}</div></div></div><div class="actions">${p.status==='pendente'&&paid?`<button class="action approve" data-action="approve-promotion" data-id="${p.id}">Aprovar e publicar</button>`:''}${p.status==='pendente'?`<button class="action reject" data-action="reject-promotion" data-id="${p.id}">Reprovar</button>`:''}${p.status==='ativa'?`<button class="action reject" data-action="close-promotion" data-id="${p.id}">Encerrar</button>`:''}</div></article>`}
   function activeJobCard(j){return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(j.cargo)}</h3><p>${safe(j.empresa_nome)} · expira em ${safe(date(j.expira_em))}</p></div><span class="badge paid">Ativa</span></div>${jobMedia(j)}<div class="actions"><button class="action approve" data-action="renew-job" data-id="${j.id}">Republicar</button><button class="action reject" data-action="close-job" data-id="${j.id}">Encerrar</button></div></article>`}
   function metricNumber(v){return Number(v||0).toLocaleString("pt-BR")}
   function metricCompanies(){
@@ -501,6 +507,8 @@
       title="Financeiro";
       if(!cityConfig().paymentsReady){subtitle=`Pagamentos do ${cityName()} ainda não estão liberados.`;html='<div class="empty"><strong>Pagamentos ainda não ativados nesta cidade</strong><span>O painel já está separado por cidade, mas o checkout do Busque Caxias será ativado somente depois dos testes de pagamento do Busque Torres.</span></div>'}
       else{list=state.payments;const approved=list.filter(p=>p.status==="aprovado");const total=approved.reduce((sum,p)=>sum+Number(p.valor||0),0);subtitle=`${approved.length} pagamento(s) aprovado(s) · Total recebido: ${money(total)}`;html=list.map(paymentCard).join("")}
+    }else if(state.tab==="promotions"){
+      list=state.promotions;title="Promoções do Dia";subtitle="Pagamentos, análise e publicações das promoções enviadas pelas empresas.";html=list.map(promotionCard).join("")
     }else if(state.tab==="crm"){
       title="Comercial / CRM";subtitle="Prospecção, contatos e próximos retornos.";html=crmHtml()
     }else if(state.tab==="metrics"){
@@ -546,7 +554,7 @@ ${renewalUrl(c)}
 
 Modalidade cadastrada: ${subscription(c.assinatura_periodo)} — ${subscriptionPrice(c.assinatura_periodo)}.`;
   }
-  async function handleAction(action,id){const company=findCompany(id),job=findJob(id);try{if(action==="pdf-company")return generateCompanyPdf(id);if(action==="pdf-general")return generateGeneralPdf();if(action==="crm-ack-renewals")return acknowledgeWeekRenewals();if(action==="crm-show-renewals"){state.crmShowRenewals=!state.crmShowRenewals;return renderContent()}if(action.startsWith("crm-"))return crmAction(action,id);if(action==="edit-company")return openCompanyEditor(id);if(action.includes("company")&&!company&&action!=="copy-checkout")throw new Error("Empresa não localizada. Atualize os dados do painel.");if(action.includes("job")&&!job)throw new Error("Vaga não localizada. Atualize os dados do painel.");if(action==="approve-company"){
+  async function handleAction(action,id){const company=findCompany(id),job=findJob(id);try{if(action==="approve-promotion"||action==="reject-promotion"||action==="close-promotion"){const promo=state.promotions.find(x=>sameId(x.id,id));if(!promo)throw new Error("Promoção não localizada.");if(action==="approve-promotion"){if(!promo.pagamento_confirmado)throw new Error("O pagamento desta promoção ainda não foi confirmado.");await patch("promocoes",id,{status:"ativa",motivo_status:null});toast("Promoção aprovada e publicada.")}else if(action==="reject-promotion"){const motivo=prompt("Motivo da reprovação:","");if(motivo===null)return;await patch("promocoes",id,{status:"rejeitada",motivo_status:String(motivo).trim()||"Reprovada pela moderação"});toast("Promoção reprovada.")}else{await patch("promocoes",id,{status:"encerrada"});toast("Promoção encerrada.")}await loadPromotions(true);return renderContent()} if(action==="pdf-company")return generateCompanyPdf(id);if(action==="pdf-general")return generateGeneralPdf();if(action==="crm-ack-renewals")return acknowledgeWeekRenewals();if(action==="crm-show-renewals"){state.crmShowRenewals=!state.crmShowRenewals;return renderContent()}if(action.startsWith("crm-"))return crmAction(action,id);if(action==="edit-company")return openCompanyEditor(id);if(action.includes("company")&&!company&&action!=="copy-checkout")throw new Error("Empresa não localizada. Atualize os dados do painel.");if(action.includes("job")&&!job)throw new Error("Vaga não localizada. Atualize os dados do painel.");if(action==="approve-company"){
       const approvalPlan="comum";
       if(!confirm(`Liberar os primeiros 30 dias gratuitos para ${company.nome}? Modalidade pretendida: ${subscription(company.assinatura_periodo)}.`))return;
       const approvalPayload={

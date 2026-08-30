@@ -355,7 +355,8 @@
     @media(max-width:640px){.hero-city-art{object-position:62% 50%;opacity:1}.hero-city-shade{display:none}.access-modal{padding:20px 15px}.access-stat strong{font-size:1.25rem}.access-stat{padding-inline:4px}}
 
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-  </style>
+  
+</style>
 </head>
 <body>
 <header class="hero" id="top">
@@ -471,6 +472,9 @@
     </div>
   </section>
 
+
+
+
   <section class="join" id="joinSection">
     <div class="join-inner"><div><h2>Seu negócio também pode estar aqui.</h2><p>Crie seu anúncio e seja encontrado por pessoas que já estão procurando produtos e serviços na sua região.</p></div><a href="cadastro.html">Cadastrar meu negócio</a></div>
   </section>
@@ -483,6 +487,8 @@
   <a href="cadastro.html" class="mobile-nav-item" aria-label="Cadastrar"><span>＋</span><b>Cadastrar</b></a>
 </nav>
 
+
+
 <div class="plans-overlay" id="plansOverlay" role="dialog" aria-modal="true" aria-labelledby="plansTitle">
   <article class="plans-card">
     <button class="plans-close" id="closePlans" type="button" aria-label="Fechar planos">×</button>
@@ -490,9 +496,9 @@
     <div class="plans-body">
       <div class="launch-note">🎁 <strong>Toda empresa nova aprovada ganha 30 dias grátis.</strong><br><span style="font-weight:700">O período gratuito começa a contar a partir da aprovação do cadastro.</span></div>
       <div class="plans-grid">
-        <article class="plan-public"><h3>Mensal</h3><div class="price">R$ 9,90</div><p>30 dias de anúncio após o período gratuito.</p></article>
-        <article class="plan-public"><h3>Trimestral</h3><div class="price">R$ 24,90</div><p>90 dias + 1 semana de Destaque, agendada conforme disponibilidade.</p></article>
-        <article class="plan-public master"><h3>Anual</h3><div class="price">R$ 89,90</div><p>365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano.</p></article>
+        <article class="plan-public"><h3>Mensal</h3><div class="price" id="priceMonthly">R$ 9,90</div><p>30 dias de anúncio após o período gratuito.</p></article>
+        <article class="plan-public"><h3>Trimestral</h3><div class="price" id="priceQuarterly">R$ 24,90</div><p>90 dias + 1 semana de Destaque, agendada conforme disponibilidade.</p></article>
+        <article class="plan-public master"><h3>Anual</h3><div class="price" id="priceAnnual">R$ 89,90</div><p>365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano.</p></article>
       </div>
       <div class="plans-warning" style="margin-top:16px">Os primeiros 30 dias são gratuitos para novos cadastros aprovados. Semanas de Destaque e MASTER são programadas pela equipe conforme disponibilidade.</div>
     </div>
@@ -735,6 +741,11 @@ async function loadCompanies(){
     }
   }
 }
+
+
+async function loadCommercialCatalog(){try{const rows=await BusqueAPI.rpc("catalogo_comercial_publico",{p_cidade_id:"torres"}),list=Array.isArray(rows)?rows:[],map=new Map(list.map(x=>[x.codigo,x]));const fmt=v=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(v||0));if($("priceMonthly")&&map.get("assinatura_mensal"))$("priceMonthly").textContent=fmt(map.get("assinatura_mensal").valor);if($("priceQuarterly")&&map.get("assinatura_trimestral"))$("priceQuarterly").textContent=fmt(map.get("assinatura_trimestral").valor);if($("priceAnnual")&&map.get("assinatura_anual"))$("priceAnnual").textContent=fmt(map.get("assinatura_anual").valor)}catch(e){console.warn("Catálogo comercial indisponível; mantendo preços da interface.",e)}}
+
+
 async function loadJobs(){
   if(jobsLoaded)return JOBS;
   if(jobsLoadPromise)return jobsLoadPromise;
