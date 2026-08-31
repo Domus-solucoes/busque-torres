@@ -748,21 +748,27 @@ async function loadCompanies(){
   }catch(error){
     console.warn("Agenda Premium pública indisponível; mantendo classificação atual das empresas.",error?.message||error);
   }
-  try{
-    await aplicarImagensPremiumAtual();
-  }catch(error){
-    console.warn("Imagens Premium indisponíveis; tentando preservar o visual com a consulta anterior.",error?.message||error);
+}
+
+function schedulePremiumImagesLoad(){
+  const run=async()=>{
     try{
-      const fallback=await btCachedRpc("empresas-imagens-fallback-v1",60000,"buscar_empresas",{p_termo:""});
-      const imagens=new Map((Array.isArray(fallback)?fallback:[]).map(r=>[String(r.id),{imagem:r.imagem_url||"",logo:r.logo_url||""}]));
-      registeredCompanies.forEach(company=>{
-        if(!company.master&&!company.destaque)return;
-        const media=imagens.get(String(company.id));
-        if(media){company.imagem=media.imagem;company.logo=media.logo}
-      });
-    }catch(fallbackError){
-      console.warn("Não foi possível recuperar as imagens Premium pela consulta anterior.",fallbackError?.message||fallbackError);
+      await aplicarImagensPremiumAtual();
+      render();
+    }catch(error){
+      console.warn("Imagens Premium indisponíveis; mantendo a home leve e os dados textuais visíveis.",error?.message||error);
     }
+  };
+  if("requestIdleCallback" in window)window.requestIdleCallback(run,{timeout:1200});
+  else setTimeout(run,120);
+}
+
+async function loadJobsCount(){
+  try{
+    const total=await btCachedRpc("vagas-count-v1",60000,"contar_vagas_publicas_cidade",{p_cidade_id:"torres"});
+    if($("jobsCount"))$("jobsCount").textContent=String(Number(total)||0);
+  }catch(error){
+    console.warn("Contagem de vagas indisponível.",error?.message||error);
   }
 }
 
@@ -793,6 +799,8 @@ async function loadJobs(){
   })();
   try{return await jobsLoadPromise}finally{jobsLoadPromise=null}
 }
+// Mantido apenas por compatibilidade. Não chamar na abertura da home:
+// vagas completas (principalmente imagens) são carregadas somente quando o usuário abre o Busque Vagas.
 function scheduleJobsLoad(){
   if(jobsLoaded||jobsLoadScheduled)return;
   jobsLoadScheduled=true;
@@ -1054,6 +1062,7 @@ async function iniciar(){
   if(initPromise)return initPromise;
   initPromise=(async()=>{
     const heroPromise=loadHeroBanner();
+    const jobsCountPromise=loadJobsCount();
     try{
       await loadCompanies();
     }catch(error){
@@ -1063,8 +1072,8 @@ async function iniciar(){
       $("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página.";
     }
     render();
-    scheduleJobsLoad();
-    await heroPromise;
+    schedulePremiumImagesLoad();
+    await Promise.allSettled([heroPromise,jobsCountPromise]);
   })();
   return initPromise;
 }
