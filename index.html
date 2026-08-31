@@ -598,6 +598,30 @@ const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"}
 async function registrarMetrica(evento,empresaId=null,pagina="index"){
   try{await BusqueAPI.rpc("registrar_metrica",{p_evento:evento,p_empresa_id:empresaId?String(empresaId):null,p_pagina:pagina})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}
 }
+function getJobMetricSession(){
+  const key="bt_job_metric_session_v1";
+  try{
+    let id=localStorage.getItem(key);
+    if(!id){
+      id=(globalThis.crypto&&typeof globalThis.crypto.randomUUID==="function")?globalThis.crypto.randomUUID():`bt-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(key,id);
+    }
+    return id;
+  }catch{
+    return `bt-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+  }
+}
+async function registrarAberturaVaga(vagaId,posicao){
+  try{
+    await BusqueAPI.rpc("registrar_abertura_vaga",{
+      p_vaga_id:String(vagaId),
+      p_posicao:Number(posicao)||1,
+      p_sessao:getJobMetricSession()
+    });
+  }catch(error){
+    console.warn("Abertura da vaga não registrada:",error?.message||error);
+  }
+}
 async function carregarContadorPublico(){
   try{const rows=await BusqueAPI.rpc("metricas_publicas",{}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
 }
@@ -780,7 +804,7 @@ function allCompanies(){return registeredCompanies}
 function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
 function abrirPerfil(company){window.location.href=profileUrl(company)}
 
-function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map(j=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map((j,index)=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}" data-job-pos="${index+1}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
 function formatDateBR(date){return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date)}
 function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 4 posições MASTER</small></div>`}).join("")}
 function openPlans(){renderRotationDates();$("plansOverlay").classList.add("open");document.body.classList.add("modal-open")}
@@ -903,7 +927,7 @@ $("jobForm").addEventListener("submit",async e=>{
 });
 
 $("openAccessCounter").addEventListener("click",abrirContador);$("closeAccessCounter").addEventListener("click",fecharContador);$("accessOverlay").addEventListener("click",e=>{if(e.target===$("accessOverlay"))fecharContador()});
-$("openPlans").addEventListener("click",openPlans);$("closePlans").addEventListener("click",closePlans);$("plansOverlay").addEventListener("click",e=>{if(e.target===$("plansOverlay"))closePlans()});$("openJobs").addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");openJobs()});$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item)openJobDetail(item.dataset.jobId)});
+$("openPlans").addEventListener("click",openPlans);$("closePlans").addEventListener("click",closePlans);$("plansOverlay").addEventListener("click",e=>{if(e.target===$("plansOverlay"))closePlans()});$("openJobs").addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");openJobs()});$("closeJobs").addEventListener("click",closeJobs);$("openJobForm").addEventListener("click",openJobForm);$("closeJobForm").addEventListener("click",closeJobForm);$("closeJobDetail").addEventListener("click",closeJobDetail);$("jobsList").addEventListener("click",e=>{const item=e.target.closest("[data-job-id]");if(item){registrarAberturaVaga(item.dataset.jobId,item.dataset.jobPos);openJobDetail(item.dataset.jobId)}});
 if($("mobileSearch"))$("mobileSearch").addEventListener("click",()=>{openSearch();setTimeout(()=>$("searchInput").focus(),80)});
 if($("mobileJobs"))$("mobileJobs").addEventListener("click",()=>{registrarMetrica("abriu_vagas",null,"index");openJobs()});
 // Os modais de vagas fecham apenas pelo botão X ou pela tecla Esc.
