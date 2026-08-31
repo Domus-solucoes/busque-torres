@@ -725,8 +725,12 @@ async function aplicarAgendaPremiumAtual(){
     else if(tipo==="destaque"){company.destaque=true;company.premium=true}
   });
 }
-async function aplicarImagensPremiumAtual(){
-  const rows=await btCachedRpc("imagens-premium-hoje-v1",60000,"buscar_imagens_premium_home",{});
+async function carregarImagensPremiumRows(){
+  // Dispara imediatamente na abertura. A resposta pesada roda em paralelo
+  // com os dados leves da home, sem bloquear o primeiro desenho da página.
+  return btCachedRpc("imagens-premium-hoje-v1",60000,"buscar_imagens_premium_home",{});
+}
+function aplicarImagensPremiumRows(rows){
   const imagens=new Map((Array.isArray(rows)?rows:[]).map(r=>[String(r.empresa_id),{imagem:r.imagem_url||"",logo:r.logo_url||""}]));
   registeredCompanies.forEach(company=>{
     if(!company.master&&!company.destaque)return;
@@ -750,17 +754,13 @@ async function loadCompanies(){
   }
 }
 
-function schedulePremiumImagesLoad(){
-  const run=async()=>{
-    try{
-      await aplicarImagensPremiumAtual();
-      render();
-    }catch(error){
-      console.warn("Imagens Premium indisponíveis; mantendo a home leve e os dados textuais visíveis.",error?.message||error);
-    }
-  };
-  if("requestIdleCallback" in window)window.requestIdleCallback(run,{timeout:1200});
-  else setTimeout(run,120);
+function aplicarPremiumAssimQueChegar(premiumImagesPromise){
+  Promise.resolve(premiumImagesPromise).then(rows=>{
+    aplicarImagensPremiumRows(rows);
+    render();
+  }).catch(error=>{
+    console.warn("Imagens Premium indisponíveis; mantendo a home leve e os dados textuais visíveis.",error?.message||error);
+  });
 }
 
 async function loadJobsCount(){
@@ -1063,6 +1063,8 @@ async function iniciar(){
   initPromise=(async()=>{
     const heroPromise=loadHeroBanner();
     const jobsCountPromise=loadJobsCount();
+    // Começa a baixar as 7 mídias premium imediatamente, sem esperar a lista leve.
+    const premiumImagesPromise=carregarImagensPremiumRows();
     try{
       await loadCompanies();
     }catch(error){
@@ -1072,7 +1074,7 @@ async function iniciar(){
       $("empty").querySelector("p").textContent="Verifique sua conexão com a internet e atualize a página.";
     }
     render();
-    schedulePremiumImagesLoad();
+    aplicarPremiumAssimQueChegar(premiumImagesPromise);
     await Promise.allSettled([heroPromise,jobsCountPromise]);
   })();
   return initPromise;
