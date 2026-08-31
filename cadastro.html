@@ -1920,7 +1920,8 @@
             submitBtn.textContent = "Enviando...";
             try {
                 const c = montarCadastro();
-                await BusqueAPI.rpc("enviar_empresa", {
+                await BusqueAPI.invokeFunction("enviar-empresa-midias-cdn", {
+                    p_cidade_id: "torres",
                     p_nome: c.nome,
                     p_categoria: c.categoria,
                     p_subcategoria: c.subcategoria,
