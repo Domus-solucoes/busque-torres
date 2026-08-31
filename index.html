@@ -906,7 +906,7 @@ $("jobForm").addEventListener("submit",async e=>{
 
   try{
     if(jobImageData){
-      await BusqueAPI.rpc("enviar_vaga_com_imagem",payload);
+      await BusqueAPI.invokeFunction("enviar-vaga-imagem-cdn",{...payload,p_cidade_id:SITE.id});
     }else{
       const legacy={...payload};delete legacy.p_imagem_url;
       try{await BusqueAPI.rpc("enviar_vaga",legacy)}catch(firstError){const message=String(firstError?.message||"");if(/function|schema cache|PGRST202|could not find/i.test(message)){await BusqueAPI.rpc("enviar_vaga",{...legacy,p_empresa_id:null})}else{throw firstError}}
