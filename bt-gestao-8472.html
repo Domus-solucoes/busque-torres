@@ -158,7 +158,7 @@
           <article class="stat warning"><small>Vencem em 7 dias</small><strong id="statRenewalSoon">0</strong></article>
           <article class="stat expired"><small>Empresas vencidas</small><strong id="statCompaniesExpired">0</strong></article>
         </div>
-        <div class="premium-inventory">
+        <div class="premium-inventory" id="premiumInventory">
           <article class="premium-slot" id="masterCapacityBox"><div><small>MASTER · semana atual</small><strong>Capacidade de exposição premium</strong></div><span class="capacity" id="masterCapacity">0/4</span></article>
           <article class="premium-slot" id="highlightCapacityBox"><div><small>DESTAQUE · semana atual</small><strong>Capacidade de exposição premium</strong></div><span class="capacity" id="highlightCapacity">0/3</span></article>
         </div>
@@ -589,6 +589,8 @@
   function renderContent(){
     const overviewStats=$("overviewStats");
     if(overviewStats)overviewStats.style.display=state.tab==="overview"?"":"none";
+    const premiumInventory=$("premiumInventory");
+    if(premiumInventory)premiumInventory.style.display=["overview","agenda-premium"].includes(state.tab)?"":"none";
     let list=[],title="",subtitle="",html="";
     if(state.tab==="overview"){
       title="Visão geral";subtitle="Prioridades, operação e atalhos do dia.";html=dashboardHtml()
