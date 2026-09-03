@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,follow">
+  <title>Promoção do Dia | Busque Torres</title>
+  <style>
+    :root{--navy:#0b1d33;--navy2:#122a46;--gold:#efbd45;--gold2:#ffd88a;--text:#f6f9fc;--muted:#c2cfdd;--line:rgba(255,255,255,.11);--red:#e84b35;--green:#35c88a}
+    *{box-sizing:border-box}html{min-height:100%;background:#071321}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 80% 5%,rgba(239,189,69,.12),transparent 24%),linear-gradient(150deg,#0d223a 0%,#071321 70%);color:var(--text);-webkit-font-smoothing:antialiased}
+    a{color:var(--gold2)}button,input{font:inherit}.wrap{width:min(760px,100%);margin:0 auto;padding:34px 18px 56px}.brand{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:24px}.logo{font-size:22px;font-weight:950;letter-spacing:-.035em}.logo span{color:var(--gold)}.back{font-size:12px;font-weight:800;text-decoration:none;color:#ccd8e5;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04)}
+    .hero{text-align:center;margin:0 auto 22px;max-width:620px}.kicker{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--gold2);font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}.hero h1{margin:14px 0 8px;font-size:clamp(28px,6vw,43px);line-height:1.03;letter-spacing:-.045em}.hero p{margin:0;color:var(--muted);line-height:1.55;font-size:14px}.rule{margin:16px auto 0;padding:12px 14px;border-radius:14px;background:rgba(239,189,69,.09);border:1px solid rgba(239,189,69,.2);color:#ffe5af;font-size:12px;font-weight:800;line-height:1.5;max-width:610px}
+    .card{background:rgba(255,255,255,.055);border:1px solid var(--line);border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.24);overflow:hidden;backdrop-filter:blur(10px)}.summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.025)}.summary strong{display:block;font-size:13px}.summary small{display:block;margin-top:3px;color:#aebccc;font-size:11px}.price{font-size:25px;font-weight:950;color:var(--gold2);letter-spacing:-.04em}.body{padding:18px}
+    .availability{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:10px 12px;border-radius:12px;background:rgba(53,200,138,.10);color:#9ff0c9;font-size:12px;font-weight:900}.availability::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(53,200,138,.1)}.availability.full{background:rgba(232,75,53,.12);color:#ffb9ad}.availability.full::before{background:var(--red);box-shadow:0 0 0 4px rgba(232,75,53,.1)}
+    .section{margin-top:16px}.label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:12px;font-weight:900;color:#e9f0f7}.label span{font-size:10px;color:#91a4b8;font-weight:700}.upload{position:relative;border:1px dashed rgba(255,216,138,.38);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.02));overflow:hidden}.upload input{position:absolute;inset:0;opacity:0;cursor:pointer}.upload-empty{min-height:190px;display:grid;place-items:center;text-align:center;padding:24px}.upload-empty .icon{font-size:30px}.upload-empty strong{display:block;margin-top:8px;font-size:14px}.upload-empty small{display:block;margin-top:5px;color:#9fb0c3;line-height:1.45}.preview{display:none;position:relative;min-height:220px;background:#071321}.preview.show{display:block}.preview img{display:block;width:100%;max-height:390px;object-fit:contain}.preview-note{position:absolute;left:10px;bottom:10px;padding:7px 9px;border-radius:9px;background:rgba(4,12,21,.75);font-size:10px;font-weight:900;color:#fff;backdrop-filter:blur(6px)}
+    input[type=tel]{width:100%;border:1px solid var(--line);border-radius:13px;padding:13px 14px;background:rgba(255,255,255,.065);color:#fff;outline:0}input[type=tel]::placeholder{color:#8fa2b6}input[type=tel]:focus{border-color:rgba(255,216,138,.55);box-shadow:0 0 0 3px rgba(239,189,69,.1)}
+    .terms{display:flex;gap:10px;align-items:flex-start;margin-top:18px;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);font-size:11px;line-height:1.55;color:#c6d3df}.terms input{margin-top:3px;accent-color:#e5b343;transform:scale(1.1)}
+    .pay{width:100%;margin-top:14px;border:0;border-radius:14px;padding:14px 16px;background:linear-gradient(135deg,#f2c467,#dfa03f);color:#122238;font-weight:950;font-size:14px;cursor:pointer;box-shadow:0 14px 28px rgba(0,0,0,.22);transition:.18s}.pay:hover{transform:translateY(-1px);filter:brightness(1.02)}.pay:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}.note{margin:10px 2px 0;text-align:center;color:#899caf;font-size:10px;line-height:1.45}.msg{display:none;margin:12px 0 0;padding:11px 12px;border-radius:12px;font-size:12px;font-weight:800;line-height:1.45}.msg.show{display:block}.msg.error{background:rgba(232,75,53,.14);color:#ffb9ad}.msg.success{background:rgba(53,200,138,.12);color:#9ff0c9}.payment-return{display:none;margin-bottom:16px;padding:14px;border-radius:15px;border:1px solid var(--line);font-size:12px;line-height:1.55}.payment-return.show{display:block}.payment-return.success{background:rgba(53,200,138,.11);color:#aaf2d0}.payment-return.pending{background:rgba(239,189,69,.10);color:#ffe1a3}.payment-return.failure{background:rgba(232,75,53,.11);color:#ffb9ad}
+    @media(max-width:620px){.wrap{padding:22px 12px 40px}.brand{margin-bottom:18px}.card{border-radius:20px}.body{padding:14px}.summary{padding:14px}.upload-empty{min-height:170px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="brand"><div class="logo">BUSQUE <span>TORRES</span></div><a class="back" href="index.html">← Voltar ao site</a></div>
+    <section class="hero">
+      <div class="kicker">🔥 Promoção do Dia</div>
+      <h1>Coloque sua promoção na vitrine de amanhã</h1>
+      <p>Envie o banner, confirme o WhatsApp da sua empresa, aceite os termos e vá direto para o pagamento.</p>
+      <div class="rule">Pagamento confirmado hoje → após nossa revisão, a promoção entra amanhã às <strong>00:01</strong> e encerra na virada seguinte às <strong>00:00</strong>. Não é possível escolher outra data.</div>
+    </section>
+
+    <section class="card">
+      <div class="summary"><div><strong>1 Promoção do Dia</strong><small>1 banner • dia seguinte ao pagamento • até 4 espaços</small></div><div class="price" id="price">R$ 4,90</div></div>
+      <div class="body">
+        <div id="paymentReturn" class="payment-return"></div>
+        <div id="availability" class="availability">Consultando os espaços para amanhã…</div>
+
+        <form id="promoForm" novalidate>
+          <div class="section">
+            <div class="label">1. Banner da promoção <span>recomendado: imagem horizontal</span></div>
+            <label class="upload" id="uploadBox">
+              <input id="bannerFile" type="file" accept="image/jpeg,image/png,image/webp" required>
+              <div class="upload-empty" id="uploadEmpty"><div><div class="icon">🖼️</div><strong>Toque para escolher seu banner</strong><small>JPG, PNG ou WebP. O sistema otimiza a imagem antes do envio.</small></div></div>
+              <div class="preview" id="preview"><img id="previewImg" alt="Prévia do banner"><div class="preview-note">Toque novamente para trocar a imagem</div></div>
+            </label>
+          </div>
+
+          <div class="section">
+            <div class="label">2. WhatsApp da empresa <span>use o mesmo número cadastrado no Busque</span></div>
+            <input id="whatsapp" type="tel" inputmode="numeric" autocomplete="tel" maxlength="16" placeholder="(51) 99999-9999" required>
+          </div>
+
+          <label class="terms"><input id="terms" type="checkbox" required><span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>. Declaro que sou responsável pelo conteúdo enviado.</span></label>
+
+          <button class="pay" id="payBtn" type="submit" hidden disabled>PAGAR R$ 4,90</button>
+          <div class="note">O pagamento é processado pelo Mercado Pago. O anúncio só entra no ar após confirmação do pagamento e aprovação da equipe.</div>
+          <div id="msg" class="msg" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="supabase-config.js"></script>
+  <script>
+  (function(){
+    "use strict";
+    const file=document.getElementById('bannerFile'),preview=document.getElementById('preview'),previewImg=document.getElementById('previewImg'),empty=document.getElementById('uploadEmpty'),phone=document.getElementById('whatsapp'),terms=document.getElementById('terms'),form=document.getElementById('promoForm'),payBtn=document.getElementById('payBtn'),msg=document.getElementById('msg'),availability=document.getElementById('availability'),price=document.getElementById('price'),paymentReturn=document.getElementById('paymentReturn');
+    let imageData='',available=0,working=false;
+    const digits=v=>String(v||'').replace(/\D/g,'');
+    function formatPhone(v){const n=digits(v).slice(0,11);if(n.length<=2)return n;if(n.length<=6)return `(${n.slice(0,2)}) ${n.slice(2)}`;if(n.length<=10)return `(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`;return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`}
+    function show(text,type='error'){msg.textContent=text;msg.className=`msg show ${type}`}
+    function clear(){msg.textContent='';msg.className='msg'}
+    function money(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v||0))}
+    async function metric(evento,detalhe=''){try{if(globalThis.BusqueAPI?.rpc)await BusqueAPI.rpc('registrar_metrica_promocao_dia',{p_cidade_id:'torres',p_evento:evento,p_origem:'promocao-do-dia',p_detalhe:detalhe||null})}catch{}}
+    function paymentStatus(){const p=new URLSearchParams(location.search).get('pagamento');if(!p)return;if(p==='sucesso'){paymentReturn.className='payment-return show success';paymentReturn.innerHTML='<strong>Pagamento retornou como aprovado.</strong><br>Sua promoção ficará aguardando nossa revisão e, sendo aprovada, entra no dia seguinte ao pagamento às 00:01.'}else if(p==='pendente'){paymentReturn.className='payment-return show pending';paymentReturn.innerHTML='<strong>Pagamento pendente.</strong><br>Assim que o Mercado Pago confirmar, o sistema define automaticamente o dia seguinte para exibição.'}else if(p==='falha'){paymentReturn.className='payment-return show failure';paymentReturn.innerHTML='<strong>Pagamento não concluído.</strong><br>Nenhuma promoção será publicada sem confirmação do Mercado Pago.'}}
+    async function loadCommercial(){payBtn.hidden=true;payBtn.disabled=true;available=0;try{if(!globalThis.BusqueAPI?.rpc)throw new Error('API indisponível');const [catalog,disp]=await Promise.all([BusqueAPI.rpc('catalogo_comercial_publico',{p_cidade_id:'torres'}),BusqueAPI.rpc('promocao_dia_disponibilidade',{p_cidade_id:'torres'})]);const product=(Array.isArray(catalog)?catalog:[]).find(x=>String(x.codigo||'')==='promocao_dia');if(product){price.textContent=money(product.valor);payBtn.textContent=`PAGAR ${money(product.valor)}`}const d=Array.isArray(disp)?disp[0]:disp;const raw=Number(d?.disponiveis);available=Number.isFinite(raw)?Math.max(0,Math.min(4,raw)):0;if(available>0){payBtn.hidden=false;payBtn.disabled=false;availability.hidden=true;availability.textContent=''}else{availability.hidden=true;availability.textContent='';form.querySelectorAll('input').forEach(el=>el.disabled=true);show('As 4 posições da Promoção do Dia para amanhã já foram preenchidas. Volte amanhã para uma nova rodada de vagas.','error')}}catch(error){console.warn('Disponibilidade da Promoção do Dia indisponível:',error?.message||error);availability.hidden=true;availability.textContent='';payBtn.hidden=true;payBtn.disabled=true}}
+    async function compressImage(file){if(!file)throw new Error('Escolha o banner da promoção.');if(!/^image\/(jpeg|png|webp)$/i.test(file.type))throw new Error('Use uma imagem JPG, PNG ou WebP.');if(file.size>15*1024*1024)throw new Error('A imagem original deve ter no máximo 15 MB.');const url=URL.createObjectURL(file);try{const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>fail(new Error('Não foi possível abrir essa imagem.'));i.src=url});const max=1600,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);let quality=.84;let data='';for(let i=0;i<5;i++){data=canvas.toDataURL('image/webp',quality);const approx=Math.ceil((data.length-data.indexOf(',')-1)*.75);if(approx<=1.8*1024*1024)break;quality-=.1}const approx=Math.ceil((data.length-data.indexOf(',')-1)*.75);if(approx>2*1024*1024)throw new Error('Não foi possível reduzir a imagem para o tamanho necessário. Tente outra arte.');return data}finally{URL.revokeObjectURL(url)}}
+    file.addEventListener('change',async()=>{clear();const f=file.files?.[0];if(!f){imageData='';preview.classList.remove('show');empty.style.display='grid';return}try{imageData=await compressImage(f);previewImg.src=imageData;preview.classList.add('show');empty.style.display='none'}catch(error){file.value='';imageData='';preview.classList.remove('show');empty.style.display='grid';show(error.message)}});
+    phone.addEventListener('input',()=>{phone.value=formatPhone(phone.value)});
+    form.addEventListener('submit',async e=>{e.preventDefault();if(working)return;clear();if(available<=0)return;if(!imageData)return show('Escolha o banner da promoção.');const whatsapp=digits(phone.value);if(whatsapp.length!==10&&whatsapp.length!==11)return show('Informe um WhatsApp válido com DDD.');if(!terms.checked)return show('Aceite os termos e políticas para continuar.');working=true;payBtn.disabled=true;payBtn.textContent='PREPARANDO PAGAMENTO…';metric('interesse','formulario_checkout');try{const result=await BusqueAPI.invokeFunction('preparar-promocao-dia',{whatsapp,imagem_data_url:imageData,aceite_termos:true,aceite_privacidade:true,aceite_comercial:true,aceite_conteudo:true});if(!result?.checkout_url)throw new Error(result?.erro||'Não foi possível abrir o pagamento.');location.href=result.checkout_url}catch(error){console.error(error);show(error?.message||'Não foi possível iniciar o pagamento.');working=false;payBtn.disabled=false;payBtn.textContent=price.textContent?`PAGAR ${price.textContent}`:'PAGAR R$ 4,90';loadCommercial().catch(()=>{})}});
+    paymentStatus();loadCommercial();
+  })();
+  </script>
+</body>
+</html>

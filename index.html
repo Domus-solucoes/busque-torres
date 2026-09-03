@@ -356,6 +356,34 @@
 
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   
+
+
+    /* ===== Promoção do Dia — foguinho flutuante ===== */
+    .promo-day-widget{position:fixed;right:18px;bottom:18px;z-index:980;display:flex;align-items:flex-end;justify-content:flex-end;transition:opacity .18s ease,transform .18s ease}
+    .promo-day-trigger{position:relative;width:58px;height:58px;display:grid;place-items:center;border:0;border-radius:50%;background:linear-gradient(160deg,#ff7a3d 0%,#ee3f2b 50%,#c82020 100%);color:#fff;cursor:pointer;box-shadow:0 15px 34px rgba(208,43,31,.34),0 5px 14px rgba(8,27,51,.18);animation:promoDayFloat 2.7s ease-in-out infinite;transition:transform .18s ease,box-shadow .18s ease}
+    .promo-day-trigger:hover{transform:translateY(-3px) scale(1.05)}
+    .promo-day-trigger:focus-visible,.promo-day-close:focus-visible,.promo-day-cta:focus-visible,.promo-day-form input:focus-visible,.promo-day-form button:focus-visible,.promo-day-nav button:focus-visible{outline:3px solid rgba(230,184,75,.72);outline-offset:3px}
+    .promo-day-fire{font-size:29px;line-height:1}.promo-day-dot{position:absolute;right:-1px;top:-2px;min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;border:2px solid #fff;border-radius:999px;background:#fff;color:#0d223f;font-size:.67rem;font-weight:950}
+    .promo-day-panel{position:absolute;right:0;bottom:72px;width:min(392px,calc(100vw - 28px));max-height:min(78vh,650px);overflow:auto;padding:18px;border:1px solid rgba(255,255,255,.08);border-radius:24px;background:linear-gradient(180deg,#0f2037 0%,#091424 100%);box-shadow:0 28px 70px rgba(8,27,51,.35);color:#fff;animation:promoDayOpen .17s ease both}.promo-day-panel[hidden]{display:none!important}
+    .promo-day-close{position:absolute;right:10px;top:9px;width:31px;height:31px;border:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#fff;font-size:1.15rem;cursor:pointer}
+    .promo-day-kicker{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.09);color:#ffe1ab;font-size:.67rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+    .promo-day-title{margin:12px 36px 6px 0;color:#fff;font-size:1.18rem;line-height:1.23;letter-spacing:-.02em;text-align:center}.promo-day-copy{margin:0 0 14px;color:#ced8e4;font-size:.84rem;line-height:1.5;text-align:center}
+    .promo-day-offer{display:grid;gap:10px;margin:0 0 13px;padding:16px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08)}.promo-day-offer-head{text-align:center}.promo-day-offer strong{display:block;color:#fff;font-size:.82rem;letter-spacing:.03em;text-transform:uppercase}.promo-day-offer small{display:block;margin-top:4px;color:#c4d1df;font-size:.7rem}.promo-day-price{display:block;margin-top:8px;color:#ffd38b;font-size:1.35rem;font-weight:950;letter-spacing:-.03em}
+    .promo-day-availability{display:flex;align-items:center;justify-content:center;gap:7px;padding:8px 10px;border-radius:999px;background:rgba(32,191,107,.14);color:#9ff0c3;font-size:.76rem;font-weight:900}.promo-day-availability.full{background:rgba(230,162,37,.16);color:#ffd38b}.promo-day-availability::before{content:"";width:8px;height:8px;border-radius:50%;background:#20bf6b;box-shadow:0 0 0 4px rgba(32,191,107,.11)}.promo-day-availability.full::before{background:#e6a225;box-shadow:0 0 0 4px rgba(230,162,37,.13)}
+    .promo-day-carousel{margin:0 0 10px}.promo-day-viewport{overflow:hidden;border-radius:18px}.promo-day-track{display:flex;transition:transform .28s ease}.promo-day-slide{flex:0 0 100%;min-width:100%}
+    .promo-day-card{position:relative;overflow:hidden;min-height:186px;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:#12243d}.promo-day-card.real img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92}.promo-day-card.real::after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(5,11,19,.94))}
+    .promo-day-card-content{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.55)}.promo-day-card-content small{display:block;margin-bottom:4px;font-size:.63rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#ffd38b}.promo-day-card-content strong{display:block;font-size:1rem;line-height:1.3;color:#fff}.promo-day-card-content p{margin:5px 0 0;font-size:.76rem;line-height:1.45;color:#dde7f2}
+    .promo-day-card.demo{background:linear-gradient(145deg,#10233e,#172d4b)}.promo-day-card.demo::before{content:"PROMOÇÃO DO DIA";position:absolute;left:14px;top:14px;font-size:.62rem;letter-spacing:.07em;font-weight:900;color:#ffd38b}.promo-day-card.demo .promo-day-card-content{left:16px;right:16px;bottom:16px;text-shadow:none}.promo-day-card.demo .promo-day-card-content small{color:#cfd9e6}.promo-day-card.demo .promo-day-card-content strong{color:#fff}.promo-day-card.demo .promo-day-card-content p{color:#c9d4e0}
+    .promo-day-carousel-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.promo-day-dots{display:flex;align-items:center;gap:6px}.promo-day-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.24);cursor:pointer}.promo-day-dots button.active{background:#ffd38b;transform:scale(1.15)}.promo-day-position{color:#c6d2de;font-size:.72rem;font-weight:900}.promo-day-nav{display:flex;gap:7px}.promo-day-nav button{width:34px;height:34px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.04);color:#fff;font-size:1rem;font-weight:900;cursor:pointer}.promo-day-nav button:disabled{opacity:.4;cursor:default}
+    .promo-day-help{margin:0 0 10px;color:#c6d2de;font-size:.71rem;line-height:1.45;text-align:center}.promo-day-cta{width:100%;border:0;border-radius:14px;padding:13px 14px;background:linear-gradient(135deg,#f0c06b,#df9d39);color:#152338;font-size:.81rem;font-weight:950;letter-spacing:.02em;cursor:pointer;box-shadow:0 12px 22px rgba(0,0,0,.2)}.promo-day-cta:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+    .promo-day-form{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.09)}.promo-day-form.show{display:block}.promo-day-form-grid{display:grid;gap:8px}.promo-day-form label{display:grid;gap:5px;color:#e7eef6;font-size:.7rem;font-weight:900}.promo-day-form input{width:100%;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 11px;color:#fff;background:rgba(255,255,255,.06);outline:0}.promo-day-form input::placeholder{color:#b9c7d7}.promo-day-form input:focus{border-color:rgba(255,211,139,.65);box-shadow:0 0 0 3px rgba(255,211,139,.12)}
+    .promo-day-submit{border:0;border-radius:11px;padding:11px 12px;background:#fff;color:#10243b;font-size:.76rem;font-weight:950;cursor:pointer}.promo-day-submit:disabled{opacity:.62;cursor:not-allowed}.promo-day-form-message{display:none;margin-top:8px;padding:9px 10px;border-radius:10px;font-size:.7rem;font-weight:800;line-height:1.4}.promo-day-form-message.show{display:block}.promo-day-form-message.success{background:rgba(32,191,107,.16);color:#9ff0c3}.promo-day-form-message.error{background:rgba(214,38,38,.16);color:#ffb6b6}
+    body.search-mode .promo-day-widget,body.modal-open .promo-day-widget{opacity:0;pointer-events:none;transform:translateY(14px)}
+    @keyframes promoDayFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes promoDayOpen{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @media(max-width:640px){.promo-day-widget{right:12px;bottom:88px}.promo-day-trigger{width:54px;height:54px}.promo-day-fire{font-size:26px}.promo-day-panel{bottom:66px;width:min(355px,calc(100vw - 24px));max-height:68vh;padding:14px}.promo-day-card{min-height:176px}.promo-day-nav button{width:32px;height:32px}}
+    @media(prefers-reduced-motion:reduce){.promo-day-trigger{animation:none}.promo-day-panel,.promo-day-track{animation:none;transition:none}}
+
 </style>
 </head>
 <body>
@@ -574,6 +602,31 @@
       </div>
     </form>
   </article>
+</div>
+
+
+
+<div class="promo-day-widget" id="promoDayWidget">
+  <div class="promo-day-panel" id="promoDayPanel" hidden role="dialog" aria-modal="false" aria-labelledby="promoDayTitle">
+    <button class="promo-day-close" id="promoDayClose" type="button" aria-label="Fechar Promoção do Dia">×</button>
+    <div class="promo-day-kicker">🔥 Promoção do Dia</div>
+    <h3 class="promo-day-title" id="promoDayTitle">Destaque sua oferta no Busque Torres</h3>
+    <p class="promo-day-copy">Uma vitrine curta, elegante e visual para colocar sua promoção na frente de quem está procurando agora.</p>
+
+    <div class="promo-day-offer">
+      <div class="promo-day-offer-head"><strong>Seu anúncio aqui</strong><small>Até 4 espaços para amanhã • sujeito à revisão</small><span class="promo-day-price" id="promoDayPrice">R$ 4,90</span></div>
+      <div class="promo-day-availability" id="promoDayAvailability">Consultando espaços para amanhã…</div>
+    </div>
+
+    <div class="promo-day-carousel" aria-label="Carrossel de Promoções do Dia">
+      <div class="promo-day-viewport" id="promoDayViewport"><div class="promo-day-track" id="promoDayTrack"></div></div>
+      <div class="promo-day-carousel-meta"><div class="promo-day-dots" id="promoDayDots" aria-label="Navegação das promoções"></div><div class="promo-day-position" id="promoDayPosition">1 / 1</div><div class="promo-day-nav" id="promoDayNav"><button id="promoDayPrev" type="button" aria-label="Promoção anterior">‹</button><button id="promoDayNext" type="button" aria-label="Próxima promoção">›</button></div></div>
+    </div>
+
+    <p class="promo-day-help">Pagou hoje? Após nossa revisão, sua promoção entra amanhã às 00:01 e encerra na virada seguinte às 00:00. Não há agendamento para datas futuras.</p>
+    <button class="promo-day-cta" id="promoDayCta" type="button">COLOCAR MINHA PROMOÇÃO</button>
+  </div>
+  <button class="promo-day-trigger" id="promoDayTrigger" type="button" aria-label="Abrir Promoção do Dia" aria-expanded="false" aria-controls="promoDayPanel"><span class="promo-day-fire" aria-hidden="true">🔥</span><span class="promo-day-dot" id="promoDayDot" aria-hidden="true">4</span></button>
 </div>
 
 <footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><div class="access-counter"><button class="access-counter-btn" id="openAccessCounter" type="button">📊 Acessos do Busque Torres</button></div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
@@ -1091,5 +1144,27 @@ window.addEventListener("pageshow",e=>{
 document.addEventListener("click",e=>{const whats=e.target.closest("a.btn-whats");if(whats){const id=whats.closest(".card")?.dataset.companyId||null;registrarMetrica("clicou_whatsapp",id,"index")}});
 registrarMetrica("visita_site",null,"index");
 </script>
+
+<script>
+(function(){
+  "use strict";
+  const widget=document.getElementById("promoDayWidget"),trigger=document.getElementById("promoDayTrigger"),panel=document.getElementById("promoDayPanel"),closeBtn=document.getElementById("promoDayClose"),cta=document.getElementById("promoDayCta"),track=document.getElementById("promoDayTrack"),dotsWrap=document.getElementById("promoDayDots"),position=document.getElementById("promoDayPosition"),availability=document.getElementById("promoDayAvailability"),dot=document.getElementById("promoDayDot"),price=document.getElementById("promoDayPrice"),prevBtn=document.getElementById("promoDayPrev"),nextBtn=document.getElementById("promoDayNext"),nav=document.getElementById("promoDayNav"),viewport=document.getElementById("promoDayViewport");
+  if(!widget||!trigger||!panel||!closeBtn||!cta||!track||!dotsWrap||!position||!availability||!dot||!prevBtn||!nextBtn||!nav||!viewport)return;
+  const CITY_ID="torres";let loaded=false,loading=false,slides=[],currentIndex=0,touchStartX=0,availableTomorrow=null,currentPromos=[];
+  const htmlEscape=value=>String(value??"").replace(/[&<>'"]/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[ch]));
+  const money=value=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(value||0));
+  async function metric(evento,detalhe=""){try{if(globalThis.BusqueAPI?.rpc)await BusqueAPI.rpc("registrar_metrica_promocao_dia",{p_cidade_id:CITY_ID,p_evento:evento,p_origem:"index",p_detalhe:detalhe||null})}catch(error){console.warn("Métrica Promoção do Dia indisponível:",error?.message||error)}}
+  function updateCarousel(){const total=slides.length||1;currentIndex=Math.max(0,Math.min(currentIndex,total-1));track.style.transform=`translateX(-${currentIndex*100}%)`;position.textContent=`${currentIndex+1} / ${total}`;dotsWrap.querySelectorAll('button').forEach((btn,idx)=>btn.classList.toggle('active',idx===currentIndex));const multiple=total>1;nav.hidden=!multiple;dotsWrap.hidden=!multiple;prevBtn.disabled=!multiple||currentIndex===0;nextBtn.disabled=!multiple||currentIndex===total-1}
+  function renderSlides(items){slides=items;track.innerHTML=items.map(item=>{if(item.type==='demo')return `<div class="promo-day-slide"><article class="promo-day-card demo"><div class="promo-day-card-content"><small>Promoção do Dia</small><strong>Sua promoção pode aparecer aqui</strong><p>Envie seu banner, confirme seu WhatsApp e pague ${htmlEscape(price.textContent||'R$ 4,90')}. A exibição é no dia seguinte ao pagamento.</p></div></article></div>`;const img=String(item.imagem_url||"").trim(),title=htmlEscape(item.titulo||"Promoção do Dia"),company=htmlEscape(item.empresa_nome||"Empresa"),description=htmlEscape(item.descricao||"");return `<div class="promo-day-slide"><article class="promo-day-card real">${img?`<img src="${htmlEscape(img)}" alt="${title}" loading="lazy" decoding="async">`:''}<div class="promo-day-card-content"><small>${company}</small><strong>${title}</strong>${description?`<p>${description}</p>`:''}</div></article></div>`}).join('');dotsWrap.innerHTML=items.map((_,idx)=>`<button type="button" aria-label="Ir para promoção ${idx+1}" ${idx===0?'class="active"':''}></button>`).join('');[...dotsWrap.querySelectorAll('button')].forEach((btn,idx)=>btn.addEventListener('click',()=>{currentIndex=idx;updateCarousel()}));currentIndex=0;updateCarousel()}
+  function renderAvailability(data){const raw=Number(data?.disponiveis);availableTomorrow=Number.isFinite(raw)?Math.max(0,Math.min(4,raw)):null;const canBuy=Number.isFinite(availableTomorrow)&&availableTomorrow>0;if(canBuy){dot.hidden=false;dot.textContent=String(availableTomorrow);dot.title=`${availableTomorrow} espaço(s) disponível(is) para amanhã`;availability.hidden=false;availability.classList.remove('full');availability.textContent=`${availableTomorrow} ${availableTomorrow===1?'espaço disponível':'espaços disponíveis'} para amanhã`;cta.hidden=false;cta.disabled=false;cta.textContent='COLOCAR MINHA PROMOÇÃO'}else{dot.hidden=true;availability.hidden=true;availability.textContent='';cta.hidden=true;cta.disabled=true}if(!canBuy&&currentPromos.length===0){panel.hidden=true;trigger.setAttribute('aria-expanded','false');widget.hidden=true}}
+  async function load(){if(loaded||loading)return;loading=true;try{if(!globalThis.BusqueAPI?.rpc)throw new Error('API indisponível');const [promos,catalog,disp]=await Promise.all([BusqueAPI.rpc('promocoes_publicas_ativas',{p_cidade_id:CITY_ID}).catch(()=>[]),BusqueAPI.rpc('catalogo_comercial_publico',{p_cidade_id:CITY_ID}).catch(()=>[]),BusqueAPI.rpc('promocao_dia_disponibilidade',{p_cidade_id:CITY_ID})]);const product=(Array.isArray(catalog)?catalog:[]).find(x=>String(x.codigo||'')==='promocao_dia');if(product&&price)price.textContent=money(product.valor);currentPromos=(Array.isArray(promos)?promos:[]).slice(0,4);const d=Array.isArray(disp)?disp[0]:disp;const raw=Number(d?.disponiveis);const canBuy=Number.isFinite(raw)&&raw>0;if(currentPromos.length)renderSlides(currentPromos);else if(canBuy)renderSlides([{type:'demo'}]);else{track.innerHTML='';slides=[]}renderAvailability(d)}catch(error){console.warn('Promoção do Dia indisponível:',error?.message||error);currentPromos=[];renderAvailability(null)}finally{loaded=true;loading=false}}
+  function openPanel(){if(!panel.hidden)return;panel.hidden=false;trigger.setAttribute('aria-expanded','true');metric('abertura','foguinho');load()}
+  function closePanel(){panel.hidden=true;trigger.setAttribute('aria-expanded','false')}
+  trigger.addEventListener('click',()=>panel.hidden?openPanel():closePanel());closeBtn.addEventListener('click',closePanel);prevBtn.addEventListener('click',()=>{currentIndex=Math.max(0,currentIndex-1);updateCarousel()});nextBtn.addEventListener('click',()=>{currentIndex=Math.min((slides.length||1)-1,currentIndex+1);updateCarousel()});viewport.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0]?.clientX||0},{passive:true});viewport.addEventListener('touchend',e=>{const d=(e.changedTouches[0]?.clientX||0)-touchStartX;if(Math.abs(d)<35)return;currentIndex=d<0?Math.min((slides.length||1)-1,currentIndex+1):Math.max(0,currentIndex-1);updateCarousel()},{passive:true});document.addEventListener('click',e=>{if(!panel.hidden&&!widget.contains(e.target))closePanel()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closePanel()});
+  cta.addEventListener('click',()=>{if(!(Number.isFinite(availableTomorrow)&&availableTomorrow>0))return;metric('iniciou_compra','abriu_pagina_compra');window.open('promocao-do-dia.html','_blank','noopener')});
+  try{const key='bt_promo_day_impression_v4';if(!sessionStorage.getItem(key)){metric('impressao','foguinho');sessionStorage.setItem(key,'1')}}catch(_){metric('impressao','foguinho')}
+})();
+</script>
+
 </body>
 </html>
