@@ -394,6 +394,32 @@
 
 
 
+    /* DESKTOP: MASTER com altura fixa para não mudar de tamanho durante a rotação */
+    @media(min-width:641px){
+      #bannerSection.banner{
+        height:360px;
+        min-height:360px;
+        max-height:360px;
+      }
+      #bannerSection .banner-content{
+        height:100%;
+        box-sizing:border-box;
+        overflow:hidden;
+      }
+      #bannerSection .banner-content h2{
+        display:-webkit-box;
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:2;
+        overflow:hidden;
+      }
+      #bannerSection .banner-content p{
+        display:-webkit-box;
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:3;
+        overflow:hidden;
+      }
+    }
+
     /* MOBILE PREMIUM — MASTER grande, cadastro curto e 3 Destaques fixos */
     .master-mobile-badge{display:none}
     @media(max-width:640px){
