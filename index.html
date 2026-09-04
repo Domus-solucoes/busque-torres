@@ -348,12 +348,12 @@
     .access-modal h3{margin:0;color:var(--navy);font-size:1.25rem}
     .access-modal-close{border:0;background:#eef2f7;width:38px;height:38px;border-radius:50%;font-size:1.3rem;cursor:pointer;color:var(--navy)}
     .access-modal p{margin:8px 0 18px;color:var(--muted);font-size:.9rem}
-    .access-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+    .access-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
     .access-stat{padding:15px 8px;border:1px solid var(--line);border-radius:15px;text-align:center;background:#f9fbfd}
     .access-stat strong{display:block;color:var(--navy);font-size:1.45rem}
     .access-stat span{font-size:.72rem;color:var(--muted);font-weight:800}
     .access-note{display:block;margin-top:14px!important;text-align:center;color:#7a8798!important;font-size:.72rem!important}
-    @media(max-width:640px){.hero-city-art{object-position:62% 50%;opacity:1}.hero-city-shade{display:none}.access-modal{padding:20px 15px}.access-stat strong{font-size:1.25rem}.access-stat{padding-inline:4px}}
+    @media(max-width:640px){.hero-city-art{object-position:62% 50%;opacity:1}.hero-city-shade{display:none}.access-modal{padding:20px 15px}.access-stats{grid-template-columns:repeat(2,1fr)}.access-stat strong{font-size:1.25rem}.access-stat{padding-inline:4px}}
 
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   
@@ -394,18 +394,39 @@
 
 
 
-    /* MASTER MOBILE V2 — imagem protagonista, conteúdo fora da arte */
+    /* MOBILE PREMIUM FIRST — MASTER + DESTAQUES aparecem cedo sem poluir a home */
     .master-mobile-badge{display:none}
     @media(max-width:640px){
+      /* No celular, prioriza utilidade e os espaços premium logo após a busca. */
+      main.shell{display:flex;flex-direction:column}
+      #bannerSection{order:1}
+      #featuredSection{order:2}
+      #categories{order:3}
+      .mobile-business-cta-wrap{order:4}
+      #companiesSection{order:5}
+      #joinSection{order:6}
+
+      /* Hero mais enxuto: mantém identidade sem empurrar MASTER para baixo. */
+      .hero{padding:12px 0 46px!important}
+      .hero-copy{margin-top:16px!important}
+      h1{margin:10px 0 7px!important;font-size:1.72rem!important;line-height:1.03!important}
+      .hero-copy p{font-size:.84rem!important;line-height:1.38!important;padding:8px 10px!important}
+      .search-wrap{margin:-24px auto 10px!important}
+
+      /* Cadastro continua disponível, mas depois de MASTER + Destaques. */
+      .mobile-business-cta-wrap{display:block;width:100%!important;margin:4px 0 15px!important}
+      .mobile-business-cta{min-height:56px!important;padding:10px 13px!important}
+
+      /* MASTER compacto: arte legível + nome + acesso, sem virar uma tela inteira. */
       #bannerSection.banner{
         display:block;
         min-height:0!important;
-        margin:0 0 32px!important;
+        margin:0 0 16px!important;
         border:1px solid #e1e6ed;
-        border-radius:22px!important;
+        border-radius:19px!important;
         background:#fff!important;
         color:var(--navy)!important;
-        box-shadow:0 14px 34px rgba(8,27,51,.10)!important;
+        box-shadow:0 10px 26px rgba(8,27,51,.09)!important;
         overflow:hidden;
       }
       #bannerSection .banner-company-bg,
@@ -413,26 +434,27 @@
       #bannerSection .banner-company-image{
         position:relative!important;
         inset:auto!important;
+        display:block!important;
         width:100%!important;
-        height:clamp(220px,72vw,310px)!important;
+        height:142px!important;
         max-height:none!important;
         margin:0!important;
-        padding:12px 12px 0!important;
+        padding:8px 10px 0!important;
         object-fit:contain!important;
         object-position:center!important;
         background:#fff!important;
         opacity:1!important;
         filter:none!important;
         z-index:1!important;
-        transition:opacity .24s ease!important;
+        transition:opacity .2s ease!important;
       }
       #bannerSection .banner-company-image[hidden]{display:none!important}
-      #bannerSection .banner-company-image:not([hidden]){display:block!important}
       #bannerSection .banner-content{
         position:relative!important;
         z-index:3!important;
         max-width:none!important;
-        padding:18px 18px 64px!important;
+        min-height:92px!important;
+        padding:12px 106px 13px 14px!important;
         background:#fff!important;
         color:var(--navy)!important;
         text-shadow:none!important;
@@ -440,77 +462,94 @@
       #bannerSection .banner-content .badge{display:none!important}
       #bannerSection .master-mobile-badge{
         position:absolute;
-        top:14px;
-        left:14px;
+        top:10px;
+        left:10px;
         z-index:5;
         display:inline-flex;
         align-items:center;
         justify-content:center;
-        padding:6px 10px;
+        padding:5px 9px;
         border-radius:999px;
         background:linear-gradient(135deg,var(--gold2),var(--gold));
         color:var(--navy);
-        box-shadow:0 6px 16px rgba(8,27,51,.14);
-        font-size:.66rem;
+        box-shadow:0 5px 14px rgba(8,27,51,.12);
+        font-size:.62rem;
         font-weight:950;
         letter-spacing:.055em;
       }
       #bannerSection .banner-content h2{
         max-width:none!important;
-        margin:0 0 7px!important;
+        margin:0 0 5px!important;
         color:var(--navy)!important;
-        font-size:1.28rem!important;
-        line-height:1.18!important;
-        letter-spacing:-.025em!important;
+        font-size:1.08rem!important;
+        line-height:1.15!important;
+        letter-spacing:-.02em!important;
         text-shadow:none!important;
       }
       #bannerSection .banner-content p{
-        display:-webkit-box!important;
-        max-width:none!important;
-        margin:0 0 15px!important;
-        overflow:hidden!important;
-        color:#667085!important;
-        font-size:.86rem!important;
-        line-height:1.48!important;
-        text-shadow:none!important;
-        -webkit-box-orient:vertical;
-        -webkit-line-clamp:2;
+        display:none!important;
       }
       #bannerSection .banner-link{
         display:inline-flex!important;
         align-items:center;
         justify-content:center;
-        gap:8px;
-        min-height:42px;
-        padding:10px 14px!important;
+        gap:6px;
+        min-height:36px;
+        padding:8px 11px!important;
         border:1px solid var(--navy);
-        border-radius:11px!important;
+        border-radius:10px!important;
         background:var(--navy)!important;
         color:#fff!important;
         box-shadow:none!important;
-        font-size:.79rem!important;
+        font-size:.72rem!important;
         font-weight:950;
         text-shadow:none!important;
       }
       #bannerSection .banner-nav{
-        right:16px!important;
-        bottom:16px!important;
+        right:12px!important;
+        bottom:13px!important;
         z-index:5!important;
-        gap:6px!important;
+        gap:5px!important;
       }
       #bannerSection .banner-nav button{
-        width:34px!important;
-        height:34px!important;
+        width:31px!important;
+        height:31px!important;
         border:1px solid #d9e0e9!important;
-        border-radius:10px!important;
+        border-radius:9px!important;
         background:#f5f7fa!important;
         color:var(--navy)!important;
         box-shadow:none!important;
-        font-size:1rem!important;
+        font-size:.95rem!important;
       }
+
+      /* Destaques logo abaixo do MASTER, em cartões mais baixos e deslizando na horizontal. */
+      #featuredSection{margin:0 0 13px!important}
+      #featuredSection .section-head{margin-bottom:8px!important;gap:3px!important}
+      #featuredSection .section-head h2{font-size:1.18rem!important}
+      #featuredSection .section-head .section-note{font-size:.76rem!important;line-height:1.3!important}
+      #featuredSection .grid{gap:10px!important;padding-bottom:7px!important}
+      #featuredSection .card{flex:0 0 min(72vw,285px)!important;border-radius:16px!important}
+      #featuredSection .cover{height:118px!important}
+      #featuredSection .card-body{padding:11px 12px 12px!important}
+      #featuredSection .card-top h3{font-size:1rem!important;line-height:1.15!important}
+      #featuredSection .tag{margin-top:5px!important;font-size:.66rem!important}
+      #featuredSection .desc,
+      #featuredSection .meta{display:none!important}
+      #featuredSection .actions{margin-top:9px!important;grid-template-columns:1fr 1.12fr!important;gap:7px!important}
+      #featuredSection .btn{min-height:36px!important;padding:8px 7px!important;font-size:.72rem!important}
+      #featuredSection .logo{width:44px!important;height:44px!important;left:10px!important;bottom:9px!important;border-radius:12px!important}
+      #featuredSection .premium{top:9px!important;right:9px!important;padding:5px 7px!important;font-size:.58rem!important}
+
+      /* Categorias entram depois dos espaços premium. */
+      #categories{margin-top:0!important;margin-bottom:9px!important}
+
+      /* Em modo busca, deixa apenas a experiência de busca. */
+      body.search-mode #featuredSection,
+      body.search-mode .mobile-business-cta-wrap{display:none!important}
     }
 
   </style>
+  <!-- BUSQUE TORRES: MOBILE PREMIUM FIRST + CLICK FOGUINHO FIX 2026-09-04 -->
 </head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
@@ -544,13 +583,6 @@
   </div>
 </div>
 
-<div class="mobile-business-cta-wrap">
-  <a class="mobile-business-cta" href="cadastro.html" aria-label="Cadastrar sua empresa">
-    <span class="mobile-business-cta-copy"><small>ANUNCIE NO BUSQUE</small><strong>CADASTRE SUA EMPRESA</strong></span>
-    <span class="mobile-business-cta-arrow" aria-hidden="true">→</span>
-  </a>
-</div>
-
 <main class="shell">
   <nav class="categories" id="categories" aria-label="Categorias">
     <button class="cat active" data-category="todos">Todos</button>
@@ -578,6 +610,24 @@
   </section>
 
   
+  <section class="section-block" id="featuredSection">
+    <div class="section-head">
+      <div>
+        <h2>Destaques fixos</h2>
+        <p class="section-note">As 3 empresas principais ficam fixas nesta área.</p>
+      </div>
+      <span class="count" id="featuredCount"></span>
+    </div>
+    <div class="grid" id="featuredCards"></div>
+  </section>
+
+  <div class="mobile-business-cta-wrap">
+    <a class="mobile-business-cta" href="cadastro.html" aria-label="Cadastrar sua empresa">
+      <span class="mobile-business-cta-copy"><small>ANUNCIE NO BUSQUE</small><strong>CADASTRE SUA EMPRESA</strong></span>
+      <span class="mobile-business-cta-arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+
   <section id="companiesSection">
     <p class="search-mode-label" id="searchModeLabel">Resultados encontrados enquanto você digita.</p>
 
@@ -587,17 +637,6 @@
     </div>
 
     <div id="normalHomeContent">
-      <section class="section-block" id="featuredSection">
-        <div class="section-head">
-          <div>
-            <h2>Destaques fixos</h2>
-            <p class="section-note">As 3 empresas principais ficam fixas nesta área.</p>
-          </div>
-          <span class="count" id="featuredCount"></span>
-        </div>
-        <div class="grid" id="featuredCards"></div>
-      </section>
-
       <section class="section-block normal-companies-section" id="normalCompaniesSection">
         <div class="section-head">
           <div>
@@ -757,7 +796,7 @@
 </div>
 
 <footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><div class="access-counter"><button class="access-counter-btn" id="openAccessCounter" type="button">📊 Acessos do Busque Torres</button></div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
-<div class="access-overlay" id="accessOverlay" aria-hidden="true"><div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="accessTitle"><div class="access-modal-head"><h3 id="accessTitle">Acessos do Busque Torres</h3><button class="access-modal-close" id="closeAccessCounter" type="button" aria-label="Fechar">×</button></div><p>Visualizações registradas na página inicial.</p><div class="access-stats"><div class="access-stat"><strong id="accessToday">—</strong><span>HOJE</span></div><div class="access-stat"><strong id="accessWeek">—</strong><span>7 DIAS</span></div><div class="access-stat"><strong id="accessMonth">—</strong><span>ESTE MÊS</span></div></div><small class="access-note">Cada carregamento da página inicial é contabilizado nesta primeira versão.</small></div></div>
+<div class="access-overlay" id="accessOverlay" aria-hidden="true"><div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="accessTitle"><div class="access-modal-head"><h3 id="accessTitle">Acessos do Busque Torres</h3><button class="access-modal-close" id="closeAccessCounter" type="button" aria-label="Fechar">×</button></div><p>Visualizações registradas na página inicial.</p><div class="access-stats"><div class="access-stat"><strong id="accessToday">—</strong><span>HOJE</span></div><div class="access-stat"><strong id="accessWeek">—</strong><span>7 DIAS</span></div><div class="access-stat"><strong id="accessMonth">—</strong><span>ESTE MÊS</span></div><div class="access-stat"><strong id="accessTotal">—</strong><span>GERAL</span></div></div><small class="access-note">Cada carregamento da página inicial é contabilizado nesta primeira versão.</small></div></div>
 
 <script src="supabase-config.js"></script>
 <script>
@@ -803,7 +842,7 @@ async function registrarAberturaVaga(vagaId,posicao){
   }
 }
 async function carregarContadorPublico(){
-  try{const rows=await BusqueAPI.rpc("metricas_publicas",{}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
+  try{const rows=await BusqueAPI.rpc("metricas_publicas",{}),r=Array.isArray(rows)?rows[0]:rows;if(!r)return;$("accessToday").textContent=Number(r.hoje||0).toLocaleString("pt-BR");$("accessWeek").textContent=Number(r.ultimos_7_dias||0).toLocaleString("pt-BR");$("accessMonth").textContent=Number(r.mes_atual||0).toLocaleString("pt-BR");$("accessTotal").textContent=Number(r.total||0).toLocaleString("pt-BR")}catch(error){console.warn("Contador indisponível:",error?.message||error)}
 }
 function abrirContador(){carregarContadorPublico();$("accessOverlay").classList.add("open");$("accessOverlay").setAttribute("aria-hidden","false")}
 function fecharContador(){$("accessOverlay").classList.remove("open");$("accessOverlay").setAttribute("aria-hidden","true")}
@@ -1288,6 +1327,40 @@ window.addEventListener("pageshow",e=>{
 
 
 document.addEventListener("click",e=>{const whats=e.target.closest("a.btn-whats");if(whats){const id=whats.closest(".card")?.dataset.companyId||null;registrarMetrica("clicou_whatsapp",id,"index")}});
+
+// Promoção do Dia: registra a abertura no script principal da home.
+// O listener roda na fase de captura, antes do widget alternar o painel,
+// então só contabiliza quando o clique realmente está ABRINDO o foguinho.
+document.addEventListener("click",e=>{
+  const flame=e.target.closest("#promoDayTrigger");
+  if(!flame)return;
+  const promoPanel=document.getElementById("promoDayPanel");
+  if(!promoPanel||!promoPanel.hidden)return;
+  (async()=>{
+    const payload={cidade_id:"torres",evento:"abertura",origem:"index",detalhe:"foguinho"};
+    try{
+      if(globalThis.BusqueAPI?.invokeFunction){
+        const result=await BusqueAPI.invokeFunction("registrar-metrica-promocao-dia",payload);
+        if(result?.ok===true)return;
+      }
+    }catch(error){
+      console.warn("Métrica do foguinho via função indisponível:",error?.message||error);
+    }
+    try{
+      if(globalThis.BusqueAPI?.rpc){
+        await BusqueAPI.rpc("registrar_metrica_promocao_dia",{
+          p_cidade_id:"torres",
+          p_evento:"abertura",
+          p_origem:"index",
+          p_detalhe:"foguinho"
+        });
+      }
+    }catch(error){
+      console.warn("Clique do foguinho não registrado:",error?.message||error);
+    }
+  })();
+},true);
+
 registrarMetrica("visita_site",null,"index");
 </script>
 
@@ -1431,7 +1504,7 @@ registrarMetrica("visita_site",null,"index");
     }finally{loaded=true;loading=false}
   }
 
-  function openPanel(){if(!panel.hidden)return;panel.hidden=false;trigger.setAttribute('aria-expanded','true');metric('abertura','foguinho');load()}
+  function openPanel(){if(!panel.hidden)return;panel.hidden=false;trigger.setAttribute('aria-expanded','true');load()}
   function closePanel(){panel.hidden=true;trigger.setAttribute('aria-expanded','false')}
 
   trigger.addEventListener('click',()=>panel.hidden?openPanel():closePanel());
