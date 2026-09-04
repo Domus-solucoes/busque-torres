@@ -392,9 +392,128 @@
     @media(max-width:640px){.promo-day-widget{right:12px;bottom:88px}.promo-day-trigger{width:54px;height:54px}.promo-day-fire{font-size:26px}.promo-day-panel{bottom:66px;width:min(355px,calc(100vw - 24px));max-height:68vh;padding:14px}.promo-day-card{min-height:176px}.promo-day-nav button{width:32px;height:32px}}
     @media(prefers-reduced-motion:reduce){.promo-day-trigger{animation:none}.promo-day-panel,.promo-day-track{animation:none;transition:none}}
 
-</style>
+
+
+    /* MASTER MOBILE V2 — imagem protagonista, conteúdo fora da arte */
+    .master-mobile-badge{display:none}
+    @media(max-width:640px){
+      #bannerSection.banner{
+        display:block;
+        min-height:0!important;
+        margin:0 0 32px!important;
+        border:1px solid #e1e6ed;
+        border-radius:22px!important;
+        background:#fff!important;
+        color:var(--navy)!important;
+        box-shadow:0 14px 34px rgba(8,27,51,.10)!important;
+        overflow:hidden;
+      }
+      #bannerSection .banner-company-bg,
+      #bannerSection .banner-media{display:none!important}
+      #bannerSection .banner-company-image{
+        position:relative!important;
+        inset:auto!important;
+        width:100%!important;
+        height:clamp(220px,72vw,310px)!important;
+        max-height:none!important;
+        margin:0!important;
+        padding:12px 12px 0!important;
+        object-fit:contain!important;
+        object-position:center!important;
+        background:#fff!important;
+        opacity:1!important;
+        filter:none!important;
+        z-index:1!important;
+        transition:opacity .24s ease!important;
+      }
+      #bannerSection .banner-company-image[hidden]{display:none!important}
+      #bannerSection .banner-company-image:not([hidden]){display:block!important}
+      #bannerSection .banner-content{
+        position:relative!important;
+        z-index:3!important;
+        max-width:none!important;
+        padding:18px 18px 64px!important;
+        background:#fff!important;
+        color:var(--navy)!important;
+        text-shadow:none!important;
+      }
+      #bannerSection .banner-content .badge{display:none!important}
+      #bannerSection .master-mobile-badge{
+        position:absolute;
+        top:14px;
+        left:14px;
+        z-index:5;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:6px 10px;
+        border-radius:999px;
+        background:linear-gradient(135deg,var(--gold2),var(--gold));
+        color:var(--navy);
+        box-shadow:0 6px 16px rgba(8,27,51,.14);
+        font-size:.66rem;
+        font-weight:950;
+        letter-spacing:.055em;
+      }
+      #bannerSection .banner-content h2{
+        max-width:none!important;
+        margin:0 0 7px!important;
+        color:var(--navy)!important;
+        font-size:1.28rem!important;
+        line-height:1.18!important;
+        letter-spacing:-.025em!important;
+        text-shadow:none!important;
+      }
+      #bannerSection .banner-content p{
+        display:-webkit-box!important;
+        max-width:none!important;
+        margin:0 0 15px!important;
+        overflow:hidden!important;
+        color:#667085!important;
+        font-size:.86rem!important;
+        line-height:1.48!important;
+        text-shadow:none!important;
+        -webkit-box-orient:vertical;
+        -webkit-line-clamp:2;
+      }
+      #bannerSection .banner-link{
+        display:inline-flex!important;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        min-height:42px;
+        padding:10px 14px!important;
+        border:1px solid var(--navy);
+        border-radius:11px!important;
+        background:var(--navy)!important;
+        color:#fff!important;
+        box-shadow:none!important;
+        font-size:.79rem!important;
+        font-weight:950;
+        text-shadow:none!important;
+      }
+      #bannerSection .banner-nav{
+        right:16px!important;
+        bottom:16px!important;
+        z-index:5!important;
+        gap:6px!important;
+      }
+      #bannerSection .banner-nav button{
+        width:34px!important;
+        height:34px!important;
+        border:1px solid #d9e0e9!important;
+        border-radius:10px!important;
+        background:#f5f7fa!important;
+        color:var(--navy)!important;
+        box-shadow:none!important;
+        font-size:1rem!important;
+      }
+    }
+
+  </style>
 </head>
 <body>
+<!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
 <header class="hero" id="top">
   <img class="hero-city-art" id="heroCityArt" src="assets/torres-hero.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
   <div class="hero-city-shade" aria-hidden="true"></div>
@@ -444,6 +563,7 @@
   </nav>
 
   <section class="banner" id="bannerSection" aria-label="Anúncios patrocinados">
+    <span class="master-mobile-badge" aria-hidden="true">MASTER</span>
     <img id="bannerImageBg" class="banner-company-bg" alt="" aria-hidden="true" decoding="async" hidden><img id="bannerImage" class="banner-company-image" alt="" decoding="async" fetchpriority="high" hidden><div class="banner-media"></div>
     <div class="banner-content">
       <span class="badge">Patrocínio Master</span>
@@ -1118,6 +1238,25 @@ function closeSearch(){document.body.classList.remove("search-mode");$("searchIn
 function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render()}
 $("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();render()}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();render();$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
+// Swipe do MASTER no celular. Não altera clique do CTA nem os controles desktop.
+(()=>{
+  const banner=$("bannerSection");
+  if(!banner)return;
+  let startX=0,startY=0;
+  banner.addEventListener("touchstart",e=>{
+    const t=e.changedTouches?.[0];
+    if(!t)return;
+    startX=t.clientX;startY=t.clientY;
+  },{passive:true});
+  banner.addEventListener("touchend",e=>{
+    const t=e.changedTouches?.[0];
+    if(!t||masterBanners.length<=1)return;
+    const dx=t.clientX-startX,dy=t.clientY-startY;
+    if(Math.abs(dx)<45||Math.abs(dx)<=Math.abs(dy))return;
+    moveBanner(dx<0?1:-1);
+  },{passive:true});
+})();
+
 async function iniciar(){
   if(initPromise)return initPromise;
   initPromise=(async()=>{
@@ -1180,8 +1319,24 @@ registrarMetrica("visita_site",null,"index");
   const money=value=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(value||0));
 
   async function metric(evento,detalhe=""){
-    try{if(globalThis.BusqueAPI?.rpc)await BusqueAPI.rpc("registrar_metrica_promocao_dia",{p_cidade_id:CITY_ID,p_evento:evento,p_origem:"index",p_detalhe:detalhe||null})}
-    catch(error){console.warn("Métrica Promoção do Dia indisponível:",error?.message||error)}
+    const payload={cidade_id:CITY_ID,evento,origem:"index",detalhe:detalhe||null};
+    try{
+      if(globalThis.BusqueAPI?.invokeFunction){
+        const result=await BusqueAPI.invokeFunction("registrar-metrica-promocao-dia",payload);
+        if(result?.ok===true)return true;
+      }
+    }catch(error){
+      console.warn("Métrica Promoção do Dia via função indisponível:",error?.message||error);
+    }
+    try{
+      if(globalThis.BusqueAPI?.rpc){
+        await BusqueAPI.rpc("registrar_metrica_promocao_dia",{p_cidade_id:CITY_ID,p_evento:evento,p_origem:"index",p_detalhe:detalhe||null});
+        return true;
+      }
+    }catch(error){
+      console.warn("Métrica Promoção do Dia via RPC indisponível:",error?.message||error);
+    }
+    return false;
   }
 
   function updateCarousel(){
