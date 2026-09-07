@@ -51,7 +51,7 @@
     .hero:before{width:420px;height:420px;right:-120px;top:-190px;background:rgba(230,184,75,.13)}
     .hero:after{width:300px;height:300px;left:-150px;bottom:-170px;background:rgba(71,157,255,.12)}
     .nav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .home-nav{justify-content:space-between}
+    .home-nav{justify-content:flex-end}
     .brand{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:900;letter-spacing:-.02em}
     .brand-mark{display:grid;place-items:center;width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,var(--gold2),var(--gold));color:var(--navy);box-shadow:0 8px 24px rgba(230,184,75,.2)}
     .brand-mark svg{width:25px;height:25px}.brand-name{font-size:1.05rem}.brand-name b{color:var(--gold2)}
@@ -614,9 +614,6 @@
   <img class="hero-city-art" id="heroCityArt" src="assets/torres-hero.webp" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
   <div class="hero-city-shade" aria-hidden="true"></div>
   <div class="shell nav home-nav">
-    <a class="brand" href="#top" aria-label="Busque Torres - início">
-      <span class="brand-name">BUSQUE <b>TORRES</b></span>
-    </a>
     <div class="nav-actions">
       <button class="jobs-btn" id="openJobs" type="button" aria-haspopup="dialog" aria-label="Abrir vagas disponíveis">
         <span class="jobs-label">TEMOS VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
