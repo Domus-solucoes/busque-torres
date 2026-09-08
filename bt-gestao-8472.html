@@ -77,6 +77,20 @@
     /* Modals */
     .modal-backdrop,.edit-company-backdrop{position:fixed;inset:0;z-index:100;background:rgba(7,18,30,.68);display:grid;place-items:center;padding:18px}.modal{width:min(540px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.28)}.modal-head,.edit-company-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border-bottom:1px solid var(--line);background:#fff}.modal-head h3,.edit-company-head h3{margin:0;font-size:16px}.close{border:0;background:#f0f3f6;color:#33465a;width:34px;height:34px;border-radius:9px;font-size:18px}.modal-body{padding:16px 17px}.modal-body p{color:#738093;font-size:11px;line-height:1.55}.modal-body textarea{min-height:110px;resize:vertical}.modal-actions{display:flex;justify-content:flex-end;gap:7px;padding:12px 17px;border-top:1px solid var(--line);background:#fafbfc}.cancel,.confirm{border-radius:9px;padding:9px 12px;font-size:10px;font-weight:850}.cancel{border:1px solid var(--line);background:#fff;color:#435265}.confirm{border:0;background:var(--nav);color:#fff}.confirm.danger{background:var(--red)}
     .edit-company-modal{width:min(900px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.28)}.edit-company-head{position:sticky;top:0;z-index:2}.edit-company-body{padding:16px}.edit-company-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.edit-company-grid .full{grid-column:1/-1}.edit-company-actions{position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;background:#fff;border-top:1px solid var(--line)}.edit-company-actions button{border-radius:9px;padding:9px 12px;font-size:10px;font-weight:850}.edit-company-actions .save{border:0;background:var(--gold);color:#382b0b}.edit-company-actions .cancel{background:#fff}
+    .edit-media-manager{margin:2px 0 6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#f8fafc}
+    .edit-media-manager h4{margin:0 0 4px;font-size:13px;color:var(--ink)}
+    .edit-media-manager>p{margin:0 0 12px;color:var(--muted);font-size:10px;line-height:1.5}
+    .edit-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .edit-media-box{padding:10px;border:1px solid #e2e8ef;border-radius:11px;background:#fff}
+    .edit-media-box>strong{display:block;margin-bottom:7px;font-size:11px;color:#344559}
+    .edit-media-preview{display:grid;place-items:center;height:170px;overflow:hidden;border:1px solid var(--line);border-radius:9px;background:#eef2f6}
+    .edit-media-preview img{display:block;width:100%;height:100%;object-fit:contain;background:#f8fafc}
+    .edit-media-empty{color:#8591a0;font-size:10px;text-align:center;padding:15px}
+    .edit-media-box input[type=file]{margin-top:8px;padding:9px;font-size:10px}
+    .edit-media-box small{display:block;margin-top:6px;color:#7d8999;font-size:9px;line-height:1.45}
+    .edit-media-upload{width:100%;margin-top:8px;border:0;border-radius:9px;padding:9px 10px;background:#162b43;color:#fff;font-size:10px;font-weight:850}
+    .edit-media-upload:disabled{opacity:.55;cursor:not-allowed}
+    @media(max-width:680px){.edit-media-grid{grid-template-columns:1fr}.edit-media-preview{height:150px}}
     .toast{position:fixed;right:20px;bottom:20px;z-index:150;max-width:min(360px,calc(100vw - 40px));padding:11px 13px;border-radius:10px;color:#fff;font-size:11px;font-weight:750;box-shadow:var(--shadow)}.toast.success{background:var(--green)}.toast.error{background:var(--red)}
 
     /* Mobile menu */
@@ -180,6 +194,26 @@
 
   <div id="modalBackdrop" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h3 id="modalTitle"></h3><button id="modalClose" class="close" type="button">×</button></div><div class="modal-body"><p id="modalText"></p><label for="modalReason">Justificativa</label><textarea id="modalReason" maxlength="1000" placeholder="Escreva de forma clara o motivo..."></textarea></div><div class="modal-actions"><button id="modalCancel" class="cancel" type="button">Cancelar</button><button id="modalConfirm" class="confirm" type="button">Confirmar</button></div></div></div>
   <div id="editCompanyBackdrop" class="edit-company-backdrop" hidden><div class="edit-company-modal" role="dialog" aria-modal="true" aria-labelledby="editCompanyTitle"><div class="edit-company-head"><h3 id="editCompanyTitle">Editar empresa</h3><button id="editCompanyClose" class="close" type="button">×</button></div><form id="editCompanyForm"><div class="edit-company-body"><div class="edit-company-grid">
+    <div class="full edit-media-manager">
+      <h4>Imagens da empresa</h4>
+      <p>Você pode corrigir a imagem principal ou o logotipo sem pedir um novo cadastro ao cliente.</p>
+      <div class="edit-media-grid">
+        <div class="edit-media-box">
+          <strong>Imagem principal</strong>
+          <div class="edit-media-preview" id="editCoverPreview"><span class="edit-media-empty">Sem imagem</span></div>
+          <input id="editCoverInput" type="file" accept="image/jpeg,image/png,image/webp">
+          <small>JPG, PNG ou WebP. A imagem é otimizada antes do envio.</small>
+          <button id="editCoverUpload" class="edit-media-upload" type="button">Trocar imagem principal</button>
+        </div>
+        <div class="edit-media-box">
+          <strong>Logotipo</strong>
+          <div class="edit-media-preview" id="editLogoPreview"><span class="edit-media-empty">Sem logo</span></div>
+          <input id="editLogoInput" type="file" accept="image/jpeg,image/png,image/webp">
+          <small>JPG, PNG ou WebP. Use uma imagem nítida, de preferência quadrada.</small>
+          <button id="editLogoUpload" class="edit-media-upload" type="button">Trocar logotipo</button>
+        </div>
+      </div>
+    </div>
     <div><label>Nome da empresa</label><input name="nome" required maxlength="160"></div><div><label>WhatsApp</label><input name="whatsapp" maxlength="30"></div><div><label>Categoria</label><input name="categoria" maxlength="100"></div><div><label>Subcategoria</label><input name="subcategoria" maxlength="140"></div><div><label>Cidade</label><input name="cidade" maxlength="120"></div><div><label>Bairro</label><input name="bairro" maxlength="120"></div><div class="full"><label>Endereço</label><input name="endereco" maxlength="240"></div><div><label>Instagram</label><input name="instagram" placeholder="@empresa ou link do Instagram" maxlength="300"></div><div><label>Site</label><input name="site" placeholder="https://..." maxlength="500"></div><div><label>E-mail</label><input name="email" type="email" maxlength="200"></div><div><label>Horário</label><input name="horario" maxlength="300"></div><div><label>Assinatura pretendida/contratada</label><select name="assinatura_periodo"><option value="mensal">Mensal — R$ 9,90</option><option value="trimestral">Trimestral — R$ 24,90</option><option value="anual">Anual — R$ 89,90</option></select></div><div><label>Vencimento</label><input name="data_vencimento" type="date"></div><div><label>Semanas MASTER disponíveis</label><input name="premium_master_total" type="number" min="0" max="52"></div><div><label>Semanas MASTER usadas</label><input name="premium_master_usado" type="number" min="0" max="52"></div><div><label>Semanas Destaque disponíveis</label><input name="premium_destaque_total" type="number" min="0" max="52"></div><div><label>Semanas Destaque usadas</label><input name="premium_destaque_usado" type="number" min="0" max="52"></div><div class="full"><label>Link do mapa</label><input name="mapa_url" maxlength="800"></div><div class="full"><label>Descrição</label><textarea name="descricao" rows="5" maxlength="4000"></textarea></div><div class="full"><label>Produtos</label><textarea name="produtos" rows="3" maxlength="3000"></textarea></div><div class="full"><label>Serviços</label><textarea name="servicos" rows="3" maxlength="3000"></textarea></div><div class="full"><label>Palavras-chave</label><textarea name="palavras_chave" rows="2" maxlength="2000"></textarea></div>
   </div></div><div class="edit-company-actions"><button id="editCompanyCancel" class="cancel" type="button">Cancelar</button><button id="editCompanySave" class="save" type="submit">Salvar alterações</button></div></form></div></div>
   <div id="toast" class="toast" hidden></div>
@@ -281,6 +315,19 @@
     }
   }
   async function rpc(name,params={}){return api(`rpc/${encodeURIComponent(name)}`,{method:"POST",body:JSON.stringify(params)})}
+  async function edgeAdmin(name,body,retry=true){
+    if(!state.session?.access_token)throw new Error("Sessão administrativa encerrada.");
+    const r=await fetch(`${BUSQUE_SUPABASE_URL}/functions/v1/${encodeURIComponent(name)}`,{
+      method:"POST",
+      headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${state.session.access_token}`,"Content-Type":"application/json"},
+      body:JSON.stringify(body||{})
+    });
+    const raw=await r.text();let data={};
+    if(raw){try{data=JSON.parse(raw)}catch{data={erro:raw}}}
+    if(r.status===401&&retry&&state.session?.refresh_token){await refreshSession();return edgeAdmin(name,body,false)}
+    if(!r.ok)throw new Error(data?.erro||data?.message||`Erro ${r.status}.`);
+    return data
+  }
   function sessionExpiryMs(session){
     const explicit=Number(session?.expires_at||0);
     if(explicit>0)return explicit*1000;
@@ -516,8 +563,63 @@
     return summary+note+`<div class="market-ranking">${head}${body}</div>`
   }
   function bannerDateTime(value){if(!value)return "—";try{return new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short",timeZone:"America/Sao_Paulo"}).format(new Date(value))}catch{return "—"}}
-  async function openCompanyEditor(id){const rows=await api(`empresas?select=id,nome,categoria,subcategoria,descricao,whatsapp,cidade,bairro,endereco,instagram,site,email,horario,mapa_url,produtos,servicos,palavras_chave,assinatura_periodo,data_vencimento,premium_master_total,premium_master_usado,premium_destaque_total,premium_destaque_usado&${cityFilter()}&id=eq.${encodeURIComponent(id)}&limit=1`);const c=Array.isArray(rows)?rows[0]:null;if(!c)return toast("Empresa não localizada.","error");state.editingCompany=c;const f=$("editCompanyForm");["nome","whatsapp","categoria","subcategoria","cidade","bairro","endereco","instagram","site","email","horario","mapa_url","descricao","produtos","servicos","palavras_chave","assinatura_periodo","premium_master_total","premium_master_usado","premium_destaque_total","premium_destaque_usado"].forEach(k=>{if(f.elements[k])f.elements[k].value=c[k]??""});if(f.elements.data_vencimento)f.elements.data_vencimento.value=dateKey(c.data_vencimento);$("editCompanyTitle").textContent=`Editar — ${c.nome}`;$("editCompanyBackdrop").hidden=false;setTimeout(()=>f.elements.nome.focus(),30)}
-  function closeCompanyEditor(){state.editingCompany=null;$("editCompanyBackdrop").hidden=true}
+  function setEditMediaPreview(targetId,url){
+    const box=$(targetId);if(!box)return;
+    const src=safeMedia(url);
+    box.innerHTML=src?`<img src="${src}" alt="Pré-visualização da imagem da empresa">`:'<span class="edit-media-empty">Sem imagem</span>'
+  }
+  function previewSelectedMedia(inputId,targetId){
+    const input=$(inputId),file=input?.files?.[0];if(!file)return;
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){input.value="";return toast("Use uma imagem JPG, PNG ou WebP.","error")}
+    if(file.size>15*1024*1024){input.value="";return toast("Arquivo muito grande. Escolha uma imagem de até 15 MB.","error")}
+    const url=URL.createObjectURL(file),box=$(targetId);if(!box)return;
+    box.innerHTML=`<img src="${url}" alt="Nova imagem selecionada">`;
+    const img=box.querySelector("img");if(img)img.onload=()=>URL.revokeObjectURL(url)
+  }
+  async function imageFileToOptimizedDataUrl(file,kind){
+    if(!file)throw new Error("Selecione uma imagem.");
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");
+    if(file.size>15*1024*1024)throw new Error("Arquivo muito grande. Escolha uma imagem de até 15 MB.");
+    const image=await new Promise((resolve,reject)=>{
+      const url=URL.createObjectURL(file),img=new Image();
+      img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};
+      img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("Não foi possível ler a imagem."))};
+      img.src=url
+    });
+    const maxDim=kind==="capa"?1800:1000;
+    const iw=image.naturalWidth||image.width,ih=image.naturalHeight||image.height;
+    const scale=Math.min(1,maxDim/Math.max(iw,ih));
+    let w=Math.max(1,Math.round(iw*scale)),h=Math.max(1,Math.round(ih*scale));
+    const limit=kind==="capa"?2*1024*1024:1024*1024;
+    let quality=kind==="capa"?.88:.9;
+    for(let attempt=0;attempt<6;attempt++){
+      const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+      const ctx=canvas.getContext("2d",{alpha:true});if(!ctx)throw new Error("Seu navegador não conseguiu processar a imagem.");
+      ctx.drawImage(image,0,0,w,h);
+      const data=canvas.toDataURL("image/webp",quality),base64=data.split(",")[1]||"",approx=Math.floor(base64.length*3/4);
+      if(approx<=limit)return data;
+      quality=Math.max(.58,quality-.09);w=Math.max(1,Math.round(w*.88));h=Math.max(1,Math.round(h*.88))
+    }
+    throw new Error(kind==="capa"?"Não foi possível reduzir a imagem principal abaixo de 2 MB.":"Não foi possível reduzir o logotipo abaixo de 1 MB.")
+  }
+  async function updateCompanyMedia(kind){
+    const c=state.editingCompany;if(!c)return toast("Abra uma empresa antes de alterar a imagem.","error");
+    const isCover=kind==="capa",input=$(isCover?"editCoverInput":"editLogoInput"),button=$(isCover?"editCoverUpload":"editLogoUpload"),previewId=isCover?"editCoverPreview":"editLogoPreview",file=input?.files?.[0];
+    if(!file)return toast(isCover?"Selecione a nova imagem principal.":"Selecione o novo logotipo.","error");
+    const originalText=button.textContent;button.disabled=true;button.textContent="Processando...";
+    try{
+      const imagemData=await imageFileToOptimizedDataUrl(file,kind);
+      button.textContent="Enviando...";
+      const result=await edgeAdmin("admin-atualizar-midias-empresa",{empresa_id:c.id,tipo:kind,imagem_data_url:imagemData});
+      if(isCover)c.imagem_url=result.url;else c.logo_url=result.url;
+      setEditMediaPreview(previewId,result.url);input.value="";
+      toast(isCover?"Imagem principal atualizada.":"Logotipo atualizado.");
+      await loadAll({sync:false})
+    }catch(error){console.error(error);toast(error.message,"error")}
+    finally{button.disabled=false;button.textContent=originalText}
+  }
+  async function openCompanyEditor(id){const rows=await api(`empresas?select=id,nome,categoria,subcategoria,descricao,whatsapp,cidade,bairro,endereco,instagram,site,email,horario,mapa_url,produtos,servicos,palavras_chave,assinatura_periodo,data_vencimento,premium_master_total,premium_master_usado,premium_destaque_total,premium_destaque_usado,imagem_url,logo_url&${cityFilter()}&id=eq.${encodeURIComponent(id)}&limit=1`);const c=Array.isArray(rows)?rows[0]:null;if(!c)return toast("Empresa não localizada.","error");state.editingCompany=c;const f=$("editCompanyForm");["nome","whatsapp","categoria","subcategoria","cidade","bairro","endereco","instagram","site","email","horario","mapa_url","descricao","produtos","servicos","palavras_chave","assinatura_periodo","premium_master_total","premium_master_usado","premium_destaque_total","premium_destaque_usado"].forEach(k=>{if(f.elements[k])f.elements[k].value=c[k]??""});if(f.elements.data_vencimento)f.elements.data_vencimento.value=dateKey(c.data_vencimento);$("editCoverInput").value="";$("editLogoInput").value="";setEditMediaPreview("editCoverPreview",c.imagem_url);setEditMediaPreview("editLogoPreview",c.logo_url);$("editCompanyTitle").textContent=`Editar — ${c.nome}`;$("editCompanyBackdrop").hidden=false;setTimeout(()=>f.elements.nome.focus(),30)}
+  function closeCompanyEditor(){state.editingCompany=null;if($("editCoverInput"))$("editCoverInput").value="";if($("editLogoInput"))$("editLogoInput").value="";$("editCompanyBackdrop").hidden=true}
   async function saveCompanyEditor(event){event.preventDefault();const c=state.editingCompany;if(!c)return;const f=event.currentTarget,btn=$("editCompanySave");const val=k=>String(f.elements[k]?.value||"").trim();const nome=val("nome");if(nome.length<2)return toast("Informe o nome da empresa.","error");const payload={nome,categoria:val("categoria")||null,subcategoria:val("subcategoria")||null,descricao:val("descricao")||null,whatsapp:digits(val("whatsapp"))||val("whatsapp")||null,cidade:val("cidade")||null,bairro:val("bairro")||null,endereco:val("endereco")||null,instagram:normalizeInstagram(val("instagram"))||null,site:val("site")||null,email:val("email")||null,horario:val("horario")||null,mapa_url:val("mapa_url")||null,produtos:val("produtos")||null,servicos:val("servicos")||null,palavras_chave:val("palavras_chave")||null,assinatura_periodo:val("assinatura_periodo")||"mensal",data_vencimento:val("data_vencimento")||null,premium_master_total:Number(val("premium_master_total")||0),premium_master_usado:Number(val("premium_master_usado")||0),premium_destaque_total:Number(val("premium_destaque_total")||0),premium_destaque_usado:Number(val("premium_destaque_usado")||0),updated_at:new Date().toISOString()};btn.disabled=true;btn.textContent="Salvando...";try{await patch("empresas",c.id,payload);toast("Cadastro da empresa atualizado.");closeCompanyEditor();await loadAll({sync:false})}catch(error){console.error(error);toast(error.message,"error")}finally{btn.disabled=false;btn.textContent="Salvar alterações"}}
   function bannerState(b){const now=Date.now(),start=b.inicio_em?new Date(b.inicio_em).getTime():null,end=b.fim_em?new Date(b.fim_em).getTime():null;if(!b.ativo)return {label:"Desativado",cls:""};if(b.tipo==="padrao")return {label:"Padrão",cls:"current"};if(start&&now<start)return {label:"Agendado",cls:"scheduled"};if((!start||now>=start)&&(!end||now<=end))return {label:"Ativo agora",cls:"current"};return {label:"Encerrado",cls:""}}
   function bannerItem(b){const st=bannerState(b);return `<article class="banner-item"><img src="${safeMedia(b.imagem_url)}" alt="Prévia do banner ${safe(b.nome||"")}"><div><h4>${safe(b.nome||"Banner")}${st.cls?`<span class="banner-${st.cls}">${safe(st.label)}</span>`:` <small>· ${safe(st.label)}</small>`}</h4><p><strong>Tipo:</strong> ${b.tipo==="padrao"?"Padrão (com dizeres)":"Promocional (somente imagem)"}</p>${b.tipo==="temporario"?`<p><strong>Período:</strong> ${safe(bannerDateTime(b.inicio_em))} até ${safe(bannerDateTime(b.fim_em))}</p>`:""}<div class="banner-item-actions"><button class="banner-toggle" type="button" data-action="toggle-banner" data-id="${safe(b.id)}">${b.ativo?"Desativar":"Ativar"}</button><button class="banner-delete" type="button" data-action="delete-banner" data-id="${safe(b.id)}">Excluir</button></div></div></article>`}
@@ -756,7 +858,7 @@ Isso NÃO cria pagamento e NÃO altera o Mercado Pago.`))return;
     }
   });
   $("adminCitySelect").addEventListener("change",async e=>{try{e.target.disabled=true;await switchAdminCity(e.target.value)}catch(error){console.error(error);toast(error.message,"error");e.target.value=ADMIN_CITY_ID}finally{e.target.disabled=false}});
-  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeCompanyEditor();closePanelMenu()}});
+  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);$("editCoverInput").addEventListener("change",()=>previewSelectedMedia("editCoverInput","editCoverPreview"));$("editLogoInput").addEventListener("change",()=>previewSelectedMedia("editLogoInput","editLogoPreview"));$("editCoverUpload").addEventListener("click",()=>updateCompanyMedia("capa"));$("editLogoUpload").addEventListener("click",()=>updateCompanyMedia("logo"));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeCompanyEditor();closePanelMenu()}});
   restoreSession().catch(()=>{});
   </script>
 </body>
