@@ -667,6 +667,16 @@
         .subcategoria-hint{margin-top:6px;color:var(--texto-suave);font-size:.79rem}
         @media(max-width:680px){.wizard-progress{margin-left:20px;margin-right:20px;gap:3px}.wizard-step-indicator{font-size:.62rem}.wizard-step-indicator span{width:30px;height:30px}}
 
+
+        .pagamento-cadastro{margin:0 34px 30px;border:1px solid var(--borda-clara);border-radius:16px;background:#fff;overflow:hidden;box-shadow:var(--sombra)}
+        .pagamento-cadastro[hidden]{display:none!important}.pagamento-cabecalho{padding:24px 24px 18px;background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:#fff}.pagamento-cabecalho h2{margin:6px 0 6px;font-size:1.55rem}.pagamento-cabecalho p{margin:0;color:#d7e0ea;line-height:1.5;font-size:.9rem}.pagamento-kicker{display:inline-block;color:var(--dourado-claro);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+        .pagamento-resumo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:18px 24px;background:#f8fafc;border-bottom:1px solid var(--borda-clara)}.pagamento-resumo div{padding:11px;border:1px solid #e8edf3;border-radius:10px;background:#fff}.pagamento-resumo small{display:block;color:var(--texto-suave);font-size:.72rem;font-weight:800}.pagamento-resumo strong{display:block;margin-top:4px;color:var(--azul-escuro);font-size:.95rem}
+        .pagamento-bloco{padding:21px 24px;border-bottom:1px solid var(--borda-clara)}.pagamento-bloco:last-child{border-bottom:0}.pagamento-bloco h3{margin:0 0 5px;color:var(--azul-escuro);font-size:1.05rem}.pagamento-ajuda,.pagamento-nota{margin:0 0 14px;color:var(--texto-suave);font-size:.8rem;line-height:1.5}.pagamento-nota{text-align:center;margin:10px 0 0}.pagamento-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pagamento-campo{display:flex;flex-direction:column;gap:6px;color:var(--azul-escuro);font-size:.82rem;font-weight:800}.pagamento-campo.full{grid-column:1/-1}.pagamento-campo input,.pagamento-campo select{width:100%;border:1px solid var(--borda);border-radius:9px;padding:12px 13px;background:#fff;color:var(--texto);outline:none}.pagamento-campo input:focus,.pagamento-campo select:focus{border-color:var(--azul);box-shadow:0 0 0 3px rgba(23,42,69,.1)}
+        .pagamento-escolhas{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.pagamento-escolhas label,.pagamento-check{display:flex;align-items:flex-start;gap:9px;padding:11px 12px;border:1px solid var(--borda-clara);border-radius:10px;background:#f8fafc;color:#475569;font-size:.8rem;line-height:1.45}.pagamento-escolhas input,.pagamento-check input{margin-top:2px;flex:0 0 auto;accent-color:var(--azul-escuro)}.pagamento-check{margin-top:10px}.pagamento-check a{color:#0e4d82;font-weight:800}.pagamento-meta{margin-top:8px;color:var(--texto-suave);font-size:.72rem;overflow-wrap:anywhere}
+        .pagamento-acoes{display:grid;gap:9px;margin-top:14px}.pagamento-btn{width:100%;border:0;border-radius:11px;padding:14px 16px;background:linear-gradient(135deg,var(--dourado-claro),var(--dourado));color:var(--azul-escuro);font-weight:900;cursor:pointer}.pagamento-btn.secundario{background:#fff;border:1px solid var(--borda);color:var(--azul-escuro);padding:12px}.pagamento-btn:disabled{opacity:.5;cursor:not-allowed}.pagamento-msg{display:none;margin-top:12px;padding:11px 12px;border-radius:10px;font-size:.82rem;font-weight:700;line-height:1.45}.pagamento-msg.show{display:block}.pagamento-msg.erro{background:var(--vermelho-claro);color:var(--vermelho)}.pagamento-msg.sucesso{background:var(--verde-claro);color:var(--verde)}
+        .pagamento-pix{margin-top:18px;padding:18px;border:1px solid #e2d39c;border-radius:14px;background:#fffdf5;text-align:center}.pagamento-pix[hidden]{display:none!important}.pagamento-pix h3{margin:6px 0 4px;font-size:1.3rem}.pagamento-pix>p{margin:0;color:var(--texto-suave);font-size:.8rem}.pagamento-qr{width:min(270px,80vw);aspect-ratio:1;margin:16px auto 10px;padding:12px;border:1px solid var(--borda-clara);border-radius:14px;background:#fff}.pagamento-qr img{display:block;width:100%;height:100%;object-fit:contain}.pagamento-pix textarea{width:100%;min-height:78px;resize:none;border:1px solid var(--borda);border-radius:10px;padding:10px;background:#fff;color:#334155;font:10px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}.pagamento-status{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:14px;color:#7a5a0a;font-size:.82rem;font-weight:900}.pagamento-status.sucesso{color:var(--verde)}.pagamento-status.falha{color:var(--vermelho)}.pagamento-dot{width:8px;height:8px;border-radius:50%;background:var(--dourado);box-shadow:0 0 0 4px rgba(212,175,55,.15);animation:pagPulse 1.2s infinite}.pagamento-status.sucesso .pagamento-dot{background:var(--verde);animation:none}.pagamento-status.falha .pagamento-dot{background:var(--vermelho);animation:none}.pagamento-expira{margin-top:6px!important;font-size:.72rem!important}.pagamento-retry{display:flex;gap:8px;margin-top:12px}.pagamento-retry button{flex:1;border:1px solid var(--borda);border-radius:9px;padding:10px;background:#fff;color:var(--azul-escuro);font-size:.78rem;font-weight:800;cursor:pointer}@keyframes pagPulse{50%{opacity:.35;transform:scale(.82)}}
+        @media(max-width:680px){.pagamento-cadastro{margin-left:12px;margin-right:12px}.pagamento-cabecalho,.pagamento-bloco{padding-left:16px;padding-right:16px}.pagamento-resumo{grid-template-columns:1fr;padding:14px 16px}.pagamento-grid,.pagamento-escolhas{grid-template-columns:1fr}.pagamento-campo.full{grid-column:auto}.pagamento-btn{min-height:50px}}
+
         footer {
             padding: 26px 20px 34px;
             color: var(--texto-suave);
@@ -744,8 +754,8 @@
 
             <section id="sucessoCadastro" class="sucesso-cadastro" role="status" aria-live="assertive" tabindex="-1" hidden>
                 <div class="sucesso-icone" aria-hidden="true">✓</div>
-                <h2>Cadastro enviado com sucesso!</h2>
-                <p>Recebemos os dados da sua empresa. Agora nossa equipe fará a análise antes da publicação. Caso seja necessário algum ajuste, entraremos em contato pelo WhatsApp informado.</p>
+                <h2>Pagamento confirmado!</h2>
+                <p>Seu cadastro está pago e aguardando revisão da equipe. Ele ainda não aparece no site. A validade do plano começa somente quando o cadastro for aprovado e publicado.</p>
                 <div class="sucesso-acoes">
                     <a href="index.html">Voltar para o Busque Torres</a>
                     <button type="button" id="novoCadastroBtn">Cadastrar outra empresa</button>
@@ -1177,30 +1187,30 @@
                 </section>
 
                 <section class="form-etapa" data-etapa="4">
-<div class="secao-titulo">Escolha como pretende continuar no Busque</div>
+<div class="secao-titulo">Escolha seu plano</div>
 
                 <div class="aviso-gratuidade">
-                    <strong>🎉 Os primeiros 30 dias continuam gratuitos</strong>
-                    O período gratuito começa quando o cadastro é aprovado e publicado. Você escolhe agora a modalidade que pretende usar depois do teste, mas nenhuma cobrança é feita neste cadastro.
+                    <strong>Pagamento antes da publicação</strong>
+                    Depois de concluir o cadastro, o pagamento abre nesta mesma página. A empresa só entra no Busque Torres após o pagamento ser confirmado e a equipe revisar e aprovar o cadastro. A validade do plano começa na publicação.
                 </div>
 
                 <div class="tabela-planos-wrap" aria-label="Modalidades de assinatura">
                     <table class="tabela-planos">
-                        <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui após o período gratuito</th></tr></thead>
+                        <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui</th></tr></thead>
                         <tbody>
                             <tr><td><strong>Mensal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de anúncio no Busque, com perfil e presença nas buscas e categorias.</td></tr>
                             <tr><td><strong>Trimestral</strong></td><td><strong>R$ 24,90</strong></td><td>90 dias de anúncio + 1 semana em Destaque, agendada pela equipe conforme disponibilidade.</td></tr>
-                            <tr><td><strong>Anual</strong></td><td><strong>R$ 89,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER e 2 semanas em Destaque ao longo do ano, agendadas pela equipe conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Anual</strong></td><td><strong>R$ 89,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER e 2 semanas em Destaque, agendadas pela equipe conforme disponibilidade.</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="planos" role="radiogroup" aria-label="Modalidade pretendida de assinatura">
+                <div class="planos" role="radiogroup" aria-label="Modalidade de assinatura">
                     <div class="plano-opcao">
                         <input type="radio" id="assinaturaMensal" name="assinatura_periodo" value="mensal" checked>
                         <label for="assinaturaMensal" class="plano-card">
                             <span class="plano-nome">Mensal — R$ 9,90</span>
-                            <span class="plano-descricao">30 dias após o período gratuito. Sem bônus premium automático.</span>
+                            <span class="plano-descricao">30 dias de anúncio. Sem bônus premium automático.</span>
                         </label>
                     </div>
 
@@ -1208,7 +1218,7 @@
                         <input type="radio" id="assinaturaTrimestral" name="assinatura_periodo" value="trimestral">
                         <label for="assinaturaTrimestral" class="plano-card">
                             <span class="plano-nome">Trimestral — R$ 24,90</span>
-                            <span class="plano-descricao">90 dias + 1 semana de Destaque, com data definida pela equipe conforme agenda disponível.</span>
+                            <span class="plano-descricao">90 dias + 1 semana de Destaque. O crédito é liberado automaticamente após o pagamento.</span>
                         </label>
                     </div>
 
@@ -1216,12 +1226,12 @@
                         <input type="radio" id="assinaturaAnual" name="assinatura_periodo" value="anual">
                         <label for="assinaturaAnual" class="plano-card plano-master">
                             <span class="plano-nome">Anual — R$ 89,90</span>
-                            <span class="plano-descricao">365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano, programadas pela equipe.</span>
+                            <span class="plano-descricao">365 dias + 3 semanas MASTER + 2 semanas Destaque. Os créditos são liberados automaticamente após o pagamento.</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="legal-box"><strong>Antes de enviar</strong>O cadastro aprovado recebe inicialmente 30 dias gratuitos. A modalidade escolhida fica registrada como intenção para continuidade e poderá ser ajustada pela equipe antes da contratação. Destaque e MASTER são benefícios de exposição com agenda controlada pela equipe e sujeitos à disponibilidade. Nenhuma cobrança é feita automaticamente neste formulário.</div>
+                <div class="legal-box"><strong>Como funciona</strong>Ao continuar, seus dados e imagens são enviados e a etapa de pagamento abre logo abaixo. PIX com QR Code e Copia e Cola é a opção principal; cartão também fica disponível. O anúncio permanece fora do site até pagamento confirmado e aprovação da equipe.</div>
                 <label class="termos">
                     <input type="checkbox" id="termos" required>
                     <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
@@ -1232,11 +1242,70 @@
                 </label>
                 <p class="erro-campo" id="erroTermos"></p>
 
-                
-            
-                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="submit" class="submit-btn" id="submitBtn">Cadastrar negócio</button></div>
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="submit" class="submit-btn" id="submitBtn">Continuar para pagamento</button></div>
                 </section>
 </form>
+
+            <section id="pagamentoCadastro" class="pagamento-cadastro" hidden aria-live="polite">
+                <div class="pagamento-cabecalho">
+                    <span class="pagamento-kicker">Cadastro recebido</span>
+                    <h2>Finalize o pagamento</h2>
+                    <p>Seu cadastro foi salvo, mas ainda não está publicado. Confirme o responsável e escolha PIX ou cartão.</p>
+                </div>
+
+                <div class="pagamento-resumo">
+                    <div><small>Empresa</small><strong id="pagamentoEmpresa">—</strong></div>
+                    <div><small>Plano escolhido</small><strong id="pagamentoPlano">—</strong></div>
+                    <div><small>Valor</small><strong id="pagamentoValor">—</strong></div>
+                    <div><small>Benefícios</small><strong id="pagamentoBeneficios">—</strong></div>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>1. Responsável pela contratação</h3>
+                    <p class="pagamento-ajuda">Esses dados ficam vinculados ao aceite e não aparecem no perfil público.</p>
+                    <div class="pagamento-grid">
+                        <label class="pagamento-campo full">Nome completo do responsável<input id="pagResponsavelNome" maxlength="160" autocomplete="name" placeholder="Nome completo"></label>
+                        <label class="pagamento-campo">Documento<select id="pagDocumentoTipo"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option></select></label>
+                        <label class="pagamento-campo">Número do documento<input id="pagDocumentoNumero" inputmode="numeric" maxlength="18" autocomplete="off" placeholder="Digite o documento"></label>
+                    </div>
+                    <div class="pagamento-escolhas">
+                        <label><input type="radio" name="pagCapacidade" value="titular_responsavel"><span>Sou o titular/responsável por esta atividade.</span></label>
+                        <label><input type="radio" name="pagCapacidade" value="autorizado"><span>Estou autorizado a contratar em nome deste negócio.</span></label>
+                    </div>
+                    <label class="pagamento-check"><input id="pagConfirmaWhatsapp" type="checkbox"><span>Confirmo que o WhatsApp <strong id="pagWhatsapp">—</strong> é o contato informado neste cadastro.</span></label>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>2. Contrato e políticas</h3>
+                    <label class="pagamento-check"><input id="pagAceiteContrato" type="checkbox"><span>Li e aceito o <a id="pagContratoLink" href="contrato-adesao-busque-torres-v7.pdf" target="_blank" rel="noopener">Contrato de Adesão do Busque Torres</a>.</span></label>
+                    <label class="pagamento-check"><input id="pagAceitePrivacidade" type="checkbox"><span>Li e aceito a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+                    <label class="pagamento-check"><input id="pagAceiteComercial" type="checkbox"><span>Li e aceito a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a>.</span></label>
+                    <div id="pagContratoMeta" class="pagamento-meta"></div>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>3. Pagamento</h3>
+                    <label class="pagamento-campo full">E-mail para o pagamento<input id="pagEmail" type="email" maxlength="180" autocomplete="email" placeholder="seuemail@exemplo.com"></label>
+                    <div id="pagamentoAcoes" class="pagamento-acoes">
+                        <button id="pagPixBtn" class="pagamento-btn" type="button" disabled>GERAR PIX</button>
+                        <button id="pagCardBtn" class="pagamento-btn secundario" type="button" disabled>Pagar com cartão</button>
+                    </div>
+                    <p class="pagamento-nota">No PIX, o QR Code e o código Copia e Cola aparecem aqui mesmo. No cartão, o ambiente seguro do Mercado Pago abre em outra aba; mantenha esta página aberta para acompanhar a confirmação.</p>
+                    <div id="pagMsg" class="pagamento-msg" role="status"></div>
+
+                    <div id="pagPixPanel" class="pagamento-pix" hidden>
+                        <span class="pagamento-kicker">PIX gerado</span>
+                        <h3 id="pagPixTitulo">Escaneie ou copie o PIX</h3>
+                        <p id="pagPixProduto"></p>
+                        <div class="pagamento-qr"><img id="pagPixQr" alt="QR Code PIX"></div>
+                        <textarea id="pagPixCode" readonly aria-label="Código PIX Copia e Cola"></textarea>
+                        <button id="pagCopyPix" class="pagamento-btn" type="button">COPIAR PIX</button>
+                        <div id="pagPixStatus" class="pagamento-status"><span class="pagamento-dot"></span><span id="pagPixStatusTexto">Aguardando pagamento...</span></div>
+                        <p id="pagPixExpira" class="pagamento-expira"></p>
+                        <div id="pagRetry" class="pagamento-retry" hidden><button id="pagRetryPix" type="button">Gerar novo PIX</button><button id="pagRetryCard" type="button">Pagar com cartão</button></div>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 
@@ -1261,6 +1330,17 @@
         const sucessoCadastro = document.getElementById("sucessoCadastro");
         const novoCadastroBtn = document.getElementById("novoCadastroBtn");
         const submitBtn = document.getElementById("submitBtn");
+        const pagamentoCadastro = document.getElementById("pagamentoCadastro");
+        const pag = id => document.getElementById(id);
+        let pagamentoData = null;
+        let pagamentoCodigo = "";
+        let pagamentoProdutoCodigo = "";
+        let pagamentoReferencia = "";
+        let pagamentoTentativa = crypto.randomUUID();
+        let pagamentoTrabalhando = false;
+        let pagamentoTravado = false;
+        let pagamentoPoll = null;
+        let pagamentoCountdown = null;
 
         const campos = {
             nome: document.getElementById("nome"),
@@ -1910,6 +1990,302 @@
         campos.termos.addEventListener("change", () => limparErro("termos"));
         campos.responsabilidadeConteudo.addEventListener("change", () => limparErro("termos"));
 
+        function dinheiro(v) {
+            return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v || 0));
+        }
+
+        function produtoAssinatura() {
+            if (!pagamentoData) return null;
+            return (Array.isArray(pagamentoData.produtos) ? pagamentoData.produtos : []).find(p => p.codigo === pagamentoProdutoCodigo) || null;
+        }
+
+        function textoBeneficios(p) {
+            if (!p) return "—";
+            const partes = [`${Number(p.duracao_dias || 30)} dias`];
+            if (Number(p.bonus_master || 0) > 0) partes.push(`${Number(p.bonus_master)} MASTER`);
+            if (Number(p.bonus_destaque || 0) > 0) partes.push(`${Number(p.bonus_destaque)} Destaque${Number(p.bonus_destaque) > 1 ? "s" : ""}`);
+            return partes.join(" + ");
+        }
+
+        function capacidadePagamento() {
+            return document.querySelector('input[name="pagCapacidade"]:checked')?.value || "";
+        }
+
+        function emailPagamentoValido() {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(pag("pagEmail").value || "").trim());
+        }
+
+        function pagamentoPronto() {
+            const doc = apenasNumeros(pag("pagDocumentoNumero").value);
+            return Boolean(
+                produtoAssinatura() &&
+                pag("pagResponsavelNome").value.trim().length >= 3 &&
+                doc.length >= 11 &&
+                capacidadePagamento() &&
+                pag("pagConfirmaWhatsapp").checked &&
+                pag("pagAceiteContrato").checked &&
+                pag("pagAceitePrivacidade").checked &&
+                pag("pagAceiteComercial").checked &&
+                emailPagamentoValido()
+            );
+        }
+
+        function atualizarBotoesPagamento() {
+            const p = produtoAssinatura();
+            const habilitado = pagamentoPronto() && !pagamentoTrabalhando && !pagamentoTravado;
+            pag("pagPixBtn").disabled = !habilitado;
+            pag("pagCardBtn").disabled = !habilitado;
+            pag("pagPixBtn").textContent = p ? `GERAR PIX — ${dinheiro(p.valor)}` : "GERAR PIX";
+            pag("pagCardBtn").textContent = p ? `Pagar com cartão — ${dinheiro(p.valor)}` : "Pagar com cartão";
+        }
+
+        function mensagemPagamento(texto, tipo = "erro") {
+            const el = pag("pagMsg");
+            el.textContent = texto;
+            el.className = `pagamento-msg show ${tipo}`;
+        }
+
+        function limparMensagemPagamento() {
+            const el = pag("pagMsg");
+            el.textContent = "";
+            el.className = "pagamento-msg";
+        }
+
+        function novaTentativaPagamento() {
+            pagamentoTentativa = crypto.randomUUID();
+            pagamentoReferencia = "";
+        }
+
+        function pararTimersPagamento() {
+            if (pagamentoPoll) { clearInterval(pagamentoPoll); pagamentoPoll = null; }
+            if (pagamentoCountdown) { clearInterval(pagamentoCountdown); pagamentoCountdown = null; }
+        }
+
+        function qrPagamentoSrc(v) {
+            const s = String(v || "");
+            return s.startsWith("data:") ? s : `data:image/png;base64,${s}`;
+        }
+
+        function estadoPix(texto, tipo = "pendente") {
+            pag("pagPixStatusTexto").textContent = texto;
+            pag("pagPixStatus").className = `pagamento-status${tipo === "sucesso" ? " sucesso" : tipo === "falha" ? " falha" : ""}`;
+        }
+
+        function iniciarContagemPix(expiraEm) {
+            if (pagamentoCountdown) clearInterval(pagamentoCountdown);
+            const tick = () => {
+                const fim = new Date(expiraEm || 0).getTime();
+                const falta = fim - Date.now();
+                if (!Number.isFinite(fim) || fim <= 0) { pag("pagPixExpira").textContent = ""; return; }
+                if (falta <= 0) {
+                    pag("pagPixExpira").textContent = "Este PIX chegou ao prazo de vencimento.";
+                    clearInterval(pagamentoCountdown); pagamentoCountdown = null; return;
+                }
+                const min = Math.floor(falta / 60000), seg = Math.floor((falta % 60000) / 1000);
+                pag("pagPixExpira").textContent = `PIX válido por aproximadamente ${String(min).padStart(2, "0")}:${String(seg).padStart(2, "0")}.`;
+            };
+            tick();
+            pagamentoCountdown = setInterval(tick, 1000);
+        }
+
+        function mostrarPixPagamento(r) {
+            pagamentoTravado = true;
+            pag("pagamentoAcoes").hidden = true;
+            pag("pagPixPanel").hidden = false;
+            pag("pagPixQr").src = qrPagamentoSrc(r.qr_code_base64);
+            pag("pagPixCode").value = r.qr_code || "";
+            pag("pagPixProduto").textContent = `${r.produto || produtoAssinatura()?.nome || "Plano"} · ${dinheiro(r.valor)}`;
+            pag("pagPixTitulo").textContent = "Escaneie ou copie o PIX";
+            estadoPix("Aguardando pagamento...");
+            pag("pagRetry").hidden = true;
+            pagamentoReferencia = String(r.referencia || "");
+            sessionStorage.setItem("busque_cadastro_pagamento_ref", pagamentoReferencia);
+            iniciarContagemPix(r.expires_at);
+            iniciarPollingPagamento();
+        }
+
+        async function conferirPagamento() {
+            if (!pagamentoReferencia) return;
+            try {
+                const r = await BusqueAPI.invokeFunction("consultar-pagamento", { referencia: pagamentoReferencia });
+                const status = String(r?.status || "");
+                if (status === "aprovado") {
+                    pararTimersPagamento();
+                    estadoPix("Pagamento confirmado!", "sucesso");
+                    pag("pagPixTitulo").textContent = "✅ PAGAMENTO CONFIRMADO";
+                    pag("pagPixExpira").textContent = "";
+                    pag("pagRetry").hidden = true;
+                    mensagemPagamento("Pagamento confirmado. Seu cadastro está aguardando revisão e ainda não aparece no site.", "sucesso");
+                    pagamentoCadastro.hidden = true;
+                    sucessoCadastro.hidden = false;
+                    sessionStorage.removeItem("busque_cadastro_pagamento_ref");
+                    sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
+                    window.scrollTo({ top: 0, behavior: "auto" });
+                    setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
+                    return;
+                }
+                if (["expirado", "rejeitado", "cancelado", "erro", "reembolsado"].includes(status)) {
+                    pararTimersPagamento();
+                    estadoPix(status === "expirado" ? "PIX expirado. Gere um novo pagamento." : "Pagamento não concluído.", "falha");
+                    pag("pagRetry").hidden = false;
+                }
+            } catch (erro) {
+                console.warn("Consulta do pagamento:", erro?.message || erro);
+            }
+        }
+
+        function iniciarPollingPagamento() {
+            if (pagamentoPoll) clearInterval(pagamentoPoll);
+            conferirPagamento();
+            pagamentoPoll = setInterval(conferirPagamento, 4000);
+        }
+
+        async function copiarPixPagamento() {
+            const valor = pag("pagPixCode").value;
+            if (!valor) return;
+            try {
+                await navigator.clipboard.writeText(valor);
+            } catch {
+                pag("pagPixCode").focus(); pag("pagPixCode").select(); document.execCommand("copy");
+            }
+            pag("pagCopyPix").textContent = "PIX COPIADO ✓";
+            setTimeout(() => pag("pagCopyPix").textContent = "COPIAR PIX", 1800);
+        }
+
+        function liberarNovaTentativa() {
+            pararTimersPagamento();
+            pagamentoTravado = false;
+            pagamentoTrabalhando = false;
+            pag("pagPixPanel").hidden = true;
+            pag("pagamentoAcoes").hidden = false;
+            novaTentativaPagamento();
+            limparMensagemPagamento();
+            atualizarBotoesPagamento();
+        }
+
+        function payloadPagamento() {
+            const p = produtoAssinatura();
+            return {
+                codigo: pagamentoCodigo,
+                produto_codigo: p.codigo,
+                quantidade: 1,
+                email_pagador: pag("pagEmail").value.trim().toLowerCase(),
+                fluxo_juridico_v7: true,
+                responsavel_nome: pag("pagResponsavelNome").value.trim(),
+                documento_tipo: pag("pagDocumentoTipo").value,
+                documento_numero: pag("pagDocumentoNumero").value,
+                capacidade: capacidadePagamento(),
+                confirmou_whatsapp_cadastrado: true,
+                aceite_contrato: true,
+                aceite_privacidade: true,
+                aceite_politica_comercial: true,
+                contrato_codigo: pagamentoData.contrato.codigo,
+                contrato_sha256: pagamentoData.contrato.sha256,
+                idempotency_token: pagamentoTentativa
+            };
+        }
+
+        async function iniciarPagamento(metodo, janelaCartao = null) {
+            if (!pagamentoPronto() || !pagamentoData || pagamentoTrabalhando || pagamentoTravado) {
+                if (janelaCartao && !janelaCartao.closed) janelaCartao.close();
+                return;
+            }
+            limparMensagemPagamento();
+            pagamentoTrabalhando = true;
+            atualizarBotoesPagamento();
+            const pix = metodo === "pix";
+            (pix ? pag("pagPixBtn") : pag("pagCardBtn")).textContent = pix ? "GERANDO PIX..." : "ABRINDO PAGAMENTO...";
+            try {
+                const r = await BusqueAPI.invokeFunction("criar-pagamento", { ...payloadPagamento(), forma_pagamento: pix ? "pix" : "checkout_pro" });
+                if (r?.codigo === "TENTATIVA_ENCERRADA") { novaTentativaPagamento(); throw new Error(r.erro || "A tentativa anterior encerrou. Tente novamente."); }
+                if (r?.codigo === "TENTATIVA_EM_PROCESSAMENTO") throw new Error(r.erro || "O pagamento ainda está sendo preparado. Aguarde alguns segundos.");
+                if (r?.erro) throw new Error(r.erro);
+                pagamentoReferencia = String(r?.referencia || "");
+                if (pagamentoReferencia) {
+                    sessionStorage.setItem("busque_cadastro_pagamento_ref", pagamentoReferencia);
+                    iniciarPollingPagamento();
+                }
+                if (pix) {
+                    if (!r?.qr_code || !r?.referencia) throw new Error("O Mercado Pago não devolveu o código PIX.");
+                    pagamentoTrabalhando = false;
+                    mostrarPixPagamento(r);
+                    return;
+                }
+                if (r?.checkout_url) {
+                    pagamentoTravado = true;
+                    pagamentoTrabalhando = false;
+                    mensagemPagamento("Pagamento com cartão aberto em outra aba. Mantenha esta página aberta; a confirmação aparecerá aqui automaticamente.", "sucesso");
+                    atualizarBotoesPagamento();
+                    if (janelaCartao && !janelaCartao.closed) janelaCartao.location.href = r.checkout_url;
+                    else window.open(r.checkout_url, "_blank", "noopener");
+                    return;
+                }
+                throw new Error("O Mercado Pago não devolveu o pagamento.");
+            } catch (erro) {
+                if (janelaCartao && !janelaCartao.closed) janelaCartao.close();
+                console.error("Pagamento do cadastro:", erro);
+                pagamentoTrabalhando = false;
+                mensagemPagamento(erro?.message || "Não foi possível iniciar o pagamento.");
+                atualizarBotoesPagamento();
+            }
+        }
+
+        async function abrirPagamentoCadastro(c, resultadoCadastro) {
+            pagamentoCodigo = String(resultadoCadastro?.codigo_pagamento || "");
+            if (!pagamentoCodigo) throw new Error("O cadastro foi recebido, mas o código de pagamento não foi retornado.");
+            let d = await BusqueAPI.rpc("consultar_checkout_renovacao", { p_codigo: pagamentoCodigo });
+            if (Array.isArray(d)) d = d[0];
+            if (!d?.contrato) throw new Error("O contrato vigente não está disponível para o pagamento.");
+            pagamentoData = d;
+            pagamentoProdutoCodigo = `assinatura_${c.assinaturaPeriodo}`;
+            const p = produtoAssinatura();
+            if (!p) throw new Error("O plano escolhido não está disponível para pagamento.");
+            pag("pagamentoEmpresa").textContent = c.nome;
+            pag("pagamentoPlano").textContent = p.nome;
+            pag("pagamentoValor").textContent = dinheiro(p.valor);
+            pag("pagamentoBeneficios").textContent = textoBeneficios(p);
+            pag("pagWhatsapp").textContent = campos.whatsapp.value;
+            pag("pagEmail").value = c.email || "";
+            pag("pagContratoLink").href = d.contrato.arquivo_url || "contrato-adesao-busque-torres-v7.pdf";
+            pag("pagContratoMeta").textContent = `Contrato ${d.contrato.codigo} · SHA-256 ${String(d.contrato.sha256 || "").slice(0,16)}…`;
+            novaTentativaPagamento();
+            sessionStorage.setItem("busque_cadastro_pagamento_codigo", pagamentoCodigo);
+            form.hidden = true;
+            pagamentoCadastro.hidden = false;
+            window.scrollTo({ top: 0, behavior: "auto" });
+            atualizarBotoesPagamento();
+            setTimeout(() => pag("pagResponsavelNome").focus({ preventScroll: true }), 0);
+        }
+
+        ["pagResponsavelNome","pagDocumentoNumero","pagDocumentoTipo","pagConfirmaWhatsapp","pagAceiteContrato","pagAceitePrivacidade","pagAceiteComercial","pagEmail"].forEach(id => {
+            pag(id).addEventListener("input", atualizarBotoesPagamento);
+            pag(id).addEventListener("change", atualizarBotoesPagamento);
+        });
+        document.querySelectorAll('input[name="pagCapacidade"]').forEach(x => x.addEventListener("change", atualizarBotoesPagamento));
+        pag("pagDocumentoTipo").addEventListener("change", () => { pag("pagDocumentoNumero").value = ""; atualizarBotoesPagamento(); });
+        pag("pagDocumentoNumero").addEventListener("input", evento => {
+            let n = evento.target.value.replace(/\D/g, "");
+            if (pag("pagDocumentoTipo").value === "cpf") {
+                n = n.slice(0,11).replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+            } else {
+                n = n.slice(0,14).replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d{1,2})$/,"$1-$2");
+            }
+            evento.target.value = n;
+            atualizarBotoesPagamento();
+        });
+        pag("pagPixBtn").addEventListener("click", () => iniciarPagamento("pix"));
+        pag("pagCardBtn").addEventListener("click", () => {
+            const janela = window.open("about:blank", "_blank");
+            iniciarPagamento("checkout_pro", janela);
+        });
+        pag("pagCopyPix").addEventListener("click", copiarPixPagamento);
+        pag("pagRetryPix").addEventListener("click", () => { liberarNovaTentativa(); setTimeout(() => iniciarPagamento("pix"), 0); });
+        pag("pagRetryCard").addEventListener("click", () => {
+            liberarNovaTentativa();
+            const janela = window.open("about:blank", "_blank");
+            setTimeout(() => iniciarPagamento("checkout_pro", janela), 0);
+        });
+
         form.addEventListener("submit", async evento => {
             evento.preventDefault();
             mensagemFormulario.className = "mensagem";
@@ -1919,10 +2295,10 @@
                 return;
             }
             submitBtn.disabled = true;
-            submitBtn.textContent = "Enviando...";
+            submitBtn.textContent = "Preparando pagamento...";
             try {
                 const c = montarCadastro();
-                await BusqueAPI.invokeFunction("enviar-empresa-midias-cdn", {
+                const resultado = await BusqueAPI.invokeFunction("enviar-empresa-midias-cdn", {
                     p_cidade_id: "torres",
                     p_nome: c.nome,
                     p_categoria: c.categoria,
@@ -1942,39 +2318,28 @@
                     p_palavras_chave: c.palavrasChave || null,
                     p_imagem_url: c.imagem || null,
                     p_logo_url: c.logo || null,
-                    p_plano: c.planoSolicitado
+                    p_plano: c.planoSolicitado,
+                    p_assinatura_periodo: c.assinaturaPeriodo,
+                    p_pagamento_imediato: true
                 });
-                await BusqueAPI.rpc("registrar_preferencia_assinatura", {
-                    p_whatsapp: c.whatsappNumero,
-                    p_cidade: c.cidade,
-                    p_periodo: c.assinaturaPeriodo
-                });
-                form.reset();
-                removerFotoCapa();
-                removerLogo();
-                carregarSubcategorias();
-                mostrarEtapa(0);
-
-                // Confirmação persistente e compatível com Safari/macOS/iOS.
-                // Em vez de depender apenas de um aviso com scroll suave, esconde o formulário
-                // e exibe um painel de sucesso que permanece visível até a ação do usuário.
-                form.hidden = true;
-                mensagemFormulario.className = "mensagem";
-                mensagemFormulario.innerHTML = "";
-                sucessoCadastro.hidden = false;
-                window.scrollTo({ top: 0, behavior: "auto" });
-                setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
+                if (resultado?.erro) throw new Error(resultado.erro);
+                await abrirPagamentoCadastro(c, resultado);
             } catch (erro) {
                 console.error("Erro ao enviar cadastro:", erro);
-                mostrarMensagem("erro", "Não foi possível enviar", "Verifique sua internet e tente novamente. Nenhum cadastro duplicado foi criado nesta tentativa.");
+                mostrarMensagem("erro", "Não foi possível continuar", erro?.message || "Verifique sua internet e tente novamente.");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Cadastrar negócio";
+                submitBtn.textContent = "Continuar para pagamento";
             }
         });
 
         novoCadastroBtn.addEventListener("click", () => {
+            pararTimersPagamento();
+            sessionStorage.removeItem("busque_cadastro_pagamento_ref");
+            sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
+            pagamentoData = null; pagamentoCodigo = ""; pagamentoReferencia = ""; pagamentoTravado = false; pagamentoTrabalhando = false;
             sucessoCadastro.hidden = true;
+            pagamentoCadastro.hidden = true;
             form.hidden = false;
             form.reset();
             removerFotoCapa();
