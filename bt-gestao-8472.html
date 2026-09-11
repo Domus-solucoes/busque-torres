@@ -332,6 +332,7 @@
     });
   }
   function toast(message,type="success"){const el=$("toast");el.textContent=message;el.className=`toast ${type}`;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,4200)}
+  function readableError(value){if(value instanceof Error&&value.message)return value.message;if(typeof value==="string"&&value.trim())return value.trim();if(value&&typeof value==="object"){const parts=[value.message,value.details,value.hint,value.code,value.erro].filter(v=>v!==null&&v!==undefined&&typeof v!=="object"&&String(v).trim()).map(v=>String(v).trim());if(parts.length)return [...new Set(parts)].join(" | ");try{const raw=JSON.stringify(value);if(raw&&raw!=="{}")return raw}catch{}}return "Não foi possível concluir a operação."}
   function loginMessage(message,type){const el=$("loginMessage");el.textContent=message;el.className=`form-message ${type}`;el.hidden=false}
   async function authRequest(path,options={}){const r=await fetch(`${BUSQUE_SUPABASE_URL}/auth/v1/${path}`,{...options,headers:{apikey:BUSQUE_SUPABASE_KEY,"Content-Type":"application/json",...(options.headers||{})}});const data=await r.json().catch(()=>({}));if(!r.ok)throw new Error(data.msg||data.message||data.error_description||"Não foi possível autenticar.");return data}
   async function api(path,options={},retry=true){if(!state.session?.access_token)throw new Error("Sessão administrativa encerrada.");const r=await fetch(`${BUSQUE_SUPABASE_URL}/rest/v1/${path}`,{...options,headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${state.session.access_token}`,"Content-Type":"application/json",Prefer:"return=representation",...(options.headers||{})}});const raw=await r.text();let data=null;if(raw){try{data=JSON.parse(raw)}catch{data=raw}}if(!r.ok&&r.status===401&&retry&&state.session?.refresh_token){await refreshSession();return api(path,options,false)}if(!r.ok)throw new Error(data?.message||data?.hint||`Erro ${r.status}.`);return data}
@@ -366,7 +367,7 @@
       const raw=await r.text();let data={};
       if(raw){try{data=JSON.parse(raw)}catch{data={erro:raw}}}
       if(r.status===401&&retry&&state.session?.refresh_token){await refreshSession();return edgeAdmin(name,body,false,timeoutMs)}
-      if(!r.ok)throw new Error(data?.erro||data?.message||`Erro ${r.status}.`);
+      if(!r.ok)throw new Error(readableError(data?.erro||data?.message||data)||`Erro ${r.status}.`);
       return data
     }catch(error){
       if(error?.name==="AbortError")throw new Error(`A consulta demorou mais de ${Math.ceil(timeoutMs/1000)} segundos e foi encerrada. Nenhum pagamento foi aplicado.`);
@@ -878,7 +879,7 @@ Digite o número (1 a ${candidatos.length}) do pagamento desta empresa:` ,"1");
         toast("Pagamento encontrado. Confirmando e aplicando o plano...");
         result=await edgeAdmin("admin-registrar-pagamento-recebido",{empresa_id:company.id,produto_codigo:product,mercado_pago_identificador:finalIdentifier},true,20000);
       }
-      if(!result?.ok)throw new Error(result?.mensagem||result?.erro||"O pagamento não foi aplicado.");
+      if(!result?.ok)throw new Error(readableError(result?.mensagem||result?.erro||result)||"O pagamento não foi aplicado.");
       await auditActivity("pagamento_recebido_confirmado","pagamentos",result?.pagamento_id||null,`Registrou pagamento já recebido de ${company.nome}`,{empresa_id:company.id,empresa:company.nome,plano:planName,produto_codigo:product,mercado_pago_identificador:paymentId,mercado_pago_payment_id:result?.mercado_pago_payment_id||null,valor:result?.valor||null,vencimento_anterior:result?.vencimento_anterior||company.data_vencimento,vencimento_novo:result?.vencimento_novo||null,bonus_master:result?.bonus_master||0,bonus_destaque:result?.bonus_destaque||0});
       state.loaded.finance=false;state.loaded.companies=false;
       await loadAll({sync:false});
@@ -894,7 +895,7 @@ ID Mercado Pago: ${result?.mercado_pago_payment_id||"—"}`;
       window.alert(msg);
       return result
     }catch(error){
-      const motivo=String(error?.message||"Não foi possível conferir o pagamento.");
+      const motivo=readableError(error);
       toast(motivo,"error");
       window.alert(`PAGAMENTO NÃO APLICADO
 
