@@ -352,18 +352,26 @@
     }
   }
   async function rpc(name,params={}){return api(`rpc/${encodeURIComponent(name)}`,{method:"POST",body:JSON.stringify(params)})}
-  async function edgeAdmin(name,body,retry=true){
+  async function edgeAdmin(name,body,retry=true,timeoutMs=0){
     if(!state.session?.access_token)throw new Error("Sessão administrativa encerrada.");
-    const r=await fetch(`${BUSQUE_SUPABASE_URL}/functions/v1/${encodeURIComponent(name)}`,{
-      method:"POST",
-      headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${state.session.access_token}`,"Content-Type":"application/json"},
-      body:JSON.stringify(body||{})
-    });
-    const raw=await r.text();let data={};
-    if(raw){try{data=JSON.parse(raw)}catch{data={erro:raw}}}
-    if(r.status===401&&retry&&state.session?.refresh_token){await refreshSession();return edgeAdmin(name,body,false)}
-    if(!r.ok)throw new Error(data?.erro||data?.message||`Erro ${r.status}.`);
-    return data
+    const controller=timeoutMs>0?new AbortController():null;
+    const timer=controller?setTimeout(()=>controller.abort(),timeoutMs):null;
+    try{
+      const r=await fetch(`${BUSQUE_SUPABASE_URL}/functions/v1/${encodeURIComponent(name)}`,{
+        method:"POST",
+        headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${state.session.access_token}`,"Content-Type":"application/json"},
+        body:JSON.stringify(body||{}),
+        ...(controller?{signal:controller.signal}:{})
+      });
+      const raw=await r.text();let data={};
+      if(raw){try{data=JSON.parse(raw)}catch{data={erro:raw}}}
+      if(r.status===401&&retry&&state.session?.refresh_token){await refreshSession();return edgeAdmin(name,body,false,timeoutMs)}
+      if(!r.ok)throw new Error(data?.erro||data?.message||`Erro ${r.status}.`);
+      return data
+    }catch(error){
+      if(error?.name==="AbortError")throw new Error(`A consulta demorou mais de ${Math.ceil(timeoutMs/1000)} segundos e foi encerrada. Nenhum pagamento foi aplicado.`);
+      throw error
+    }finally{if(timer)clearTimeout(timer)}
   }
   function sessionExpiryMs(session){
     const explicit=Number(session?.expires_at||0);
@@ -812,7 +820,7 @@ Escolha 1, 2 ou 3:`,String(company.assinatura_periodo||"mensal").toLowerCase()==
     const mpId=window.prompt(`Cole o ID ou NÚMERO DA TRANSAÇÃO mostrado pelo Mercado Pago.
 
 Pode ser somente números ou um código alfanumérico, como E1650...
-O sistema vai localizar o pagamento e conferir automaticamente status, moeda e valor antes de liberar o plano ${subscription(planName)}.`,"");
+A conferência tem limite de tempo e SEMPRE terminará com sucesso ou uma mensagem de erro.` ,"");
     if(mpId===null)return;
     const paymentId=String(mpId).trim();
     if(!/^[A-Za-z0-9_-]{5,100}$/.test(paymentId))return toast("Identificador inválido. Copie exatamente o ID ou número da transação exibido pelo Mercado Pago.","error");
@@ -822,16 +830,40 @@ Empresa: ${company.nome}
 Plano: ${subscription(planName)}
 Valor esperado: ${valores[planName]}
 Benefícios: ${renewalPlanBenefits(planName)}
-ID Mercado Pago: ${paymentId}
+Identificador: ${paymentId}
 
 O Busque vai consultar o Mercado Pago. Somente um pagamento realmente APROVADO e com o valor exato será processado.
 
 Esta ação NÃO é cortesia.`))return;
-    toast("Conferindo pagamento diretamente no Mercado Pago...");
-    const result=await edgeAdmin("admin-registrar-pagamento-recebido",{empresa_id:company.id,produto_codigo:product,mercado_pago_identificador:paymentId});
-    await auditActivity("pagamento_recebido_confirmado","pagamentos",result?.pagamento_id||null,`Registrou pagamento já recebido de ${company.nome}`,{empresa_id:company.id,empresa:company.nome,plano:planName,produto_codigo:product,mercado_pago_identificador:paymentId,mercado_pago_payment_id:result?.mercado_pago_payment_id||null,valor:result?.valor||null,vencimento_anterior:result?.vencimento_anterior||company.data_vencimento,vencimento_novo:result?.vencimento_novo||null,bonus_master:result?.bonus_master||0,bonus_destaque:result?.bonus_destaque||0});
-    toast(`${company.nome}: pagamento confirmado. ${subscription(planName)} aplicado até ${date(result?.vencimento_novo)}.`);
-    await loadAll({sync:false});
+    toast("Conferindo no Mercado Pago. Aguarde no máximo 20 segundos...");
+    try{
+      const result=await edgeAdmin("admin-registrar-pagamento-recebido",{empresa_id:company.id,produto_codigo:product,mercado_pago_identificador:paymentId},true,20000);
+      await auditActivity("pagamento_recebido_confirmado","pagamentos",result?.pagamento_id||null,`Registrou pagamento já recebido de ${company.nome}`,{empresa_id:company.id,empresa:company.nome,plano:planName,produto_codigo:product,mercado_pago_identificador:paymentId,mercado_pago_payment_id:result?.mercado_pago_payment_id||null,valor:result?.valor||null,vencimento_anterior:result?.vencimento_anterior||company.data_vencimento,vencimento_novo:result?.vencimento_novo||null,bonus_master:result?.bonus_master||0,bonus_destaque:result?.bonus_destaque||0});
+      state.loaded.finance=false;state.loaded.companies=false;
+      await loadAll({sync:false});
+      const msg=`PAGAMENTO CONFIRMADO!
+
+Empresa: ${company.nome}
+Plano: ${subscription(planName)}
+Novo vencimento: ${date(result?.vencimento_novo)}
+MASTER: +${Number(result?.bonus_master||0)}
+Destaque: +${Number(result?.bonus_destaque||0)}
+ID Mercado Pago: ${result?.mercado_pago_payment_id||"—"}`;
+      toast(`${company.nome}: pagamento confirmado e plano aplicado.`);
+      window.alert(msg);
+      return result
+    }catch(error){
+      const motivo=String(error?.message||"Não foi possível conferir o pagamento.");
+      toast(motivo,"error");
+      window.alert(`PAGAMENTO NÃO APLICADO
+
+Empresa: ${company.nome}
+
+${motivo}
+
+Nenhum benefício foi liberado por esta tentativa.`);
+      return null
+    }
   }
   function stopRenewalPixPolling(){if(renewalPixState.pollTimer){clearInterval(renewalPixState.pollTimer);renewalPixState.pollTimer=null}}
   function setRenewalPixStatus(text,paid=false){const el=$("renewalPixStatus");if(!el)return;el.textContent=text;el.classList.toggle("paid",!!paid)}
