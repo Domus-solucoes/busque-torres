@@ -657,6 +657,8 @@
         .wizard-step-indicator span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#e2e8f0;color:#475569}
         .wizard-step-indicator.ativo{color:var(--azul-escuro)}
         .wizard-step-indicator.ativo span,.wizard-step-indicator.concluido span{background:var(--azul-escuro);color:var(--dourado)}
+        .wizard-step-indicator.erro{color:var(--vermelho)}
+        .wizard-step-indicator.erro span{background:var(--vermelho);color:#fff}
         .form-etapa{display:none}
         .form-etapa.ativa{display:block;animation:etapaEntrada .22s ease}
         @keyframes etapaEntrada{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -1224,7 +1226,7 @@
 
                     <div class="plano-opcao">
                         <input type="radio" id="assinaturaAnual" name="assinatura_periodo" value="anual">
-                        <label for="assinaturaAnual" class="plano-card plano-master">
+                        <label for="assinaturaAnual" class="plano-card">
                             <span class="plano-nome">Anual — R$ 89,90</span>
                             <span class="plano-descricao">365 dias + 3 semanas MASTER + 2 semanas Destaque. Os créditos são liberados automaticamente após o pagamento.</span>
                         </label>
@@ -1494,6 +1496,7 @@
 
             elementosImagem.erroFotoCapa.textContent = "";
             elementosImagem.erroFotoCapa.classList.remove("visivel");
+            atualizarIndicadorErro(3);
         }
 
         function removerFotoCapa() {
@@ -1814,6 +1817,10 @@
                 valido = false;
             }
 
+            indicadoresEtapa.forEach((indicador, indice) => {
+                indicador.classList.toggle("erro", !valido && etapaPossuiErro(indice));
+            });
+
             if (!valido && primeiroCampoInvalido) {
                 primeiroCampoInvalido.focus();
             }
@@ -1918,6 +1925,44 @@
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
 
+        function etapaPossuiErro(indice) {
+            const etapa = etapasFormulario[indice];
+            if (!etapa) return false;
+
+            const obrigatorios = [...etapa.querySelectorAll("[required]")];
+            for (const campo of obrigatorios) {
+                if (campo.type === "checkbox") {
+                    if (!campo.checked) return true;
+                } else if (!campo.value || !campo.checkValidity()) {
+                    return true;
+                }
+            }
+
+            if (indice === 0) {
+                const nome = limparTexto(campos.nome.value);
+                const cidade = limparTexto(campos.cidade.value);
+                const descricaoTexto = limparTexto(campos.descricao.value);
+                return nome.length < 3 || !campos.categoria.value || !campos.subcategoria.value ||
+                    cidade.length < 2 || descricaoTexto.length < 15 || descricaoTexto.length > 120;
+            }
+
+            if (indice === 1) {
+                const numero = apenasNumeros(campos.whatsapp.value);
+                return numero.length < 10 || numero.length > 11;
+            }
+
+            if (indice === 3) return !fotoCapaBase64;
+
+            return false;
+        }
+
+        function atualizarIndicadorErro(indice, forcar = false) {
+            const indicador = indicadoresEtapa[indice];
+            if (!indicador) return;
+            if (!forcar && !indicador.classList.contains("erro")) return;
+            indicador.classList.toggle("erro", etapaPossuiErro(indice));
+        }
+
         function validarEtapaAtual() {
             const etapa = etapasFormulario[etapaAtual];
             const obrigatorios = [...etapa.querySelectorAll("[required]")];
@@ -1969,12 +2014,24 @@
 
         document.addEventListener("click", evento => {
             if (evento.target.closest(".wizard-next")) {
-                if (validarEtapaAtual()) mostrarEtapa(etapaAtual + 1);
+                const etapaValida = validarEtapaAtual();
+                indicadoresEtapa[etapaAtual]?.classList.toggle("erro", !etapaValida);
+                if (etapaValida) mostrarEtapa(etapaAtual + 1);
             }
             if (evento.target.closest(".wizard-prev")) {
                 mostrarEtapa(etapaAtual - 1);
             }
         });
+
+        function atualizarIndicadorDoCampo(campo) {
+            const etapa = campo.closest?.(".form-etapa");
+            if (!etapa) return;
+            const indice = Number(etapa.dataset.etapa);
+            if (Number.isInteger(indice)) atualizarIndicadorErro(indice);
+        }
+
+        form.addEventListener("input", evento => atualizarIndicadorDoCampo(evento.target));
+        form.addEventListener("change", evento => atualizarIndicadorDoCampo(evento.target));
 
         descricao.addEventListener("input", atualizarContadorDescricao);
 
