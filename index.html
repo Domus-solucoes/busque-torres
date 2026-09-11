@@ -257,6 +257,10 @@
     .plans-head{padding:27px 28px;background:linear-gradient(135deg,#09203b,#123f68);color:#fff}.plans-head h2{margin:0 50px 7px 0;font-size:1.8rem}.plans-head p{margin:0;color:#d5e1ee;line-height:1.5}.plans-close{position:absolute;right:18px;top:18px;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:13px;background:rgba(255,255,255,.12);color:#fff;font-size:1.35rem;cursor:pointer}
     .plans-body{padding:24px 28px 29px}.launch-note{padding:14px 16px;border-radius:14px;background:#fff8e6;border:1px solid #f2dfab;color:#72530b;font-weight:850;line-height:1.5}.plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}.plan-public{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.plan-public.master{border-color:#ead48b;background:#fffdf6}.plan-public h3{margin:0 0 5px;color:var(--navy)}.plan-public .price{font-size:1.45rem;font-weight:950;color:var(--navy)}.plan-public p{margin:8px 0 0;color:var(--muted);font-size:.9rem;line-height:1.5}
     .rotation-box{margin-top:20px;padding:18px;border-radius:16px;background:#f5f8fb;border:1px solid var(--line)}.rotation-box h3{margin:0 0 7px;color:var(--navy)}.rotation-box p{margin:0;color:var(--muted);line-height:1.55}.rotation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.rotation-item{padding:11px 12px;border-radius:12px;background:#fff;border:1px solid #e5eaf0;color:#344559;font-weight:800}.rotation-item small{display:block;margin-top:3px;color:#7a8798;font-weight:700}.plans-warning{margin-top:14px;color:#667085;font-size:.82rem;line-height:1.5}
+    .plans-register-cta{display:flex;align-items:center;justify-content:center;width:100%;margin-top:18px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#14283f;text-decoration:none;font-weight:950;font-size:.96rem;box-shadow:0 10px 24px rgba(168,123,28,.20);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+    .plans-register-cta:hover{transform:translateY(-1px);box-shadow:0 13px 28px rgba(168,123,28,.27);filter:saturate(1.05)}
+    .plans-register-cta:focus-visible{outline:3px solid rgba(13,63,104,.25);outline-offset:3px}
+    .plans-register-note{margin:8px 0 0;text-align:center;color:#7a8798;font-size:.78rem;font-weight:750}
     @media(max-width:760px){.plans-grid,.rotation-list{grid-template-columns:1fr}.plans-body,.plans-head{padding-left:18px;padding-right:18px}.plans-btn{padding:10px 9px;font-size:.72rem}}
     .mobile-bottom-nav{display:none}
     .mobile-business-cta-wrap{display:none}
@@ -758,6 +762,8 @@
         <article class="plan-public master"><h3>Anual</h3><div class="price" id="priceAnnual">R$ 89,90</div><p>365 dias + 3 semanas MASTER e 2 semanas Destaque durante o ano.</p></article>
       </div>
       <div class="plans-warning" style="margin-top:16px">Não há período gratuito para novos cadastros. Semanas de Destaque e MASTER são programadas pela equipe conforme disponibilidade.</div>
+      <a class="plans-register-cta" href="cadastro.html">Cadastrar minha empresa</a>
+      <p class="plans-register-note">Você escolhe o plano durante o cadastro.</p>
     </div>
   </article>
 </div>
