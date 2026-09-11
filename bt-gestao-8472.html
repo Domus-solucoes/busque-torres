@@ -814,8 +814,8 @@ Escolha 1, 2 ou 3:`,String(company.assinatura_periodo||"mensal").toLowerCase()==
 Ele aparece nos detalhes da venda/pagamento no Mercado Pago.
 O sistema vai conferir automaticamente status, moeda e valor antes de liberar o plano ${subscription(planName)}.`,"");
     if(mpId===null)return;
-    const paymentId=String(mpId).replace(/\D/g,"");
-    if(paymentId.length<5)return toast("ID do Mercado Pago inválido.","error");
+    const paymentId=String(mpId).trim();
+    if(!/^\d{5,30}$/.test(paymentId))return toast("Esse código não é o ID numérico do pagamento do Mercado Pago. Abra os detalhes do pagamento e copie o ID do pagamento (somente números).","error");
     if(!confirm(`CONFIRMAR PAGAMENTO JÁ RECEBIDO?
 
 Empresa: ${company.nome}
