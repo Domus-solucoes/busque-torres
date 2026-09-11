@@ -809,13 +809,13 @@ Escolha 1, 2 ou 3:`,String(company.assinatura_periodo||"mensal").toLowerCase()==
     if(!planName)return toast("Plano inválido. Digite 1, 2 ou 3.","error");
     const product=RENEWAL_PIX_PRODUCTS[planName];
     const valores={mensal:"R$ 9,90",trimestral:"R$ 24,90",anual:"R$ 89,90"};
-    const mpId=window.prompt(`Cole o ID NUMÉRICO do pagamento no Mercado Pago.
+    const mpId=window.prompt(`Cole o ID ou NÚMERO DA TRANSAÇÃO mostrado pelo Mercado Pago.
 
-Ele aparece nos detalhes da venda/pagamento no Mercado Pago.
-O sistema vai conferir automaticamente status, moeda e valor antes de liberar o plano ${subscription(planName)}.`,"");
+Pode ser somente números ou um código alfanumérico, como E1650...
+O sistema vai localizar o pagamento e conferir automaticamente status, moeda e valor antes de liberar o plano ${subscription(planName)}.`,"");
     if(mpId===null)return;
     const paymentId=String(mpId).trim();
-    if(!/^\d{5,30}$/.test(paymentId))return toast("Esse código não é o ID numérico do pagamento do Mercado Pago. Abra os detalhes do pagamento e copie o ID do pagamento (somente números).","error");
+    if(!/^[A-Za-z0-9_-]{5,100}$/.test(paymentId))return toast("Identificador inválido. Copie exatamente o ID ou número da transação exibido pelo Mercado Pago.","error");
     if(!confirm(`CONFIRMAR PAGAMENTO JÁ RECEBIDO?
 
 Empresa: ${company.nome}
@@ -828,8 +828,8 @@ O Busque vai consultar o Mercado Pago. Somente um pagamento realmente APROVADO e
 
 Esta ação NÃO é cortesia.`))return;
     toast("Conferindo pagamento diretamente no Mercado Pago...");
-    const result=await edgeAdmin("admin-registrar-pagamento-recebido",{empresa_id:company.id,produto_codigo:product,mercado_pago_payment_id:paymentId});
-    await auditActivity("pagamento_recebido_confirmado","pagamentos",result?.pagamento_id||null,`Registrou pagamento já recebido de ${company.nome}`,{empresa_id:company.id,empresa:company.nome,plano:planName,produto_codigo:product,mercado_pago_payment_id:paymentId,valor:result?.valor||null,vencimento_anterior:result?.vencimento_anterior||company.data_vencimento,vencimento_novo:result?.vencimento_novo||null,bonus_master:result?.bonus_master||0,bonus_destaque:result?.bonus_destaque||0});
+    const result=await edgeAdmin("admin-registrar-pagamento-recebido",{empresa_id:company.id,produto_codigo:product,mercado_pago_identificador:paymentId});
+    await auditActivity("pagamento_recebido_confirmado","pagamentos",result?.pagamento_id||null,`Registrou pagamento já recebido de ${company.nome}`,{empresa_id:company.id,empresa:company.nome,plano:planName,produto_codigo:product,mercado_pago_identificador:paymentId,mercado_pago_payment_id:result?.mercado_pago_payment_id||null,valor:result?.valor||null,vencimento_anterior:result?.vencimento_anterior||company.data_vencimento,vencimento_novo:result?.vencimento_novo||null,bonus_master:result?.bonus_master||0,bonus_destaque:result?.bonus_destaque||0});
     toast(`${company.nome}: pagamento confirmado. ${subscription(planName)} aplicado até ${date(result?.vencimento_novo)}.`);
     await loadAll({sync:false});
   }
