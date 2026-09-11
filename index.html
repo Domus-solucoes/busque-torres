@@ -873,7 +873,9 @@
 let JOBS=[];
 let registeredCompanies=[];
 let selected="todos",query="",bannerIndex=0,bannerTimer;
-let searchRemoteCompanies=null,searchRemoteQuery="",searchRequestToken=0,searchDebounceTimer=null;
+let searchRemoteCompanies=null,searchRemoteQuery="",searchRequestToken=0,searchDebounceTimer=null,marketSearchRegisterTimer=null;
+const MARKET_SEARCH_SESSION_KEY="bt_market_searches_v1";
+const marketSearchSeen=new Set((()=>{try{return JSON.parse(sessionStorage.getItem(MARKET_SEARCH_SESSION_KEY)||"[]")}catch{return []}})());
 let jobPublishMode="manual",jobImageData="";
 const NORMAL_PAGE_SIZE=12;
 let normalVisible=NORMAL_PAGE_SIZE,normalOrder=[];
@@ -1359,6 +1361,25 @@ function mergeSearchCompany(remote){
   if(!local)return remote;
   return {...remote,master:local.master,destaque:local.destaque,premium:local.premium,imagem:local.imagem||remote.imagem,logo:local.logo||remote.logo};
 }
+function rememberMarketSearch(normalized){
+  marketSearchSeen.add(normalized);
+  try{sessionStorage.setItem(MARKET_SEARCH_SESSION_KEY,JSON.stringify([...marketSearchSeen].slice(-100)))}catch{}
+}
+async function registerMarketSearch(term,resultCount,normalized){
+  if(!normalized||normalized.length<2||marketSearchSeen.has(normalized))return;
+  try{
+    const saved=await BusqueAPI.rpc("registrar_busca_mercado",{p_cidade_id:SITE.id,p_termo:term,p_resultados:Number(resultCount)||0});
+    if(saved===true)rememberMarketSearch(normalized);
+  }catch(error){console.warn("Não foi possível registrar inteligência da busca.",error?.message||error)}
+}
+function scheduleMarketSearchRegistration(term,resultCount,normalized){
+  clearTimeout(marketSearchRegisterTimer);
+  if(!normalized||marketSearchSeen.has(normalized))return;
+  marketSearchRegisterTimer=setTimeout(()=>{
+    const current=clean($("searchInput").value);
+    if(current===normalized&&query===normalized)void registerMarketSearch(term,resultCount,normalized);
+  },850);
+}
 async function loadRemoteSearch(rawTerm){
   const term=String(rawTerm||"").trim(),normalized=clean(term);
   if(!normalized){searchRemoteCompanies=null;searchRemoteQuery="";return}
@@ -1369,6 +1390,7 @@ async function loadRemoteSearch(rawTerm){
     searchRemoteCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany).map(mergeSearchCompany);
     searchRemoteQuery=normalized;
     renderSearch();
+    scheduleMarketSearchRegistration(term,searchRemoteCompanies.length,normalized);
   }catch(error){
     if(token!==searchRequestToken)return;
     searchRemoteCompanies=null;
@@ -1386,7 +1408,7 @@ function scheduleRemoteSearch(immediate=false){
   else searchDebounceTimer=setTimeout(()=>loadRemoteSearch(raw),220);
 }
 function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();if(query)scheduleRemoteSearch();window.scrollTo({top:0,behavior:"smooth"})}
-function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";clearTimeout(searchDebounceTimer);searchRequestToken++;searchRemoteCompanies=null;searchRemoteQuery="";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
+function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";clearTimeout(searchDebounceTimer);clearTimeout(marketSearchRegisterTimer);searchRequestToken++;searchRemoteCompanies=null;searchRemoteQuery="";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
 function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render();scheduleRemoteSearch()}
 $("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true)}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true);$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
