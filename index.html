@@ -433,6 +433,8 @@
       }
     }
 
+    .banner-mobile-company-info{display:none}
+
     /* MOBILE PREMIUM — MASTER grande, cadastro curto e 3 Destaques fixos */
     .master-mobile-badge{display:none}
     @media(max-width:640px){
@@ -513,6 +515,43 @@
         color:#fff!important;
         text-shadow:none!important;
         pointer-events:none!important;
+      }
+      #bannerSection .banner-mobile-company-info{
+        position:absolute!important;
+        left:14px!important;
+        bottom:58px!important;
+        z-index:5!important;
+        display:block!important;
+        max-width:52%!important;
+        padding:8px 10px!important;
+        border-radius:11px!important;
+        background:rgba(8,27,51,.78)!important;
+        color:#fff!important;
+        box-shadow:0 6px 16px rgba(0,0,0,.20)!important;
+        backdrop-filter:blur(5px)!important;
+        pointer-events:none!important;
+      }
+      #bannerSection .banner-mobile-company-name{
+        display:block!important;
+        overflow:hidden!important;
+        color:#fff!important;
+        font-size:.82rem!important;
+        font-weight:950!important;
+        line-height:1.15!important;
+        white-space:nowrap!important;
+        text-overflow:ellipsis!important;
+      }
+      #bannerSection .banner-mobile-company-category{
+        display:block!important;
+        margin-top:3px!important;
+        overflow:hidden!important;
+        color:#f3d184!important;
+        font-size:.64rem!important;
+        font-weight:850!important;
+        line-height:1.15!important;
+        text-transform:uppercase!important;
+        white-space:nowrap!important;
+        text-overflow:ellipsis!important;
       }
       #bannerSection .banner-link{
         position:absolute!important;
@@ -664,6 +703,10 @@
   <section class="banner" id="bannerSection" aria-label="Anúncios patrocinados">
     <img id="bannerImageBg" class="banner-company-bg" alt="" aria-hidden="true" decoding="async" hidden><img id="bannerImage" class="banner-company-image" alt="" decoding="async" fetchpriority="high" hidden><div class="banner-media"></div>
     <div class="banner-content">
+      <div class="banner-mobile-company-info" id="bannerMobileCompanyInfo" aria-hidden="true">
+        <strong class="banner-mobile-company-name" id="bannerMobileCompanyName"></strong>
+        <span class="banner-mobile-company-category" id="bannerMobileCompanyCategory"></span>
+      </div>
       <span class="badge">Patrocínio Master</span>
       <h2 id="bannerTitle">Sua empresa pode ser o destaque da cidade.</h2>
       <p id="bannerText">Ganhe visibilidade e fale diretamente com novos clientes da sua região.</p>
@@ -1318,6 +1361,19 @@ async function showBanner(){
 
   $("bannerTitle").textContent=b.title;
   $("bannerText").textContent=b.text;
+  const mobileInfo=$("bannerMobileCompanyInfo");
+  const mobileName=$("bannerMobileCompanyName");
+  const mobileCategory=$("bannerMobileCompanyCategory");
+  if(b.company){
+    const info=categoryInfo[b.company.categoria]||{name:"Empresa"};
+    mobileName.textContent=b.company.nome||b.title||"Empresa";
+    mobileCategory.textContent=b.company.subcategoria||info.name||"Empresa";
+    mobileInfo.hidden=false;
+  }else{
+    mobileName.textContent="";
+    mobileCategory.textContent="";
+    mobileInfo.hidden=true;
+  }
   $("bannerLink").href=b.link;
   $("bannerLink").onclick=b.company?(e=>{e.preventDefault();abrirPerfil(b.company)}):null;
 
