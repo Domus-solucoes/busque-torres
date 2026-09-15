@@ -428,8 +428,9 @@
       await startAdmin();
       return true
     }catch(error){
-      console.warn("Sessão salva inválida ou expirada:",error?.message||error);
-      clearSession();return false
+      console.warn("Falha ao restaurar sessão administrativa:",error?.message||error);
+      if(/jwt|token|sess[aã]o administrativa encerrada|invalid refresh|refresh token|not authenticated|não autenticado/i.test(String(error?.message||error||"")))clearSession();
+      return false
     }
   }
   async function verifyAdmin(userId){
