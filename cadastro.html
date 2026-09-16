@@ -434,6 +434,7 @@
         }
         .sucesso-acoes a { background: var(--azul-escuro); color: var(--dourado); }
         .sucesso-acoes button { background: #fff; color: var(--azul-escuro); border: 1px solid var(--borda); }
+        .beneficio-cadastro{max-width:620px;margin:0 auto 20px;padding:17px;border:1px solid #86efac;border-radius:13px;background:#fff;text-align:left}.beneficio-cadastro[hidden]{display:none!important}.beneficio-cadastro strong{display:block;color:#14532d;margin-bottom:6px}.beneficio-codigo-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.beneficio-codigo{display:inline-flex;padding:10px 13px;border:1px dashed #16a34a;border-radius:10px;background:#f0fdf4;color:#14532d;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:1.05rem;font-weight:950;letter-spacing:.05em}.beneficio-copy{border:1px solid #86efac;border-radius:10px;padding:10px 12px;background:#fff;color:#14532d;font-weight:850;cursor:pointer}.beneficio-cadastro small{display:block;color:#3f6b50;line-height:1.5}
 
         .aviso-gratuidade {
             margin: 0 0 18px; padding: 16px 18px; border-radius: 12px;
@@ -758,6 +759,12 @@
                 <div class="sucesso-icone" aria-hidden="true">✓</div>
                 <h2>Pagamento confirmado!</h2>
                 <p>Seu cadastro está pago e aguardando revisão da equipe. Ele ainda não aparece no site. A validade do plano começa somente quando o cadastro for aprovado e publicado.</p>
+                <div id="beneficioCadastro" class="beneficio-cadastro" hidden>
+                    <strong>🔥 Benefício Promoção do Dia incluído no seu plano</strong>
+                    <div id="beneficioCadastroResumo"></div>
+                    <div class="beneficio-codigo-row"><span id="beneficioCadastroCodigo" class="beneficio-codigo"></span><button type="button" id="copiarBeneficioCadastro" class="beneficio-copy">Copiar código</button></div>
+                    <small>Guarde este código. Ele é vinculado à sua empresa e ao WhatsApp cadastrado. Se perder, a equipe do Busque Torres consegue reenviar o mesmo código. O uso fica disponível quando o cadastro estiver aprovado, publicado e com a assinatura ativa.</small>
+                </div>
                 <div class="sucesso-acoes">
                     <a href="index.html">Voltar para o Busque Torres</a>
                     <button type="button" id="novoCadastroBtn">Cadastrar outra empresa</button>
@@ -1201,8 +1208,8 @@
                         <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui</th></tr></thead>
                         <tbody>
                             <tr><td><strong>Mensal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de anúncio no Busque, com perfil e presença nas buscas e categorias.</td></tr>
-                            <tr><td><strong>Trimestral</strong></td><td><strong>R$ 24,90</strong></td><td>90 dias de anúncio + 1 semana em Destaque, agendada pela equipe conforme disponibilidade.</td></tr>
-                            <tr><td><strong>Anual</strong></td><td><strong>R$ 89,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER e 2 semanas em Destaque, agendadas pela equipe conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Trimestral</strong></td><td><strong>R$ 24,90</strong></td><td>90 dias de anúncio + 1 semana em Destaque + <strong>2 Promoções do Dia por mês</strong>.</td></tr>
+                            <tr><td><strong>Anual</strong></td><td><strong>R$ 89,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER + 2 semanas em Destaque + <strong>4 Promoções do Dia por mês</strong>.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1220,7 +1227,7 @@
                         <input type="radio" id="assinaturaTrimestral" name="assinatura_periodo" value="trimestral">
                         <label for="assinaturaTrimestral" class="plano-card">
                             <span class="plano-nome">Trimestral — R$ 24,90</span>
-                            <span class="plano-descricao">90 dias + 1 semana de Destaque. O crédito é liberado automaticamente após o pagamento.</span>
+                            <span class="plano-descricao">90 dias + 1 semana de Destaque + 2 Promoções do Dia por mês. Os benefícios são liberados após o pagamento.</span>
                         </label>
                     </div>
 
@@ -1228,7 +1235,7 @@
                         <input type="radio" id="assinaturaAnual" name="assinatura_periodo" value="anual">
                         <label for="assinaturaAnual" class="plano-card">
                             <span class="plano-nome">Anual — R$ 89,90</span>
-                            <span class="plano-descricao">365 dias + 3 semanas MASTER + 2 semanas Destaque. Os créditos são liberados automaticamente após o pagamento.</span>
+                            <span class="plano-descricao">365 dias + 3 semanas MASTER + 2 semanas Destaque + 4 Promoções do Dia por mês. Os benefícios são liberados após o pagamento.</span>
                         </label>
                     </div>
                 </div>
@@ -1331,6 +1338,10 @@
         const mensagemFormulario = document.getElementById("mensagemFormulario");
         const sucessoCadastro = document.getElementById("sucessoCadastro");
         const novoCadastroBtn = document.getElementById("novoCadastroBtn");
+        const beneficioCadastro = document.getElementById("beneficioCadastro");
+        const beneficioCadastroCodigo = document.getElementById("beneficioCadastroCodigo");
+        const beneficioCadastroResumo = document.getElementById("beneficioCadastroResumo");
+        const copiarBeneficioCadastro = document.getElementById("copiarBeneficioCadastro");
         const submitBtn = document.getElementById("submitBtn");
         const pagamentoCadastro = document.getElementById("pagamentoCadastro");
         const pag = id => document.getElementById(id);
@@ -2061,6 +2072,9 @@
             const partes = [`${Number(p.duracao_dias || 30)} dias`];
             if (Number(p.bonus_master || 0) > 0) partes.push(`${Number(p.bonus_master)} MASTER`);
             if (Number(p.bonus_destaque || 0) > 0) partes.push(`${Number(p.bonus_destaque)} Destaque${Number(p.bonus_destaque) > 1 ? "s" : ""}`);
+            const periodo = pagamentoProdutoCodigo === "assinatura_trimestral" ? "trimestral" : pagamentoProdutoCodigo === "assinatura_anual" ? "anual" : "mensal";
+            if (periodo === "trimestral") partes.push("2 Promoções do Dia/mês");
+            if (periodo === "anual") partes.push("4 Promoções do Dia/mês");
             return partes.join(" + ");
         }
 
@@ -2161,6 +2175,39 @@
             iniciarPollingPagamento();
         }
 
+
+        async function carregarBeneficioFoguinhoCadastro() {
+            beneficioCadastro.hidden = true;
+            beneficioCadastroCodigo.textContent = "";
+            beneficioCadastroResumo.textContent = "";
+            if (!pagamentoCodigo) return;
+            for (let tentativa = 0; tentativa < 4; tentativa++) {
+                try {
+                    let b = await BusqueAPI.rpc("consultar_beneficio_foguinho_checkout", { p_codigo_renovacao: pagamentoCodigo });
+                    if (Array.isArray(b)) b = b[0];
+                    if (b?.ok && b?.elegivel && b?.codigo_beneficio) {
+                        beneficioCadastroCodigo.textContent = String(b.codigo_beneficio);
+                        beneficioCadastroResumo.textContent = `Seu plano ${String(b.assinatura_periodo || "").toLowerCase() === "anual" ? "Anual" : "Trimestral"} inclui ${Number(b.cota_mes || 0)} Promoções do Dia por mês. Neste mês, ${Number(b.restantes_mes || 0)} uso(s) estão disponíveis.`;
+                        beneficioCadastro.hidden = false;
+                        return;
+                    }
+                    if (b?.assinatura_periodo === "mensal" || b?.cota_mes === 0) return;
+                } catch (erro) {
+                    console.warn("Benefício Foguinho ainda não disponível:", erro?.message || erro);
+                }
+                if (tentativa < 3) await new Promise(resolve => setTimeout(resolve, 800));
+            }
+        }
+
+        async function copiarCodigoBeneficioCadastro() {
+            const codigo = String(beneficioCadastroCodigo.textContent || "").trim();
+            if (!codigo) return;
+            try { await navigator.clipboard.writeText(codigo); }
+            catch { window.prompt("Copie seu código de benefício:", codigo); return; }
+            copiarBeneficioCadastro.textContent = "Código copiado ✓";
+            setTimeout(() => copiarBeneficioCadastro.textContent = "Copiar código", 1800);
+        }
+
         async function conferirPagamento() {
             if (!pagamentoReferencia) return;
             try {
@@ -2173,6 +2220,7 @@
                     pag("pagPixExpira").textContent = "";
                     pag("pagRetry").hidden = true;
                     mensagemPagamento("Pagamento confirmado. Seu cadastro está aguardando revisão e ainda não aparece no site.", "sucesso");
+                    await carregarBeneficioFoguinhoCadastro();
                     pagamentoCadastro.hidden = true;
                     sucessoCadastro.hidden = false;
                     sessionStorage.removeItem("busque_cadastro_pagamento_ref");
@@ -2390,12 +2438,17 @@
             }
         });
 
+        copiarBeneficioCadastro.addEventListener("click", copiarCodigoBeneficioCadastro);
+
         novoCadastroBtn.addEventListener("click", () => {
             pararTimersPagamento();
             sessionStorage.removeItem("busque_cadastro_pagamento_ref");
             sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
             pagamentoData = null; pagamentoCodigo = ""; pagamentoReferencia = ""; pagamentoTravado = false; pagamentoTrabalhando = false;
             sucessoCadastro.hidden = true;
+            beneficioCadastro.hidden = true;
+            beneficioCadastroCodigo.textContent = "";
+            beneficioCadastroResumo.textContent = "";
             pagamentoCadastro.hidden = true;
             form.hidden = false;
             form.reset();

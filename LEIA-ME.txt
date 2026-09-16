@@ -1,0 +1,42 @@
+BUSQUE TORRES — BENEFÍCIO FOGUINHO NOS PLANOS
+Atualização: 16/09/2026
+
+ARQUIVOS PARA SUBSTITUIR NO GITHUB (branch main):
+- index.html
+- cadastro.html
+- promocao-do-dia.html
+- bt-gestao-8472.html
+- politica-comercial.html
+
+O BACKEND JÁ FOI PREPARADO NO SUPABASE.
+Não é necessário alterar supabase-config.js.
+
+REGRAS INSTALADAS
+- Mensal: 0 usos grátis; Promoção do Dia continua disponível por R$ 4,90.
+- Trimestral: 2 Promoções do Dia por mês.
+- Anual: 4 Promoções do Dia por mês.
+- A cota é por mês-calendário e não acumula.
+- Cada empresa elegível recebe um código estável no formato BT-XXXX-XXXX.
+- O código é conferido junto ao WhatsApp cadastrado e só funciona com assinatura paga elegível ativa.
+- Uso extra após a cota: R$ 4,90.
+- Continua valendo o limite de até 4 Promoções do Dia por data.
+- Promoções com benefício continuam aguardando aprovação da equipe.
+- Se uma promoção por benefício for rejeitada/cancelada, ela deixa de contar no saldo usado do mês.
+
+CÓDIGO DO CLIENTE
+- Após a confirmação do pagamento de um novo cadastro Trimestral/Anual, o código aparece na tela de sucesso.
+- No painel, empresas elegíveis exibem o botão “🔥 Reenviar código”.
+- O botão consulta o MESMO código e abre o WhatsApp com a mensagem pronta, quota e saldo do mês.
+- O código não precisa ser recriado a cada mês.
+
+PROMOÇÃO DO DIA
+- O cliente informa WhatsApp + código e clica VALIDAR.
+- Se houver saldo, a tela muda para “INCLUSO” e “USAR BENEFÍCIO — SEM PAGAMENTO”.
+- Se não houver saldo ou o código não for válido, o fluxo normal de R$ 4,90 continua disponível.
+
+TESTE SEGURO APÓS O DEPLOY
+1. Abra o painel e escolha uma empresa Trimestral ou Anual paga.
+2. Clique “🔥 Reenviar código” e confira a mensagem do WhatsApp.
+3. Abra promocao-do-dia.html e informe o WhatsApp + código.
+4. Clique somente em VALIDAR para conferir a cota. Isso não consome uso.
+5. Só clique “USAR BENEFÍCIO — SEM PAGAMENTO” quando quiser realmente enviar uma promoção para aprovação.
