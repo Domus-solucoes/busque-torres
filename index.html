@@ -1630,10 +1630,6 @@ registrarMetrica("visita_site",null,"index");
     cta.disabled=false;
     cta.textContent='COLOCAR MINHA PROMOÇÃO';
 
-    // O contador é apenas informativo e só aparece quando há dado confiável.
-    if(Number.isFinite(availableTomorrow)&&availableTomorrow>0){
-    }else{
-    }
   }
 
   async function load(){
@@ -1641,7 +1637,7 @@ registrarMetrica("visita_site",null,"index");
     loading=true;
     widget.hidden=false;
     try{
-      if(!globalThis.BusqueAPI?.rpc){renderToday([]);renderTomorrowAvailability(null);return}
+      if(typeof BusqueAPI==="undefined"||typeof BusqueAPI.rpc!=="function"){renderToday([]);renderTomorrowAvailability(null);return}
       const [promos,catalog,disp]=await Promise.all([
         BusqueAPI.rpc('promocoes_publicas_ativas',{p_cidade_id:CITY_ID}).catch(error=>{console.warn('Vitrine de hoje indisponível:',error?.message||error);return []}),
         BusqueAPI.rpc('catalogo_comercial_publico',{p_cidade_id:CITY_ID}).catch(()=>[]),
