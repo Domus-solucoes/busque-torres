@@ -108,8 +108,19 @@ function currentMonthRange(){const d=new Date();return{start:monthStart(d.getFul
 function paymentProductName(p){const map={assinatura_mensal:'Assinatura mensal',assinatura_trimestral:'Assinatura trimestral',assinatura_anual:'Assinatura anual',promocao_dia:'Promoção do Dia',master_semana:'MASTER extra',destaque_semana:'Destaque extra'};return map[p.produto_codigo]||p.produto_codigo||p.tipo||'Pagamento'}
 function manualPaidInRange(type,start,end){return state.entries.filter(e=>e.tipo===type&&e.status==='pago'&&inDateRange(e.pago_em||e.competencia,start,end))}
 function approvedPayments(start,end){return state.payments.filter(p=>p.status==='aprovado'&&inDateRange(p.pago_em||p.created_at,start,end))}
-function mpFee(p){return p?.taxa_mercado_pago==null?null:num(p.taxa_mercado_pago)}
-function mpNet(p){return p?.valor_liquido==null?null:num(p.valor_liquido)}
+const MERCADO_PAGO_PIX_RATE=0.0099;
+function roundMoney(v){return Math.round((num(v)+Number.EPSILON)*100)/100}
+function isMercadoPagoPix(p){return String(p?.forma_pagamento||'').toLowerCase()==='pix'&&!!p?.mercado_pago_payment_id}
+function mpFee(p){
+  if(p?.taxa_mercado_pago!=null)return num(p.taxa_mercado_pago);
+  if(p?.status==='aprovado'&&isMercadoPagoPix(p))return roundMoney(num(p.valor)*MERCADO_PAGO_PIX_RATE);
+  return null
+}
+function mpNet(p){
+  if(p?.valor_liquido!=null)return num(p.valor_liquido);
+  const fee=mpFee(p);
+  return fee==null?null:roundMoney(num(p.valor)-fee)
+}
 function mpKnownFees(payments){return payments.reduce((s,p)=>s+(mpFee(p)??0),0)}
 function mpKnownNet(payments){return payments.reduce((s,p)=>s+(mpNet(p)??num(p.valor)),0)}
 function accountBalance(a){let b=num(a.saldo_inicial),start=String(a.data_saldo_inicial||'0000-01-01');for(const e of state.entries){if(e.status!=='pago')continue;const d=String(e.pago_em||e.competencia||'').slice(0,10);if(d<start)continue;if(e.tipo==='receita'&&e.conta_id===a.id)b+=num(e.valor);if(e.tipo==='despesa'&&e.conta_id===a.id)b-=num(e.valor);if(e.tipo==='transferencia'){if(e.conta_id===a.id)b-=num(e.valor);if(e.conta_destino_id===a.id)b+=num(e.valor)}}return b}
