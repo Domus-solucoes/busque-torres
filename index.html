@@ -904,7 +904,7 @@
     <a class="promo-day-cta" id="promoDayCta" href="promocao-do-dia.html" target="_blank" rel="noopener">COLOCAR MINHA PROMOÇÃO</a>
   </div>
   <div class="promo-day-nudge" id="promoDayNudge" aria-hidden="true">🔥 Promoções de hoje</div>
-  <button class="promo-day-trigger" id="promoDayTrigger" type="button" aria-label="Abrir Promoção do Dia" aria-expanded="false" aria-controls="promoDayPanel"><span class="promo-day-fire" aria-hidden="true">🔥</span><span class="promo-day-dot" id="promoDayDot" aria-hidden="true">4</span></button>
+  <button class="promo-day-trigger" id="promoDayTrigger" type="button" aria-label="Abrir Promoção do Dia" aria-expanded="false" aria-controls="promoDayPanel"><span class="promo-day-fire" aria-hidden="true">🔥</span><span class="promo-day-dot" id="promoDayDot" aria-hidden="true" hidden></span></button>
 </div>
 
 <footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><div class="access-counter"><button class="access-counter-btn" id="openAccessCounter" type="button">📊 Acessos do Busque Torres</button></div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
@@ -1594,6 +1594,11 @@ registrarMetrica("visita_site",null,"index");
 
   function renderToday(promos){
     currentPromos=Array.isArray(promos)?promos.slice(0,4):[];
+      const todayCount=currentPromos.length;
+      dot.hidden=todayCount===0;
+      dot.textContent=todayCount?String(todayCount):'';
+      dot.title=todayCount?`${todayCount} promoção(ões) ativa(s) hoje`:'';
+      nudge.textContent=todayCount?'🔥 Promoções de hoje':'🔥 Promoção do Dia';
     if(currentPromos.length){
       selfPromo.hidden=true;
       carousel.hidden=false;
@@ -1616,7 +1621,6 @@ registrarMetrica("visita_site",null,"index");
     // A vitrine de hoje nunca depende da disponibilidade de amanhã.
     // O CTA nasce visível; só é ocultado quando o backend confirma lotação (0 vagas).
     if(availableTomorrow===0){
-      dot.hidden=true;
       cta.hidden=true;
       cta.disabled=true;
       return;
@@ -1628,11 +1632,7 @@ registrarMetrica("visita_site",null,"index");
 
     // O contador é apenas informativo e só aparece quando há dado confiável.
     if(Number.isFinite(availableTomorrow)&&availableTomorrow>0){
-      dot.hidden=false;
-      dot.textContent=String(availableTomorrow);
-      dot.title=`${availableTomorrow} espaço(s) disponível(is) para amanhã`;
     }else{
-      dot.hidden=true;
     }
   }
 
