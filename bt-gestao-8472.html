@@ -494,7 +494,7 @@
     if(tab==="overview")return loadPromoMetrics();
     if(tab==="companies-pending")return loadPendingCompanyDetails(force);
     if(tab==="jobs-pending")return loadPendingJobDetails(force);
-    if(tab==="jobs-active")return loadActiveJobDetails(force);
+    if(tab==="jobs-active")return Promise.all([loadActiveJobDetails(force),loadMetrics(force).catch(()=>{})]);
     if(tab==="promotions")return loadPromotions(force);
     if(tab==="finance")return loadFinance(force);
     if(tab==="metrics")return loadMetrics(force);
@@ -778,7 +778,7 @@
     }else if(state.tab==="activities"){
       title="Atividade";subtitle="Sessões e ações do operador. Esta aba é visível somente para o dono.";html=activitiesHtml()
     }else{
-      list=state.jobs.filter(x=>x.status==="ativa");title="Vagas ativas";subtitle="Vagas disponíveis publicamente.";html=list.map(activeJobCard).join("")
+      list=state.jobs.filter(x=>x.status==="ativa");title="Vagas ativas";subtitle="Vagas disponíveis publicamente.";const tv=state.metrics?.acoes_mes||{};const tvMes=Number(tv.temos_vagas||0),tvTotal=Number(tv.temos_vagas_total||0);html=`<div class="metrics-summary" style="grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 12px"><div class="metric-box"><small>Cliques em TEMOS VAGAS · este mês</small><strong>${metricNumber(tvMes)}</strong></div><div class="metric-box"><small>Cliques em TEMOS VAGAS · total</small><strong>${metricNumber(tvTotal)}</strong></div></div>`+list.map(activeJobCard).join("")
     }
     $("sectionTitle").textContent=title;$("sectionSubtitle").textContent=subtitle;$("content").innerHTML=html||'<div class="empty"><strong>Nenhum registro nesta área</strong><span>Quando houver novos dados, eles aparecerão aqui.</span></div>'
   }
