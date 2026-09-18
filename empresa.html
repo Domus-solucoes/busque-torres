@@ -27,7 +27,7 @@
 .premium-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;gap:15px;padding:20px 22px;background:#081b33;color:#fff}.premium-head h2{margin:0}.premium-close{border:0;background:transparent;color:#fff;font-size:28px;cursor:pointer}
 .premium-content{padding:22px}.premium-types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}.premium-type{border:1px solid var(--line);background:#fff;padding:13px;border-radius:13px;font-weight:900;cursor:pointer}.premium-type.active{border-color:var(--gold);background:#fff8e5}
 .premium-weeks{display:grid;gap:9px}.premium-week{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:13px;border-radius:13px;cursor:pointer}.premium-week.active{border-color:var(--gold);background:#fff8e5}.premium-week:disabled{opacity:.5;cursor:not-allowed}.premium-week small{display:block;color:var(--muted);margin-top:3px}
-.premium-code{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.premium-code label{display:block;font-weight:900;margin-bottom:7px}.premium-code-row{display:flex;gap:8px}.premium-code input{flex:1;min-width:0;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;text-transform:uppercase}.premium-confirm{border:0;background:var(--gold);color:var(--navy);padding:12px 16px;border-radius:11px;font-weight:950;cursor:pointer}.premium-msg{margin-top:12px;font-weight:800}.premium-msg.ok{color:#12805a}.premium-msg.err{color:#b42318}.season{color:#a15c00;font-weight:900}
+.premium-code{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.premium-code label{display:block;font-weight:900;margin-bottom:7px}.premium-code-row{display:flex;gap:8px}.premium-code input{flex:1;min-width:0;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;text-transform:uppercase}.premium-confirm{border:0;background:var(--gold);color:var(--navy);padding:12px 16px;border-radius:11px;font-weight:950;cursor:pointer}.premium-buy{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:15px;background:#f8fafc}.premium-buy h3{margin:0 0 6px;color:var(--navy)}.premium-buy p{margin:0 0 12px}.premium-buy-btn{width:100%;border:0;background:var(--navy);color:#fff;padding:13px;border-radius:11px;font:inherit;font-weight:950;cursor:pointer}.premium-buy-btn:disabled{opacity:.6;cursor:wait}.premium-pix{margin-top:14px;text-align:center}.premium-pix img{width:min(230px,80%);display:block;margin:10px auto}.premium-pix textarea{width:100%;min-height:92px;padding:10px;border:1px solid var(--line);border-radius:10px;resize:none}.premium-copy{margin-top:8px;border:1px solid var(--line);background:#fff;padding:10px 13px;border-radius:10px;font-weight:900;cursor:pointer}.premium-msg{margin-top:12px;font-weight:800}.premium-msg.ok{color:#12805a}.premium-msg.err{color:#b42318}.season{color:#a15c00;font-weight:900}
 @media(max-width:600px){.premium-types{grid-template-columns:1fr}.premium-code-row{flex-direction:column}}
 </style>
 </head>
@@ -72,7 +72,7 @@
     <label for="premiumBenefitCode">Código do benefício</label>
     <div class="premium-code-row"><input id="premiumBenefitCode" maxlength="30" autocomplete="off" placeholder="Ex.: BT-XXXXXXXXXX"><button class="premium-confirm" id="confirmPremiumBooking" type="button">Usar benefício e reservar</button></div>
     <div class="premium-msg" id="premiumBookingMessage"></div>
-    <p style="margin:12px 0 0;font-size:.86rem">Sem benefício disponível? A compra de semana adicional será liberada aqui após integrarmos o pagamento sem alterar o fluxo atual do Mercado Pago.</p>
+    <div class="premium-buy"><h3>Não tem benefício disponível?</h3><p id="premiumBuyText">Escolha uma semana acima para comprar uma semana extra.</p><button class="premium-buy-btn" id="buyPremiumWeek" type="button">Comprar esta semana</button><div class="premium-pix" id="premiumPix" hidden><strong>PIX gerado</strong><img id="premiumPixImage" alt="QR Code PIX"><textarea id="premiumPixCode" readonly></textarea><button class="premium-copy" id="copyPremiumPix" type="button">Copiar código PIX</button><p>Após a confirmação do Mercado Pago, a semana fica confirmada automaticamente na Agenda Premium.</p></div></div>
    </div>
   </div>
  </article>
@@ -94,7 +94,7 @@ function fillChips(id,boxId,value){const items=listItems(value);if(!items.length
 async function registrarMetrica(evento,empresaId){try{await BusqueAPI.rpc("registrar_metrica",{p_evento:evento,p_empresa_id:String(empresaId||""),p_pagina:"empresa"})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}}
 async function carregarVisualizacoesPerfil(){if(!currentCompanyId)return;try{const rows=await BusqueAPI.rpc("metricas_empresa_publica",{p_empresa_id:String(currentCompanyId)}),r=Array.isArray(rows)?rows[0]:rows;const n=Number(r?.visualizacoes||0);$("profileViews").textContent=n.toLocaleString("pt-BR");$("profileViewsLabel").textContent=n===1?"visualização":"visualizações"}catch(error){console.warn("Visualizações indisponíveis:",error?.message||error);$("profileViewsWrap").hidden=true}}
 const LIKE_TOKEN_KEY="bt_like_token_v1";
-let currentCompanyId=null;
+let currentCompanyId=null,currentCompanyEmail="";
 function likeToken(){let token="";try{token=localStorage.getItem(LIKE_TOKEN_KEY)||""}catch{}if(!/^[A-Za-z0-9_-]{20,100}$/.test(token)){token=(globalThis.crypto&&crypto.randomUUID)?crypto.randomUUID():`bt_${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`;try{localStorage.setItem(LIKE_TOKEN_KEY,token)}catch{}}return token}
 function renderLikeState(total,liked){const n=Number(total||0);$("likeCount").textContent=n.toLocaleString("pt-BR");$("likeLabel").textContent=n===1?"curtida":"curtidas";$("likeButton").classList.toggle("liked",!!liked);$("likeButton").setAttribute("aria-pressed",liked?"true":"false");$("likeButton").textContent=liked?"♥ Você curtiu":"♡ Curtir esta empresa"}
 async function loadLikeState(){if(!currentCompanyId)return;try{const rows=await BusqueAPI.rpc("status_curtida_empresa",{p_empresa_id:String(currentCompanyId),p_visitante_token:likeToken()}),r=Array.isArray(rows)?rows[0]:rows;if(r)renderLikeState(r.total,r.curtiu)}catch(error){console.warn("Curtidas indisponíveis:",error?.message||error);$("likeWrap").hidden=true}}
@@ -118,7 +118,7 @@ function renderPremiumWeeks(){
   b.disabled=available<=0||high;
   if(premiumSelectedWeek?.data_inicio===w.data_inicio)b.classList.add("active");
   b.innerHTML=`<span><strong>${premiumDateBR(w.data_inicio)} a ${premiumDateBR(w.data_fim)}</strong><small>${high?'<span class="season">Alta Temporada · benefício normal bloqueado</span>':`${available} ${available===1?"posição disponível":"posições disponíveis"}`}</small></span><strong>${available>0&&!high?"Escolher":"Indisponível"}</strong>`;
-  b.addEventListener("click",()=>{premiumSelectedWeek=w;renderPremiumWeeks();$("premiumBookingMessage").textContent=""});
+  b.addEventListener("click",()=>{premiumSelectedWeek=w;renderPremiumWeeks();$("premiumBookingMessage").textContent="";const price=premiumBookingType==="master"?"R$ 24,90":"R$ 14,90";$("premiumBuyText").textContent=`Comprar ${premiumBookingType==="master"?"MASTER":"DESTAQUE"} para ${premiumDateBR(w.data_inicio)} a ${premiumDateBR(w.data_fim)} por ${price}.`;});
   box.appendChild(b);
  });
 }
@@ -132,6 +132,25 @@ function closePremiumBooking(){$("premiumBookingLayer").classList.remove("open")
 $("openPremiumBooking").addEventListener("click",openPremiumBooking);
 $("closePremiumBooking").addEventListener("click",closePremiumBooking);
 document.querySelectorAll("[data-premium-type]").forEach(b=>b.addEventListener("click",()=>{premiumBookingType=b.dataset.premiumType;premiumSelectedWeek=null;document.querySelectorAll("[data-premium-type]").forEach(x=>x.classList.toggle("active",x===b));renderPremiumWeeks()}));
+async function buyPremiumWeek(){
+ const msg=$("premiumBookingMessage"),btn=$("buyPremiumWeek");
+ if(!premiumSelectedWeek){msg.className="premium-msg err";msg.textContent="Escolha primeiro a semana que deseja comprar.";return}
+ if(!currentCompanyEmail){msg.className="premium-msg err";msg.textContent="Esta empresa não possui e-mail cadastrado para gerar o PIX. Entre em contato com a equipe.";return}
+ btn.disabled=true;msg.className="premium-msg";msg.textContent="Preparando sua reserva e o PIX...";
+ try{
+  const prep=await BusqueAPI.rpc("preparar_reserva_premium_extra",{p_empresa_id:currentCompanyId,p_tipo:premiumBookingType,p_data_inicio:premiumSelectedWeek.data_inicio,p_data_fim:premiumSelectedWeek.data_fim});
+  const ref=crypto.randomUUID(),base="https://xwkmsqawiimouilldwit.supabase.co/functions/v1/criar-pagamento";
+  const response=await fetch(base,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({produto_codigo:prep.produto_codigo,codigo:prep.codigo_empresa,quantidade:1,forma_pagamento:"pix",email_pagador:currentCompanyEmail,idempotency_token:ref})});
+  const pay=await response.json();if(!response.ok||!pay?.ok||!pay?.qr_code)throw new Error(pay?.erro||"Não foi possível gerar o PIX.");
+  await BusqueAPI.rpc("vincular_pagamento_reserva_premium",{p_external_reference:pay.referencia,p_reserva_id:prep.reserva_id});
+  $("premiumPixCode").value=pay.qr_code;if(pay.qr_code_base64){$("premiumPixImage").src=`data:image/png;base64,${pay.qr_code_base64}`;$("premiumPixImage").hidden=false}else $("premiumPixImage").hidden=true;
+  $("premiumPix").hidden=false;msg.className="premium-msg ok";msg.textContent=`PIX de ${new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(pay.valor||prep.valor))} gerado. A vaga fica protegida enquanto o pagamento está pendente.`;
+  premiumWeeksData=await BusqueAPI.rpc("premium_disponibilidade_publica",{p_cidade_id:"torres",p_semanas:26})||[];premiumSelectedWeek=null;renderPremiumWeeks();
+ }catch(error){msg.className="premium-msg err";msg.textContent=String(error?.message||"Não foi possível iniciar a compra.");}finally{btn.disabled=false}
+}
+$("buyPremiumWeek").addEventListener("click",buyPremiumWeek);
+$("copyPremiumPix").addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("premiumPixCode").value);$("copyPremiumPix").textContent="Código copiado!";setTimeout(()=>$("copyPremiumPix").textContent="Copiar código PIX",1800)}catch{}});
+
 $("confirmPremiumBooking").addEventListener("click",async()=>{
  const msg=$("premiumBookingMessage"),code=$("premiumBenefitCode").value.trim(),btn=$("confirmPremiumBooking");
  if(!premiumSelectedWeek){msg.className="premium-msg err";msg.textContent="Escolha uma semana disponível.";return}
@@ -162,7 +181,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("premiumBookingLa
       }catch(error){
         console.warn("Agenda Premium pública indisponível no perfil; mantendo classificação atual.",error?.message||error);
       }
-      currentCompanyId=company.id;
+      currentCompanyId=company.id;currentCompanyEmail=company.email||"";
       show(company);
       loadCompanyMedia(company);
       loadLikeState();
