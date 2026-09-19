@@ -236,15 +236,19 @@
       .job-form-layer{padding:8px;align-items:flex-end}.job-form-card{max-height:96vh;border-radius:22px 22px 0 0}.job-form-head,.job-form{padding-left:18px;padding-right:18px}.job-form-grid{grid-template-columns:1fr}.job-field.full,.job-duration,.job-form-terms,.job-submit{grid-column:1}.job-duration-options{grid-template-columns:1fr}.job-form-message{margin-left:18px;margin-right:18px}
     }
 
-    body.search-mode .hero,body.search-mode #categories,body.search-mode #bannerSection,body.search-mode #joinSection,body.search-mode footer{display:none!important}
-    body.search-mode .search-wrap{position:sticky;top:0;z-index:50;width:100%;max-width:none;margin:0;padding:18px max(18px,calc((100% - 980px)/2));background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);box-shadow:0 8px 24px rgba(8,27,51,.08);backdrop-filter:blur(12px)}
-    body.search-mode .search{max-width:980px;margin:0 auto;border-radius:18px;box-shadow:none;border:1px solid var(--line)}
-    body.search-mode .search-close{display:block}
-    body.search-mode main.shell{max-width:980px;padding-top:26px}
-    body.search-mode #companiesSection .section-head h2{font-size:1.55rem}
-    body.search-mode #companiesSection .section-head p{display:none}
-    body.search-mode .search-mode-label{display:block}
-    body.search-mode .grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+    /* BUSCA NA PRÓPRIA HOME: mantém topo e buscador no lugar e mostra os resultados logo abaixo. */
+    body.search-mode{background:var(--bg)}
+    body.search-mode #bannerSection,
+    body.search-mode #featuredSection{display:none!important}
+    body.search-mode .search-wrap{position:relative;z-index:4;width:min(850px,calc(100% - 28px));margin:-38px auto 26px;padding:0;background:transparent;border:0;box-shadow:none;backdrop-filter:none}
+    body.search-mode .search{max-width:none;margin:0;border-radius:22px;box-shadow:0 20px 50px rgba(8,27,51,.18);border:1px solid rgba(8,27,51,.08)}
+    body.search-mode .search-close{display:inline-flex}
+    body.search-mode main.shell{max-width:var(--max);padding-top:0}
+    body.search-mode #companiesSection{margin-top:10px}
+    body.search-mode #companiesSection .section-head h2{font-size:clamp(1.55rem,3vw,2.1rem)}
+    body.search-mode #companiesSection .section-head p{display:block}
+    body.search-mode .search-mode-label{display:none}
+    body.search-mode .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
     body.search-mode .card{animation:searchCardIn .22s ease both}
     @keyframes searchCardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
     .search-hint{display:none;padding:54px 20px;text-align:center;color:var(--muted)}
@@ -338,8 +342,9 @@
       .mobile-nav-item.is-active,.mobile-nav-item:active{background:#f0f3f7;color:var(--navy)}
       body.search-mode{padding-bottom:76px}
       body.search-mode .mobile-bottom-nav{display:grid!important}
-      body.search-mode .search-wrap{padding:10px 12px}
-      body.search-mode main.shell{padding-top:18px}
+      body.search-mode .search-wrap{width:calc(100% - 24px);margin:-29px auto 14px;padding:0}
+      body.search-mode .search{padding:6px;border-radius:16px;box-shadow:0 12px 30px rgba(8,27,51,.16)}
+      body.search-mode main.shell{padding-top:0}
     }
 
     .access-counter{display:flex;justify-content:center}
@@ -1295,7 +1300,7 @@ function renderSearch(){
   if(hasQuery&&!remoteReady)list=list.filter(c=>searchableText(c).includes(query));
   else if(!hasQuery&&!hasCategory)list=[];
   if(hasCategory)list=list.filter(c=>c.categoria===selected);
-  list.sort((a,b)=>Number(b.master)-Number(a.master)||Number(b.premium)-Number(a.premium)||String(a.nome).localeCompare(String(b.nome),"pt-BR"));
+  list.sort((a,b)=>String(a.nome).localeCompare(String(b.nome),"pt-BR"));
   $("cards").replaceChildren(...list.map(company=>card(company,false)));
   const hasFilter=hasQuery||hasCategory;
   $("resultCount").textContent=hasFilter?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";
@@ -1463,10 +1468,10 @@ function scheduleRemoteSearch(immediate=false){
   if(immediate)loadRemoteSearch(raw);
   else searchDebounceTimer=setTimeout(()=>loadRemoteSearch(raw),220);
 }
-function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();if(query)scheduleRemoteSearch();window.scrollTo({top:0,behavior:"smooth"})}
+function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();if(query)scheduleRemoteSearch();requestAnimationFrame(()=>{$("companiesSection")?.scrollIntoView({behavior:"smooth",block:"start"})})}
 function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";clearTimeout(searchDebounceTimer);clearTimeout(marketSearchRegisterTimer);searchRequestToken++;searchRemoteCompanies=null;searchRemoteQuery="";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
 function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render();scheduleRemoteSearch()}
-$("searchInput").addEventListener("focus",openSearch);$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true)}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true);$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
+$("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true)}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true);$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
 // Swipe do MASTER no celular. Não altera clique do CTA nem os controles desktop.
 (()=>{
