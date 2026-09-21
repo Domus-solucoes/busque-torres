@@ -26,15 +26,16 @@
       <div class="field"><label>Fechamento automático (opcional)</label><input id="fechamento" type="time"><span class="small muted">Não existe horário fixo para abrir. No painel você toca em “Abrir empresa” quando quiser. Se informar um horário aqui, o sistema pausa os pedidos automaticamente nele.</span></div>
 
       <div class="field"><label>Entrega</label><select id="delivery"><option value="pickup">Somente retirada</option><option value="own">Faço entrega própria</option></select></div>
-      <div id="faixaWrap" class="hidden grid grid2">
-        <div class="field"><label>Até quantos km?</label><div class="input-affix"><input id="km" type="number" min="0.1" step="0.1" value="5"><span class="suffix">KM</span></div></div>
-        <div class="field"><label>Taxa de entrega</label><div class="input-affix"><span class="prefix">R$</span><input id="fee" type="number" min="0" step="0.01" value="0"></div></div>
+      <div id="faixaWrap" class="hidden">
+        <div class="inline" style="margin-bottom:10px"><strong>Faixas de entrega</strong><button class="mini primary right" id="addSignupRange" type="button">+ Adicionar faixa</button></div>
+        <div id="signupRanges" class="delivery-ranges"></div>
+        <div class="small muted">Ex.: até 2 KM = R$ 5,00; até 5 KM = R$ 8,00. Você pode cadastrar até 40 faixas e alterar depois no painel.</div>
       </div>
 
       <div class="sep"></div><h3>Primeiro item do cardápio</h3>
       <div class="field"><label>Foto do produto</label><input id="fotoProduto" type="file" accept="image/*"><span class="small muted">A foto pertence ao produto. Sabores e adicionais usam essa mesma imagem.</span></div>
       <div class="grid grid2"><div class="field"><label>Produto</label><input id="produto" placeholder="Ex.: Pastel"></div><div class="field"><label>Preço base</label><div class="input-affix"><span class="prefix">R$</span><input id="preco" type="number" min="0" step="0.01"></div></div></div>
-      <div class="notice">Depois de entrar no painel você pode criar “Escolha o sabor” e adicionar, por exemplo: Carne + R$ 0, Bacon + R$ 3, Frango + R$ 3 — tudo usando apenas uma foto.</div>
+      <div class="notice">Depois de entrar no painel você pode criar “Escolha o sabor” e informar o preço final de cada opção, por exemplo: Carne R$ 19,90, Bacon R$ 22,90 e Frango R$ 21,50 — tudo usando apenas uma foto.</div>
 
       <div class="sep"></div><h3>Acesso ao painel</h3><div class="grid grid2"><div class="field"><label>E-mail</label><input id="email" type="email"></div><div class="field"><label>Senha</label><input id="senha" type="password" minlength="8"></div></div>
       <div class="inline"><button class="btn gold" id="criar">Criar conta e entrar</button><span class="small muted">Acesso liberado na hora. Sem confirmação de e-mail.</span></div>
@@ -43,7 +44,26 @@
 </main>
 <script>
 const $=id=>document.getElementById(id);
+let signupRanges=[{km:5,fee:0}];
+function renderSignupRanges(){
+  $('signupRanges').innerHTML=signupRanges.map((r,i)=>`<div class="delivery-range-row">
+    <div class="field"><label>Até</label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${r.km??''}"><span class="suffix">KM</span></div></div>
+    <div class="field"><label>Taxa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${r.fee??''}"></div></div>
+    <button class="mini danger delivery-remove" type="button" onclick="removeSignupRange(${i})" ${signupRanges.length===1?'disabled':''}>×</button>
+  </div>`).join('');
+}
+function syncSignupRanges(){signupRanges=[...$('signupRanges').querySelectorAll('.delivery-range-row')].map(row=>({km:row.querySelector('[data-km]').value,fee:row.querySelector('[data-fee]').value}));}
+window.removeSignupRange=i=>{syncSignupRanges();signupRanges.splice(i,1);if(!signupRanges.length)signupRanges=[{km:'',fee:''}];renderSignupRanges()};
+$('addSignupRange').onclick=()=>{syncSignupRanges();if(signupRanges.length>=40)return;const prev=signupRanges[signupRanges.length-1]||{};signupRanges.push({km:Number(prev.km)>0?Math.round((Number(prev.km)+1)*10)/10:'',fee:''});renderSignupRanges()};
+function collectSignupRanges(){
+  syncSignupRanges();
+  const out=signupRanges.map(r=>({km:Number(r.km),fee:Number(r.fee)}));
+  if(out.some(r=>!Number.isFinite(r.km)||r.km<=0||!Number.isFinite(r.fee)||r.fee<0))throw new Error('Preencha KM e taxa corretamente em todas as faixas.');
+  out.sort((a,b)=>a.km-b.km);const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('Não repita a mesma distância em duas faixas.');seen.add(r.km)}
+  return out;
+}
 $('delivery').onchange=()=>$('faixaWrap').classList.toggle('hidden',$('delivery').value!=='own');
+renderSignupRanges();
 async function uploadImagem(tipo,file,produtoId=null){
   if(!file)return;
   const webp=await CardapioCore.toWebp(file),form=new FormData();
@@ -54,7 +74,7 @@ $('criar').onclick=async()=>{
   const b=$('criar');b.disabled=true;$('msg').innerHTML='';
   const email=$('email').value.trim().toLowerCase(),password=$('senha').value;
   try{
-    const payload={email,password,nome:$('nome').value,whatsapp:$('whatsapp').value,endereco:$('endereco').value,categorias:[$('categoria').value].filter(Boolean),horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?[{km:Number($('km').value),fee:Number($('fee').value)}]:[],produto_nome:$('produto').value,produto_preco:Number($('preco').value),produto_categoria:$('categoria').value||'Outros'};
+    const payload={email,password,nome:$('nome').value,whatsapp:$('whatsapp').value,endereco:$('endereco').value,categorias:[$('categoria').value].filter(Boolean),horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectSignupRanges():[],produto_nome:$('produto').value,produto_preco:Number($('preco').value),produto_categoria:$('categoria').value||'Outros'};
     const d=await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});
     await CardapioCore.signIn(email,password);
     $('msg').innerHTML='<div class="notice ok"><strong>Conta criada.</strong><br>Enviando as imagens e abrindo o painel...</div>';

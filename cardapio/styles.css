@@ -24,3 +24,14 @@
 .qr-box{display:grid;grid-template-columns:170px 1fr;gap:16px;align-items:center;padding:15px;border:1px solid #3a3a3a;border-radius:16px;background:#121212}.qr-img{width:170px;max-width:100%;border-radius:14px;background:#fff;padding:8px}.qr-box code{display:block;max-height:100px;overflow:auto;word-break:break-all;margin:9px 0;color:#ddd;font-size:10px}
 .nav-button,.footer-link{border:0;background:transparent;color:#ddd;font:inherit;font-size:13px;font-weight:800;cursor:pointer;padding:0}.nav-button:hover,.footer-link:hover{color:var(--yellow)}.tracking-search{display:grid;grid-template-columns:1fr auto;gap:9px}.tracking-search input{border:1px solid #444;border-radius:12px;padding:12px;background:#fff;color:#111}.track-card{padding:15px;border:1px solid #333;border-radius:16px;background:#121212}.track-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.track-step{display:grid;gap:7px;justify-items:center;text-align:center;color:#777;font-size:11px;font-weight:900}.track-step span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#222;border:1px solid #444;color:#888}.track-step.done span{background:#173c29;border-color:#2b6c49;color:#8be0b3}.track-step.current{color:#fff}.track-step.current span{background:linear-gradient(135deg,var(--yellow),var(--orange));border-color:transparent;color:#080808}.order-code{margin:12px 0;padding:15px;border-radius:16px;background:linear-gradient(135deg,#241a00,#151515);border:1px solid #5d4800}.order-code small{display:block;color:#bbb}.order-code strong{display:block;margin-top:4px;color:var(--yellow);font-size:28px;letter-spacing:.04em}
 @media(max-width:780px){.panel-head{align-items:flex-start;flex-direction:column}.option-admin-row,.option-new{grid-template-columns:1fr}.qr-box{grid-template-columns:1fr}.qr-img{margin:auto}.track-flow{grid-template-columns:1fr 1fr}.tracking-search{grid-template-columns:1fr}}
+
+/* V5 — faixas de entrega e preços de opções */
+.delivery-ranges{display:grid;gap:10px;margin-bottom:10px}
+.delivery-range-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;align-items:end;padding:10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.delivery-range-row .field{margin-bottom:0}
+.delivery-remove{height:42px;min-width:42px;margin-bottom:0}
+.option-admin-group .final-price{min-width:105px;text-align:center}
+@media(max-width:640px){
+  .delivery-range-row{grid-template-columns:1fr 1fr auto;gap:7px;padding:9px}
+  .delivery-remove{min-width:38px;padding:8px}
+}
