@@ -28,3 +28,9 @@ O QUE MUDOU
 
 IMPORTANTE
 O backend permanece no Supabase. Este pacote altera apenas o frontend /cardapio.
+
+
+ATUALIZAÇÃO DE CADASTRO:
+- Empresas do Busque Cardápio não precisam confirmar e-mail para entrar.
+- O cadastro usa a função cardapio-cadastrar-empresa e libera o acesso imediatamente.
+- A configuração global de confirmação do Supabase não foi alterada, preservando o Busque Torres.

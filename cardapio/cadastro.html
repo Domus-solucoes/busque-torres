@@ -25,13 +25,45 @@
       <div id="faixaWrap" class="hidden grid grid2"><div class="field"><label>Até quantos km?</label><input id="km" type="number" min="0.1" step="0.1" value="5"></div><div class="field"><label>Taxa de entrega</label><input id="fee" type="number" min="0" step="0.01" value="0"></div></div>
       <div class="sep"></div><h3>Primeiro item do cardápio</h3><div class="grid grid2"><div class="field"><label>Produto</label><input id="produto" placeholder="Ex.: X-Burguer"></div><div class="field"><label>Preço</label><input id="preco" type="number" min="0" step="0.01"></div></div>
       <div class="sep"></div><h3>Acesso ao painel</h3><div class="grid grid2"><div class="field"><label>E-mail</label><input id="email" type="email"></div><div class="field"><label>Senha</label><input id="senha" type="password" minlength="8"></div></div>
-      <div class="inline"><button class="btn gold" id="criar">Criar conta e continuar</button><button class="btn hidden" id="reenviar">Reenviar confirmação</button></div>
+      <div class="inline"><button class="btn gold" id="criar">Criar conta e entrar</button><span class="small muted">Acesso liberado na hora. Sem confirmação de e-mail.</span></div>
     </section>
   </div>
 </main>
 <script>
-const $=id=>document.getElementById(id);let lastEmail='';
+const $=id=>document.getElementById(id);
 $('delivery').onchange=()=>$('faixaWrap').classList.toggle('hidden',$('delivery').value!=='own');
-$('criar').onclick=async()=>{const b=$('criar');b.disabled=true;$('msg').innerHTML='';lastEmail=$('email').value.trim();try{const meta={cardapio_nome:$('nome').value,cardapio_whatsapp:$('whatsapp').value,cardapio_endereco:$('endereco').value,cardapio_categorias:[$('categoria').value].filter(Boolean),cardapio_horario_abertura:$('abertura').value,cardapio_horario_fechamento:$('fechamento').value,cardapio_delivery_mode:$('delivery').value,cardapio_delivery_ranges:$('delivery').value==='own'?[{km:Number($('km').value),fee:Number($('fee').value)}]:[],cardapio_produto_nome:$('produto').value,cardapio_produto_preco:Number($('preco').value),cardapio_produto_categoria:$('categoria').value||'Outros'};const d=await CardapioCore.signUp(lastEmail,$('senha').value,meta);if(!d.access_token){$('msg').innerHTML='<div class="notice warn"><strong>Conta criada.</strong><br>Enviamos um link de confirmação para o seu e-mail. Confira também Spam/Lixo eletrônico.</div>';$('reenviar').classList.remove('hidden');return}await CardapioCore.fn('cardapio-bootstrap-empresa',{auth:true,body:{nome:$('nome').value}});location.href='painel.html'}catch(e){$('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(e.message)+'</div>'}finally{b.disabled=false}};
-$('reenviar').onclick=async()=>{const email=(lastEmail||$('email').value).trim();if(!email)return;const b=$('reenviar');b.disabled=true;try{await CardapioCore.resendConfirmation(email);$('msg').innerHTML='<div class="notice ok">Novo e-mail de confirmação solicitado. Verifique a caixa de entrada e o Spam.</div>'}catch(e){$('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(e.message)+'</div>'}finally{b.disabled=false}};
+$('criar').onclick=async()=>{
+  const b=$('criar');
+  b.disabled=true;
+  $('msg').innerHTML='';
+  const email=$('email').value.trim().toLowerCase();
+  const password=$('senha').value;
+  try{
+    const payload={
+      email,password,
+      nome:$('nome').value,
+      whatsapp:$('whatsapp').value,
+      endereco:$('endereco').value,
+      categorias:[$('categoria').value].filter(Boolean),
+      horario_abertura:$('abertura').value,
+      horario_fechamento:$('fechamento').value,
+      delivery_mode:$('delivery').value,
+      delivery_ranges:$('delivery').value==='own'?[{km:Number($('km').value),fee:Number($('fee').value)}]:[],
+      produto_nome:$('produto').value,
+      produto_preco:Number($('preco').value),
+      produto_categoria:$('categoria').value||'Outros'
+    };
+    await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});
+    await CardapioCore.signIn(email,password);
+    $('msg').innerHTML='<div class="notice ok"><strong>Cadastro concluído.</strong><br>Entrando no painel...</div>';
+    location.href='painel.html';
+  }catch(e){
+    const code=e.data?.error||'';
+    let msg=e.message;
+    if(code==='email_ja_cadastrado') msg='Esse e-mail já está cadastrado. Use “Já tenho conta” para entrar.';
+    if(code==='senha_minimo_8') msg='A senha precisa ter pelo menos 8 caracteres.';
+    if(code==='email_invalido') msg='Digite um e-mail válido.';
+    $('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(msg)+'</div>';
+  }finally{b.disabled=false}
+};
 </script></body></html>
