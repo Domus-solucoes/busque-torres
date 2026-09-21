@@ -1,36 +1,21 @@
-BUSQUE CARDÁPIO — FRONTEND V2 (LAYOUT PRETO/AMARELO/LARANJA)
+BUSQUE CARDÁPIO — LAYOUT V4 / AJUSTES DE TESTE
 
-COMO SUBIR NO GITHUB
-1. Abra o repositório Domus-solucoes/busque-torres.
-2. Envie a pasta "cardapio" inteira para a raiz do repositório.
-3. Quando o GitHub avisar que arquivos dentro de /cardapio já existem, confirme a substituição.
-4. NÃO substitua o index.html da raiz do Busque Torres.
+Suba a pasta "cardapio" inteira para a raiz do repositório busque-torres,
+substituindo a pasta /cardapio atual. NÃO substitua o index.html da raiz.
 
-A estrutura correta ficará:
-/cardapio/index.html
-/cardapio/cadastro.html
-/cardapio/painel.html
-/cardapio/cardapio-core.js
-/cardapio/styles.css
-/cardapio/logo-cardapio.jpg
-/cardapio/icone-cardapio.jpg
+Esta versão mantém a identidade preta/amarela/laranja e acrescenta:
+- KM e R$ fixos nos campos de entrega.
+- Foto da empresa no cadastro inicial.
+- Foto por produto com compressão automática WebP <= 256 KB.
+- Sabores, tamanhos e adicionais vinculados a um único produto/imagem.
+- Abertura manual da empresa; horário de fechamento opcional.
+- Exibição imediata da área de "Outro banco" ao selecionar o modelo.
+- QR Code e Pix para recarga de créditos.
+- Acompanhamento público de pedidos por código.
+- Fluxo de status no painel: recebido > preparo > pronto/entrega > concluído.
 
-O QUE MUDOU
-- Home redesenhada na identidade preta/amarela/laranja do Busque Cardápio.
-- Home não fica vazia quando ainda não existem empresas: mostra categorias, chamada de lançamento e posições "Em breve" claramente identificadas.
-- Cadastro e painel harmonizados com a mesma identidade.
-- Cadastro agora possui botão para reenviar o e-mail de confirmação.
-- Confirmação de e-mail redireciona para /cardapio/painel.html e o frontend captura a sessão.
-- Checkout mostra e-mail/documento somente quando o provedor (PicPay/PagBank) exigir.
-- Painel consulta o catálogo real de bancos do Supabase e mostra instituições ativas e "em breve".
-- Campos bancários mudam conforme a instituição: Pix/mTLS, PicPay ou PagBank.
-- Corrigido um erro de sintaxe que existia no painel anterior na renderização da foto da empresa.
-
-IMPORTANTE
-O backend permanece no Supabase. Este pacote altera apenas o frontend /cardapio.
-
-
-ATUALIZAÇÃO DE CADASTRO:
-- Empresas do Busque Cardápio não precisam confirmar e-mail para entrar.
-- O cadastro usa a função cardapio-cadastrar-empresa e libera o acesso imediatamente.
-- A configuração global de confirmação do Supabase não foi alterada, preservando o Busque Torres.
+BACKEND SUPABASE JÁ ATUALIZADO:
+- abertura não é mais obrigatória;
+- fechamento opcional pode pausar automaticamente a empresa;
+- listagem pública mostra somente empresas abertas;
+- Mercado Pago split permanece com marketplace_fee R$ 1 e taxa_busque R$ 1.
