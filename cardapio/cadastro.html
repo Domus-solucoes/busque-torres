@@ -23,6 +23,7 @@
 
       <div class="field"><label>Foto ou logo da empresa</label><input id="fotoEmpresa" type="file" accept="image/*"><span class="small muted">Nós reduzimos automaticamente para WebP de até 256 KB para economizar armazenamento e egress.</span></div>
       <div class="grid grid2"><div class="field"><label>Nome da empresa</label><input id="nome"></div><div class="field"><label>WhatsApp</label><input id="whatsapp"></div><div class="field"><label>Endereço</label><input id="endereco"></div><div class="field"><label>Categoria principal</label><input id="categoria" placeholder="Ex.: Pastéis"></div></div>
+      <div class="location-setup"><div><strong>📍 Localização da empresa</strong><div class="small muted">Se você faz entrega, salve a posição exata do estabelecimento. O Mapbox usará esse ponto para calcular a rota de carro pelas ruas até o cliente e definir o frete pela faixa correta. Você também pode fazer isso depois no painel.</div><div id="signupLocationStatus" class="small location-status">Ainda não definida.</div></div><button class="btn" id="capturarLocalCadastro" type="button">Usar localização atual</button></div>
       <div class="field"><label>Fechamento automático (opcional)</label><input id="fechamento" type="time"><span class="small muted">Não existe horário fixo para abrir. No painel você toca em “Abrir empresa” quando quiser. Se informar um horário aqui, o sistema pausa os pedidos automaticamente nele.</span></div>
 
       <div class="field"><label>Entrega</label><select id="delivery"><option value="pickup">Somente retirada</option><option value="own">Faço entrega própria</option></select></div>
@@ -44,7 +45,7 @@
 </main>
 <script>
 const $=id=>document.getElementById(id);
-let signupRanges=[{km:5,fee:0}];
+let signupRanges=[{km:5,fee:0}],signupLat=null,signupLon=null;
 function renderSignupRanges(){
   $('signupRanges').innerHTML=signupRanges.map((r,i)=>`<div class="delivery-range-row">
     <div class="field"><label>Até</label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${r.km??''}"><span class="suffix">KM</span></div></div>
@@ -62,6 +63,8 @@ function collectSignupRanges(){
   out.sort((a,b)=>a.km-b.km);const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('Não repita a mesma distância em duas faixas.');seen.add(r.km)}
   return out;
 }
+
+$('capturarLocalCadastro').onclick=()=>{const b=$('capturarLocalCadastro');if(!navigator.geolocation){$('signupLocationStatus').textContent='Este navegador não permite capturar localização.';return}b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(pos=>{signupLat=pos.coords.latitude;signupLon=pos.coords.longitude;$('signupLocationStatus').textContent='Localização salva para o cadastro.';$('signupLocationStatus').className='small location-status oktext';b.disabled=false;b.textContent='Atualizar localização'},()=>{$('signupLocationStatus').textContent='Não foi possível acessar a localização. Você pode definir depois no painel.';b.disabled=false;b.textContent='Usar localização atual'},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
 $('delivery').onchange=()=>$('faixaWrap').classList.toggle('hidden',$('delivery').value!=='own');
 renderSignupRanges();
 async function uploadImagem(tipo,file,produtoId=null){
@@ -74,7 +77,7 @@ $('criar').onclick=async()=>{
   const b=$('criar');b.disabled=true;$('msg').innerHTML='';
   const email=$('email').value.trim().toLowerCase(),password=$('senha').value;
   try{
-    const payload={email,password,nome:$('nome').value,whatsapp:$('whatsapp').value,endereco:$('endereco').value,categorias:[$('categoria').value].filter(Boolean),horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectSignupRanges():[],produto_nome:$('produto').value,produto_preco:Number($('preco').value),produto_categoria:$('categoria').value||'Outros'};
+    const payload={email,password,nome:$('nome').value,whatsapp:$('whatsapp').value,endereco:$('endereco').value,categorias:[$('categoria').value].filter(Boolean),horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectSignupRanges():[],produto_nome:$('produto').value,produto_preco:Number($('preco').value),produto_categoria:$('categoria').value||'Outros',latitude:signupLat,longitude:signupLon};
     const d=await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});
     await CardapioCore.signIn(email,password);
     $('msg').innerHTML='<div class="notice ok"><strong>Conta criada.</strong><br>Enviando as imagens e abrindo o painel...</div>';

@@ -35,3 +35,7 @@
   .delivery-range-row{grid-template-columns:1fr 1fr auto;gap:7px;padding:9px}
   .delivery-remove{min-width:38px;padding:8px}
 }
+
+/* V6 — localização e estados de disponibilidade */
+.location-setup,.location-checkout{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px;margin:12px 0;border:1px solid #3a3a3a;border-radius:16px;background:linear-gradient(135deg,rgba(255,210,26,.06),rgba(255,122,0,.025))}.location-status{margin-top:6px}.oktext{color:#55d88b!important}.warntext{color:#ffca55!important}.checkout-total{margin-top:14px}.soon.setup{background:#2a2412;color:#ffd21a;border:1px solid #725b00}.unavailable-text{margin-top:9px;color:#ffca55;font-weight:800}.location-checkout .btn,.location-setup .btn{flex:0 0 auto}
+@media(max-width:640px){.location-setup,.location-checkout{align-items:stretch;flex-direction:column}.location-setup .btn,.location-checkout .btn{width:100%}}
