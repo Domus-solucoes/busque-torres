@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#062a48">
+  <title>Busque Cardápio — Administrativo</title>
+  <style>
+    :root{
+      --navy:#062a48;--navy2:#0b3b63;--blue:#0a7fc7;--bg:#f4f7f9;--paper:#fff;
+      --text:#12212e;--muted:#687985;--line:#dfe7ec;--green:#168a57;--amber:#9a6814;
+      --red:#a53b3b;--shadow:0 10px 30px rgba(5,37,62,.09);--max:1380px
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+    button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+    .shell{width:min(var(--max),calc(100% - 28px));margin:auto}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+    .topbar-inner{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .brand{display:flex;align-items:center;gap:10px}.mark{width:39px;height:39px;border-radius:12px;background:linear-gradient(145deg,var(--navy),var(--blue));color:#fff;display:grid;place-items:center;font-weight:950}
+    .brand strong{display:block;color:var(--navy);font-size:14px}.brand span{display:block;margin-top:2px;color:var(--blue);font-size:9px;text-transform:uppercase;font-weight:950;letter-spacing:.08em}
+    .module-switch{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid var(--line);border-radius:13px;background:#f8fafb}
+    .module-switch a{border:0;border-radius:9px;padding:8px 11px;background:transparent;color:#5e6d77;font-weight:900;font-size:10px;text-decoration:none}
+    .module-switch a.active{background:var(--navy);color:#fff}
+    .top-actions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff;color:var(--navy);font-weight:900;font-size:10px}
+    .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}.btn.danger{color:var(--red);border-color:#e7caca}
+    .login-wrap{min-height:calc(100vh - 69px);display:grid;place-items:center;padding:28px 0}.login-card{width:min(460px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+    .login-card h1{margin:0;color:var(--navy);font-size:25px}.login-card p{margin:8px 0 18px;color:var(--muted);font-size:11px;line-height:1.55}
+    .field{display:grid;gap:6px;margin-bottom:11px}.field label{font-size:10px;font-weight:950;color:var(--navy)}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,127,199,.08)}
+    .login-error{min-height:18px;color:var(--red);font-size:10px;font-weight:800}
+    .app{display:none;padding:18px 0 42px}
+    .hero{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end;margin-bottom:14px;padding:22px;border-radius:20px;background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;box-shadow:var(--shadow)}
+    .hero small{display:block;color:#b9d6e8;font-size:9px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}.hero h1{margin:5px 0 5px;font-size:clamp(24px,4vw,34px);letter-spacing:-.8px}.hero p{margin:0;color:#d5e4ec;font-size:11px;line-height:1.45}
+    .hero-admin{text-align:right}.hero-admin strong{display:block;font-size:13px}.hero-admin span{display:block;margin-top:3px;color:#c7dae5;font-size:9px}
+    .tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 12px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+    .tab{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:#fff;color:#5a6974;font-weight:950;font-size:10px;white-space:nowrap}.tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+    .pane{display:none}.pane.active{display:block}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}.kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;box-shadow:0 4px 15px rgba(5,37,62,.04)}
+    .kpi small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;font-weight:950;letter-spacing:.05em}.kpi strong{display:block;margin-top:5px;color:var(--navy);font-size:24px}.kpi span{display:block;margin-top:3px;color:var(--muted);font-size:9px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 4px 15px rgba(5,37,62,.04)}
+    .card h2{margin:0;color:var(--navy);font-size:18px}.card>p{margin:5px 0 14px;color:var(--muted);font-size:10px;line-height:1.5}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 11px}.toolbar h2{margin:0;color:var(--navy);font-size:20px}.toolbar-right{display:flex;gap:8px;align-items:center}
+    .search{min-width:260px;border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;outline:none}.search:focus{border-color:var(--blue)}
+    .select{border:1px solid var(--line);border-radius:11px;padding:10px 11px;background:#fff;color:var(--navy);font-weight:800;font-size:10px}
+    .company-list,.order-list,.finance-list{display:grid;gap:10px}
+    .company{background:#fff;border:1px solid var(--line);border-radius:17px;overflow:hidden}.company-head{display:grid;grid-template-columns:1fr auto;gap:12px;padding:14px 15px;border-bottom:1px solid #edf1f3}
+    .company h3{margin:0;color:var(--navy);font-size:15px}.company-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.tag{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 8px;background:#f8fafb;color:#5c6c76;font-size:9px;font-weight:900}
+    .tag.ok{background:#eef9f3;border-color:#cae9d8;color:#166d47}.tag.warn{background:#fff8e9;border-color:#eed9a5;color:#7e5617}.tag.bad{background:#fff1f1;border-color:#edcccc;color:#913838}.tag.test{background:#eef5ff;border-color:#cedff5;color:#2c5f93}
+    .company-body{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:13px 15px}.stat small{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;font-weight:900}.stat strong{display:block;margin-top:3px;color:var(--navy);font-size:12px}
+    .missing{grid-column:1/-1;padding:9px 10px;border-radius:10px;background:#fff9ed;color:#72551c;font-size:9px;line-height:1.45}.company-actions{display:flex;gap:7px;flex-wrap:wrap;padding:11px 15px;border-top:1px solid #edf1f3;background:#fbfcfd}
+    .mini{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--navy);font-size:9px;font-weight:950}.mini.primary{background:var(--navy);border-color:var(--navy);color:#fff}.mini.danger{color:var(--red);border-color:#e7caca}
+    .order,.finance-row{display:grid;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+    .order{grid-template-columns:130px 1.5fr 1fr 100px 110px}.finance-row{grid-template-columns:135px 1.4fr 1fr 120px 110px}
+    .order strong,.finance-row strong{color:var(--navy);font-size:11px}.order span,.finance-row span{color:var(--muted);font-size:9px}.money{font-weight:950;color:var(--navy)!important}
+    .empty{padding:35px 18px;border:1px dashed #cbd7de;border-radius:16px;background:#fff;text-align:center;color:var(--muted);font-size:11px}.empty strong{display:block;margin-bottom:5px;color:var(--navy);font-size:16px}
+    .notice{padding:12px 13px;border:1px solid #d8e5ec;border-radius:13px;background:#f8fbfd;color:#586b77;font-size:10px;line-height:1.5;margin-bottom:12px}
+    .notice.warn{border-color:#ead3a0;background:#fff9ed;color:#72551c}
+    .status-line{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #edf1f3}.status-line:last-child{border-bottom:0}.status-line span{color:#5c6d78;font-size:10px}.status-line strong{color:var(--navy);font-size:11px}
+    .toast{position:fixed;left:50%;bottom:18px;z-index:100;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#10283a;color:#fff;border-radius:11px;padding:10px 13px;font-size:10px;font-weight:850;transition:.2s;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.company-body{grid-template-columns:repeat(3,1fr)}.order,.finance-row{grid-template-columns:120px 1fr 110px}.order .hide-md,.finance-row .hide-md{display:none}}
+    @media(max-width:700px){.shell{width:min(var(--max),calc(100% - 18px))}.topbar-inner{min-height:62px}.module-switch button:first-child{display:none}.top-actions .desktop{display:none}.hero{grid-template-columns:1fr}.hero-admin{text-align:left}.kpis{grid-template-columns:1fr 1fr}.toolbar{align-items:stretch;flex-direction:column}.toolbar-right{display:grid;grid-template-columns:1fr 120px}.search{min-width:0;width:100%}.company-body{grid-template-columns:1fr 1fr}.order,.finance-row{grid-template-columns:1fr auto}.order .hide-sm,.finance-row .hide-sm{display:none}}
+    @media(max-width:440px){.kpis{grid-template-columns:1fr 1fr;gap:8px}.kpi{padding:12px}.kpi strong{font-size:20px}.company-body{grid-template-columns:1fr 1fr}.toolbar-right{grid-template-columns:1fr}.top-actions .btn:not(.primary){display:none}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="shell topbar-inner">
+    <div class="brand">
+      <div class="mark">B</div>
+      <div><strong>Busque Torres</strong><span>Administrativo</span></div>
+    </div>
+    <div class="module-switch" aria-label="Produto administrativo">
+      <a href="bt-gestao-8472.html">Busque Torres</a>
+      <a href="admin-cardapio.html" class="active">Busque Cardápio</a>
+    </div>
+    <div class="top-actions">
+      <a class="btn desktop" href="index.html">Abrir Cardápio</a>
+      <button class="btn danger" id="logoutBtn" type="button" hidden>Sair</button>
+    </div>
+  </div>
+</header>
+
+<section class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>Acesso administrativo</h1>
+    <p id="gateMessage">Validando a sessão do Busque Torres...</p>
+    <div class="login-error" id="loginError"></div>
+    <a class="btn primary" style="display:block;text-align:center;padding:12px" href="bt-gestao-8472.html?next=cardapio">Entrar pelo Painel Busque Torres</a>
+  </div>
+</section>
+
+<main class="shell app" id="app">
+  <section class="hero">
+    <div>
+      <small>Módulo independente</small>
+      <h1>Busque Cardápio</h1>
+      <p>Empresas, operação, pedidos e financeiro. Sem CRM e sem misturar dados com o diretório principal.</p>
+    </div>
+    <div class="hero-admin"><strong id="adminName">Administrador</strong><span id="adminRole">Acesso administrativo</span></div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-pane="overview">Visão geral</button>
+    <button class="tab" data-pane="companies">Empresas</button>
+    <button class="tab" data-pane="orders">Pedidos</button>
+    <button class="tab" data-pane="finance">Financeiro</button>
+  </nav>
+
+  <section class="pane active" id="pane-overview">
+    <div class="kpis">
+      <div class="kpi"><small>Empresas</small><strong id="kCompanies">0</strong><span id="kCompaniesSub">0 completas</span></div>
+      <div class="kpi"><small>Pedidos hoje</small><strong id="kOrdersToday">0</strong><span id="kOrdersPeriod">0 no período</span></div>
+      <div class="kpi"><small>Mercado Pago</small><strong id="kMP">0</strong><span>contas conectadas</span></div>
+      <div class="kpi"><small>Homologação</small><strong id="kTest">0</strong><span>empresas com teste liberado</span></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2>Saúde da operação</h2>
+        <p>Leitura rápida do módulo Busque Cardápio.</p>
+        <div class="status-line"><span>Empresas completas</span><strong id="healthComplete">0</strong></div>
+        <div class="status-line"><span>Empresas incompletas</span><strong id="healthIncomplete">0</strong></div>
+        <div class="status-line"><span>Recebendo pedidos</span><strong id="healthOpen">0</strong></div>
+        <div class="status-line"><span>Pedidos pagos no período</span><strong id="healthPaid">0</strong></div>
+      </div>
+      <div class="card" id="overviewFinance">
+        <h2>Financeiro</h2>
+        <p>Somente pagamentos reais aprovados. Homologações ficam fora desta conta.</p>
+        <div class="status-line"><span>Vendas brutas</span><strong id="healthGross">R$ 0,00</strong></div>
+        <div class="status-line"><span>Receita Busque</span><strong id="healthFee">R$ 0,00</strong></div>
+        <div class="status-line"><span>Período</span><strong id="healthPeriod">30 dias</strong></div>
+        <div class="notice warn" id="financeNoAccess" hidden>Seu usuário administrativo não possui permissão financeira.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-companies">
+    <div class="toolbar">
+      <h2>Empresas do Cardápio</h2>
+      <div class="toolbar-right">
+        <input class="search" id="companySearch" placeholder="Buscar empresa">
+        <select class="select" id="companyFilter">
+          <option value="all">Todas</option>
+          <option value="complete">Completas</option>
+          <option value="incomplete">Incompletas</option>
+          <option value="open">Recebendo pedidos</option>
+          <option value="test">Homologação</option>
+        </select>
+      </div>
+    </div>
+    <div class="company-list" id="companyList"></div>
+  </section>
+
+  <section class="pane" id="pane-orders">
+    <div class="toolbar">
+      <h2>Pedidos</h2>
+      <div class="toolbar-right"><input class="search" id="orderSearch" placeholder="Código, empresa ou cliente"></div>
+    </div>
+    <div class="order-list" id="orderList"></div>
+  </section>
+
+  <section class="pane" id="pane-finance">
+    <div class="toolbar">
+      <div><h2>Financeiro</h2><div style="margin-top:3px;color:var(--muted);font-size:9px">Somente pagamentos reais aprovados.</div></div>
+      <div class="toolbar-right">
+        <select class="select" id="periodSelect">
+          <option value="7">7 dias</option>
+          <option value="30" selected>30 dias</option>
+          <option value="90">90 dias</option>
+          <option value="365">365 dias</option>
+        </select>
+      </div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><small>Vendas brutas</small><strong id="fGross">R$ 0,00</strong><span>pedidos reais aprovados</span></div>
+      <div class="kpi"><small>Receita Busque</small><strong id="fFee">R$ 0,00</strong><span>taxa de plataforma</span></div>
+      <div class="kpi"><small>Pagamentos</small><strong id="fCount">0</strong><span>aprovados no período</span></div>
+      <div class="kpi"><small>Ticket médio</small><strong id="fTicket">R$ 0,00</strong><span>venda média aprovada</span></div>
+    </div>
+    <div class="notice warn" id="financeBlocked" hidden>Financeiro indisponível para este usuário administrativo.</div>
+    <div class="finance-list" id="financeList"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="supabase-config.js"></script>
+<script>
+const ADMIN_SESSION_KEY='busque_torres_admin_session_v1';
+const DASHBOARD_URL=BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-dashboard';
+const ACTION_URL=BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-acao';
+
+let state={session:null,data:null,dias:30,refreshPromise:null};
+const $=id=>document.getElementById(id);
+const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const fmtDate=v=>v?new Date(v).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+const toast=msg=>{const el=$('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2600)};
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+function readSharedSession(){
+  try{return JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY)||'null')}catch{return null}
+}
+function saveSharedSession(session){
+  state.session=session;
+  if(session?.access_token&&session?.refresh_token){
+    const persisted={
+      access_token:session.access_token,
+      refresh_token:session.refresh_token,
+      expires_at:session.expires_at||null,
+      expires_in:session.expires_in||null,
+      token_type:session.token_type||'bearer'
+    };
+    try{localStorage.setItem(ADMIN_SESSION_KEY,JSON.stringify(persisted))}catch{}
+  }
+}
+function clearSharedSession(){
+  state.session=null;
+  try{localStorage.removeItem(ADMIN_SESSION_KEY)}catch{}
+}
+async function refreshSharedSession(){
+  if(state.refreshPromise)return state.refreshPromise;
+  const refreshToken=state.session?.refresh_token;
+  if(!refreshToken)throw new Error('Sessão administrativa encerrada.');
+  state.refreshPromise=fetch(`${BUSQUE_SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{
+    method:'POST',
+    headers:{apikey:BUSQUE_SUPABASE_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({refresh_token:refreshToken})
+  }).then(async r=>{
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.msg||data.message||'Não foi possível renovar a sessão.');
+    saveSharedSession(data);
+    return data;
+  }).finally(()=>{state.refreshPromise=null});
+  return state.refreshPromise;
+}
+function sessionExpiring(session){
+  if(!session?.expires_at)return false;
+  return Number(session.expires_at)*1000<=Date.now()+60000;
+}
+async function api(url,opts={},retry=true){
+  if(!state.session?.access_token)throw Object.assign(new Error('unauthorized'),{status:401});
+  const res=await fetch(url,{
+    ...opts,
+    headers:{
+      ...(opts.headers||{}),
+      Authorization:'Bearer '+state.session.access_token,
+      apikey:BUSQUE_SUPABASE_KEY,
+      Accept:'application/json'
+    }
+  });
+  const data=await res.json().catch(()=>({}));
+  if(res.status===401&&retry&&state.session?.refresh_token){
+    await refreshSharedSession();
+    return api(url,opts,false);
+  }
+  if(!res.ok||!data.ok)throw Object.assign(new Error(data.error||'erro_api'),{data,status:res.status});
+  return data;
+}
+function showGate(message){
+  $('gateMessage').textContent=message||'Acesso restrito.';
+  $('loginWrap').style.display='grid';
+  $('app').style.display='none';
+  $('logoutBtn').hidden=true;
+}
+function showApp(){
+  $('loginWrap').style.display='none';
+  $('app').style.display='block';
+  $('logoutBtn').hidden=false;
+}
+async function boot(){
+  const saved=readSharedSession();
+  if(!saved?.access_token||!saved?.refresh_token){
+    location.replace('bt-gestao-8472.html?next=cardapio');
+    return;
+  }
+  state.session=saved;
+  try{
+    if(sessionExpiring(saved))await refreshSharedSession();
+    await loadDashboard();
+  }catch(err){
+    console.error(err);
+    if(err.status===403){
+      showGate(err.data?.error==='cardapio_admin_nao_liberado'
+        ?'Seu usuário está autenticado, mas ainda não está liberado para o administrativo do Busque Cardápio.'
+        :'Seu usuário não possui acesso a este módulo.');
+      return;
+    }
+    clearSharedSession();
+    location.replace('bt-gestao-8472.html?next=cardapio');
+  }
+}
+async function loadDashboard(){
+  const data=await api(DASHBOARD_URL+'?dias='+state.dias);
+  state.data=data;
+  showApp();
+  renderAll();
+}
+function renderAll(){
+  const d=state.data,r=d.resumo,a=d.admin;
+  $('adminName').textContent=a.nome||'Administrador';
+  $('adminRole').textContent=(a.papel==='dono'?'Dono':'Operador')+(a.financeiro?' · Financeiro liberado':'');
+  $('kCompanies').textContent=r.empresas_total;
+  $('kCompaniesSub').textContent=r.completas+' completas · '+r.incompletas+' incompletas';
+  $('kOrdersToday').textContent=r.pedidos_hoje;
+  $('kOrdersPeriod').textContent=r.pedidos_periodo+' no período';
+  $('kMP').textContent=r.mercadopago_conectadas;
+  $('kTest').textContent=r.homologacao;
+  $('healthComplete').textContent=r.completas;
+  $('healthIncomplete').textContent=r.incompletas;
+  $('healthOpen').textContent=r.aceitando_pedidos;
+  $('healthPaid').textContent=r.pedidos_pagos;
+  $('healthPeriod').textContent=d.periodo_dias+' dias';
+  $('financeNoAccess').hidden=a.financeiro;
+  $('healthGross').textContent=a.financeiro?money(r.vendas_brutas):'Restrito';
+  $('healthFee').textContent=a.financeiro?money(r.taxa_busque):'Restrito';
+  renderCompanies();renderOrders();renderFinance();
+}
+function renderCompanies(){
+  const q=$('companySearch').value.trim().toLowerCase(),filter=$('companyFilter').value;
+  let rows=[...(state.data?.empresas||[])];
+  rows=rows.filter(e=>{
+    if(q&&!String(e.nome).toLowerCase().includes(q))return false;
+    if(filter==='complete'&&!e.cadastro_completo)return false;
+    if(filter==='incomplete'&&e.cadastro_completo)return false;
+    if(filter==='open'&&!e.aceitando_pedidos)return false;
+    if(filter==='test'&&!e.homologacao)return false;
+    return true;
+  });
+  if(!rows.length){$('companyList').innerHTML='<div class="empty"><strong>Nenhuma empresa encontrada</strong>Ajuste os filtros ou aguarde novos cadastros.</div>';return}
+  const isOwner=state.data.admin.papel==='dono';
+  $('companyList').innerHTML=rows.map(e=>{
+    const trial=e.dias_trial==null?'—':(e.dias_trial<0?'Vencido':e.dias_trial+' dias');
+    const cats=(e.categorias||[]).slice(0,4).map(c=>'<span class="tag">'+esc(c)+'</span>').join('');
+    return `<article class="company">
+      <div class="company-head">
+        <div><h3>${esc(e.nome)}</h3><div class="company-meta">
+          <span class="tag ${e.cadastro_completo?'ok':'warn'}">${e.cadastro_completo?'Cadastro completo':'Cadastro incompleto'}</span>
+          <span class="tag ${e.mercadopago_conectado?'ok':'warn'}">${e.mercadopago_conectado?'Mercado Pago conectado':'Sem Mercado Pago'}</span>
+          ${e.homologacao?'<span class="tag test">Homologação</span>':''}${cats}
+        </div></div>
+        <span class="tag ${e.aceitando_pedidos?'ok':'bad'}">${e.aceitando_pedidos?'Recebendo pedidos':'Pedidos pausados'}</span>
+      </div>
+      <div class="company-body">
+        <div class="stat"><small>Produtos</small><strong>${e.produtos}</strong></div>
+        <div class="stat"><small>Pedidos período</small><strong>${e.pedidos_periodo}</strong></div>
+        <div class="stat"><small>Trial</small><strong>${trial}</strong></div>
+        <div class="stat"><small>Vendas reais</small><strong>${money(e.vendas_brutas)}</strong></div>
+        <div class="stat"><small>Receita Busque</small><strong>${money(e.taxa_busque)}</strong></div>
+        ${e.cadastro_completo?'':`<div class="missing"><strong>Faltando:</strong> ${(e.faltando||[]).map(esc).join(', ')||'verificar cadastro'}</div>`}
+      </div>
+      <div class="company-actions">
+        <button class="mini primary" onclick="setReceiving('${e.id}',${!e.aceitando_pedidos})">${e.aceitando_pedidos?'Pausar pedidos':'Retomar pedidos'}</button>
+        ${isOwner?`<button class="mini" onclick="setTest('${e.id}',${!e.homologacao})">${e.homologacao?'Desativar homologação':'Liberar homologação'}</button>`:''}
+      </div>
+    </article>`;
+  }).join('');
+}
+function renderOrders(){
+  const q=$('orderSearch').value.trim().toLowerCase();
+  let rows=[...(state.data?.pedidos||[])];
+  if(q)rows=rows.filter(o=>[o.codigo,o.empresa,o.cliente,o.status].some(x=>String(x||'').toLowerCase().includes(q)));
+  if(!rows.length){$('orderList').innerHTML='<div class="empty"><strong>Nenhum pedido</strong>Não há pedidos no período selecionado.</div>';return}
+  $('orderList').innerHTML=rows.map(o=>`<div class="order">
+    <div><strong>${esc(o.codigo)}</strong><br><span>${fmtDate(o.created_at)}</span></div>
+    <div><strong>${esc(o.empresa)}</strong><br><span>${esc(o.cliente||'Cliente')}</span></div>
+    <div class="hide-sm"><strong>${esc(o.status)}</strong><br><span>${o.modalidade==='entrega'?'Entrega':'Retirada'}</span></div>
+    <div class="hide-md"><span>Pedido</span><br><strong>${o.status==='concluido'?'Concluído':'Em andamento'}</strong></div>
+    <div class="money">${money(o.total)}</div>
+  </div>`).join('');
+}
+function renderFinance(){
+  const allowed=Boolean(state.data?.admin?.financeiro);
+  $('financeBlocked').hidden=allowed;
+  const rows=allowed?(state.data?.financeiro||[]):[];
+  const gross=Number(state.data?.resumo?.vendas_brutas||0),fee=Number(state.data?.resumo?.taxa_busque||0);
+  $('fGross').textContent=allowed?money(gross):'Restrito';
+  $('fFee').textContent=allowed?money(fee):'Restrito';
+  $('fCount').textContent=allowed?rows.length:'—';
+  $('fTicket').textContent=allowed&&rows.length?money(gross/rows.length):money(0);
+  if(!allowed){$('financeList').innerHTML='';return}
+  if(!rows.length){$('financeList').innerHTML='<div class="empty"><strong>Sem pagamentos reais</strong>Pagamentos de homologação não aparecem no financeiro.</div>';return}
+  $('financeList').innerHTML=rows.map(p=>`<div class="finance-row">
+    <div><strong>${esc(p.codigo||'Pedido')}</strong><br><span>${fmtDate(p.pago_em)}</span></div>
+    <div><strong>${esc(p.empresa)}</strong><br><span>${esc(p.provider)}</span></div>
+    <div class="hide-sm"><span>Venda bruta</span><br><strong>${money(p.valor_bruto)}</strong></div>
+    <div class="hide-md"><span>Taxa Busque</span><br><strong>${money(p.taxa_busque)}</strong></div>
+    <div class="money">${money(p.taxa_busque)}</div>
+  </div>`).join('');
+}
+async function adminAction(payload){
+  await api(ACTION_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  await loadDashboard();
+}
+async function setReceiving(id,value){
+  try{await adminAction({acao:'set_recebimento',empresa_id:id,valor:value});toast(value?'Pedidos retomados.':'Pedidos pausados.')}catch(err){toast('Não foi possível alterar a empresa.')}
+}
+async function setTest(id,value){
+  try{await adminAction({acao:'set_homologacao',empresa_id:id,valor:value});toast(value?'Homologação liberada.':'Homologação desativada.')}catch(err){toast(err.data?.error==='somente_dono'?'Somente o dono pode alterar homologação.':'Não foi possível alterar a homologação.')}
+}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));
+  document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('active',x.id==='pane-'+btn.dataset.pane));
+}));
+$('logoutBtn').addEventListener('click',()=>{
+  clearSharedSession();
+  location.href='bt-gestao-8472.html';
+});
+$('companySearch').addEventListener('input',renderCompanies);
+$('companyFilter').addEventListener('change',renderCompanies);
+$('orderSearch').addEventListener('input',renderOrders);
+$('periodSelect').addEventListener('change',async e=>{state.dias=Number(e.target.value||30);await loadDashboard()});
+boot();
+</script>
+</body>
+</html>
