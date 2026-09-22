@@ -40,10 +40,21 @@ const CardapioCore=(()=>{
     if(r.status===401&&auth&&s?.refresh_token){await refresh();s=read();headers.Authorization="Bearer "+s.access_token;r=await doReq()}
     const d=await r.json().catch(()=>({}));if(!r.ok||d?.ok===false)throw Object.assign(new Error(d?.detalhe||d?.error||d?.erro||"Erro na operação."),{status:r.status,data:d});return d;
   }
-  async function toWebp(file,maxBytes=262144){
-    if(file.type==="image/webp"&&file.size<=maxBytes)return file;const bmp=await createImageBitmap(file);let scale=Math.min(1,1600/Math.max(bmp.width,bmp.height)),quality=.86,blob=null;
-    for(let attempt=0;attempt<8;attempt++){const w=Math.max(1,Math.round(bmp.width*scale)),h=Math.max(1,Math.round(bmp.height*scale));const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;canvas.getContext("2d").drawImage(bmp,0,0,w,h);blob=await new Promise(res=>canvas.toBlob(res,"image/webp",quality));if(blob&&blob.size<=maxBytes)break;quality=Math.max(.5,quality-.08);scale*=.88}
-    bmp.close();if(!blob||blob.size>maxBytes)throw new Error("Não foi possível reduzir a imagem para 256 KB.");return new File([blob],(file.name||"imagem").replace(/\.[^.]+$/,"" )+".webp",{type:"image/webp"});
+  async function toWebp(file,maxBytes=92160){
+    if(file.type==="image/webp"&&file.size<=maxBytes)return file;
+    const bmp=await createImageBitmap(file);
+    let scale=Math.min(1,1200/Math.max(bmp.width,bmp.height)),quality=.82,blob=null;
+    for(let attempt=0;attempt<12;attempt++){
+      const w=Math.max(1,Math.round(bmp.width*scale)),h=Math.max(1,Math.round(bmp.height*scale));
+      const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+      canvas.getContext("2d",{alpha:false}).drawImage(bmp,0,0,w,h);
+      blob=await new Promise(res=>canvas.toBlob(res,"image/webp",quality));
+      if(blob&&blob.size<=maxBytes)break;
+      quality=Math.max(.44,quality-.06);scale*=.88;
+    }
+    bmp.close();
+    if(!blob||blob.size>maxBytes)throw new Error("Não foi possível otimizar a imagem para até 90 KB.");
+    return new File([blob],(file.name||"imagem").replace(/\.[^.]+$/,"" )+".webp",{type:"image/webp"});
   }
   captureAuthRedirect();
   return {money,esc,fmt,read,save,clear,session,signIn,signUp,resendConfirmation,refresh,fn,toWebp,captureAuthRedirect};

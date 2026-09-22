@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Visitas — Busque Cardápio</title>
+  <style>
+    :root{--bg:#080808;--card:#141414;--line:#2b2b2b;--text:#fff;--muted:#a8a8a8;--yellow:#ffd21a;--orange:#ff7a00}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(920px,calc(100% - 28px));margin:auto;padding:28px 0 50px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top a{color:#111;text-decoration:none;background:linear-gradient(135deg,var(--yellow),var(--orange));padding:10px 13px;border-radius:11px;font-weight:900}.title h1{margin:0;font-size:30px}.title p{margin:6px 0 0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.kpi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}.kpi small{display:block;color:var(--muted);font-weight:800;text-transform:uppercase;font-size:11px}.kpi strong{display:block;font-size:34px;margin-top:7px}.note{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#101010;color:var(--muted);font-size:13px;line-height:1.5}.bad{color:#ff8b8b}.btn{border:1px solid var(--line);border-radius:11px;padding:10px 13px;background:#151515;color:#fff;font-weight:900;cursor:pointer}@media(max-width:650px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.kpi strong{font-size:30px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="title"><h1>Visitas do Busque Cardápio</h1><p>Contagem por sessão, sem inflar por refresh.</p></div><a href="../admin-cardapio.html">Administrativo</a></div>
+  <div id="content">
+    <div class="grid">
+      <div class="kpi"><small>Hoje</small><strong id="today">—</strong></div>
+      <div class="kpi"><small>No período</small><strong id="period">—</strong></div>
+      <div class="kpi"><small>Total</small><strong id="total">—</strong></div>
+    </div>
+    <div class="note" id="note">Carregando...</div>
+  </div>
+</div>
+<script src="../supabase-config.js"></script>
+<script>
+const KEY='busque_torres_admin_session_v1';
+const $=id=>document.getElementById(id);
+function read(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
+async function refresh(session){
+  const r=await fetch(BUSQUE_SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:BUSQUE_SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+  const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Sessão encerrada.');localStorage.setItem(KEY,JSON.stringify(d));return d;
+}
+async function api(session,retry=true){
+  const r=await fetch(BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-dashboard?dias=30',{headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:'Bearer '+session.access_token}});
+  const d=await r.json().catch(()=>({}));
+  if(r.status===401&&retry&&session.refresh_token)return api(await refresh(session),false);
+  if(!r.ok||!d.ok)throw new Error(d.error||'Não foi possível carregar.');return d;
+}
+async function boot(){
+  let s=read();
+  if(!s?.access_token){$('content').innerHTML='<div class="note bad">Entre primeiro no painel administrativo do Busque Torres e depois volte para esta página.</div>';return}
+  try{const d=await api(s);const r=d.resumo||{};$('today').textContent=Number(r.visitas_hoje||0).toLocaleString('pt-BR');$('period').textContent=Number(r.visitas_periodo||0).toLocaleString('pt-BR');$('total').textContent=Number(r.visitas_total||0).toLocaleString('pt-BR');$('note').textContent='Período exibido: '+d.periodo_dias+' dias. Uma nova visita só é contada após 30 minutos sem atividade no mesmo navegador.'}catch(e){$('content').innerHTML='<div class="note bad">'+String(e.message||e)+'</div>'}
+}
+boot();
+</script>
+</body>
+</html>
