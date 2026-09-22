@@ -374,6 +374,45 @@
     .access-note{display:block;margin-top:14px!important;text-align:center;color:#7a8798!important;font-size:.72rem!important}
     @media(max-width:640px){.hero-city-art{object-position:62% 50%;opacity:1}.hero-city-shade{display:none}.access-modal{padding:20px 15px}.access-stats{grid-template-columns:repeat(2,1fr)}.access-stat strong{font-size:1.25rem}.access-stat{padding-inline:4px}}
 
+    /* BUSQUE CARDÁPIO — chamada principal na home */
+    .cardapio-hero-wrap{max-width:900px;margin:42px auto 0;text-align:left;text-shadow:none}
+    .cardapio-hero-cta{position:relative;overflow:hidden;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:18px;width:100%;padding:20px 21px 20px 20px;border:2px solid #ffd21a;border-radius:26px;background:linear-gradient(135deg,#050505 0%,#111 62%,#1a1400 100%);color:#fff;text-decoration:none;box-shadow:0 18px 42px rgba(0,0,0,.36),0 0 0 1px rgba(255,210,26,.08) inset;backdrop-filter:blur(8px);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+    .cardapio-hero-cta:before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:linear-gradient(180deg,#ffd21a,#ff9d00)}
+    .cardapio-hero-cta:after{content:"";position:absolute;width:190px;height:190px;right:-95px;top:-95px;border-radius:50%;background:rgba(255,210,26,.11);pointer-events:none}
+    .cardapio-hero-cta:hover{transform:translateY(-2px);border-color:#ffe15b;box-shadow:0 22px 50px rgba(0,0,0,.42),0 0 28px rgba(255,210,26,.10)}
+    .cardapio-hero-brand{position:relative;z-index:1;display:grid;place-items:center;width:82px;height:82px;border-radius:20px;overflow:hidden;background:#090909;border:1px solid rgba(255,210,26,.34);box-shadow:0 10px 26px rgba(0,0,0,.30)}
+    .cardapio-hero-brand img{width:100%;height:100%;object-fit:cover;display:block}
+    .cardapio-hero-text{position:relative;z-index:1;display:grid;gap:4px;min-width:0}
+    .cardapio-hero-kicker{display:inline-flex;align-items:center;gap:7px;width:max-content;max-width:100%;padding:5px 9px;border-radius:999px;background:rgba(255,210,26,.12);border:1px solid rgba(255,210,26,.28);color:#ffd21a;font-size:.64rem;font-weight:950;letter-spacing:.10em}
+    .cardapio-hero-kicker:before{content:"";width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#ffd21a;box-shadow:0 0 0 4px rgba(255,210,26,.10)}
+    .cardapio-hero-title{color:#ffd21a;font-size:1.62rem;line-height:1.05;font-weight:1000;letter-spacing:-.035em}
+    .cardapio-hero-headline{color:#fff;font-size:1.04rem;line-height:1.25;font-weight:900}
+    .cardapio-hero-desc{color:#cfd2d7;font-size:.84rem;line-height:1.4}
+    .cardapio-hero-action{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;min-width:166px;padding:13px 15px;border-radius:14px;background:linear-gradient(135deg,#ffd21a,#ff9d00);color:#090909;font-size:.79rem;font-weight:1000;letter-spacing:.02em;box-shadow:0 10px 24px rgba(255,174,0,.22)}
+    .cardapio-hero-action b{font-size:1.15rem;line-height:1}
+    .cardapio-hero-cta:focus-visible{outline:3px solid rgba(255,210,26,.65);outline-offset:3px}
+
+    @media(max-width:640px){
+      .cardapio-hero-wrap{margin-top:18px!important;padding-inline:2px!important;text-align:left!important}
+      .cardapio-hero-cta{grid-template-columns:66px minmax(0,1fr);gap:13px;padding:15px 14px 14px 15px;border-radius:21px;border-width:2px}
+      .cardapio-hero-cta:before{width:5px}
+      .cardapio-hero-brand{width:66px;height:66px;border-radius:17px}
+      .cardapio-hero-kicker{font-size:.54rem;padding:4px 7px;letter-spacing:.08em}
+      .cardapio-hero-title{font-size:1.33rem}
+      .cardapio-hero-headline{font-size:.91rem}
+      .cardapio-hero-desc{font-size:.72rem;line-height:1.35}
+      .cardapio-hero-action{grid-column:1/-1;width:100%;min-width:0;padding:12px 14px;border-radius:13px;font-size:.76rem}
+    }
+
+    @media(max-width:380px){
+      .cardapio-hero-cta{grid-template-columns:58px minmax(0,1fr);gap:11px;padding:13px 11px 12px 13px}
+      .cardapio-hero-brand{width:58px;height:58px;border-radius:15px}
+      .cardapio-hero-title{font-size:1.19rem}
+      .cardapio-hero-headline{font-size:.84rem}
+      .cardapio-hero-desc{font-size:.68rem}
+      .cardapio-hero-action{padding:11px 12px;font-size:.72rem}
+    }
+
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
   
 
@@ -686,18 +725,21 @@
         <span class="jobs-label">TEMOS VAGAS</span><span class="jobs-count" id="jobsCount">0</span>
       </button>
       <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog" aria-label="Abrir planos e valores">PLANOS</button>
-      <div class="cardapio-bubble" aria-label="Novidade Busque Cardápio">
-        <div class="cardapio-bubble-icon" aria-hidden="true">🍽️</div>
-        <div class="cardapio-bubble-copy">
-          <strong>Busque Cardápio</strong>
-          <span>Uma nova forma de encontrar cardápios e fazer pedidos em Torres está chegando.</span>
-        </div>
-      </div>
     </div>
   </div>
-  <div class="hero-copy shell">
-    <h1>Tudo o que você procura em um só lugar.</h1>
-    <p>Encontre empresas, profissionais, serviços e oportunidades em Torres, com contato rápido e direto.</p>
+  <div class="hero-copy shell cardapio-hero-wrap">
+    <a class="cardapio-hero-cta" href="/cardapio/" aria-label="Abrir o Busque Cardápio">
+      <span class="cardapio-hero-brand" aria-hidden="true">
+        <img src="/cardapio/logo-cardapio.jpg" alt="" loading="eager" decoding="async">
+      </span>
+      <span class="cardapio-hero-text">
+        <span class="cardapio-hero-kicker">AGORA NO BUSQUE TORRES</span>
+        <strong class="cardapio-hero-title">BUSQUE CARDÁPIO</strong>
+        <span class="cardapio-hero-headline">Escolha, peça e acompanhe.</span>
+        <span class="cardapio-hero-desc">Cardápios das empresas de Torres em um só lugar.</span>
+      </span>
+      <span class="cardapio-hero-action">ABRIR CARDÁPIOS <b aria-hidden="true">→</b></span>
+    </a>
   </div>
 </header>
 
