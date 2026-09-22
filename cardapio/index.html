@@ -45,7 +45,6 @@
 
 <script>
 const $=id=>document.getElementById(id),toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2800)};let all=[],empresa=null,produtoAtual=null,cart=[],cat='',clienteCoords=null,freteCalculado=0,entregaCalculada=null,trackingTimer=null;
-const placeholders=[{emoji:'🍔',title:'Burger House',cat:'Hambúrguer',desc:'Em breve no Busque Cardápio.'},{emoji:'🍕',title:'La Vera Pizza',cat:'Pizza',desc:'Em breve no Busque Cardápio.'},{emoji:'🍲',title:'Sabor da Casa',cat:'Marmita',desc:'Em breve no Busque Cardápio.'},{emoji:'🍇',title:'Açaí do Vale',cat:'Açaí',desc:'Em breve no Busque Cardápio.'}];
 const statusLabel=s=>({aguardando_pagamento:'Aguardando pagamento',pago:'Pedido recebido',preparando:'Em preparo',pronto:'Pronto para retirada',em_entrega:'Saiu para entrega',concluido:'Concluído',cancelado:'Cancelado'}[s]||s);
 async function load(){try{const d=await CardapioCore.fn('cardapio-publico-lista',{method:'GET'});all=d.estabelecimentos||[];renderLista();renderHomeCommercial()}catch(e){$('lista').innerHTML='<div class="empty"><strong>Não foi possível carregar</strong>Tente novamente em instantes.</div>';renderHomeCommercial()}}
 function premiumRows(){return all.filter(e=>e.vitrine_premium===true||e.premium===true||e.tipo_vitrine==='premium').slice(0,3)}
@@ -53,74 +52,35 @@ function destaqueRows(){return all.filter(e=>e.destaque===true||e.home_destaque=
 function renderHomeCommercial(){
   const premiums=premiumRows(),destaques=destaqueRows();
   const premiumBox=$('premiumCarousel'),highlightBox=$('homeHighlights');
+
   if(premiums.length){
     $('premiumSection').classList.remove('hidden');
     premiumBox.innerHTML=premiums.map(e=>`<article class="premium-card" onclick="openEmpresa('${e.id}')"><div class="premium-cover">${e.foto_url?`<img src="${CardapioCore.esc(e.foto_url)}" alt="${CardapioCore.esc(e.nome)}" loading="lazy" decoding="async">`:'<div class="premium-ph">🍽️</div>'}<span class="premium-badge">PREMIUM</span></div><div class="premium-body"><div><h3>${CardapioCore.esc(e.nome)}</h3><p>${CardapioCore.esc((e.categorias||[]).slice(0,2).join(' • ')||'Cardápio local')}</p></div><span class="premium-open">${e.pedido_disponivel?'● Aberto':'Ver cardápio'}</span><button class="btn gold" type="button">Ver cardápio</button></div></article>`).join('');
-  }else if(!all.length){
-    $('premiumSection').classList.remove('hidden');
-    const demoPremium=[
-      {nome:'Brasa 42 Burger',cat:'Hambúrguer • Lanches',emoji:'🍔',food:'burger'},
-      {nome:'Pizzaria Farol',cat:'Pizzas • Massas',emoji:'🍕',food:'pizza'},
-      {nome:'Açaí do Mar',cat:'Açaí • Sobremesas',emoji:'🍇',food:'acai'}
-    ];
-    premiumBox.innerHTML=demoPremium.map(e=>`<article class="premium-card demo-card" onclick="demoOpen('${e.nome}')"><div class="premium-cover demo-food ${e.food}"><div class="premium-ph">${e.emoji}</div><span class="premium-badge">PREMIUM</span><span class="demo-badge">DEMO</span></div><div class="premium-body"><div><h3>${e.nome}</h3><p>${e.cat}</p></div><span class="premium-open">● Aberto</span><button class="btn gold" type="button">Ver cardápio</button></div></article>`).join('');
-  }else $('premiumSection').classList.add('hidden');
+  }else{
+    $('premiumSection').classList.add('hidden');
+    premiumBox.innerHTML='';
+  }
 
   if(destaques.length){
     $('highlightsSection').classList.remove('hidden');
-    const cards=destaques.slice(0,4).map(e=>`<button class="highlight-card" type="button" onclick="openEmpresa('${e.id}')"><span class="highlight-label">DESTAQUE</span><strong>${CardapioCore.esc(e.nome)}</strong><small>${CardapioCore.esc((e.categorias||[]).slice(0,2).join(' • ')||'Ver cardápio')}</small><span class="highlight-action">Abrir cardápio ›</span></button>`);
-    while(cards.length<4)cards.push('<div class="highlight-card highlight-slot"><span class="highlight-label offer">OFERTA DO DIA</span><strong>Oferta especial</strong><small>Este espaço receberá uma promoção do dia.</small><span class="highlight-action">Em breve</span></div>');
-    highlightBox.innerHTML=cards.join('');
-  }else if(!all.length){
-    $('highlightsSection').classList.remove('hidden');
-    highlightBox.innerHTML=`
-      <button class="highlight-card demo-highlight" type="button" onclick="demoOpen('Pastel da Praça')"><span class="highlight-label">DESTAQUE</span><span class="highlight-emoji">🥟</span><strong>Pastel da Praça</strong><small>Pastéis e porções</small><span class="highlight-action">Abrir cardápio ›</span></button>
-      <button class="highlight-card demo-highlight" type="button" onclick="demoOpen('Sabor da Praia')"><span class="highlight-label">DESTAQUE</span><span class="highlight-emoji">🍛</span><strong>Sabor da Praia</strong><small>Marmitas e pratos</small><span class="highlight-action">Abrir cardápio ›</span></button>
-      <button class="highlight-card demo-highlight offer-card" type="button" onclick="demoOpen('Brasa 42 Burger')"><span class="highlight-label offer">OFERTA DO DIA</span><span class="highlight-emoji">🍔</span><strong>Combo X-Bacon + Refri</strong><small><s>R$ 36,90</s> <b>R$ 29,90</b> · Brasa 42 Burger</small><span class="highlight-action">Pedir agora ›</span></button>
-      <button class="highlight-card demo-highlight offer-card" type="button" onclick="demoOpen('Pizzaria Farol')"><span class="highlight-label offer">OFERTA DO DIA</span><span class="highlight-emoji">🍕</span><strong>Pizza Família 40 cm</strong><small><s>R$ 54,90</s> <b>R$ 44,90</b> · Pizzaria Farol</small><span class="highlight-action">Pedir agora ›</span></button>`;
-  }else $('highlightsSection').classList.add('hidden');
+    highlightBox.innerHTML=destaques.map(e=>`<button class="highlight-card" type="button" onclick="openEmpresa('${e.id}')"><span class="highlight-label">DESTAQUE</span><strong>${CardapioCore.esc(e.nome)}</strong><small>${CardapioCore.esc((e.categorias||[]).slice(0,2).join(' • ')||'Ver cardápio')}</small><span class="highlight-action">Abrir cardápio ›</span></button>`).join('');
+  }else{
+    $('highlightsSection').classList.add('hidden');
+    highlightBox.innerHTML='';
+  }
 }
 function renderLista(){
   const q=$('busca').value.trim().toLowerCase();
   const rows=all.filter(x=>(!q||x.nome.toLowerCase().includes(q)||(x.categorias||[]).join(' ').toLowerCase().includes(q))&&(!cat||(x.categorias||[]).join(' ').toLowerCase().includes(cat.toLowerCase())));
   $('contador').textContent=rows.length+' disponível'+(rows.length===1?'':'is');
   if(!all.length){
-    const demoEmpresas=[
-      {nome:'Casa do Pastel',cat:'Pastéis e lanches',aberto:true},
-      {nome:'Xis do Dariu',cat:'Lanches',aberto:true},
-      {nome:'Essencial Lanches',cat:'Hambúrgueres e porções',aberto:true},
-      {nome:'Pizzaria Central',cat:'Pizzas',aberto:false},
-      {nome:'Açaí da Praia',cat:'Açaí e sobremesas',aberto:true},
-      {nome:'Restaurante Exemplo',cat:'Pratos e marmitas',aberto:true},
-      {nome:'Sushi Costa Sul',cat:'Sushi e combinados',aberto:false},
-      {nome:'Doce & Café',cat:'Cafés e sobremesas',aberto:true}
-    ];
-    const qDemo=$('busca').value.trim().toLowerCase();
-    const demoRows=demoEmpresas.filter(e=>(!qDemo||e.nome.toLowerCase().includes(qDemo)||e.cat.toLowerCase().includes(qDemo))&&(!cat||e.cat.toLowerCase().includes(cat.toLowerCase())));
-    $('contador').textContent=demoRows.length+' disponível'+(demoRows.length===1?'':'is');
-    $('subRestaurantes').textContent='Toque no nome para abrir o cardápio.';
-    $('lista').innerHTML=demoRows.length?demoRows.map(e=>`<button class="company-row demo-row" type="button" onclick="demoOpen('${e.nome.replace(/'/g,"\'")}')"><span class="company-dot ${e.aberto?'open':'closed'}"></span><span class="company-row-main"><strong>${e.nome}</strong><small>${e.cat}</small></span><span class="company-row-arrow">›</span></button>`).join(''):'<div class="company-list-empty"><strong>Nenhum resultado</strong><span>Tente outra busca ou categoria.</span></div>';
+    $('subRestaurantes').textContent='As empresas cadastradas aparecerão aqui.';
+    $('lista').innerHTML='<div class="company-list-empty"><strong>Nenhuma empresa disponível agora</strong><span>Assim que os primeiros cardápios estiverem disponíveis, eles aparecerão nesta lista.</span></div>';
     return;
   }
   $('subRestaurantes').textContent='Toque no nome para abrir o cardápio.';
-  $('lista').innerHTML=rows.length?rows.map(e=>`<button class="company-row" type="button" onclick="openEmpresa('${e.id}')"><span class="company-dot ${e.pedido_disponivel?'open':'setup'}"></span><span class="company-row-main"><strong>${CardapioCore.esc(e.nome)}</strong></span><span class="company-row-state">${e.pedido_disponivel?'Aberto':'Cardápio'}</span><span class="company-row-arrow">›</span></button>`).join(''):'<div class="company-list-empty"><strong>Nenhum resultado</strong><span>Tente outra busca ou categoria.</span></div>';
+  $('lista').innerHTML=rows.length?rows.map(e=>`<button class="company-row" type="button" onclick="openEmpresa('${e.id}')"><span class="company-dot ${e.pedido_disponivel?'open':'closed'}"></span><span class="company-row-main"><strong>${CardapioCore.esc(e.nome)}</strong><small>${CardapioCore.esc((e.categorias||[]).slice(0,3).join(' • ')||'Cardápio')}</small></span><span class="company-row-arrow">›</span></button>`).join(''):'<div class="company-list-empty"><strong>Nenhum resultado</strong><span>Tente outra busca ou categoria.</span></div>';
 }
-const demoMenus={
-  'Casa do Pastel':{cat:'Pastéis e lanches',open:true,emoji:'🥟',produtos:[['Pastel de Carne','Carne temperada e queijo.',14.90,'🥟'],['Pastel de Frango','Frango, queijo e temperos.',15.90,'🥟'],['Porção de Fritas','Batata frita crocante.',19.90,'🍟']]},
-  'Xis do Dariu':{cat:'Lanches',open:true,emoji:'🍔',produtos:[['Xis Salada','Hambúrguer, queijo, salada e molho da casa.',24.90,'🍔'],['Xis Bacon','Hambúrguer, bacon, queijo e salada.',29.90,'🥓'],['Combo Xis + Refri','Xis salada com refrigerante lata.',31.90,'🥤']]},
-  'Essencial Lanches':{cat:'Hambúrgueres e porções',open:true,emoji:'🍔',produtos:[['Burger Essencial','Pão, carne, queijo e molho especial.',27.90,'🍔'],['Fritas com Cheddar','Porção de fritas com cheddar.',22.90,'🍟'],['Combo Duplo','Burger duplo + fritas + refrigerante.',42.90,'🥤']]},
-  'Pizzaria Central':{cat:'Pizzas',open:false,emoji:'🍕',produtos:[['Pizza Calabresa','Calabresa, cebola e queijo.',49.90,'🍕'],['Pizza Quatro Queijos','Muçarela, parmesão, provolone e gorgonzola.',54.90,'🧀'],['Pizza Família','Pizza grande para compartilhar.',59.90,'🍕']]},
-  'Açaí da Praia':{cat:'Açaí e sobremesas',open:true,emoji:'🍇',produtos:[['Açaí 300ml','Escolha seus acompanhamentos.',18.90,'🍇'],['Açaí 500ml','Açaí cremoso com complementos.',25.90,'🥣'],['Copo Especial','Açaí, banana, morango e leite em pó.',29.90,'🍓']]},
-  'Restaurante Exemplo':{cat:'Pratos e marmitas',open:true,emoji:'🍛',produtos:[['Prato Executivo','Arroz, feijão, carne e salada.',29.90,'🍛'],['Marmita Caseira','Refeição completa do dia.',24.90,'🍱'],['Filé Acebolado','Filé, arroz, feijão e fritas.',36.90,'🥩']]},
-  'Sushi Costa Sul':{cat:'Sushi e combinados',open:false,emoji:'🍣',produtos:[['Combo 20 peças','Seleção variada de sushi.',49.90,'🍣'],['Hot Filadélfia','10 unidades.',26.90,'🍱'],['Temaki Salmão','Salmão, cream cheese e cebolinha.',24.90,'🍣']]},
-  'Doce & Café':{cat:'Cafés e sobremesas',open:true,emoji:'☕',produtos:[['Cappuccino','Café cremoso com leite.',12.90,'☕'],['Brownie','Brownie de chocolate.',14.90,'🍫'],['Combo Café + Doce','Café expresso e sobremesa do dia.',19.90,'🍰']]},
-  'Brasa 42 Burger':{cat:'Hambúrguer • Lanches',open:true,emoji:'🍔',produtos:[['Brasa Bacon','Burger artesanal com bacon.',31.90,'🍔'],['Combo X-Bacon + Refri','Oferta demonstrativa do dia.',29.90,'🥤'],['Fritas Brasa','Porção de fritas temperadas.',18.90,'🍟']]},
-  'Pizzaria Farol':{cat:'Pizzas • Massas',open:true,emoji:'🍕',produtos:[['Pizza Família 40 cm','Oferta demonstrativa.',44.90,'🍕'],['Pizza Marguerita','Tomate, queijo e manjericão.',48.90,'🍅'],['Pizza Bacon','Bacon e muçarela.',52.90,'🥓']]},
-  'Açaí do Mar':{cat:'Açaí • Sobremesas',open:true,emoji:'🍇',produtos:[['Açaí 400ml','Açaí com até 3 complementos.',22.90,'🍇'],['Açaí Premium','Açaí com frutas e creme.',29.90,'🍓']]},
-  'Pastel da Praça':{cat:'Pastéis e porções',open:true,emoji:'🥟',produtos:[['Pastel Especial','Carne, queijo e bacon.',18.90,'🥟'],['Porção Mista','Fritas e polenta.',24.90,'🍟']]},
-  'Sabor da Praia':{cat:'Marmitas e pratos',open:true,emoji:'🍛',produtos:[['Marmita do Dia','Prato completo caseiro.',25.90,'🍱'],['Prato da Casa','Carne, acompanhamentos e salada.',32.90,'🍛']]}
-};
-window.demoOpen=nome=>{const d=demoMenus[nome]||{cat:'Cardápio demonstrativo',open:true,emoji:'🍽️',produtos:[['Produto exemplo','Item fictício para visualizar o layout.',19.90,'🍽️']]};document.querySelectorAll('.home-only').forEach(x=>x.classList.add('hidden'));$('menuWrap').classList.remove('hidden');$('empresaNome').textContent=nome;$('empresaMeta').textContent=d.cat+' · Demonstração visual';$('empresaContato').innerHTML='';$('menuAvailability').innerHTML=d.open?'<div class="notice ok"><strong>● Aberto agora</strong><br>Empresa fictícia usada apenas para visualizar o layout.</div>':'<div class="notice bad"><strong>● Fechado agora</strong><br>O cardápio pode ser consultado, mas os pedidos estariam indisponíveis neste momento.</div>';$('produtos').innerHTML=d.produtos.map((p,i)=>`<article class="prod demo-product" onclick="toast('Produto fictício — demonstração do layout.')"><div class="ph">${p[3]}</div><div><h3>${p[0]}</h3><p>${p[1]}</p><div class="price">${CardapioCore.money(p[2])}</div><div class="small muted">Toque para ver como um produto apareceria</div></div></article>`).join('');window.scrollTo({top:0,behavior:'smooth'})};
 window.openEmpresa=async id=>{try{const d=await CardapioCore.fn('cardapio-publico',{method:'GET',query:'?empresa='+encodeURIComponent(id)});document.querySelectorAll('.home-only').forEach(x=>x.classList.add('hidden'));empresa={...d.empresa,entrega:d.entrega,pagamento:d.pagamento,pedido_disponivel:d.pedido_disponivel,indisponivel_motivo:d.indisponivel_motivo};$('lista').classList.add('hidden');$('categorias').classList.add('hidden');$('menuWrap').classList.remove('hidden');$('empresaNome').textContent=empresa.nome;$('empresaMeta').textContent=(empresa.endereco||'')+' · '+(d.pagamento?.tipo==='pix_banco'?(d.pagamento.banco_nome?'Pix '+d.pagamento.banco_nome:'Recebimento bancário em configuração'):'Mercado Pago');const waEmpresa=CardapioCore.waLink(empresa.whatsapp,`Olá! Encontrei a ${empresa.nome} pelo Busque Cardápio e gostaria de falar com vocês.`);$('empresaContato').innerHTML=waEmpresa?`<a class="mini whatsapp-action" target="_blank" rel="noopener" href="${CardapioCore.esc(waEmpresa)}">💬 WhatsApp da empresa</a>`:'';$('menuAvailability').innerHTML=d.pedido_disponivel?'':`<div class="notice warn"><strong>Cardápio disponível para consulta.</strong><br>Os pedidos ainda não estão liberados: ${CardapioCore.esc(d.indisponivel_motivo||'recebimento em configuração')}.</div>`;$('produtos').innerHTML=(d.produtos||[]).map(p=>`<article class="prod" onclick='abrirProduto(${JSON.stringify(JSON.stringify(p))})'>${p.imagem_url?`<img src="${CardapioCore.esc(p.imagem_url)}" alt="${CardapioCore.esc(p.nome)}" loading="lazy" decoding="async" fetchpriority="low">`:'<div class="ph">🍽️</div>'}<div><h3>${CardapioCore.esc(p.nome)}</h3><p>${CardapioCore.esc(p.descricao||'')}</p><div class="price">A partir de ${CardapioCore.money(p.preco)}</div>${(p.grupos||[]).length?`<div class="small muted">${p.grupos.map(g=>CardapioCore.esc(g.nome)).join(' · ')}</div>`:''}</div></article>`).join('')||'<div class="empty"><strong>Sem produtos</strong></div>'}catch(e){toast(e.data?.error==='empresa_fechada'?'Essa empresa está fechada no momento.':'Empresa indisponível.')}};
 window.abrirProduto=s=>{produtoAtual=JSON.parse(s);$('pmNome').textContent=produtoAtual.nome;$('pmPreco').textContent='A partir de '+CardapioCore.money(produtoAtual.preco);$('pmDesc').textContent=produtoAtual.descricao||'';$('pmQtd').value=1;$('pmGrupos').innerHTML=(produtoAtual.grupos||[]).map(g=>`<div class="option-group" data-group="${g.id}" data-min="${g.minimo||0}" data-max="${g.maximo||1}" data-tipo="${g.tipo}"><strong>${CardapioCore.esc(g.nome)} ${g.obrigatorio?'*':''}</strong>${(g.opcoes||[]).map(o=>`<label class="option"><span><input type="${g.tipo==='single'?'radio':'checkbox'}" name="g_${g.id}" value="${o.id}" data-price="${o.preco_adicional||0}"> ${CardapioCore.esc(o.nome)}</span><b>${Number(o.preco_adicional)>0?CardapioCore.money(Number(produtoAtual.preco)+Number(o.preco_adicional)):CardapioCore.money(produtoAtual.preco)}</b></label>`).join('')}</div>`).join('');$('produtoModal').hidden=false};
 $('addCart').onclick=()=>{const opcoes=[];let extra=0;for(const g of document.querySelectorAll('#pmGrupos .option-group')){const checked=[...g.querySelectorAll('input:checked')],min=Number(g.dataset.min||0),max=Number(g.dataset.max||1);if(checked.length<min||checked.length>max){toast('Revise as opções obrigatórias.');return}checked.forEach(i=>{opcoes.push(i.value);extra+=Number(i.dataset.price||0)})}cart.push({produto_id:produtoAtual.id,quantidade:Number($('pmQtd').value||1),opcoes,nome:produtoAtual.nome,preco:Number(produtoAtual.preco)+extra});$('produtoModal').hidden=true;updateCart()};
