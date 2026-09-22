@@ -1,5 +1,6 @@
 "use strict";
 const CARDAPIO_SESSION_KEY="busque_cardapio_empresa_session_v1";
+const CARDAPIO_RECOVERY_KEY="busque_cardapio_password_recovery_v1";
 const CardapioCore=(()=>{
   const base=BUSQUE_SUPABASE_URL;
   const key=BUSQUE_SUPABASE_KEY;
@@ -20,9 +21,12 @@ const CardapioCore=(()=>{
     const h=new URLSearchParams(location.hash.replace(/^#/,""));
     const q=new URLSearchParams(location.search);
     const access=h.get("access_token")||q.get("access_token"),refresh=h.get("refresh_token")||q.get("refresh_token");
+    const type=h.get("type")||q.get("type")||"";
+    const recoveryHint=type==="recovery"||q.get("recovery")==="1";
     if(access&&refresh){
       const expiresIn=Number(h.get("expires_in")||q.get("expires_in")||3600);
       save({access_token:access,refresh_token:refresh,expires_in:expiresIn,expires_at:Math.floor(Date.now()/1000)+expiresIn,token_type:h.get("token_type")||"bearer"});
+      if(recoveryHint){try{sessionStorage.setItem(CARDAPIO_RECOVERY_KEY,"1")}catch{}}
       history.replaceState({},document.title,location.pathname);
       return true;
     }
@@ -31,6 +35,20 @@ const CardapioCore=(()=>{
   async function signIn(email,password){const d=await authRequest("/auth/v1/token?grant_type=password",{email,password});save(d);return d}
   async function signUp(email,password,data){const d=await authRequest("/auth/v1/signup?redirect_to="+encodeURIComponent(emailRedirect),{email,password,data});if(d.access_token)save(d);return d}
   async function resendConfirmation(email){return authRequest("/auth/v1/resend",{type:"signup",email})}
+  async function requestPasswordRecovery(email){
+    const redirect=location.origin+"/cardapio/painel.html?recovery=1";
+    return authRequest("/auth/v1/recover?redirect_to="+encodeURIComponent(redirect),{email:String(email||"").trim().toLowerCase()});
+  }
+  async function updatePassword(password){
+    const s=await session();if(!s?.access_token)throw new Error("Link de recuperação inválido ou expirado.");
+    const r=await fetch(base+"/auth/v1/user",{method:"PUT",headers:{apikey:key,Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},body:JSON.stringify({password})});
+    const d=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(d.msg||d.message||d.error_description||"Não foi possível alterar a senha."),{status:r.status,data:d});
+    return d;
+  }
+  const isRecoveryMode=()=>{try{return sessionStorage.getItem(CARDAPIO_RECOVERY_KEY)==="1"}catch{return false}};
+  const clearRecoveryMode=()=>{try{sessionStorage.removeItem(CARDAPIO_RECOVERY_KEY)}catch{}};
+  function whatsappDigits(phone){let d=String(phone||"").replace(/\D/g,"");if((d.length===10||d.length===11)&&!d.startsWith("55"))d="55"+d;return d}
+  function waLink(phone,message=""){const d=whatsappDigits(phone);return d?"https://wa.me/"+d+(message?"?text="+encodeURIComponent(message):""):""}
   async function refresh(){const s=read();if(!s?.refresh_token)throw new Error("Sessão encerrada.");const d=await authRequest("/auth/v1/token?grant_type=refresh_token",{refresh_token:s.refresh_token});save(d);return d}
   async function session(){captureAuthRedirect();let s=read();if(!s?.access_token)return null;if(s.expires_at&&Number(s.expires_at)*1000<Date.now()+60000){try{await refresh();s=read()}catch{clear();return null}}return s}
   async function fn(name,{method="POST",body=null,auth=false,form=null,query=""}={}){
@@ -57,5 +75,5 @@ const CardapioCore=(()=>{
     return new File([blob],(file.name||"imagem").replace(/\.[^.]+$/,"" )+".webp",{type:"image/webp"});
   }
   captureAuthRedirect();
-  return {money,esc,fmt,read,save,clear,session,signIn,signUp,resendConfirmation,refresh,fn,toWebp,captureAuthRedirect};
+  return {money,esc,fmt,read,save,clear,session,signIn,signUp,resendConfirmation,requestPasswordRecovery,updatePassword,isRecoveryMode,clearRecoveryMode,waLink,refresh,fn,toWebp,captureAuthRedirect};
 })();

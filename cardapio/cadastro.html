@@ -54,11 +54,12 @@
       <div class="step-title"><span>3</span><div><h2>Crie seu acesso</h2><p>Sem confirmação por e-mail. Você entra no painel na hora.</p></div></div>
       <div class="grid grid2"><div class="field"><label>E-mail *</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Senha *</label><input id="senha" type="password" minlength="8" autocomplete="new-password"><span class="small muted">Mínimo de 8 caracteres.</span></div></div>
       <div id="resumoCadastro" class="signup-summary"></div>
-      <div class="notice ok"><strong>3 créditos gratuitos.</strong><br>Se você escolher receber por outro banco, já consegue começar com 3 pedidos pagos sem fazer recarga. Se usar Mercado Pago, continua valendo o split de R$ 1 por pedido.</div>
+      <div class="notice ok"><strong>3 créditos gratuitos.</strong><br>Se você escolher receber por outro banco, já consegue começar com 3 pedidos pagos sem fazer recarga. Se usar Mercado Pago, continua valendo o split de R$ 1 por pedido.</div><div class="small muted legal-consent">Ao criar a empresa, você declara que leu os <a href="termos.html" target="_blank">Termos de Uso</a> e a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.</div>
       <div class="wizard-actions"><button class="btn" id="step3Back">← Voltar</button><button class="btn gold" id="criar">Criar empresa e entrar</button></div>
     </section>
   </section>
 </main>
+<footer class="legal-footer"><div class="shell"><a href="termos.html">Termos de Uso</a><span>·</span><a href="privacidade.html">Política de Privacidade</a><span class="legal-copy">© 2026 Busque Torres · Desenvolvido por <strong>DOMUS SISTEMAS</strong></span></div></footer>
 <script>
 const $=id=>document.getElementById(id);
 let step=1,signupRanges=[{km:2,fee:5},{km:5,fee:8}],signupLat=null,signupLon=null;
