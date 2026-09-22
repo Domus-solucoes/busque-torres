@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505">
   <title>Painel da empresa — Busque Cardápio</title>
+  <meta name="busque-cardapio-version" content="13">
   <link rel="stylesheet" href="styles.css"><script src="../supabase-config.js"></script><script src="cardapio-core.js"></script>
 </head>
 <body>
@@ -44,19 +45,67 @@
   </section>
 
   <section class="pane" id="pane-recebimento">
-    <div class="grid grid2"><div class="card"><h2>Como deseja receber?</h2><p>Escolha um modelo. A mudança é salva na hora.</p><label class="payment-choice"><input type="radio" name="modelo" value="mercadopago_split"><span><strong>Mercado Pago</strong><small>R$ 1 por pedido pago via split.</small></span></label><label class="payment-choice"><input type="radio" name="modelo" value="banco_creditos"><span><strong>Outro banco</strong><small>100% do pedido vai para a empresa; o Busque usa créditos.</small></span></label></div><div class="card"><h2>Status do recebimento</h2><div id="recebStatus"></div></div></div>
+    <div class="receiving-intro card">
+      <div>
+        <span class="tag warn">Configuração guiada</span>
+        <h2>Como sua empresa quer receber?</h2>
+        <p>Escolha uma opção. O Busque Cardápio faz o máximo possível sozinho e mostra apenas o que você realmente precisa preencher.</p>
+      </div>
+      <div id="recebStatus" class="receiving-current"></div>
+    </div>
 
-    <div id="mpBox" class="card" style="margin-top:16px"><h2>Mercado Pago</h2><p>Conecte a conta da empresa. O split de R$ 1 por pedido permanece automático.</p><button id="conectarMP" class="btn gold">Conectar Mercado Pago</button></div>
+    <div class="receive-method-grid">
+      <label class="receive-method payment-choice" data-receive-card="mercadopago_split">
+        <input type="radio" name="modelo" value="mercadopago_split">
+        <span class="receive-method-icon">⚡</span>
+        <span><b class="receive-badge">MAIS FÁCIL</b><strong>Mercado Pago</strong><small>Você clica, autoriza sua conta e volta. O Busque configura a conexão automaticamente.</small><em>R$ 1 por pedido pago via split.</em></span>
+      </label>
+      <label class="receive-method payment-choice" data-receive-card="banco_creditos">
+        <input type="radio" name="modelo" value="banco_creditos">
+        <span class="receive-method-icon">🏦</span>
+        <span><strong>Meu banco / Pix</strong><small>100% do valor do pedido entra direto na conta da empresa. O Busque usa créditos.</small><em>Começa com 3 créditos gratuitos.</em></span>
+      </label>
+    </div>
 
-    <div id="bankBox" class="card" style="margin-top:16px"><h2>Banco próprio + créditos</h2><p>O cliente paga direto para a conta da empresa. O Busque Cardápio usa 1 crédito somente quando o pedido é confirmado como pago.</p><div class="notice warn">Use apenas credenciais de API fornecidas pela instituição. Nunca informe senha do aplicativo ou internet banking.</div>
-      <div class="grid grid2" style="margin-top:12px"><div class="field"><label>Banco / instituição</label><select id="bankCode"></select></div><div class="field"><label>Ambiente</label><select id="bankAmbiente"><option value="producao">Produção</option><option value="sandbox">Homologação / Sandbox</option></select></div></div>
-      <div id="bankSupportNote" class="notice" style="margin-bottom:12px"></div>
-      <div id="bankFieldsBcb"><div class="bank-fields"><div class="field"><label>Chave Pix</label><input id="bankPix"></div><div class="field"><label>Client ID</label><input id="bankClient"></div><div class="field"><label>Client Secret</label><input id="bankSecret" type="password"></div><div class="field wide"><label>Certificado PEM</label><textarea id="bankCert"></textarea></div><div class="field wide"><label>Chave privada PEM</label><textarea id="bankKey"></textarea></div></div></div>
-      <div id="bankFieldsPicpay" class="hidden"><div class="grid grid2"><div class="field"><label>Client ID</label><input id="picpayClient"></div><div class="field"><label>Client Secret</label><input id="picpaySecret" type="password"></div></div><div class="field"><label>Token do webhook PicPay</label><input id="picpayWebhook" type="password"></div><div class="notice">No Painel Lojista PicPay, cadastre esta URL e informe aqui o token gerado.</div><div class="field" style="margin-top:10px"><label>URL de webhook</label><input id="bankWebhookUrl" readonly></div></div>
-      <div id="bankFieldsPagbank" class="hidden"><div class="field"><label>Token API PagBank / PagSeguro</label><input id="pagbankToken" type="password"></div><div class="notice">Use o token da conta do estabelecimento. O dinheiro entra diretamente nessa conta.</div></div>
-      <button id="conectarBanco" class="btn primary">Conectar instituição</button>
+    <div id="mpBox" class="card receive-connect-card" style="margin-top:16px">
+      <div class="receive-connect-head"><div><span class="receive-step-number">1</span><div><h2>Conectar Mercado Pago</h2><p>Não precisa copiar Client ID, Secret nem certificado. A autorização acontece diretamente no Mercado Pago.</p></div></div><span id="mpConnectionPill" class="connection-pill">Não conectado</span></div>
+      <div class="auto-explainer"><span>✓ Login no Mercado Pago</span><span>✓ Autorização segura</span><span>✓ Split configurado pelo sistema</span><span>✓ Retorno automático ao painel</span></div>
+      <div class="receive-actions"><button id="conectarMP" class="btn gold">⚡ Conectar Mercado Pago automaticamente</button><button id="verificarMP" class="btn">Já autorizei — verificar agora</button></div>
+      <div id="mpConnectHelp" class="small muted" style="margin-top:10px">Uma janela do Mercado Pago será aberta. Depois da autorização, este painel verifica a conexão automaticamente.</div>
+    </div>
+
+    <div id="bankBox" class="card receive-connect-card" style="margin-top:16px">
+      <div class="receive-connect-head"><div><span class="receive-step-number">1</span><div><h2>Escolha sua instituição</h2><p>Mostramos somente integrações que o Busque Cardápio já consegue testar e conectar.</p></div></div><span id="bankConnectionPill" class="connection-pill">Não conectado</span></div>
+
+      <div id="bankConnectedBanner" class="notice ok hidden" style="margin-bottom:14px"></div>
+      <div id="bankSetupFlow">
+        <div class="grid grid2 bank-select-row"><div class="field"><label>Banco / instituição</label><select id="bankCode"></select></div><div class="field" id="bankEnvironmentField"><label>Ambiente</label><select id="bankAmbiente"><option value="producao">Produção</option><option value="sandbox">Homologação / Sandbox</option></select></div></div>
+        <div id="bankSupportNote" class="notice" style="margin-bottom:12px"></div>
+
+        <div class="bank-auto-box">
+          <div><strong>🤖 O que o Busque faz sozinho</strong><p>Depois que você informar os dados fornecidos pelo banco, o sistema testa a autenticação, guarda as credenciais no cofre seguro e configura o recebimento. Quando o banco permite, o webhook também é configurado automaticamente.</p></div>
+          <div id="bankAutoChecklist" class="bank-auto-checklist"></div>
+        </div>
+
+        <div class="receive-step-block">
+          <div class="receive-step-title"><span class="receive-step-number">2</span><div><h3>Pegue os dados no seu banco</h3><p>Não sabe onde achar? Abra o guia abaixo. Você nunca deve informar a senha do aplicativo ou internet banking.</p></div></div>
+          <details class="bank-help-details" id="bankHelpDetails"><summary>📘 Como conseguir os dados desta instituição</summary><div id="bankGuide" class="bank-guide"></div></details>
+        </div>
+
+        <div class="receive-step-block">
+          <div class="receive-step-title"><span class="receive-step-number">3</span><div><h3>Cole somente os dados pedidos</h3><p id="bankFieldsIntro">O formulário muda automaticamente conforme a instituição escolhida.</p></div></div>
+
+          <div id="bankFieldsBcb"><div class="bank-fields"><div class="field"><label>Chave Pix</label><input id="bankPix" placeholder="Sua chave Pix de recebimento"><span class="field-help">A mesma chave habilitada na API Pix do banco.</span></div><div class="field"><label>Client ID</label><input id="bankClient" autocomplete="off" placeholder="Fornecido pelo portal/API do banco"></div><div class="field"><label>Client Secret</label><input id="bankSecret" type="password" autocomplete="new-password" placeholder="Fornecido pelo portal/API do banco"></div><div class="field wide"><label>Certificado PEM</label><textarea id="bankCert" spellcheck="false" placeholder="-----BEGIN CERTIFICATE-----"></textarea></div><div class="field wide"><label>Chave privada PEM</label><textarea id="bankKey" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></div></div></div>
+          <div id="bankFieldsPicpay" class="hidden"><div class="grid grid2"><div class="field"><label>Client ID</label><input id="picpayClient" autocomplete="off" placeholder="Fornecido pelo PicPay"></div><div class="field"><label>Client Secret</label><input id="picpaySecret" type="password" autocomplete="new-password" placeholder="Fornecido pelo PicPay"></div></div><div class="field"><label>Token do webhook</label><input id="picpayWebhook" type="password" autocomplete="new-password" placeholder="Token criado no Painel Lojista PicPay"><span class="field-help">No PicPay, cadastre a URL abaixo e depois informe aqui o token gerado.</span></div><div class="field"><label>URL de webhook</label><div class="copy-field"><input id="bankWebhookUrl" readonly><button class="mini" type="button" id="copyBankWebhook">Copiar</button></div></div></div>
+          <div id="bankFieldsPagbank" class="hidden"><div class="field"><label>Token API PagBank / PagSeguro</label><input id="pagbankToken" type="password" autocomplete="new-password" placeholder="Token da conta da empresa"><span class="field-help">O dinheiro do pedido continuará entrando diretamente na conta do estabelecimento.</span></div></div>
+
+          <div id="bankConnectResult"></div>
+          <div class="receive-actions"><button id="conectarBanco" class="btn gold">🤖 Testar e conectar automaticamente</button><button id="desconectarBanco" class="btn danger hidden">Desconectar banco</button></div>
+        </div>
+      </div>
+
       <div class="sep"></div>
-      <div class="inline"><div><strong>Saldo: <span id="saldoCreditos">0</span> créditos</strong><div class="small muted">1 crédito = 1 pedido pago.</div></div><div class="right inline"><input id="qtdCreditos" type="number" min="1" value="20" style="width:90px"><button id="recarregar" class="btn gold">Carregar créditos</button></div></div><div id="pixRecarga" style="margin-top:12px"></div>
+      <div class="credit-summary"><div><span class="receive-step-number">4</span><div><strong>Créditos do Busque</strong><div class="small muted">Saldo disponível: <b id="saldoCreditos">0</b> · 1 crédito é consumido somente quando um pedido é confirmado como pago.</div></div></div><div class="right inline"><input id="qtdCreditos" type="number" min="1" value="20" style="width:90px"><button id="recarregar" class="btn">Carregar créditos</button></div></div><div id="pixRecarga" style="margin-top:12px"></div>
     </div>
   </section>
 </main>
@@ -96,7 +145,7 @@
 <div class="toast" id="toast"></div>
 <script>
 const $=id=>document.getElementById(id),toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2800)};
-let cfg=null,orders=null,products=[],bankInfo=null,opProduto=null,opGrupos=[],deliveryDraft=[],orderPollTimer=null,lastOrderSnapshot=new Map();
+let cfg=null,orders=null,products=[],bankInfo=null,opProduto=null,opGrupos=[],deliveryDraft=[],orderPollTimer=null,lastOrderSnapshot=new Map(),bankSetupForceOpen=false,mpPopup=null;
 const statusLabel=s=>({aguardando_pagamento:'Aguardando pagamento',pago:'Pedido recebido',preparando:'Em preparo',pronto:'Pronto para retirada',em_entrega:'Saiu para entrega',concluido:'Concluído',cancelado:'Cancelado'}[s]||s);
 async function boot(){const s=await CardapioCore.session();if(CardapioCore.isRecoveryMode()&&s){showPasswordReset();return}if(!s){showLogin();return}try{await loadAll();showApp();applyInitialTab()}catch(e){if(e.status===404){try{await CardapioCore.fn('cardapio-bootstrap-empresa',{auth:true,body:{nome:s.user?.user_metadata?.cardapio_nome||'Minha empresa'}});await loadAll();showApp();applyInitialTab()}catch(x){CardapioCore.clear();showLogin()}}else{CardapioCore.clear();showLogin()}}}
 function stopOrderPolling(){if(orderPollTimer){clearInterval(orderPollTimer);orderPollTimer=null}}
@@ -183,12 +232,73 @@ function toggleDeliveryFields(){document.querySelectorAll('.delivery-own').forEa
 $('setCompanyLocation').onclick=()=>{const b=$('setCompanyLocation');if(!navigator.geolocation)return toast('Seu navegador não permite obter a localização.');b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(async pos=>{try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{latitude:pos.coords.latitude,longitude:pos.coords.longitude}});await loadAll();toast('Localização da empresa salva.')}catch(e){toast('Não foi possível salvar a localização.')}finally{b.disabled=false}},()=>{b.disabled=false;b.textContent='Usar localização atual';toast('Não foi possível acessar a localização. Autorize o navegador e tente novamente.')},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
 $('cfgDelivery').onchange=toggleDeliveryFields;
 $('salvarEntrega').onclick=async()=>{const own=$('cfgDelivery').value==='own';try{const faixas=own?collectDeliveryRanges():[];await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{entrega:{modo:$('cfgDelivery').value,faixas}}});await loadAll();toast('Entrega salva.')}catch(e){toast(e.message==='km_repetido'?'Não repita a mesma distância em duas faixas.':e.message==='faixa_invalida'?'Preencha KM e taxa corretamente em todas as faixas.':'Não foi possível salvar a entrega.')}};
-function renderRecebimento(){document.querySelectorAll('input[name=modelo]').forEach(r=>r.checked=r.value===cfg.empresa.modelo_recebimento);document.querySelectorAll('.payment-choice').forEach(l=>l.classList.toggle('selected',l.querySelector('input').checked));const banco=cfg.banco;$('recebStatus').innerHTML=cfg.empresa.modelo_recebimento==='mercadopago_split'?`<div class="notice ${cfg.mercado_pago?.status==='conectado'?'ok':'warn'}">Mercado Pago: ${cfg.mercado_pago?.status||'não conectado'}</div>`:`<div class="notice ${banco?.status==='conectado'?'ok':'warn'}">Banco: ${banco?.banco_nome||'não conectado'} · ${banco?.status||'pendente'}</div>`;$('mpBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='mercadopago_split');$('bankBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='banco_creditos');$('saldoCreditos').textContent=cfg.creditos?.disponiveis??0;renderBankCatalog()}
-function renderBankCatalog(){const banks=bankInfo?.bancos_suportados||[],current=bankInfo?.conexao?.banco_codigo||'';$('bankCode').innerHTML=banks.map(b=>`<option value="${CardapioCore.esc(b.codigo)}" ${b.codigo===current?'selected':''} ${b.selecionavel?'':'disabled'}>${CardapioCore.esc(b.nome)}${b.selecionavel?'':' — em breve'}</option>`).join('');if(!$('bankCode').value){const first=banks.find(b=>b.selecionavel);if(first)$('bankCode').value=first.codigo}$('bankWebhookUrl').value=bankInfo?.webhook_url||'';if(bankInfo?.conexao?.pix_chave)$('bankPix').value=bankInfo.conexao.pix_chave;updateBankFields()}
-function selectedBank(){return (bankInfo?.bancos_suportados||[]).find(b=>b.codigo===$('bankCode').value)||null}function updateBankFields(){const b=selectedBank(),code=b?.codigo||'',pic=code==='picpay',pag=code==='pagbank',bcb=!pic&&!pag&&b?.tipo_integracao==='pix_bcb_mtls';$('bankFieldsBcb').classList.toggle('hidden',!bcb);$('bankFieldsPicpay').classList.toggle('hidden',!pic);$('bankFieldsPagbank').classList.toggle('hidden',!pag);const sandboxOpt=$('bankAmbiente').querySelector('option[value=sandbox]');sandboxOpt.disabled=!b?.ambiente_homologacao;if(!b?.ambiente_homologacao&&$('bankAmbiente').value==='sandbox')$('bankAmbiente').value='producao';$('bankSupportNote').className='notice '+(b?.selecionavel?'ok':'warn');$('bankSupportNote').textContent=b?.observacao||'Selecione uma instituição.';$('conectarBanco').disabled=!b?.selecionavel}$('bankCode').onchange=updateBankFields;
+function connectionLabel(status){return status==='conectado'?'Conectado':status==='erro'?'Erro na conexão':status==='pendente'?'Configuração pendente':'Não conectado'}
+function renderRecebimento(){
+  document.querySelectorAll('input[name=modelo]').forEach(r=>r.checked=r.value===cfg.empresa.modelo_recebimento);
+  document.querySelectorAll('.payment-choice').forEach(l=>l.classList.toggle('selected',l.querySelector('input').checked));
+  const banco=bankInfo?.conexao||cfg.banco||null,mpConnected=cfg.mercado_pago?.status==='conectado',bankConnected=banco?.status==='conectado';
+  $('recebStatus').innerHTML=cfg.empresa.modelo_recebimento==='mercadopago_split'
+    ?`<div class="connection-summary ${mpConnected?'ok':''}"><span>${mpConnected?'✅':'⚠️'}</span><div><strong>Mercado Pago</strong><small>${mpConnected?'Conta conectada e pronta para pagamentos.':'Falta conectar a conta para liberar pedidos.'}</small></div></div>`
+    :`<div class="connection-summary ${bankConnected?'ok':''}"><span>${bankConnected?'✅':'⚠️'}</span><div><strong>${CardapioCore.esc(banco?.banco_nome||'Banco ainda não conectado')}</strong><small>${bankConnected?'Recebimento direto configurado.':'Escolha uma instituição e conclua a conexão.'}</small></div></div>`;
+  $('mpBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='mercadopago_split');
+  $('bankBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='banco_creditos');
+  $('saldoCreditos').textContent=cfg.creditos?.disponiveis??0;
+  $('mpConnectionPill').textContent=mpConnected?'✓ Conectado':'Não conectado';$('mpConnectionPill').className='connection-pill '+(mpConnected?'connected':'');
+  $('conectarMP').textContent=mpConnected?'Reconectar Mercado Pago':'⚡ Conectar Mercado Pago automaticamente';
+  renderBankCatalog();
+}
+function renderBankCatalog(){
+  const banks=bankInfo?.bancos_suportados||[],current=bankInfo?.conexao?.banco_codigo||'';
+  const active=banks.filter(b=>b.selecionavel),future=banks.filter(b=>!b.selecionavel);
+  $('bankCode').innerHTML='<optgroup label="Disponíveis agora">'+active.map(b=>`<option value="${CardapioCore.esc(b.codigo)}" ${b.codigo===current?'selected':''}>${CardapioCore.esc(b.nome)}</option>`).join('')+'</optgroup>'+(future.length?'<optgroup label="Em homologação / em breve">'+future.map(b=>`<option value="${CardapioCore.esc(b.codigo)}" disabled>${CardapioCore.esc(b.nome)} — em breve</option>`).join('')+'</optgroup>':'');
+  if(!$('bankCode').value&&active[0])$('bankCode').value=active[0].codigo;
+  $('bankWebhookUrl').value=bankInfo?.webhook_url||'';
+  if(bankInfo?.conexao?.pix_chave)$('bankPix').value=bankInfo.conexao.pix_chave;
+  const connected=bankInfo?.conexao?.status==='conectado';
+  $('bankConnectionPill').textContent=connectionLabel(bankInfo?.conexao?.status);$('bankConnectionPill').className='connection-pill '+(connected?'connected':bankInfo?.conexao?.status==='erro'?'error':'');
+  $('bankConnectedBanner').classList.toggle('hidden',!connected);
+  if(connected)$('bankConnectedBanner').innerHTML=`<strong>✅ ${CardapioCore.esc(bankInfo.conexao.banco_nome)} conectado.</strong><br>O sistema já validou a integração${bankInfo.conexao.webhook_configurado?' e o webhook está configurado':''}. Você pode receber pedidos por este modelo. <button class="mini" type="button" id="editBankConnection" style="margin-left:8px">Alterar configuração</button>`;
+  $('bankSetupFlow').classList.toggle('hidden',connected&&!bankSetupForceOpen);
+  $('desconectarBanco').classList.toggle('hidden',!connected);
+  updateBankFields();
+  const edit=$('editBankConnection');if(edit)edit.onclick=()=>{bankSetupForceOpen=true;$('bankSetupFlow').classList.remove('hidden');updateBankFields()};
+}
+function selectedBank(){return (bankInfo?.bancos_suportados||[]).find(b=>b.codigo===$('bankCode').value)||null}
+const BANK_GUIDES={
+  banrisul:['Entre no portal de desenvolvedores/integrações da sua conta empresarial.','Habilite a API Pix para cobrança e recebimento.','Gere ou obtenha Client ID, Client Secret, certificado mTLS e chave privada.','Use uma chave Pix da mesma conta habilitada na API.'],
+  sicredi:['Solicite ou habilite o acesso à API Pix da conta PJ no Sicredi.','No ambiente de desenvolvedores, obtenha Client ID e Client Secret.','Baixe o certificado mTLS e a respectiva chave privada.','Informe a chave Pix vinculada à conta recebedora.'],
+  inter:['Use uma conta Inter Empresas PJ com API Banking habilitada.','No portal de APIs do Inter, crie a aplicação e gere Client ID e Client Secret.','Baixe o certificado e a chave privada da aplicação.','Informe a chave Pix da conta que receberá os pedidos.'],
+  efi:['No painel Efí, crie uma aplicação para API Pix.','Copie Client ID e Client Secret da aplicação.','Baixe o certificado de produção da aplicação e tenha a chave privada correspondente.','Informe a chave Pix cadastrada na Efí.'],
+  picpay:['No ambiente PicPay Empresas/Business, habilite a API Pix Checkout.','Obtenha Client ID e Client Secret.','Cadastre a URL de webhook mostrada nesta tela.','Copie o token de webhook criado no PicPay e cole aqui.'],
+  pagbank:['No PagBank/PagSeguro, acesse as credenciais da API da conta empresarial.','Gere/copiei o Token API da conta que receberá os pagamentos.','Cole apenas o token aqui. O Busque valida a chave pública do webhook automaticamente.']
+};
+function renderBankGuide(b){
+  const steps=BANK_GUIDES[b?.codigo]||['Acesse o portal ou suporte empresarial da instituição.','Procure por API Pix, cobrança Pix ou credenciais para integração.','Copie somente as credenciais solicitadas abaixo.'];
+  const link=b?.fonte_oficial?`<a class="btn" target="_blank" rel="noopener" href="${CardapioCore.esc(b.fonte_oficial)}">Abrir página oficial da instituição ↗</a>`:'';
+  $('bankGuide').innerHTML=`<ol>${steps.map(x=>`<li>${CardapioCore.esc(x)}</li>`).join('')}</ol><div class="notice warn"><strong>Importante:</strong> nunca informe senha do aplicativo, internet banking, cartão ou código de segurança.</div>${link}`;
+}
+function updateBankFields(){
+  const b=selectedBank(),code=b?.codigo||'',pic=code==='picpay',pag=code==='pagbank',bcb=!pic&&!pag&&b?.tipo_integracao==='pix_bcb_mtls';
+  $('bankFieldsBcb').classList.toggle('hidden',!bcb);$('bankFieldsPicpay').classList.toggle('hidden',!pic);$('bankFieldsPagbank').classList.toggle('hidden',!pag);
+  const sandboxOpt=$('bankAmbiente').querySelector('option[value=sandbox]');sandboxOpt.disabled=!b?.ambiente_homologacao;if(!b?.ambiente_homologacao&&$('bankAmbiente').value==='sandbox')$('bankAmbiente').value='producao';
+  $('bankEnvironmentField').classList.toggle('hidden',!b?.ambiente_homologacao);
+  $('bankSupportNote').className='notice '+(b?.selecionavel?'ok':'warn');
+  $('bankSupportNote').innerHTML=b?`<strong>${CardapioCore.esc(b.nome)}</strong><br>${CardapioCore.esc(b.observacao||'Integração disponível.')}`:'Selecione uma instituição.';
+  $('conectarBanco').disabled=!b?.selecionavel;
+  $('bankFieldsIntro').textContent=bcb?'Este banco usa API Pix com certificado. Cole os quatro dados técnicos fornecidos pelo banco e sua chave Pix.':pic?'O PicPay precisa das credenciais da API e do token do webhook.':pag?'O PagBank precisa apenas do token API da conta empresarial.':'Selecione uma instituição.';
+  const items=[];if(b?.requer_pix_chave)items.push('Chave Pix');if(b?.requer_client_credentials)items.push('Client ID + Secret');if(b?.requer_certificado)items.push('Certificado mTLS');if(b?.requer_api_token)items.push('Token API');if(b?.requer_webhook_token)items.push('Token de webhook');
+  $('bankAutoChecklist').innerHTML=(items.length?items:['Nenhuma credencial disponível']).map(x=>`<span>✓ ${CardapioCore.esc(x)}</span>`).join('');
+  renderBankGuide(b);
+  $('bankConnectResult').innerHTML=bankInfo?.conexao?.ultimo_erro&&bankInfo?.conexao?.banco_codigo===code?`<div class="notice bad"><strong>Último teste não passou.</strong><br>${CardapioCore.esc(bankInfo.conexao.ultimo_erro)}</div>`:'';
+}
+$('bankCode').onchange=()=>{bankSetupForceOpen=true;updateBankFields()};
 async function trocarModelo(m){$('mpBox').classList.toggle('hidden',m!=='mercadopago_split');$('bankBox').classList.toggle('hidden',m!=='banco_creditos');document.querySelectorAll('.payment-choice').forEach(l=>l.classList.toggle('selected',l.querySelector('input').value===m));try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{modelo_recebimento:m}});await loadAll();toast(m==='banco_creditos'?'Modo banco + créditos selecionado.':'Modo Mercado Pago selecionado.')}catch(e){toast('Não foi possível mudar a forma de recebimento.')}}document.querySelectorAll('input[name=modelo]').forEach(r=>r.onchange=()=>trocarModelo(r.value));
-$('conectarMP').onclick=async()=>{try{const d=await CardapioCore.fn('cardapio-mp-oauth-start-real',{auth:true,body:{}});window.open(d.url,'_blank','noopener');toast('Conclua a autorização e depois clique em Atualizar.')}catch(e){toast(e.data?.faltando?.length?'Complete o cadastro: '+e.data.faltando.join(', '):'Não foi possível iniciar a conexão.')}};
-$('conectarBanco').onclick=async()=>{try{const code=$('bankCode').value,b=selectedBank();if(!b?.selecionavel)return toast('Essa instituição ainda está em homologação.');let body={banco_codigo:code,ambiente:$('bankAmbiente').value};if(code==='picpay')body={...body,client_id:$('picpayClient').value,client_secret:$('picpaySecret').value,webhook_token:$('picpayWebhook').value};else if(code==='pagbank')body={...body,api_token:$('pagbankToken').value};else body={...body,pix_chave:$('bankPix').value,client_id:$('bankClient').value,client_secret:$('bankSecret').value,certificado_pem:$('bankCert').value,chave_privada_pem:$('bankKey').value};const d=await CardapioCore.fn('cardapio-banco-conexao',{method:'PUT',auth:true,body});await loadAll();toast(d.conectado?'Instituição conectada.':(d.proxima_etapa||'Configuração salva.'))}catch(e){toast(e.data?.detalhe||e.data?.observacao||'Não foi possível conectar a instituição.')}};
+$('conectarMP').onclick=async()=>{try{const d=await CardapioCore.fn('cardapio-mp-oauth-start-real',{auth:true,body:{}});mpPopup=window.open(d.url,'busque_cardapio_mp','width=720,height=780');if(!mpPopup)return toast('O navegador bloqueou a janela. Libere pop-ups e tente novamente.');$('mpConnectHelp').textContent='Aguardando autorização no Mercado Pago...';toast('Autorize a conta na janela do Mercado Pago.')}catch(e){toast(e.data?.faltando?.length?'Complete o cadastro: '+e.data.faltando.join(', '):'Não foi possível iniciar a conexão.')}};
+$('verificarMP').onclick=async()=>{try{await loadAll();toast(cfg.mercado_pago?.status==='conectado'?'Mercado Pago conectado e pronto.':'A autorização ainda não apareceu.')}catch(e){toast('Não foi possível verificar agora.')}};
+window.addEventListener('message',async ev=>{if(ev.origin!=='https://xwkmsqawiimouilldwit.supabase.co')return;if(ev.data?.type==='busque-cardapio-mp-connected'){try{await loadAll();$('mpConnectHelp').textContent='✅ Mercado Pago autorizado e conectado.';toast('Mercado Pago conectado com sucesso.')}catch(e){toast('A conta foi autorizada. Clique em Atualizar para confirmar.')}}if(ev.data?.type==='busque-cardapio-mp-error'){toast('O Mercado Pago não concluiu a autorização.')}});
+$('conectarBanco').onclick=async()=>{const btn=$('conectarBanco'),old=btn.textContent;try{const code=$('bankCode').value,b=selectedBank();if(!b?.selecionavel)return toast('Essa instituição ainda está em homologação.');btn.disabled=true;btn.textContent='Testando conexão...';$('bankConnectResult').innerHTML='<div class="notice">⏳ Validando os dados diretamente com a instituição. Não feche esta tela.</div>';let body={banco_codigo:code,ambiente:$('bankAmbiente').value};if(code==='picpay')body={...body,client_id:$('picpayClient').value,client_secret:$('picpaySecret').value,webhook_token:$('picpayWebhook').value};else if(code==='pagbank')body={...body,api_token:$('pagbankToken').value};else body={...body,pix_chave:$('bankPix').value,client_id:$('bankClient').value,client_secret:$('bankSecret').value,certificado_pem:$('bankCert').value,chave_privada_pem:$('bankKey').value};const d=await CardapioCore.fn('cardapio-banco-conexao',{method:'PUT',auth:true,body});bankSetupForceOpen=!d.conectado;await loadAll();$('bankConnectResult').innerHTML=d.conectado?'<div class="notice ok"><strong>✅ Conexão concluída.</strong><br>Credenciais validadas e recebimento liberado.</div>':`<div class="notice warn">${CardapioCore.esc(d.proxima_etapa||'Configuração salva. Complete a próxima etapa indicada.')}</div>`;toast(d.conectado?'Instituição conectada e testada.':(d.proxima_etapa||'Configuração salva.'))}catch(e){const m=e.data?.detalhe||e.data?.observacao||'Não foi possível conectar a instituição.';$('bankConnectResult').innerHTML=`<div class="notice bad"><strong>Não conseguimos validar a conexão.</strong><br>${CardapioCore.esc(m)}</div>`;toast(m)}finally{btn.disabled=false;btn.textContent=old}};
+$('desconectarBanco').onclick=async()=>{if(!confirm('Desconectar esta instituição? Os dados de conexão serão removidos do sistema.'))return;try{await CardapioCore.fn('cardapio-banco-conexao',{method:'DELETE',auth:true});bankSetupForceOpen=true;await loadAll();toast('Instituição desconectada.')}catch(e){toast('Não foi possível desconectar agora.')}};
+$('copyBankWebhook').onclick=()=>navigator.clipboard.writeText($('bankWebhookUrl').value||'').then(()=>toast('URL do webhook copiada.')).catch(()=>toast('Não foi possível copiar.'));
 $('recarregar').onclick=async()=>{try{const d=await CardapioCore.fn('cardapio-creditos-criar-recarga',{auth:true,body:{quantidade:Number($('qtdCreditos').value)}});const qrImg=d.qr_code_base64?`<img class="qr-img" src="data:image/png;base64,${d.qr_code_base64}" alt="QR Code Pix">`:'';$('pixRecarga').innerHTML=`<div class="qr-box">${qrImg}<div><strong>Pix da recarga</strong><div class="small muted">${d.quantidade} créditos · ${CardapioCore.money(d.valor_total)}</div><code>${CardapioCore.esc(d.qr_code)}</code><br><button class="mini" id="copyRecharge">Copiar Pix</button><div class="small muted">O saldo só aumenta após o Mercado Pago confirmar o pagamento.</div></div></div>`;$('copyRecharge').onclick=()=>navigator.clipboard.writeText(d.qr_code||'')}catch(e){toast('Não foi possível gerar a recarga.')}};
 function selectPane(name){const btn=[...document.querySelectorAll('.tab')].find(x=>x.dataset.pane===name);if(!btn)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('active',x.id==='pane-'+name))}function applyInitialTab(){const q=new URLSearchParams(location.search);const name=q.get('tab');if(name)selectPane(name)}document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>selectPane(b.dataset.pane));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).hidden=true);boot();
 </script></body></html>
