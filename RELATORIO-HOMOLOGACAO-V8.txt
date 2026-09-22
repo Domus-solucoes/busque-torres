@@ -1,0 +1,45 @@
+BUSQUE CARDÁPIO — RELATÓRIO DE HOMOLOGAÇÃO E2E
+Data: 21/09/2026
+
+Foi executada uma empresa fictícia temporária e removida ao final.
+Resultado do teste principal: 20/20 verificações aprovadas.
+
+APROVADO
+1. Cadastro de empresa.
+2. Login imediato sem confirmação de e-mail.
+3. Bônus inicial de 3 créditos.
+4. Abrir empresa para pedidos.
+5. Upload de imagem da empresa em WebP.
+6. Upload de imagem de produto em WebP.
+7. Proteção contra duplo clique/duplicação de produto.
+8. Criação de sabores/tamanhos via grupos de opções.
+9. Preço final de sabor: base R$ 19,90 + diferença interna R$ 3,00 = cliente R$ 22,90.
+10. Mapbox Directions com rota real: teste retornou 1,083 km.
+11. Seleção automática de faixa: até 2 km.
+12. Frete automático: R$ 5,00.
+13. Empresa apareceu na vitrine pública.
+14. Cardápio público carregou produtos.
+15. Pagamento de homologação aprovado sem movimentar dinheiro real.
+16. Código de acompanhamento gerado.
+17. Código consultado publicamente em status PAGO.
+18. Transição inválida de status foi bloqueada.
+19. Empresa alterou status para PREPARANDO > EM ENTREGA > CONCLUÍDO e o cliente viu cada atualização corretamente.
+20. Totais conferidos: produto/sabor R$ 22,90 + frete R$ 5,00 = R$ 27,90.
+
+CRÉDITOS
+Teste transacional separado:
+- empresa recebe 3 créditos;
+- reserva de 1 crédito funciona;
+- confirmação consome apenas 1 e deixa saldo 2;
+- liberação de uma reserva devolve disponibilidade e mantém saldo 3.
+Os testes foram executados com rollback, sem deixar dados fictícios.
+
+PAGAMENTOS REAIS
+Não foi feita nova cobrança real durante esta homologação para evitar movimentar dinheiro sem necessidade.
+O caminho Mercado Pago ativo foi verificado e continua contendo marketplace_fee = 1 e taxa_busque = 1.
+O caminho de outros bancos continua com taxa_busque = 0 e sistema de créditos.
+A integração Mercado Pago já havia sido validada anteriormente com cartão e Pix reais.
+Conectores bancários individuais dependem das credenciais reais de cada instituição para homologação ponta a ponta.
+
+LIMPEZA
+A empresa/usuário fictícios foram removidos. O endpoint temporário de homologação foi desativado e responde 410.

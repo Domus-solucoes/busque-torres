@@ -7,89 +7,75 @@
 </head>
 <body>
 <header class="top"><div class="shell topin"><a class="brand" href="./"><img class="brand-logo" src="logo-cardapio.jpg" alt="Busque Cardápio"></a><div class="actions"><a class="btn" href="painel.html">Já tenho conta</a><a class="btn gold desktop" href="./">Ver cardápios</a></div></div></header>
-<main class="shell main">
-  <div class="grid grid2" style="align-items:start;max-width:1020px;margin:auto">
-    <aside class="card" style="position:sticky;top:96px;background:linear-gradient(145deg,#161000,#0d0d0d);border-color:#5c4700">
-      <img src="icone-cardapio.jpg" alt="Busque Cardápio" style="width:100%;border-radius:20px;max-height:320px;object-fit:cover">
-      <h2 style="margin-top:18px">Seu cardápio mais perto dos clientes.</h2>
-      <p>Cadastre sua empresa, monte o cardápio, escolha como receber e comece a aceitar pedidos no Busque Cardápio.</p>
-      <div class="list"><div class="row">🖼️ Foto da empresa e dos produtos</div><div class="row">🍔 Sabores, tamanhos e adicionais</div><div class="row">🛵 Retirada ou entrega própria</div><div class="row">💳 Mercado Pago ou banco próprio</div><div class="row">📱 Acompanhamento do pedido</div></div>
-    </aside>
-    <section class="card">
-      <span class="tag warn">30 dias para conhecer</span>
-      <h1 style="margin:12px 0 6px;color:#fff">Cadastre sua empresa</h1>
-      <p>Preencha o básico agora. Você entra no painel imediatamente e pode ajustar tudo depois.</p>
-      <div id="msg"></div>
+<main class="shell main signup-shell">
+  <section class="signup-card">
+    <div class="signup-intro">
+      <span class="tag warn">Cadastro rápido</span>
+      <h1>Coloque sua empresa no Busque Cardápio</h1>
+      <p>Primeiro cadastramos a empresa. Depois, dentro do painel, você monta o cardápio com calma. Você já começa com <strong>3 créditos gratuitos</strong>.</p>
+    </div>
 
-      <div class="field"><label>Foto ou logo da empresa</label><input id="fotoEmpresa" type="file" accept="image/*"><span class="small muted">Nós reduzimos automaticamente para WebP de até 256 KB para economizar armazenamento e egress.</span></div>
-      <div class="grid grid2"><div class="field"><label>Nome da empresa</label><input id="nome"></div><div class="field"><label>WhatsApp</label><input id="whatsapp"></div><div class="field"><label>Endereço</label><input id="endereco"></div><div class="field"><label>Categoria principal</label><input id="categoria" placeholder="Ex.: Pastéis"></div></div>
-      <div class="location-setup"><div><strong>📍 Localização da empresa</strong><div class="small muted">Se você faz entrega, salve a posição exata do estabelecimento. O Mapbox usará esse ponto para calcular a rota de carro pelas ruas até o cliente e definir o frete pela faixa correta. Você também pode fazer isso depois no painel.</div><div id="signupLocationStatus" class="small location-status">Ainda não definida.</div></div><button class="btn" id="capturarLocalCadastro" type="button">Usar localização atual</button></div>
-      <div class="field"><label>Fechamento automático (opcional)</label><input id="fechamento" type="time"><span class="small muted">Não existe horário fixo para abrir. No painel você toca em “Abrir empresa” quando quiser. Se informar um horário aqui, o sistema pausa os pedidos automaticamente nele.</span></div>
+    <div class="wizard-progress" aria-label="Etapas do cadastro">
+      <button class="wizard-dot active" data-step-go="1"><span>1</span><b>Empresa</b></button>
+      <i></i>
+      <button class="wizard-dot" data-step-go="2"><span>2</span><b>Entrega</b></button>
+      <i></i>
+      <button class="wizard-dot" data-step-go="3"><span>3</span><b>Acesso</b></button>
+    </div>
+    <div id="msg"></div>
 
-      <div class="field"><label>Entrega</label><select id="delivery"><option value="pickup">Somente retirada</option><option value="own">Faço entrega própria</option></select></div>
-      <div id="faixaWrap" class="hidden">
-        <div class="inline" style="margin-bottom:10px"><strong>Faixas de entrega</strong><button class="mini primary right" id="addSignupRange" type="button">+ Adicionar faixa</button></div>
-        <div id="signupRanges" class="delivery-ranges"></div>
-        <div class="small muted">Ex.: até 2 KM = R$ 5,00; até 5 KM = R$ 8,00. Você pode cadastrar até 40 faixas e alterar depois no painel.</div>
+    <section class="wizard-step active" data-step="1">
+      <div class="step-title"><span>1</span><div><h2>Dados da empresa</h2><p>O básico que o cliente precisa ver.</p></div></div>
+      <div class="signup-form-grid">
+        <div class="field wide"><label>Nome da empresa *</label><input id="nome" autocomplete="organization" placeholder="Ex.: Casa do Pastel"></div>
+        <div class="field"><label>WhatsApp *</label><input id="whatsapp" inputmode="tel" placeholder="(51) 99999-9999"></div>
+        <div class="field"><label>Categoria principal *</label><input id="categoria" placeholder="Ex.: Pastéis, Pizzas, Marmitas"></div>
+        <div class="field wide"><label>Endereço *</label><input id="endereco" autocomplete="street-address" placeholder="Rua, número, bairro"></div>
+        <div class="field wide"><label>Foto ou logo</label><input id="fotoEmpresa" type="file" accept="image/*"><span class="small muted">Pode ser logo, fachada ou uma foto do negócio. Reduzimos automaticamente para WebP de até 256 KB.</span></div>
       </div>
-
-      <div class="sep"></div><h3>Primeiro item do cardápio</h3>
-      <div class="field"><label>Foto do produto</label><input id="fotoProduto" type="file" accept="image/*"><span class="small muted">A foto pertence ao produto. Sabores e adicionais usam essa mesma imagem.</span></div>
-      <div class="grid grid2"><div class="field"><label>Produto</label><input id="produto" placeholder="Ex.: Pastel"></div><div class="field"><label>Preço base</label><div class="input-affix"><span class="prefix">R$</span><input id="preco" type="number" min="0" step="0.01"></div></div></div>
-      <div class="notice">Depois de entrar no painel você pode criar “Escolha o sabor” e informar o preço final de cada opção, por exemplo: Carne R$ 19,90, Bacon R$ 22,90 e Frango R$ 21,50 — tudo usando apenas uma foto.</div>
-
-      <div class="sep"></div><h3>Acesso ao painel</h3><div class="grid grid2"><div class="field"><label>E-mail</label><input id="email" type="email"></div><div class="field"><label>Senha</label><input id="senha" type="password" minlength="8"></div></div>
-      <div class="inline"><button class="btn gold" id="criar">Criar conta e entrar</button><span class="small muted">Acesso liberado na hora. Sem confirmação de e-mail.</span></div>
+      <div class="wizard-actions"><span></span><button class="btn gold" id="step1Next">Continuar →</button></div>
     </section>
-  </div>
+
+    <section class="wizard-step" data-step="2">
+      <div class="step-title"><span>2</span><div><h2>Como você atende?</h2><p>Escolha retirada, entrega própria ou as duas.</p></div></div>
+      <div class="field"><label>Atendimento</label><select id="delivery"><option value="pickup">Somente retirada no local</option><option value="own">Retirada + entrega própria</option></select></div>
+      <div id="faixaWrap" class="hidden">
+        <div class="location-setup"><div><strong>📍 Ponto de saída das entregas *</strong><div class="small muted">Fique no estabelecimento e toque no botão. Usaremos o Mapbox para calcular a rota real pelas ruas até o cliente.</div><div id="signupLocationStatus" class="small location-status">Localização ainda não salva.</div></div><button class="btn" id="capturarLocalCadastro" type="button">Usar localização atual</button></div>
+        <div class="delivery-box">
+          <div class="inline" style="margin-bottom:10px"><div><strong>Faixas de frete</strong><div class="small muted">Ex.: até 2 KM = R$ 5,00; até 5 KM = R$ 8,00.</div></div><button class="mini primary right" id="addSignupRange" type="button">+ Nova faixa</button></div>
+          <div id="signupRanges" class="delivery-ranges"></div>
+        </div>
+      </div>
+      <div class="field"><label>Fechamento automático <span class="muted">(opcional)</span></label><input id="fechamento" type="time"><span class="small muted">Você abre a empresa manualmente no painel quando quiser. Se preencher aqui, o sistema pausa os pedidos nesse horário.</span></div>
+      <div class="wizard-actions"><button class="btn" id="step2Back">← Voltar</button><button class="btn gold" id="step2Next">Continuar →</button></div>
+    </section>
+
+    <section class="wizard-step" data-step="3">
+      <div class="step-title"><span>3</span><div><h2>Crie seu acesso</h2><p>Sem confirmação por e-mail. Você entra no painel na hora.</p></div></div>
+      <div class="grid grid2"><div class="field"><label>E-mail *</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Senha *</label><input id="senha" type="password" minlength="8" autocomplete="new-password"><span class="small muted">Mínimo de 8 caracteres.</span></div></div>
+      <div id="resumoCadastro" class="signup-summary"></div>
+      <div class="notice ok"><strong>3 créditos gratuitos.</strong><br>Se você escolher receber por outro banco, já consegue começar com 3 pedidos pagos sem fazer recarga. Se usar Mercado Pago, continua valendo o split de R$ 1 por pedido.</div>
+      <div class="wizard-actions"><button class="btn" id="step3Back">← Voltar</button><button class="btn gold" id="criar">Criar empresa e entrar</button></div>
+    </section>
+  </section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
-let signupRanges=[{km:5,fee:0}],signupLat=null,signupLon=null;
-function renderSignupRanges(){
-  $('signupRanges').innerHTML=signupRanges.map((r,i)=>`<div class="delivery-range-row">
-    <div class="field"><label>Até</label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${r.km??''}"><span class="suffix">KM</span></div></div>
-    <div class="field"><label>Taxa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${r.fee??''}"></div></div>
-    <button class="mini danger delivery-remove" type="button" onclick="removeSignupRange(${i})" ${signupRanges.length===1?'disabled':''}>×</button>
-  </div>`).join('');
-}
-function syncSignupRanges(){signupRanges=[...$('signupRanges').querySelectorAll('.delivery-range-row')].map(row=>({km:row.querySelector('[data-km]').value,fee:row.querySelector('[data-fee]').value}));}
-window.removeSignupRange=i=>{syncSignupRanges();signupRanges.splice(i,1);if(!signupRanges.length)signupRanges=[{km:'',fee:''}];renderSignupRanges()};
-$('addSignupRange').onclick=()=>{syncSignupRanges();if(signupRanges.length>=40)return;const prev=signupRanges[signupRanges.length-1]||{};signupRanges.push({km:Number(prev.km)>0?Math.round((Number(prev.km)+1)*10)/10:'',fee:''});renderSignupRanges()};
-function collectSignupRanges(){
-  syncSignupRanges();
-  const out=signupRanges.map(r=>({km:Number(r.km),fee:Number(r.fee)}));
-  if(out.some(r=>!Number.isFinite(r.km)||r.km<=0||!Number.isFinite(r.fee)||r.fee<0))throw new Error('Preencha KM e taxa corretamente em todas as faixas.');
-  out.sort((a,b)=>a.km-b.km);const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('Não repita a mesma distância em duas faixas.');seen.add(r.km)}
-  return out;
-}
-
-$('capturarLocalCadastro').onclick=()=>{const b=$('capturarLocalCadastro');if(!navigator.geolocation){$('signupLocationStatus').textContent='Este navegador não permite capturar localização.';return}b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(pos=>{signupLat=pos.coords.latitude;signupLon=pos.coords.longitude;$('signupLocationStatus').textContent='Localização salva para o cadastro.';$('signupLocationStatus').className='small location-status oktext';b.disabled=false;b.textContent='Atualizar localização'},()=>{$('signupLocationStatus').textContent='Não foi possível acessar a localização. Você pode definir depois no painel.';b.disabled=false;b.textContent='Usar localização atual'},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
+let step=1,signupRanges=[{km:2,fee:5},{km:5,fee:8}],signupLat=null,signupLon=null;
+function goStep(n){step=n;document.querySelectorAll('.wizard-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===n));document.querySelectorAll('.wizard-dot').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepGo)<=n));if(n===3)renderSummary();window.scrollTo({top:0,behavior:'smooth'})}
+function showError(m){$('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(m)+'</div>';window.scrollTo({top:0,behavior:'smooth'})}
+function validateStep1(){if($('nome').value.trim().length<2)throw new Error('Informe o nome da empresa.');if($('whatsapp').value.replace(/\D/g,'').length<8)throw new Error('Informe um WhatsApp válido.');if(!$('endereco').value.trim())throw new Error('Informe o endereço da empresa.');if(!$('categoria').value.trim())throw new Error('Informe a categoria principal.');}
+function renderSignupRanges(){$('signupRanges').innerHTML=signupRanges.map((r,i)=>`<div class="delivery-range-row"><div class="field"><label>Até</label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${r.km??''}"><span class="suffix">KM</span></div></div><div class="field"><label>Frete</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${r.fee??''}"></div></div><button class="mini danger delivery-remove" type="button" onclick="removeSignupRange(${i})" ${signupRanges.length===1?'disabled':''}>×</button></div>`).join('')}
+function syncRanges(){signupRanges=[...$('signupRanges').querySelectorAll('.delivery-range-row')].map(row=>({km:row.querySelector('[data-km]').value,fee:row.querySelector('[data-fee]').value}))}
+window.removeSignupRange=i=>{syncRanges();signupRanges.splice(i,1);if(!signupRanges.length)signupRanges=[{km:'',fee:''}];renderSignupRanges()};
+$('addSignupRange').onclick=()=>{syncRanges();if(signupRanges.length>=40)return;const p=signupRanges.at(-1)||{};signupRanges.push({km:Number(p.km)>0?Math.round((Number(p.km)+1)*10)/10:'',fee:''});renderSignupRanges()};
+function collectRanges(){syncRanges();const out=signupRanges.map(r=>({km:Number(r.km),fee:Number(r.fee)}));if(out.some(r=>!Number.isFinite(r.km)||r.km<=0||!Number.isFinite(r.fee)||r.fee<0))throw new Error('Preencha corretamente todas as faixas de frete.');out.sort((a,b)=>a.km-b.km);const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('Não repita a mesma distância em duas faixas.');seen.add(r.km)}return out}
+function validateStep2(){if($('delivery').value==='own'){if(signupLat==null||signupLon==null)throw new Error('Para fazer entrega, salve a localização do estabelecimento.');collectRanges()}}
+function renderSummary(){let t=`<strong>${CardapioCore.esc($('nome').value)}</strong><span>${CardapioCore.esc($('categoria').value)} · ${CardapioCore.esc($('endereco').value)}</span>`;if($('delivery').value==='own'){const f=collectRanges();t+=`<span>Entrega própria · ${f.length} faixa${f.length===1?'':'s'} de frete · rota calculada pelo Mapbox</span>`}else t+='<span>Somente retirada no local</span>';$('resumoCadastro').innerHTML=t}
+$('step1Next').onclick=()=>{try{validateStep1();$('msg').innerHTML='';goStep(2)}catch(e){showError(e.message)}};$('step2Back').onclick=()=>goStep(1);$('step2Next').onclick=()=>{try{validateStep2();$('msg').innerHTML='';goStep(3)}catch(e){showError(e.message)}};$('step3Back').onclick=()=>goStep(2);
 $('delivery').onchange=()=>$('faixaWrap').classList.toggle('hidden',$('delivery').value!=='own');
-renderSignupRanges();
-async function uploadImagem(tipo,file,produtoId=null){
-  if(!file)return;
-  const webp=await CardapioCore.toWebp(file),form=new FormData();
-  form.append('tipo',tipo);if(produtoId)form.append('produto_id',produtoId);form.append('file',webp);
-  await CardapioCore.fn('cardapio-upload-imagem',{auth:true,form});
-}
-$('criar').onclick=async()=>{
-  const b=$('criar');b.disabled=true;$('msg').innerHTML='';
-  const email=$('email').value.trim().toLowerCase(),password=$('senha').value;
-  try{
-    const payload={email,password,nome:$('nome').value,whatsapp:$('whatsapp').value,endereco:$('endereco').value,categorias:[$('categoria').value].filter(Boolean),horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectSignupRanges():[],produto_nome:$('produto').value,produto_preco:Number($('preco').value),produto_categoria:$('categoria').value||'Outros',latitude:signupLat,longitude:signupLon};
-    const d=await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});
-    await CardapioCore.signIn(email,password);
-    $('msg').innerHTML='<div class="notice ok"><strong>Conta criada.</strong><br>Enviando as imagens e abrindo o painel...</div>';
-    await uploadImagem('empresa',$('fotoEmpresa').files[0]);
-    if(d.first_product_id)await uploadImagem('produto',$('fotoProduto').files[0],d.first_product_id);
-    location.href='painel.html';
-  }catch(e){
-    const code=e.data?.error||'';let msg=e.message;
-    if(code==='email_ja_cadastrado')msg='Esse e-mail já está cadastrado. Use “Já tenho conta” para entrar.';
-    if(code==='senha_minimo_8')msg='A senha precisa ter pelo menos 8 caracteres.';
-    if(code==='email_invalido')msg='Digite um e-mail válido.';
-    $('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(msg)+'</div>';
-  }finally{b.disabled=false}
-};
+$('capturarLocalCadastro').onclick=()=>{const b=$('capturarLocalCadastro');if(!navigator.geolocation)return showError('Este navegador não permite obter a localização.');b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(pos=>{signupLat=pos.coords.latitude;signupLon=pos.coords.longitude;$('signupLocationStatus').textContent='Localização salva com sucesso.';$('signupLocationStatus').className='small location-status oktext';b.disabled=false;b.textContent='Atualizar localização'},()=>{b.disabled=false;b.textContent='Usar localização atual';showError('Não conseguimos acessar a localização. Autorize o navegador e tente novamente.')},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
+async function uploadEmpresa(file){if(!file)return;const webp=await CardapioCore.toWebp(file),form=new FormData();form.append('tipo','empresa');form.append('file',webp);await CardapioCore.fn('cardapio-upload-imagem',{auth:true,form})}
+$('criar').onclick=async()=>{const b=$('criar');if(b.disabled)return;b.disabled=true;const old=b.textContent;b.textContent='Criando...';$('msg').innerHTML='';try{validateStep1();validateStep2();const email=$('email').value.trim().toLowerCase(),password=$('senha').value;if(!email.includes('@'))throw new Error('Informe um e-mail válido.');if(password.length<8)throw new Error('A senha precisa ter pelo menos 8 caracteres.');const payload={email,password,nome:$('nome').value.trim(),whatsapp:$('whatsapp').value,endereco:$('endereco').value.trim(),categorias:[$('categoria').value.trim()],horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectRanges():[],latitude:signupLat,longitude:signupLon};await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});await CardapioCore.signIn(email,password);await uploadEmpresa($('fotoEmpresa').files[0]);location.href='painel.html?onboarding=1&tab=cardapio'}catch(e){const code=e.data?.error||'';let m=e.message;if(code==='email_ja_cadastrado')m='Esse e-mail já está cadastrado. Use “Já tenho conta” para entrar.';if(code==='senha_minimo_8')m='A senha precisa ter pelo menos 8 caracteres.';if(code==='email_invalido')m='Digite um e-mail válido.';showError(m)}finally{b.disabled=false;b.textContent=old}};
+document.querySelectorAll('.wizard-dot').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.stepGo);if(n<step)goStep(n)});renderSignupRanges();
 </script></body></html>

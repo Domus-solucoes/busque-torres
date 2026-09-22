@@ -1,20 +1,29 @@
-BUSQUE CARDÁPIO — LAYOUT V7
+BUSQUE CARDÁPIO — LAYOUT V8
 
-Atualização visual + integração de frete por rota real com Mapbox Directions.
+Pacote final de homologação visual/UX.
 
-Arquivos da pasta cardapio devem substituir a pasta /cardapio do repositório.
-Não substitua o index.html da raiz do Busque Torres.
+COMO SUBIR
+Substitua a pasta /cardapio do repositório pela pasta cardapio deste pacote.
+NÃO substitua o index.html da raiz do Busque Torres.
 
-IMPORTANTE SOBRE MAPBOX
-O frontend já está preparado e o backend no Supabase já usa Mapbox Directions.
-O token Mapbox NÃO fica dentro destes arquivos. Ele deve ser salvo com segurança no Supabase Vault.
-Sem o token, a tela informa que o cálculo de rota ainda está sendo ativado; não há fallback para distância em linha reta.
+PRINCIPAIS MUDANÇAS DA V8
+- Cadastro da empresa virou um assistente simples em 3 etapas: Empresa > Entrega > Acesso.
+- O cadastro inicial não obriga mais a criar produto junto com a empresa.
+- Nova empresa começa com 3 créditos gratuitos.
+- Painel mostra onboarding para cadastrar o primeiro produto depois que a empresa é criada.
+- Cadastro/edição de produto unificado em uma única tela.
+- Atalhos simples para Sabores, Tamanhos e Adicionais.
+- Preço final para sabores/tamanhos e valor adicional para extras.
+- Proteção contra produto duplicado por duplo clique.
+- Fotos WebP de até 256 KB e remoção da imagem ao excluir produto.
+- Entrega usa Mapbox Directions no backend para rota real de carro pelas ruas.
+- Cotação de frete válida por 15 minutos e vinculada ao pedido.
+- Acompanhamento de pedido atualiza automaticamente a cada 15 segundos enquanto aberto.
 
-Fluxo de entrega:
-1. Empresa salva sua localização.
-2. Cliente autoriza sua localização no checkout.
-3. Backend consulta Mapbox Directions (perfil driving).
-4. Mapbox retorna a distância da rota pelas ruas.
-5. Backend escolhe a faixa de frete da empresa.
-6. É criada uma cotação de entrega válida por 15 minutos.
-7. O checkout usa essa cotação, sem confiar em quilômetros enviados pelo navegador.
+MAPBOX
+O token já está salvo no Supabase Vault. Ele NÃO está exposto nos HTML/JS.
+Não existe fallback silencioso para distância em linha reta.
+
+PAGAMENTOS
+- Mercado Pago: split de R$ 1 continua ativo.
+- Outro banco: taxa_busque = 0 e consumo de 1 crédito por pedido pago.
