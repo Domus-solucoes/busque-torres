@@ -48,9 +48,10 @@ const $=id=>document.getElementById(id),toast=m=>{const e=$('toast');e.textConte
 const statusLabel=s=>({aguardando_pagamento:'Aguardando pagamento',pago:'Pedido recebido',preparando:'Em preparo',pronto:'Pronto para retirada',em_entrega:'Saiu para entrega',concluido:'Concluído',cancelado:'Cancelado'}[s]||s);
 async function load(){try{const d=await CardapioCore.fn('cardapio-publico-lista',{method:'GET'});all=d.estabelecimentos||[];renderLista();renderHomeCommercial()}catch(e){$('lista').innerHTML='<div class="empty"><strong>Não foi possível carregar</strong>Tente novamente em instantes.</div>';renderHomeCommercial()}}
 function premiumRows(){return all.filter(e=>e.vitrine_premium===true||e.premium===true||e.tipo_vitrine==='premium').slice(0,3)}
-function destaqueRows(){return all.filter(e=>e.destaque===true||e.home_destaque===true).slice(0,4)}
+function destaqueRows(){return all.filter(e=>e.destaque===true||e.home_destaque===true).slice(0,2)}
+function ofertaRows(){return all.filter(e=>e.oferta&&e.oferta.produto_id).slice(0,2)}
 function renderHomeCommercial(){
-  const premiums=premiumRows(),destaques=destaqueRows();
+  const premiums=premiumRows(),destaques=destaqueRows(),ofertas=ofertaRows();
   const premiumBox=$('premiumCarousel'),highlightBox=$('homeHighlights');
 
   if(premiums.length){
@@ -61,9 +62,11 @@ function renderHomeCommercial(){
     premiumBox.innerHTML='';
   }
 
-  if(destaques.length){
+  if(destaques.length||ofertas.length){
     $('highlightsSection').classList.remove('hidden');
-    highlightBox.innerHTML=destaques.map(e=>`<button class="highlight-card" type="button" onclick="openEmpresa('${e.id}')"><span class="highlight-label">DESTAQUE</span><strong>${CardapioCore.esc(e.nome)}</strong><small>${CardapioCore.esc((e.categorias||[]).slice(0,2).join(' • ')||'Ver cardápio')}</small><span class="highlight-action">Abrir cardápio ›</span></button>`).join('');
+    const destaquesHtml=destaques.map(e=>`<button class="highlight-card" type="button" onclick="openEmpresa('${e.id}')"><span class="highlight-label">DESTAQUE</span><strong>${CardapioCore.esc(e.nome)}</strong><small>${CardapioCore.esc((e.categorias||[]).slice(0,2).join(' • ')||'Ver cardápio')}</small><span class="highlight-action">Abrir cardápio ›</span></button>`).join('');
+    const ofertasHtml=ofertas.map(e=>{const o=e.oferta||{};return `<button class="offer-card" type="button" onclick="openEmpresa('${e.id}')">${o.imagem_url?`<img src="${CardapioCore.esc(o.imagem_url)}" alt="${CardapioCore.esc(o.nome||'Oferta')}" loading="lazy" decoding="async">`:'<div class="offer-ph">🍽️</div>'}<span class="offer-copy"><span class="highlight-label">OFERTA</span><strong>${CardapioCore.esc(o.nome||'Oferta especial')}</strong><small>${CardapioCore.esc(e.nome)}</small><span class="offer-price"><del>${CardapioCore.money(Number(o.preco_original||0))}</del><b>${CardapioCore.money(Number(o.preco_oferta||0))}</b></span><span class="offer-action">Abrir cardápio ›</span></span></button>`}).join('');
+    highlightBox.innerHTML=destaquesHtml+ofertasHtml;
   }else{
     $('highlightsSection').classList.add('hidden');
     highlightBox.innerHTML='';

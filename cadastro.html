@@ -680,6 +680,8 @@
         .pagamento-pix{margin-top:18px;padding:18px;border:1px solid #e2d39c;border-radius:14px;background:#fffdf5;text-align:center}.pagamento-pix[hidden]{display:none!important}.pagamento-pix h3{margin:6px 0 4px;font-size:1.3rem}.pagamento-pix>p{margin:0;color:var(--texto-suave);font-size:.8rem}.pagamento-qr{width:min(270px,80vw);aspect-ratio:1;margin:16px auto 10px;padding:12px;border:1px solid var(--borda-clara);border-radius:14px;background:#fff}.pagamento-qr img{display:block;width:100%;height:100%;object-fit:contain}.pagamento-pix textarea{width:100%;min-height:78px;resize:none;border:1px solid var(--borda);border-radius:10px;padding:10px;background:#fff;color:#334155;font:10px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}.pagamento-status{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:14px;color:#7a5a0a;font-size:.82rem;font-weight:900}.pagamento-status.sucesso{color:var(--verde)}.pagamento-status.falha{color:var(--vermelho)}.pagamento-dot{width:8px;height:8px;border-radius:50%;background:var(--dourado);box-shadow:0 0 0 4px rgba(212,175,55,.15);animation:pagPulse 1.2s infinite}.pagamento-status.sucesso .pagamento-dot{background:var(--verde);animation:none}.pagamento-status.falha .pagamento-dot{background:var(--vermelho);animation:none}.pagamento-expira{margin-top:6px!important;font-size:.72rem!important}.pagamento-retry{display:flex;gap:8px;margin-top:12px}.pagamento-retry button{flex:1;border:1px solid var(--borda);border-radius:9px;padding:10px;background:#fff;color:var(--azul-escuro);font-size:.78rem;font-weight:800;cursor:pointer}@keyframes pagPulse{50%{opacity:.35;transform:scale(.82)}}
         @media(max-width:680px){.pagamento-cadastro{margin-left:12px;margin-right:12px}.pagamento-cabecalho,.pagamento-bloco{padding-left:16px;padding-right:16px}.pagamento-resumo{grid-template-columns:1fr;padding:14px 16px}.pagamento-grid,.pagamento-escolhas{grid-template-columns:1fr}.pagamento-campo.full{grid-column:auto}.pagamento-btn{min-height:50px}}
 
+        .cortesia-cardapio-banner{margin:0 34px 24px;padding:18px;border:1px solid #86efac;border-radius:14px;background:linear-gradient(135deg,#f0fdf4,#ecfeff);color:#14532d;line-height:1.55}.cortesia-cardapio-banner[hidden]{display:none!important}.cortesia-cardapio-banner strong{display:block;margin-bottom:5px;font-size:1.02rem}.cortesia-cardapio-banner code{display:inline-block;margin-top:7px;padding:6px 9px;border-radius:8px;background:#fff;border:1px dashed #22c55e;color:#14532d;font-weight:900}.cortesia-cardapio-banner.invalida{border-color:#fca5a5;background:#fff1f2;color:#991b1b}
+
         footer {
             padding: 26px 20px 34px;
             color: var(--texto-suave);
@@ -753,12 +755,18 @@
                 exatamente como foram preenchidas pelo anunciante.
             </div>
 
+            <div id="cortesiaCardapioBanner" class="cortesia-cardapio-banner" hidden>
+                <strong id="cortesiaCardapioTitulo">🎁 Benefício Busque Cardápio</strong>
+                <span id="cortesiaCardapioTexto"></span>
+                <code id="cortesiaCardapioCodigo"></code>
+            </div>
+
             <div id="mensagemFormulario" class="mensagem" role="status" aria-live="polite"></div>
 
             <section id="sucessoCadastro" class="sucesso-cadastro" role="status" aria-live="assertive" tabindex="-1" hidden>
                 <div class="sucesso-icone" aria-hidden="true">✓</div>
-                <h2>Pagamento confirmado!</h2>
-                <p>Seu cadastro está pago e aguardando revisão da equipe. Ele ainda não aparece no site. A validade do plano começa somente quando o cadastro for aprovado e publicado.</p>
+                <h2 id="sucessoCadastroTitulo">Pagamento confirmado!</h2>
+                <p id="sucessoCadastroTexto">Seu cadastro está pago e aguardando revisão da equipe. Ele ainda não aparece no site. A validade do plano começa somente quando o cadastro for aprovado e publicado.</p>
                 <div id="beneficioCadastro" class="beneficio-cadastro" hidden>
                     <strong>🔥 Benefício Promoção do Dia incluído no seu plano</strong>
                     <div id="beneficioCadastroResumo"></div>
@@ -1196,14 +1204,14 @@
                 </section>
 
                 <section class="form-etapa" data-etapa="4">
-<div class="secao-titulo">Escolha seu plano</div>
+<div class="secao-titulo" id="planoTitulo">Escolha seu plano</div>
 
-                <div class="aviso-gratuidade">
+                <div class="aviso-gratuidade" id="avisoPlanoCadastro">
                     <strong>Pagamento antes da publicação</strong>
                     Depois de concluir o cadastro, o pagamento abre nesta mesma página. A empresa só entra no Busque Torres após o pagamento ser confirmado e a equipe revisar e aprovar o cadastro. A validade do plano começa na publicação.
                 </div>
 
-                <div class="tabela-planos-wrap" aria-label="Modalidades de assinatura">
+                <div class="tabela-planos-wrap" id="tabelaPlanosCadastro" aria-label="Modalidades de assinatura">
                     <table class="tabela-planos">
                         <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui</th></tr></thead>
                         <tbody>
@@ -1214,7 +1222,7 @@
                     </table>
                 </div>
 
-                <div class="planos" role="radiogroup" aria-label="Modalidade de assinatura">
+                <div class="planos" id="planosCadastro" role="radiogroup" aria-label="Modalidade de assinatura">
                     <div class="plano-opcao">
                         <input type="radio" id="assinaturaMensal" name="assinatura_periodo" value="mensal" checked>
                         <label for="assinaturaMensal" class="plano-card">
@@ -1240,7 +1248,7 @@
                     </div>
                 </div>
 
-                <div class="legal-box"><strong>Como funciona</strong>Ao continuar, seus dados e imagens são enviados e a etapa de pagamento abre logo abaixo. PIX com QR Code e Copia e Cola é a opção principal; cartão também fica disponível. O anúncio permanece fora do site até pagamento confirmado e aprovação da equipe.</div>
+                <div class="legal-box" id="legalPlanoCadastro"><strong>Como funciona</strong>Ao continuar, seus dados e imagens são enviados e a etapa de pagamento abre logo abaixo. PIX com QR Code e Copia e Cola é a opção principal; cartão também fica disponível. O anúncio permanece fora do site até pagamento confirmado e aprovação da equipe.</div>
                 <label class="termos">
                     <input type="checkbox" id="termos" required>
                     <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
@@ -1354,6 +1362,15 @@
         let pagamentoTravado = false;
         let pagamentoPoll = null;
         let pagamentoCountdown = null;
+        const queryCadastro = new URLSearchParams(window.location.search);
+        const cortesiaCodigo = String(queryCadastro.get("cortesia") || "").trim();
+        let cortesiaCardapio = null;
+        const cortesiaCardapioBanner = document.getElementById("cortesiaCardapioBanner");
+        const cortesiaCardapioTitulo = document.getElementById("cortesiaCardapioTitulo");
+        const cortesiaCardapioTexto = document.getElementById("cortesiaCardapioTexto");
+        const cortesiaCardapioCodigo = document.getElementById("cortesiaCardapioCodigo");
+        const sucessoCadastroTitulo = document.getElementById("sucessoCadastroTitulo");
+        const sucessoCadastroTexto = document.getElementById("sucessoCadastroTexto");
 
         const campos = {
             nome: document.getElementById("nome"),
@@ -2058,6 +2075,81 @@
         campos.termos.addEventListener("change", () => limparErro("termos"));
         campos.responsabilidadeConteudo.addEventListener("change", () => limparErro("termos"));
 
+        function textoBotaoCadastro() {
+            return cortesiaCardapio?.valido ? "Ativar 30 dias grátis" : "Continuar para pagamento";
+        }
+
+        function aplicarVisualCortesiaCardapio(ativa) {
+            const tabela = document.getElementById("tabelaPlanosCadastro");
+            const planos = document.getElementById("planosCadastro");
+            const aviso = document.getElementById("avisoPlanoCadastro");
+            const titulo = document.getElementById("planoTitulo");
+            const legal = document.getElementById("legalPlanoCadastro");
+            if (ativa) {
+                document.getElementById("assinaturaMensal").checked = true;
+                tabela.hidden = true;
+                planos.hidden = true;
+                titulo.textContent = "Ative seus 30 dias grátis";
+                aviso.innerHTML = "<strong>Cortesia do Busque Cardápio</strong>Este código libera 30 dias do plano comum no Busque Torres, sem pagamento. MASTER e Destaque não estão incluídos. O cadastro continua passando pela revisão normal antes de aparecer no site.";
+                legal.innerHTML = "<strong>Como funciona</strong>Ao continuar, conferimos se o WhatsApp é o mesmo usado no Busque Cardápio. O pagamento é dispensado e o cadastro segue para revisão da equipe.";
+            } else {
+                tabela.hidden = false;
+                planos.hidden = false;
+            }
+            submitBtn.textContent = textoBotaoCadastro();
+        }
+
+        async function carregarCortesiaCardapio() {
+            if (!cortesiaCodigo) return;
+            cortesiaCardapioBanner.hidden = false;
+            cortesiaCardapioTitulo.textContent = "🎁 Verificando benefício do Busque Cardápio...";
+            cortesiaCardapioTexto.textContent = "Aguarde um instante.";
+            cortesiaCardapioCodigo.textContent = cortesiaCodigo;
+            try {
+                let r = await BusqueAPI.rpc("validar_convite_cardapio_cortesia_v2", { p_codigo: cortesiaCodigo, p_cidade_id: "torres", p_whatsapp: null });
+                if (Array.isArray(r)) r = r[0];
+                if (r?.valido && r?.codigo_valido) {
+                    cortesiaCardapio = r;
+                    cortesiaCardapioBanner.classList.remove("invalida");
+                    cortesiaCardapioTitulo.textContent = "🎁 Você ganhou 30 dias grátis no Busque Torres";
+                    cortesiaCardapioTexto.textContent = "Complete o cadastro usando o mesmo WhatsApp da empresa no Busque Cardápio. Não haverá cobrança agora.";
+                    aplicarVisualCortesiaCardapio(true);
+                } else {
+                    cortesiaCardapio = null;
+                    cortesiaCardapioBanner.classList.add("invalida");
+                    cortesiaCardapioTitulo.textContent = "Código de cortesia indisponível";
+                    cortesiaCardapioTexto.textContent = "O código está inválido, já foi utilizado ou expirou. O cadastro normal com pagamento continua disponível.";
+                    aplicarVisualCortesiaCardapio(false);
+                }
+            } catch (erro) {
+                cortesiaCardapio = null;
+                cortesiaCardapioBanner.classList.add("invalida");
+                cortesiaCardapioTitulo.textContent = "Não foi possível validar a cortesia agora";
+                cortesiaCardapioTexto.textContent = "Atualize a página e tente novamente. Se continuar, use o cadastro normal.";
+                aplicarVisualCortesiaCardapio(false);
+            }
+        }
+
+        async function validarWhatsappCortesiaCardapio(numero) {
+            let r = await BusqueAPI.rpc("validar_convite_cardapio_cortesia_v2", { p_codigo: cortesiaCodigo, p_cidade_id: "torres", p_whatsapp: numero });
+            if (Array.isArray(r)) r = r[0];
+            if (!r?.codigo_valido) throw new Error("Este código de cortesia não está mais disponível.");
+            if (!r?.whatsapp_confere) throw new Error("Para usar os 30 dias grátis, informe o mesmo WhatsApp cadastrado no Busque Cardápio.");
+            return r;
+        }
+
+        function mostrarSucessoCortesiaCardapio() {
+            pararTimersPagamento();
+            pagamentoCadastro.hidden = true;
+            form.hidden = true;
+            beneficioCadastro.hidden = true;
+            sucessoCadastroTitulo.textContent = "30 dias grátis vinculados!";
+            sucessoCadastroTexto.textContent = "Seu cadastro do Busque Torres foi recebido sem cobrança e está aguardando revisão da equipe. Os 30 dias começam quando ele for aprovado e publicado.";
+            sucessoCadastro.hidden = false;
+            window.scrollTo({ top: 0, behavior: "auto" });
+            setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
+        }
+
         function dinheiro(v) {
             return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v || 0));
         }
@@ -2400,9 +2492,11 @@
                 return;
             }
             submitBtn.disabled = true;
-            submitBtn.textContent = "Preparando pagamento...";
+            const usandoCortesia = Boolean(cortesiaCardapio?.valido && cortesiaCodigo);
+            submitBtn.textContent = usandoCortesia ? "Ativando seus 30 dias..." : "Preparando pagamento...";
             try {
                 const c = montarCadastro();
+                if (usandoCortesia) await validarWhatsappCortesiaCardapio(c.whatsappNumero);
                 const resultado = await BusqueAPI.invokeFunction("enviar-empresa-midias-cdn", {
                     p_cidade_id: "torres",
                     p_nome: c.nome,
@@ -2425,22 +2519,30 @@
                     p_logo_url: c.logo || null,
                     p_plano: c.planoSolicitado,
                     p_assinatura_periodo: c.assinaturaPeriodo,
-                    p_pagamento_imediato: true
+                    p_pagamento_imediato: !usandoCortesia
                 });
                 if (resultado?.erro) throw new Error(resultado.erro);
-                await abrirPagamentoCadastro(c, resultado);
+                if (usandoCortesia) {
+                    let ativacao = await BusqueAPI.rpc("ativar_convite_cardapio_cortesia", { p_codigo: cortesiaCodigo, p_empresa_id: resultado.id, p_cidade_id: "torres" });
+                    if (Array.isArray(ativacao)) ativacao = ativacao[0];
+                    if (!ativacao?.ok) throw new Error("Não foi possível aplicar os 30 dias grátis.");
+                    mostrarSucessoCortesiaCardapio();
+                } else {
+                    await abrirPagamentoCadastro(c, resultado);
+                }
             } catch (erro) {
                 console.error("Erro ao enviar cadastro:", erro);
                 mostrarMensagem("erro", "Não foi possível continuar", erro?.message || "Verifique sua internet e tente novamente.");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Continuar para pagamento";
+                submitBtn.textContent = textoBotaoCadastro();
             }
         });
 
         copiarBeneficioCadastro.addEventListener("click", copiarCodigoBeneficioCadastro);
 
         novoCadastroBtn.addEventListener("click", () => {
+            if (cortesiaCodigo) { window.location.href = "cadastro.html"; return; }
             pararTimersPagamento();
             sessionStorage.removeItem("busque_cadastro_pagamento_ref");
             sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
@@ -2463,6 +2565,7 @@
         atualizarContadorDescricao();
         carregarSubcategorias();
         mostrarEtapa(0);
+        carregarCortesiaCardapio();
     </script>
 </body>
 </html>
