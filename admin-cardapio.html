@@ -55,6 +55,8 @@
     .notice{padding:12px 13px;border:1px solid #d8e5ec;border-radius:13px;background:#f8fbfd;color:#586b77;font-size:10px;line-height:1.5;margin-bottom:12px}
     .notice.warn{border-color:#ead3a0;background:#fff9ed;color:#72551c}
     .status-line{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #edf1f3}.status-line:last-child{border-bottom:0}.status-line span{color:#5c6d78;font-size:10px}.status-line strong{color:var(--navy);font-size:11px}
+    .rank-list{display:grid;gap:7px}.rank-row{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #edf1f3}.rank-row:last-child{border-bottom:0}.rank-pos{width:28px;height:28px;border-radius:9px;background:#eef5f9;color:var(--navy);display:grid;place-items:center;font-size:9px;font-weight:950}.rank-main{min-width:0}.rank-main strong{display:block;color:var(--navy);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rank-main span{display:block;margin-top:2px;color:var(--muted);font-size:9px}.rank-value{text-align:right;color:var(--navy);font-weight:950;font-size:12px}.intel-note{margin-bottom:12px;padding:11px 12px;border-radius:12px;background:#eef7fc;border:1px solid #cfe4f1;color:#4f6877;font-size:9px;line-height:1.5}.loading-line{padding:18px;border:1px dashed #cbd7de;border-radius:14px;background:#fff;color:var(--muted);font-size:10px;text-align:center}
+
     .toast{position:fixed;left:50%;bottom:18px;z-index:100;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#10283a;color:#fff;border-radius:11px;padding:10px 13px;font-size:10px;font-weight:850;transition:.2s;box-shadow:var(--shadow)}.toast.show{opacity:1;transform:translate(-50%,0)}
     @media(max-width:1000px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.company-body{grid-template-columns:repeat(3,1fr)}.order,.finance-row{grid-template-columns:120px 1fr 110px}.order .hide-md,.finance-row .hide-md{display:none}}
     @media(max-width:700px){.shell{width:min(var(--max),calc(100% - 18px))}.topbar-inner{min-height:62px}.module-switch button:first-child{display:none}.top-actions .desktop{display:none}.hero{grid-template-columns:1fr}.hero-admin{text-align:left}.kpis{grid-template-columns:1fr 1fr}.toolbar{align-items:stretch;flex-direction:column}.toolbar-right{display:grid;grid-template-columns:1fr 120px}.search{min-width:0;width:100%}.company-body{grid-template-columns:1fr 1fr}.order,.finance-row{grid-template-columns:1fr auto}.order .hide-sm,.finance-row .hide-sm{display:none}}
@@ -103,6 +105,7 @@
     <button class="tab" data-pane="companies">Empresas</button>
     <button class="tab" data-pane="orders">Pedidos</button>
     <button class="tab" data-pane="finance">Financeiro</button>
+    <button class="tab" data-pane="intelligence">Inteligência de Mercado</button>
   </nav>
 
   <section class="pane active" id="pane-overview">
@@ -178,6 +181,65 @@
     <div class="notice warn" id="financeBlocked" hidden>Financeiro indisponível para este usuário administrativo.</div>
     <div class="finance-list" id="financeList"></div>
   </section>
+
+  <section class="pane" id="pane-intelligence">
+    <div class="toolbar">
+      <div>
+        <h2>Inteligência de Mercado</h2>
+        <div style="margin-top:3px;color:var(--muted);font-size:9px">Acessos, empresas, produtos e conversão do Busque Cardápio.</div>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn" id="intelRefresh" type="button">Atualizar dados</button>
+      </div>
+    </div>
+
+    <div class="intel-note">
+      Acessos representam sessões do Busque Cardápio. Empresas são contabilizadas quando o cliente abre o cardápio.
+      Produtos são contabilizados quando o cliente abre o produto. O ranking de pedidos considera pedidos pagos ou em operação.
+    </div>
+
+    <div id="intelLoading" class="loading-line">Abra esta aba para carregar a inteligência de mercado.</div>
+
+    <div id="intelContent" hidden>
+      <div class="kpis">
+        <div class="kpi"><small>Acessos hoje</small><strong id="iToday">0</strong><span>sessões registradas</span></div>
+        <div class="kpi"><small>Últimos 7 dias</small><strong id="iWeek">0</strong><span>acessos ao Cardápio</span></div>
+        <div class="kpi"><small>Últimos 30 dias</small><strong id="iMonth">0</strong><span>acessos ao Cardápio</span></div>
+        <div class="kpi"><small>Total</small><strong id="iTotal">0</strong><span>desde o início da medição</span></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Empresas mais clicadas</h2>
+          <p>Ranking pelas aberturas de cardápio nos últimos 30 dias.</p>
+          <div class="rank-list" id="iCompanies"></div>
+        </div>
+
+        <div class="card">
+          <h2>Produtos mais clicados</h2>
+          <p>Produtos que mais despertaram interesse nos últimos 30 dias.</p>
+          <div class="rank-list" id="iProducts"></div>
+        </div>
+
+        <div class="card">
+          <h2>Produtos mais pedidos</h2>
+          <p>Ranking por quantidade em pedidos pagos ou em operação nos últimos 30 dias.</p>
+          <div class="rank-list" id="iOrders"></div>
+        </div>
+
+        <div class="card">
+          <h2>Funil dos últimos 30 dias</h2>
+          <p>Da abertura do cardápio até o pedido pago.</p>
+          <div class="status-line"><span>Aberturas de cardápio</span><strong id="iMenuViews">0</strong></div>
+          <div class="status-line"><span>Carrinhos iniciados</span><strong id="iCarts">0</strong></div>
+          <div class="status-line"><span>Checkouts iniciados</span><strong id="iCheckouts">0</strong></div>
+          <div class="status-line"><span>Pedidos pagos</span><strong id="iPaidOrders">0</strong></div>
+          <div class="status-line"><span>Conversão</span><strong id="iConversion">0%</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <div class="toast" id="toast"></div>
@@ -187,8 +249,9 @@
 const ADMIN_SESSION_KEY='busque_torres_admin_session_v1';
 const DASHBOARD_URL=BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-dashboard';
 const ACTION_URL=BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-acao';
+const INTEL_URL=BUSQUE_SUPABASE_URL+'/functions/v1/cardapio-admin-inteligencia';
 
-let state={session:null,data:null,dias:30,refreshPromise:null};
+let state={session:null,data:null,dias:30,refreshPromise:null,intel:null,intelLoading:false};
 const $=id=>document.getElementById(id);
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const fmtDate=v=>v?new Date(v).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
@@ -272,6 +335,7 @@ async function boot(){
     return;
   }
   state.session=saved;
+  showApp();
   try{
     if(sessionExpiring(saved))await refreshSharedSession();
     await loadDashboard();
@@ -290,7 +354,6 @@ async function boot(){
 async function loadDashboard(){
   const data=await api(DASHBOARD_URL+'?dias='+state.dias);
   state.data=data;
-  showApp();
   renderAll();
 }
 function renderAll(){
@@ -313,6 +376,73 @@ function renderAll(){
   $('healthFee').textContent=a.financeiro?money(r.taxa_busque):'Restrito';
   renderCompanies();renderOrders();renderFinance();
 }
+
+async function loadIntelligence(force=false){
+  if(state.intel&&!force){renderIntelligence();return}
+  if(state.intelLoading)return;
+  state.intelLoading=true;
+  $('intelLoading').hidden=false;
+  $('intelLoading').textContent='Carregando inteligência de mercado...';
+  $('intelContent').hidden=true;
+  try{
+    state.intel=await api(INTEL_URL);
+    renderIntelligence();
+  }catch(err){
+    console.error(err);
+    $('intelLoading').hidden=false;
+    $('intelLoading').textContent='Não foi possível carregar a Inteligência de Mercado agora.';
+    $('intelContent').hidden=true;
+  }finally{
+    state.intelLoading=false;
+  }
+}
+
+function renderIntelligence(){
+  const intel=state.intel||{},a=intel.acessos||{},conv=intel.conversao_30d||{};
+  $('iToday').textContent=Number(a.hoje||0).toLocaleString('pt-BR');
+  $('iWeek').textContent=Number(a.sete_dias||0).toLocaleString('pt-BR');
+  $('iMonth').textContent=Number(a.trinta_dias||0).toLocaleString('pt-BR');
+  $('iTotal').textContent=Number(a.total||0).toLocaleString('pt-BR');
+
+  $('iMenuViews').textContent=Number(conv.aberturas_cardapio||0).toLocaleString('pt-BR');
+  $('iCarts').textContent=Number(conv.carrinhos_iniciados||0).toLocaleString('pt-BR');
+  $('iCheckouts').textContent=Number(conv.checkouts_iniciados||0).toLocaleString('pt-BR');
+  $('iPaidOrders').textContent=Number(conv.pedidos_pagos||0).toLocaleString('pt-BR');
+  $('iConversion').textContent=Number(conv.taxa_conversao||0).toLocaleString('pt-BR',{maximumFractionDigits:2})+'%';
+
+  const renderRank=(id,rows,kind)=>{
+    const el=$(id);
+    if(!rows?.length){
+      el.innerHTML='<div class="empty"><strong>Ainda sem dados</strong>As métricas aparecerão conforme houver uso real do Busque Cardápio.</div>';
+      return;
+    }
+    el.innerHTML=rows.slice(0,5).map((r,i)=>{
+      let title='',sub='',value='';
+      if(kind==='company'){
+        title=r.empresa;
+        sub=(r.sete_dias||0)+' nos últimos 7 dias';
+        value=(r.trinta_dias||0)+' cliques';
+      }else if(kind==='product'){
+        title=r.produto;
+        sub=r.empresa;
+        value=(r.trinta_dias||0)+' cliques';
+      }else{
+        title=r.produto;
+        sub=r.empresa+' · '+(r.pedidos||0)+' pedido(s)';
+        value=(r.quantidade||0)+' un.';
+      }
+      return '<div class="rank-row"><div class="rank-pos">'+(i+1)+'</div><div class="rank-main"><strong>'+esc(title)+'</strong><span>'+esc(sub)+'</span></div><div class="rank-value">'+esc(value)+'</div></div>';
+    }).join('');
+  };
+
+  renderRank('iCompanies',intel.empresas_mais_clicadas||[],'company');
+  renderRank('iProducts',intel.produtos_mais_clicados||[],'product');
+  renderRank('iOrders',intel.produtos_mais_pedidos||[],'order');
+
+  $('intelLoading').hidden=true;
+  $('intelContent').hidden=false;
+}
+
 function renderCompanies(){
   const q=$('companySearch').value.trim().toLowerCase(),filter=$('companyFilter').value;
   let rows=[...(state.data?.empresas||[])];
@@ -398,6 +528,7 @@ async function setTest(id,value){
 document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));
   document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('active',x.id==='pane-'+btn.dataset.pane));
+  if(btn.dataset.pane==='intelligence')loadIntelligence();
 }));
 $('logoutBtn').addEventListener('click',()=>{
   clearSharedSession();
@@ -407,6 +538,7 @@ $('companySearch').addEventListener('input',renderCompanies);
 $('companyFilter').addEventListener('change',renderCompanies);
 $('orderSearch').addEventListener('input',renderOrders);
 $('periodSelect').addEventListener('change',async e=>{state.dias=Number(e.target.value||30);await loadDashboard()});
+$('intelRefresh').addEventListener('click',()=>loadIntelligence(true));
 boot();
 </script>
 </body>
