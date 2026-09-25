@@ -16,15 +16,6 @@
     <div class="actions"><button class="btn" id="refresh">Atualizar</button><button class="btn gold" id="toggleOpen">Abrir empresa</button></div>
   </div>
   <div id="alerta"></div>
-  <section id="btBenefitCard" class="bt-benefit-card hidden" aria-live="polite">
-    <div class="bt-benefit-copy">
-      <span class="tag warn">🎁 BENEFÍCIO EXCLUSIVO</span>
-      <h2>30 dias grátis no Busque Torres</h2>
-      <p id="btBenefitText">Seu cadastro no Busque Cardápio dá direito a 30 dias de divulgação no Busque Torres.</p>
-      <strong id="btBenefitCode"></strong>
-    </div>
-    <a id="btBenefitLink" class="btn gold" href="#" target="_blank" rel="noopener">Ativar meus 30 dias →</a>
-  </section>
   <div class="kpis" style="margin-bottom:16px"><div class="kpi"><small>Pedidos</small><strong id="kPedidos">0</strong></div><div class="kpi"><small>Créditos</small><strong id="kCreditos">—</strong></div><div class="kpi"><small>Recebimento</small><strong id="kModelo" class="kpi-text">—</strong></div><div class="kpi"><small>Cadastro</small><strong id="kCadastro" class="kpi-text">—</strong></div></div>
   <nav class="tabs"><button class="tab active" data-pane="pedidos">Pedidos</button><button class="tab" data-pane="cardapio">Cardápio</button><button class="tab" data-pane="divulgacao">Divulgação</button><button class="tab" data-pane="empresa">Empresa</button><button class="tab" data-pane="recebimento">Recebimento</button></nav>
 
@@ -33,6 +24,16 @@
   <section class="pane" id="pane-cardapio">
     <div id="onboardingCardapio" class="onboarding-card hidden"><div><span class="tag warn">Próximo passo</span><h2>Monte seu primeiro produto</h2><p>Agora que a empresa está criada, cadastre um produto. Depois, na mesma tela, você adiciona sabores, tamanhos e adicionais sem duplicar a foto.</p></div><button class="btn gold" id="onboardingProduto">Cadastrar primeiro produto</button></div>
     <div class="card"><div class="inline"><div><h2>Seu cardápio</h2><p class="small muted">Cada produto tem uma foto. Sabores, tamanhos e adicionais ficam organizados dentro dele.</p></div><button class="btn gold right" id="novoProduto">+ Novo produto</button></div><div id="produtos" class="list product-list"></div></div>
+
+    <section id="btBenefitCard" class="bt-benefit-card hidden" aria-live="polite" style="margin-top:16px">
+      <div class="bt-benefit-copy">
+        <span class="tag warn">🎁 BENEFÍCIO EXCLUSIVO</span>
+        <h2>Seu cardápio está ganhando forma</h2>
+        <p id="btBenefitText">Depois de montar seu cardápio, você ainda pode ativar 30 dias grátis de divulgação no Busque Torres.</p>
+        <strong id="btBenefitCode"></strong>
+      </div>
+      <a id="btBenefitLink" class="btn gold" href="#" target="_blank" rel="noopener">Ativar meus 30 dias →</a>
+    </section>
   </section>
 
   <section class="pane" id="pane-divulgacao">
@@ -187,6 +188,7 @@ function render(){const e=cfg.empresa;$('empresaNome').textContent=e.nome;$('sta
 function renderBtBenefit(){
   const card=$('btBenefitCard'),link=$('btBenefitLink'),txt=$('btBenefitText'),code=$('btBenefitCode');
   if(!card)return;
+  if(!products.length){card.classList.add('hidden');return}
   const b=btBenefit?.beneficio;
   if(!b){
     if(btBenefit?.error==='beneficio_ja_emitido_para_esta_empresa'){
