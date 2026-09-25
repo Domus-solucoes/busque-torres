@@ -122,7 +122,16 @@ window.abrirProduto=s=>{
   const temFinalObrigatorio=grupos.some(g=>g.modo_preco==='final'&&(g.obrigatorio||Number(g.minimo||0)>0));
   $('pmPreco').textContent=CardapioCore.money(temFinalObrigatorio?0:Number(produtoAtual.preco||0));
   $('pmGrupos').innerHTML=grupos.map(g=>`<div class="option-group" data-group="${g.id}" data-min="${g.minimo||0}" data-max="${g.maximo||1}" data-tipo="${g.tipo}" data-modo="${g.modo_preco||'adicional'}"><strong>${CardapioCore.esc(g.nome)} ${g.obrigatorio?'*':''}</strong>${(g.opcoes||[]).map(o=>{const final=g.modo_preco==='final';const valor=final?Number(produtoAtual.preco||0)+Number(o.preco_adicional||0):Number(o.preco_adicional||0);const texto=final?CardapioCore.money(valor):(valor>0?'+ '+CardapioCore.money(valor):'Sem acréscimo');return `<label class="option"><span><input type="${g.tipo==='single'?'radio':'checkbox'}" name="g_${g.id}" value="${o.id}" data-price="${o.preco_adicional||0}"> ${CardapioCore.esc(o.nome)}</span><b>${texto}</b></label>`}).join('')}</div>`).join('');
-  document.querySelectorAll('#pmGrupos input').forEach(i=>i.addEventListener('change',atualizarPrecoModal));
+  document.querySelectorAll('#pmGrupos input').forEach(i=>{
+    if(i.type==='radio'){
+      i.addEventListener('pointerdown',()=>{i.dataset.wasChecked=i.checked?'1':'0'});
+      i.addEventListener('click',e=>{
+        const group=i.closest('.option-group'),min=Number(group?.dataset.min||0);
+        if(i.dataset.wasChecked==='1'&&min===0){i.checked=false;e.preventDefault();atualizarPrecoModal()}
+      });
+    }
+    i.addEventListener('change',atualizarPrecoModal);
+  });
   $('pmQtd').oninput=atualizarPrecoModal;
   $('produtoModal').hidden=false;
 };

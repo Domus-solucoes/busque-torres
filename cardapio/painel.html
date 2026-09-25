@@ -52,7 +52,7 @@
       <div class="card"><h2>Foto e operação</h2><div id="fotoAtual" class="company-photo-preview">Sem foto</div><div class="field"><label>Foto/logo da empresa</label><input id="fotoFile" type="file" accept="image/*"><span class="small muted">Convertida automaticamente para WebP otimizado, normalmente até 90 KB.</span></div><button class="btn" id="enviarFoto">Atualizar foto</button><div class="sep"></div><div class="notice" id="openHelp"></div></div>
     </div>
     <div class="card" style="margin-top:16px">
-      <div class="section-head compact"><div><h2>Entrega</h2><p>Crie quantas faixas precisar. Ex.: até 2 km = R$ 5, até 5 km = R$ 8, até 10 km = R$ 12.</p></div></div>
+      <div class="section-head compact"><div><h2>Entrega</h2><p><strong>Os valores não somam.</strong> Ex.: 0 a 2 km = R$ 5; acima de 2 até 5 km = R$ 8; acima de 5 até 10 km = R$ 12.</p></div></div>
       <div class="field"><label>Modalidade</label><select id="cfgDelivery"><option value="pickup">Somente retirada</option><option value="own">Entrega própria + retirada</option></select></div>
       <div class="delivery-own">
         <div class="location-setup"><div><strong>📍 Localização da empresa</strong><div class="small muted">Necessária para o Mapbox calcular a rota real de carro pelas ruas até o cliente e escolher automaticamente a faixa de frete.</div><div id="companyLocationStatus" class="small location-status">Ainda não definida.</div></div><button class="btn" id="setCompanyLocation" type="button">Usar localização atual</button></div>
@@ -266,7 +266,7 @@ function renderOpcoes(){
 }
 function grupoById(id){return opGrupos.find(g=>String(g.id)===String(id))}
 async function createGroup(data){if(!opProduto?.id)return;if(opGrupos.some(g=>String(g.nome).trim().toLowerCase()===String(data.nome).trim().toLowerCase()))return toast('Essa opção já existe neste produto.');try{await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'POST',auth:true,body:{acao:'criar_grupo',produto_id:opProduto.id,...data}});await loadOpcoes();toast('Opção criada. Agora adicione os itens.')}catch(e){toast('Não foi possível criar essa opção.')}}
-document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const kind=b.dataset.preset;if(kind==='tamanhos')createGroup({nome:'Escolha o tamanho',tipo:'single',modo_preco:'final',obrigatorio:true,minimo:1,maximo:1});if(kind==='adicionais')createGroup({nome:'Adicionais',tipo:'multiple',modo_preco:'adicional',obrigatorio:false,minimo:0,maximo:20})});
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const kind=b.dataset.preset;if(kind==='tamanhos')createGroup({nome:'Escolha o tamanho',tipo:'single',modo_preco:'final',obrigatorio:false,minimo:0,maximo:1});if(kind==='adicionais')createGroup({nome:'Adicionais',tipo:'multiple',modo_preco:'adicional',obrigatorio:false,minimo:0,maximo:20})});
 
 window.addOpcao=async gid=>{const g=grupoById(gid);if(!g)return;const name=$('newName_'+gid).value.trim();if(!name)return toast('Digite o nome da opção.');try{const stored=optionStoredValue(g,$('newPrice_'+gid).value);await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'POST',auth:true,body:{acao:'criar_opcao',grupo_id:gid,nome:name,preco_adicional:stored,disponivel:true}});await loadOpcoes()}catch(e){toast(e.message==='preco_final_menor_que_base'?'O preço final não pode ser menor que o preço base do produto.':'Não foi possível adicionar a opção.')}};
 window.saveOpcao=async(id,gid)=>{const g=grupoById(gid);if(!g)return;try{const stored=optionStoredValue(g,$('op_'+id).value);await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'PATCH',auth:true,body:{acao:'atualizar_opcao',id,nome:$('on_'+id).value,preco_adicional:stored,disponivel:true}});await loadOpcoes();toast('Opção salva.')}catch(e){toast(e.message==='preco_final_menor_que_base'?'O preço final não pode ser menor que o preço base do produto.':'Não foi possível salvar a opção.')}};
@@ -283,11 +283,12 @@ function syncDeliveryDraft(){
 function renderDeliveryRanges(){
   const wrap=$('deliveryRanges');if(!wrap)return;
   if(!deliveryDraft.length)deliveryDraft=[{km:'',fee:''}];
-  wrap.innerHTML=deliveryDraft.map((r,i)=>`<div class="delivery-range-row">
-    <div class="field"><label>Até</label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${CardapioCore.esc(r.km??'')}"><span class="suffix">KM</span></div></div>
-    <div class="field"><label>Taxa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${CardapioCore.esc(r.fee??'')}"></div></div>
+  let anterior=0;
+  wrap.innerHTML=deliveryDraft.map((r,i)=>{const atual=Number(r.km),inicio=i===0?'0':(Number(anterior)>0?String(Number(anterior).toLocaleString('pt-BR',{maximumFractionDigits:1})):'—'),faixa=i===0?`0 a ${r.km||'—'} KM`:`Acima de ${inicio} até ${r.km||'—'} KM`;anterior=Number.isFinite(atual)&&atual>0?atual:anterior;return `<div class="delivery-range-row">
+    <div class="field"><label>Distância <span class="small muted">(${faixa})</span></label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${CardapioCore.esc(r.km??'')}"><span class="suffix">KM</span></div></div>
+    <div class="field"><label>Frete desta faixa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${CardapioCore.esc(r.fee??'')}"></div></div>
     <button class="mini danger delivery-remove" type="button" onclick="removeDeliveryRange(${i})" ${deliveryDraft.length===1?'disabled':''}>×</button>
-  </div>`).join('');
+  </div>`}).join('');
 }
 window.removeDeliveryRange=i=>{syncDeliveryDraft();deliveryDraft.splice(i,1);if(!deliveryDraft.length)deliveryDraft=[{km:'',fee:''}];renderDeliveryRanges()};
 $('addDeliveryRange').onclick=()=>{syncDeliveryDraft();if(deliveryDraft.length>=40)return toast('Limite de 40 faixas de entrega.');const prev=deliveryDraft[deliveryDraft.length-1]||{};const nextKm=Number(prev.km)>0?Math.round((Number(prev.km)+1)*10)/10:'';deliveryDraft.push({km:nextKm,fee:''});renderDeliveryRanges()};
