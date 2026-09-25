@@ -50,7 +50,7 @@
     .workspace{padding:30px;max-width:1530px;margin:0 auto}.page-intro{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin-bottom:24px}.page-intro-actions{justify-content:flex-end;margin-bottom:18px}.page-intro h1{margin:0;font-size:29px;letter-spacing:-.04em;color:var(--ink)}.page-intro p{margin:7px 0 0;color:var(--muted);font-size:14px}.hero-actions{display:flex;align-items:flex-end;gap:9px}.city-switch{min-width:210px}.city-switch label{margin:0 0 5px;font-size:10px;color:#778397;text-transform:uppercase;letter-spacing:.08em}.city-switch select{height:42px;padding:8px 34px 8px 11px;font-size:12px;font-weight:800}.refresh{height:42px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:0 13px;color:#334458;font-weight:800;font-size:12px}
 
     /* Top KPIs */
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}.stat{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;overflow:hidden}.stat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#cfd7df}.stat.pending:before{background:#d69a34}.stat.warning:before{background:#d69a34}.stat.expired:before{background:#d34e59}.stat small{display:block;color:#718094;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.055em}.stat strong{display:block;margin-top:5px;font-size:26px;letter-spacing:-.04em;color:var(--ink)}
+    .stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:12px}.stat{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 16px;overflow:hidden}.stat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:#cfd7df}.stat.pending:before{background:#d69a34}.stat.warning:before{background:#d69a34}.stat.expired:before{background:#d34e59}.stat small{display:block;color:#718094;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.055em}.stat strong{display:block;margin-top:5px;font-size:26px;letter-spacing:-.04em;color:var(--ink)}
     .premium-inventory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:24px}.premium-slot{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 16px}.premium-slot small{display:block;color:#78869a;font-size:10px;font-weight:850;letter-spacing:.06em}.premium-slot strong{display:block;margin-top:2px;font-size:12px;color:#3d4c5f}.capacity{min-width:62px;text-align:center;border-radius:9px;background:#f0f4f8;padding:7px 9px;font-size:13px;font-weight:900;color:#24364b}.premium-slot.full .capacity{background:var(--red-soft);color:var(--red)}
 
     /* Dynamic workspace */
@@ -174,6 +174,7 @@
           <article class="stat pending"><small>Vagas pendentes</small><strong id="statJobsPending">0</strong></article>
           <article class="stat warning"><small>Vencem em 7 dias</small><strong id="statRenewalSoon">0</strong></article>
           <article class="stat expired"><small>Empresas vencidas</small><strong id="statCompaniesExpired">0</strong></article>
+          <article class="stat pending"><small>Alterações pendentes</small><strong id="statCompanyChangesPending">0</strong></article>
         </div>
         <div class="premium-inventory" id="premiumInventory">
           <article class="premium-slot" id="masterCapacityBox"><div><small>MASTER · semana atual</small><strong>Capacidade de exposição premium</strong></div><span class="capacity" id="masterCapacity">0/4</span></article>
@@ -269,7 +270,7 @@
   let ADMIN_CITY_ID=(()=>{try{const v=localStorage.getItem(ADMIN_CITY_KEY);return CITIES[v]?v:"torres"}catch{return "torres"}})();
   const MAX_MASTER=4,MAX_DESTAQUE=3;
   const ADMIN_SESSION_KEY="busque_torres_admin_session_v1";
-  const state={session:null,adminProfile:null,adminSessionId:null,heartbeatTimer:null,refreshTimer:null,refreshPromise:null,companies:[],jobs:[],promotions:[],payments:[],commercial:null,metrics:null,promoMetrics:null,intelligence:null,banners:[],premiumAgenda:[],auditSessions:[],auditActivities:[],courtesyInvites:[],editingCompany:null,tab:"overview",modal:null,loaded:{pendingCompanies:false,pendingJobs:false,activeJobs:false,promotions:false,finance:false,metrics:false,intelligence:false,banners:false,agenda:false,activities:false,courtesy:false},syncRunning:false};
+  const state={session:null,adminProfile:null,adminSessionId:null,heartbeatTimer:null,refreshTimer:null,refreshPromise:null,companies:[],jobs:[],promotions:[],payments:[],commercial:null,metrics:null,promoMetrics:null,intelligence:null,banners:[],premiumAgenda:[],auditSessions:[],auditActivities:[],courtesyInvites:[],companyChanges:[],companyChangesPending:0,editingCompany:null,tab:"overview",modal:null,loaded:{pendingCompanies:false,pendingJobs:false,activeJobs:false,promotions:false,finance:false,metrics:false,intelligence:false,banners:false,agenda:false,activities:false,courtesy:false,companyChanges:false},syncRunning:false};
   const cityConfig=()=>CITIES[ADMIN_CITY_ID]||CITIES.torres;
   const cityName=()=>cityConfig().name;
   function ensureConfig(){
@@ -467,7 +468,7 @@
   const JOB_BASE_FIELDS="id,empresa_nome,cargo,local,whatsapp,salario,horario,contrato,email,duracao_dias,status,expira_em,motivo_status,created_at,cidade_id,acessos";
   function cityFilter(){return `cidade_id=eq.${encodeURIComponent(ADMIN_CITY_ID)}`}
   function mergeRows(base,details){const map=new Map((details||[]).map(x=>[String(x.id),x]));return (base||[]).map(x=>Object.assign({},x,map.get(String(x.id))||{}))}
-  function resetLazyData(){state.loaded={pendingCompanies:false,pendingJobs:false,activeJobs:false,promotions:false,finance:false,metrics:false,intelligence:false,banners:false,agenda:false,activities:false};state.promotions=[];state.payments=[];state.metrics=null;state.promoMetrics=null;state.intelligence=null;state.banners=[];state.premiumAgenda=[];state.auditSessions=[];state.auditActivities=[]}
+  function resetLazyData(){state.loaded={pendingCompanies:false,pendingJobs:false,activeJobs:false,promotions:false,finance:false,metrics:false,intelligence:false,banners:false,agenda:false,activities:false,courtesy:false,companyChanges:false};state.promotions=[];state.payments=[];state.metrics=null;state.promoMetrics=null;state.intelligence=null;state.banners=[];state.premiumAgenda=[];state.auditSessions=[];state.auditActivities=[];state.companyChanges=[];state.companyChangesPending=0}
   async function loadBase(){
     const [companies,jobs,configs]=await Promise.all([
       api(`empresas?select=${COMPANY_BASE_FIELDS}&${cityFilter()}&order=created_at.desc`),
@@ -508,8 +509,24 @@
   }
   async function generateCourtesy(){if(ADMIN_CITY_ID!=="torres")return toast("Troque para Busque Torres para gerar o convite.","error");const name=$("courtesyName")?.value.trim()||null,reason=$("courtesyReason")?.value.trim()||null;const r=await rpc("admin_gerar_convite_cortesia",{p_nome:name,p_motivo:reason,p_cidade_id:"torres"});state.loaded.courtesy=false;await loadCourtesyInvites(true);renderContent();await copyText(courtesyLink(r.codigo));toast("Link criado e copiado. Ele vale para um único cadastro.")}
   async function cancelCourtesy(id){if(!confirm("Cancelar este link de cortesia? Depois disso ele não poderá ser usado."))return;await rpc("admin_cancelar_convite_cortesia",{p_id:id});state.loaded.courtesy=false;await loadCourtesyInvites(true);renderContent();toast("Link de cortesia cancelado.")}
+  async function loadCompanyChanges(force=false){
+    if(state.loaded.companyChanges&&!force)return state.companyChanges;
+    const rows=await rpc("admin_listar_alteracoes_empresa",{p_cidade_id:ADMIN_CITY_ID})||[];
+    state.companyChanges=Array.isArray(rows)?rows:[];
+    state.companyChangesPending=state.companyChanges.filter(r=>r.status==="pendente").length;
+    state.loaded.companyChanges=true;
+    return state.companyChanges;
+  }
   async function ensureTabData(tab,force=false){
-    if(tab==="overview")return loadPromoMetrics();
+    if(tab==="overview")return Promise.all([
+      loadPromoMetrics(),
+      loadCompanyChanges(force).catch(error=>{
+        console.warn("Não foi possível carregar alterações pendentes:",error?.message||error);
+        state.companyChanges=[];
+        state.companyChangesPending=0;
+        state.loaded.companyChanges=false;
+      })
+    ]);
     if(tab==="companies-pending")return loadPendingCompanyDetails(force);
     if(tab==="jobs-pending")return loadPendingJobDetails(force);
     if(tab==="jobs-active")return Promise.all([loadActiveJobDetails(force),loadMetrics(force).catch(()=>{})]);
@@ -521,6 +538,7 @@
     if(tab==="agenda-premium")return loadPremiumAgenda(force);
     if(tab==="activities")return loadActivities(force);
     if(tab==="courtesy-30")return loadCourtesyInvites(force);
+    if(tab==="company-changes")return loadCompanyChanges(force);
   }
   function updateCityUi(){
     const c=cityConfig();
@@ -531,7 +549,7 @@
     if(!CITIES[cityId]||cityId===ADMIN_CITY_ID)return;
     ADMIN_CITY_ID=cityId;
     try{localStorage.setItem(ADMIN_CITY_KEY,cityId)}catch{}
-    state.companies=[];state.jobs=[];state.promotions=[];state.payments=[];state.metrics=null;state.promoMetrics=null;state.intelligence=null;state.banners=[];state.courtesyInvites=[];state.loaded.courtesy=false;
+    state.companies=[];state.jobs=[];state.promotions=[];state.payments=[];state.metrics=null;state.promoMetrics=null;state.intelligence=null;state.banners=[];state.courtesyInvites=[];state.companyChanges=[];state.companyChangesPending=0;state.loaded.courtesy=false;state.loaded.companyChanges=false;
     updateCityUi();
     setLoading(`Carregando ${cityName()}...`);
     await loadAll({sync:false});
@@ -544,6 +562,7 @@
       await loadBase();
       renderStats();
       await ensureTabData(state.tab,true);
+      renderStats();
       renderContent();
       if(options.sync!==false)void refreshStatusesAfterSync();
     }catch(error){
@@ -555,7 +574,7 @@
   function activePlanCount(planName,excludeId=null){return state.companies.filter(c=>c.status==="ativo"&&c.ativo&&String(c.plano||"comum").toLowerCase()===planName&&(!excludeId||!sameId(c.id,excludeId))).length}
   function planLimit(planName){return planName==="master"?MAX_MASTER:planName==="destaque"?MAX_DESTAQUE:null}
   function ensurePremiumCapacity(planName,companyId=null){const limit=planLimit(planName);if(!limit)return true;const count=activePlanCount(planName,companyId);if(count>=limit)throw new Error(`${plan(planName)} lotado — ${count}/${limit}. Libere uma posição antes de adicionar outra empresa.`);return true}
-  function renderStats(){const soon=state.companies.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d>=0&&d<=7}).length;const expired=state.companies.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d<0}).length;$("statCompaniesPending").textContent=state.companies.filter(x=>x.status==="pendente").length;$("statJobsPending").textContent=state.jobs.filter(x=>x.status==="pendente").length;$("statRenewalSoon").textContent=soon;$("statCompaniesExpired").textContent=expired;const master=activePlanCount("master"),destaque=activePlanCount("destaque");$("masterCapacity").textContent=`${master}/${MAX_MASTER}`;$("highlightCapacity").textContent=`${destaque}/${MAX_DESTAQUE}`;$("masterCapacityBox").classList.toggle("full",master>=MAX_MASTER);$("highlightCapacityBox").classList.toggle("full",destaque>=MAX_DESTAQUE)}
+  function renderStats(){const soon=state.companies.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d>=0&&d<=7}).length;const expired=state.companies.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d<0}).length;$("statCompaniesPending").textContent=state.companies.filter(x=>x.status==="pendente").length;$("statJobsPending").textContent=state.jobs.filter(x=>x.status==="pendente").length;$("statRenewalSoon").textContent=soon;$("statCompaniesExpired").textContent=expired;if($("statCompanyChangesPending"))$("statCompanyChangesPending").textContent=Number(state.companyChangesPending||0);const master=activePlanCount("master"),destaque=activePlanCount("destaque");$("masterCapacity").textContent=`${master}/${MAX_MASTER}`;$("highlightCapacity").textContent=`${destaque}/${MAX_DESTAQUE}`;$("masterCapacityBox").classList.toggle("full",master>=MAX_MASTER);$("highlightCapacityBox").classList.toggle("full",destaque>=MAX_DESTAQUE)}
   function setLoading(message="Carregando informações..."){$("content").innerHTML=`<div class="loading">${safe(message)}</div>`}
   function correctionReason(item){return String(item.motivo_status||"").startsWith("[CORREÇÃO]")}
   function formatSalary(value){const raw=String(value??"").trim();if(!raw)return "A combinar";if(/a\s*combinar/i.test(raw))return "A combinar";let normalized=raw.replace(/R\$|\s/g,"");if(normalized.includes(","))normalized=normalized.replace(/\./g,"").replace(",",".");else if(/^\d{1,3}(?:\.\d{3})+$/.test(normalized))normalized=normalized.replace(/\./g,"");normalized=normalized.replace(/[^0-9.-]/g,"");const n=Number(normalized);return Number.isFinite(n)?new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL",minimumFractionDigits:2}).format(n):raw}
@@ -734,7 +753,7 @@
   function syncPanelMenuActive(){document.querySelectorAll(".tab,.panel-menu-item").forEach(x=>x.classList.toggle("active",x.dataset.tab===state.tab))}
   function openPanelMenu(){$("panelMenuBackdrop").hidden=false;syncPanelMenuActive()}
   function closePanelMenu(){$("panelMenuBackdrop").hidden=true}
-  async function selectPanelTab(tab){if(tab==="activities"&&!isOwner())return toast("A aba Atividade é exclusiva do proprietário.","error");state.tab=tab;syncPanelMenuActive();closePanelMenu();try{setLoading("Carregando esta área...");await ensureTabData(state.tab);renderContent()}catch(error){console.error(error);toast(error.message,"error");renderContent()}}
+  async function selectPanelTab(tab){if(tab==="activities"&&!isOwner())return toast("A aba Atividade é exclusiva do proprietário.","error");state.tab=tab;syncPanelMenuActive();closePanelMenu();try{setLoading("Carregando esta área...");await ensureTabData(state.tab,true);if(state.tab==="company-changes")await renderContentAsync();else renderContent()}catch(error){console.error(error);toast(error.message,"error");renderContent()}}
   function dashboardHtml(){
     const activeCompanies=state.companies.filter(x=>x.status==="ativo"&&x.ativo);
     const activeJobs=state.jobs.filter(x=>x.status==="ativa");
@@ -743,7 +762,8 @@
     const renewals=renewalCompanies().sort((a,b)=>new Date(a.data_vencimento||0)-new Date(b.data_vencimento||0));
     const master=activePlanCount("master"), destaque=activePlanCount("destaque");
     const urgent=renewals.slice(0,5);
-    const actionCount=pendingCompanies.length+pendingJobs.length+renewals.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d<=7}).length;
+    const pendingChanges=Number(state.companyChangesPending||0);
+    const actionCount=pendingCompanies.length+pendingJobs.length+pendingChanges+renewals.filter(c=>{const d=daysUntil(c.data_vencimento);return d!==null&&d<=7}).length;
     const renewalRows=urgent.length?urgent.map(c=>{const r=renewalStatus(c);return `<article class="overview-row"><div class="overview-row-main"><span class="status-dot ${r.cls}"></span><div><strong>${safe(c.nome)}</strong><small>${safe(r.text)} · ${safe(subscription(c.assinatura_periodo))}</small></div></div><button class="overview-row-action" data-action="send-renewal" data-id="${safe(c.id)}">WhatsApp</button></article>`}).join(""):'<div class="overview-empty">Nenhuma renovação urgente agora.</div>';
     return `<div class="overview">
       <section class="overview-welcome"><div><span class="eyebrow">CENTRAL DE OPERAÇÕES</span><h3>${actionCount?`${actionCount} item${actionCount===1?"":"s"} pedindo atenção`:`Tudo sob controle por aqui`}</h3><p>Use esta tela para decidir o que fazer primeiro no ${safe(cityName())}.</p></div><div class="overview-welcome-mark"><span>${activeCompanies.length}</span><small>empresas ativas</small></div></section>
@@ -752,6 +772,7 @@
         <button class="overview-action-card" data-action="go-tab" data-tab="jobs-pending"><span class="overview-card-icon">02</span><div><small>VAGAS</small><strong>${pendingJobs.length} pendente${pendingJobs.length===1?"":"s"}</strong><p>Confira e publique oportunidades.</p></div><span class="overview-card-arrow">→</span></button>
         <button class="overview-action-card" data-action="go-tab" data-tab="renewals"><span class="overview-card-icon">03</span><div><small>RENOVAÇÕES</small><strong>${renewals.length} na fila</strong><p>Vencidas ou próximas do vencimento.</p></div><span class="overview-card-arrow">→</span></button>
         <button class="overview-action-card" data-action="go-tab" data-tab="agenda-premium"><span class="overview-card-icon">04</span><div><small>PREMIUM</small><strong>${master}/${MAX_MASTER} MASTER · ${destaque}/${MAX_DESTAQUE} Destaque</strong><p>Visualize e organize a agenda premium.</p></div><span class="overview-card-arrow">→</span></button>
+        <button class="overview-action-card ${pendingChanges?"urgent":""}" data-action="go-tab" data-tab="company-changes"><span class="overview-card-icon">05</span><div><small>ALTERAÇÕES</small><strong>${pendingChanges} pendente${pendingChanges===1?"":"s"}</strong><p>Pedidos dos proprietários aguardando sua aprovação.</p></div><span class="overview-card-arrow">→</span></button>
       </div>
       <section class="promo-overview"><div class="promo-overview-head"><div><small>PROMOÇÃO DO DIA</small><h4>🔥 Cliques e conversão de hoje</h4></div><button data-action="go-tab" data-tab="metrics" type="button">Ver detalhes</button></div><div class="promo-overview-grid"><div class="promo-overview-box"><small>Cliques no foguinho</small><strong>${metricNumber(state.promoMetrics?.hoje?.aberturas)}</strong></div><div class="promo-overview-box"><small>Cliques em anunciar</small><strong>${metricNumber(state.promoMetrics?.hoje?.interesses)}</strong></div><div class="promo-overview-box"><small>Compras iniciadas</small><strong>${metricNumber(state.promoMetrics?.hoje?.compras_iniciadas)}</strong></div><div class="promo-overview-box"><small>Checkouts criados</small><strong>${metricNumber(state.promoMetrics?.hoje?.checkouts)}</strong></div></div><div class="promo-overview-note">A contagem começa a partir dos eventos registrados no novo foguinho. Ela não reconstrói cliques anteriores que não foram gravados.</div></section>
       <div class="overview-columns">
@@ -763,7 +784,7 @@
 
   async function companyChangesHtml(){
     try{
-      const rows=await rpc("admin_listar_alteracoes_empresa",{p_cidade_id:state.city})||[];
+      const rows=(state.loaded.companyChanges?state.companyChanges:await loadCompanyChanges(true))||[];
       if(!rows.length)return '<div class="empty"><strong>Nenhuma alteração aguardando revisão</strong><span>Solicitações feitas pelos proprietários aparecerão aqui.</span></div>';
       return rows.map(r=>{
         const pending=r.status==="pendente",d=r.dados||{};
@@ -777,7 +798,7 @@
     let motivo=null;if(!approve){motivo=prompt("Motivo da recusa (opcional):","")||null}
     if(!confirm(approve?"Aprovar esta alteração e publicar os novos dados/imagens?":"Recusar esta solicitação?"))return;
     await rpc("admin_revisar_alteracao_empresa",{p_id:id,p_aprovar:approve,p_motivo:motivo});
-    toast(approve?"Alterações aprovadas e publicadas.":"Solicitação recusada.");await loadAll();state.tab="company-changes";await renderContentAsync();
+    toast(approve?"Alterações aprovadas e publicadas.":"Solicitação recusada.");state.loaded.companyChanges=false;await loadCompanyChanges(true);state.tab="company-changes";syncPanelMenuActive();await renderContentAsync();
   }
   async function renderContentAsync(){
     if(state.tab!=="company-changes"){renderContent();return}
