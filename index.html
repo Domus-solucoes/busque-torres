@@ -356,11 +356,14 @@
       .join{margin-top:30px;padding:23px 19px;border-radius:20px}
       .join h2{font-size:1.35rem}.join p{font-size:.88rem}.join a{padding:12px 15px}
       footer{margin-bottom:0;padding-bottom:24px}
-      .mobile-bottom-nav{position:fixed;z-index:900;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:7px;border:1px solid rgba(8,27,51,.09);border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 12px 36px rgba(8,27,51,.22);backdrop-filter:blur(16px)}
+      .mobile-bottom-nav{position:fixed;z-index:900;left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:7px;border:1px solid rgba(8,27,51,.09);border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 12px 36px rgba(8,27,51,.22);backdrop-filter:blur(16px)}
       .mobile-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:51px;border:0;border-radius:14px;background:transparent;color:#667085;text-decoration:none;cursor:pointer}
       .mobile-nav-item span{font-size:1.25rem;line-height:1}
       .mobile-nav-item b{font-size:.66rem;font-weight:900}
-      .mobile-nav-instagram svg{width:20px;height:20px;display:block;margin-bottom:1px}
+      .mobile-nav-instagram svg,.mobile-nav-whatsapp svg{width:20px;height:20px;display:block;margin-bottom:1px}
+      .mobile-nav-whatsapp{color:#168a4a}
+      .mobile-nav-announce{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy)}
+      .mobile-nav-announce:active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:var(--navy)}
       .mobile-nav-item.is-active,.mobile-nav-item:active{background:#f0f3f7;color:var(--navy)}
       body.search-mode{padding-bottom:76px}
       body.search-mode .mobile-bottom-nav{display:grid!important}
@@ -863,11 +866,9 @@
   </section>
 </main>
 
-<nav class="mobile-bottom-nav" aria-label="Navegação principal no celular">
-  <a href="#top" class="mobile-nav-item is-active" aria-label="Início"><span>⌂</span><b>Início</b></a>
-  <button type="button" id="mobileSearch" class="mobile-nav-item" aria-label="Buscar"><span>⌕</span><b>Buscar</b></button>
-  <button type="button" id="mobileJobs" class="mobile-nav-item" aria-label="Vagas"><span>▣</span><b>Vagas</b></button>
-  <a href="cadastro.html" class="mobile-nav-item" aria-label="Cadastrar"><span>＋</span><b>Cadastrar</b></a>
+<nav class="mobile-bottom-nav" aria-label="Ações rápidas no celular">
+  <a href="https://wa.me/5551996929287?text=Ol%C3%A1%21%20Vi%20o%20Busque%20Torres%20e%20gostaria%20de%20saber%20como%20anunciar%20minha%20empresa." target="_blank" rel="noopener noreferrer" class="mobile-nav-item mobile-nav-whatsapp" aria-label="Falar com o Busque Torres pelo WhatsApp"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.08 0C5.5 0 .15 5.35.15 11.93c0 2.1.55 4.15 1.6 5.95L.05 24l6.27-1.64a11.9 11.9 0 0 0 5.75 1.46h.01c6.58 0 11.93-5.35 11.93-11.93 0-3.19-1.24-6.18-3.49-8.41ZM12.08 21.8h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.72.98.99-3.63-.24-.37a9.84 9.84 0 0 1-1.52-5.26c0-5.46 4.44-9.9 9.9-9.9 2.64 0 5.13 1.03 7 2.9a9.83 9.83 0 0 1 2.9 7c-.01 5.45-4.45 9.87-9.91 9.87Zm5.43-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47a8.92 8.92 0 0 1-1.65-2.05c-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.71.23 1.36.19 1.87.12.57-.08 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg></span><b>WhatsApp</b></a>
+  <a href="cadastro.html" class="mobile-nav-item mobile-nav-announce" aria-label="Anunciar no Busque Torres"><span>＋</span><b>Anunciar</b></a>
   <a href="https://www.instagram.com/busque_torres?stkn=MXQ0MTdkMGR6NmxnZw==" target="_blank" rel="noopener noreferrer" class="mobile-nav-item mobile-nav-instagram" aria-label="Instagram do Busque Torres"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span><b>Instagram</b></a>
 </nav>
 
