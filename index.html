@@ -734,19 +734,33 @@
     /* Regra definitiva para qualquer banner enviado pelo painel */
     body.hero-custom-banner .hero{
       position:relative!important;
-      height:clamp(300px,23vw,360px)!important;
-      min-height:300px!important;
+      overflow:hidden!important;
       padding:0!important;
       border-radius:0!important;
-      background:var(--navy)!important;
+      background:#0b1d33!important;
+    }
+    body.hero-custom-banner .hero:before{
+      content:""!important;
+      display:block!important;
+      position:absolute!important;
+      inset:-24px!important;
+      z-index:0!important;
+      background-image:var(--hero-banner-image)!important;
+      background-size:cover!important;
+      background-position:center!important;
+      filter:blur(18px) brightness(.58)!important;
+      transform:scale(1.06)!important;
+      opacity:.95!important;
     }
     body.hero-custom-banner .hero-city-art{
       position:absolute!important;
       inset:0!important;
+      z-index:1!important;
       width:100%!important;
       height:100%!important;
-      object-fit:cover!important;
-      object-position:center 38%!important;
+      object-fit:contain!important;
+      object-position:center center!important;
+      background:transparent!important;
       opacity:1!important;
     }
     body.hero-custom-banner .home-nav{
@@ -769,69 +783,33 @@
       align-items:flex-start!important;
       flex-wrap:nowrap!important;
     }
+    @media(min-width:641px){
+      body.hero-custom-banner .hero{
+        height:420px!important;
+        min-height:420px!important;
+        max-height:420px!important;
+      }
+    }
     @media(max-width:640px){
       body.hero-custom-banner .hero{
         height:300px!important;
         min-height:300px!important;
-        max-height:none!important;
+        max-height:300px!important;
         aspect-ratio:auto!important;
-        padding:0!important;
-        border-radius:0!important;
-      }
-      body.hero-custom-banner .hero-city-art{
-        width:100%!important;
-        height:100%!important;
-        object-fit:cover!important;
-        object-position:78% center!important;
       }
       body.hero-custom-banner .home-nav{
         top:12px!important;
         left:10px!important;
-        width:auto!important;
-        min-height:0!important;
-        margin:0!important;
-        padding:0!important;
-        transform:none!important;
-        justify-content:flex-start!important;
       }
       body.hero-custom-banner .home-nav .nav-actions{
-        width:auto!important;
-        margin:0!important;
-        justify-content:flex-start!important;
-        flex-wrap:nowrap!important;
         gap:5px!important;
       }
     }
 
     /* Desktop: mostra o banner inteiro, sem cortar logo/textos */
     @media(min-width:641px){
-      body.hero-custom-banner .hero{
-        height:390px!important;
-        min-height:390px!important;
-        overflow:hidden!important;
-        background:#0b1d33!important;
-      }
       body.hero-custom-banner .hero:before{
         content:""!important;
-        display:block!important;
-        position:absolute!important;
-        inset:-24px!important;
-        z-index:0!important;
-        background-image:var(--hero-banner-image)!important;
-        background-size:cover!important;
-        background-position:center!important;
-        filter:blur(18px) brightness(.58)!important;
-        transform:scale(1.06)!important;
-        opacity:.95!important;
-      }
-      body.hero-custom-banner .hero-city-art{
-        z-index:1!important;
-        object-fit:contain!important;
-        object-position:center center!important;
-        background:transparent!important;
-      }
-      body.hero-custom-banner .home-nav{
-        z-index:5!important;
       }
     }
 </style>
