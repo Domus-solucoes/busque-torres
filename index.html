@@ -730,6 +730,78 @@
       /* PLANOS: CTA comercial sólido e destacado */
     .plans-btn{background:#f4c95d!important;color:#081b33!important;border-color:#d7aa3a!important;backdrop-filter:none!important;box-shadow:0 7px 18px rgba(0,0,0,.18);transition:.18s}
     .plans-btn:hover{background:#ffd66f!important;color:#081b33!important;transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.22)}
+
+    /* Regra definitiva para qualquer banner enviado pelo painel */
+    body.hero-custom-banner .hero{
+      position:relative!important;
+      height:clamp(430px,38vw,620px)!important;
+      min-height:430px!important;
+      padding:0!important;
+      border-radius:0!important;
+      background:var(--navy)!important;
+    }
+    body.hero-custom-banner .hero-city-art{
+      position:absolute!important;
+      inset:0!important;
+      width:100%!important;
+      height:100%!important;
+      object-fit:cover!important;
+      object-position:center center!important;
+      opacity:1!important;
+    }
+    body.hero-custom-banner .home-nav{
+      position:absolute!important;
+      top:18px!important;
+      left:max(18px,calc((100% - min(var(--max),calc(100% - 36px)))/2))!important;
+      width:auto!important;
+      min-height:0!important;
+      margin:0!important;
+      padding:0!important;
+      transform:none!important;
+      justify-content:flex-start!important;
+      align-items:flex-start!important;
+      z-index:5!important;
+    }
+    body.hero-custom-banner .home-nav .nav-actions{
+      width:auto!important;
+      margin:0!important;
+      justify-content:flex-start!important;
+      align-items:flex-start!important;
+      flex-wrap:nowrap!important;
+    }
+    @media(max-width:640px){
+      body.hero-custom-banner .hero{
+        height:300px!important;
+        min-height:300px!important;
+        max-height:none!important;
+        aspect-ratio:auto!important;
+        padding:0!important;
+        border-radius:0!important;
+      }
+      body.hero-custom-banner .hero-city-art{
+        width:100%!important;
+        height:100%!important;
+        object-fit:cover!important;
+        object-position:center center!important;
+      }
+      body.hero-custom-banner .home-nav{
+        top:12px!important;
+        left:10px!important;
+        width:auto!important;
+        min-height:0!important;
+        margin:0!important;
+        padding:0!important;
+        transform:none!important;
+        justify-content:flex-start!important;
+      }
+      body.hero-custom-banner .home-nav .nav-actions{
+        width:auto!important;
+        margin:0!important;
+        justify-content:flex-start!important;
+        flex-wrap:nowrap!important;
+        gap:5px!important;
+      }
+    }
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
 </head>
@@ -1096,7 +1168,7 @@ async function btCachedRpc(cacheKey,ttlMs,rpcName,params={}){
 
 async function loadHeroBanner(){
   const img=$("heroCityArt");
-  document.body.classList.remove("hero-promo");
+  document.body.classList.remove("hero-promo","hero-custom-banner");
   try{
     const banner=await btCachedRpc("banner-torres",300000,"banner_publico_atual_cidade",{p_cidade_id:"torres"});
     if(banner?.imagem_url){
@@ -1106,11 +1178,12 @@ async function loadHeroBanner(){
         img.hidden=false;
         img.alt=banner.nome?`Banner ${banner.nome}`:"";
         img.removeAttribute("aria-hidden");
+        document.body.classList.add("hero-custom-banner");
         document.body.classList.toggle("hero-promo",banner.tipo==="temporario");
       }
     }
   }catch(error){
-    document.body.classList.remove("hero-promo");
+    document.body.classList.remove("hero-promo","hero-custom-banner");
     console.warn("Banner dinâmico indisponível; usando o fundo padrão do site.",error?.message||error);
   }
 }
