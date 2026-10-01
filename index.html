@@ -802,6 +802,38 @@
         gap:5px!important;
       }
     }
+
+    /* Desktop: mostra o banner inteiro, sem cortar logo/textos */
+    @media(min-width:641px){
+      body.hero-custom-banner .hero{
+        height:390px!important;
+        min-height:390px!important;
+        overflow:hidden!important;
+        background:#0b1d33!important;
+      }
+      body.hero-custom-banner .hero:before{
+        content:""!important;
+        display:block!important;
+        position:absolute!important;
+        inset:-24px!important;
+        z-index:0!important;
+        background-image:var(--hero-banner-image)!important;
+        background-size:cover!important;
+        background-position:center!important;
+        filter:blur(18px) brightness(.58)!important;
+        transform:scale(1.06)!important;
+        opacity:.95!important;
+      }
+      body.hero-custom-banner .hero-city-art{
+        z-index:1!important;
+        object-fit:contain!important;
+        object-position:center center!important;
+        background:transparent!important;
+      }
+      body.hero-custom-banner .home-nav{
+        z-index:5!important;
+      }
+    }
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
 </head>
@@ -1178,6 +1210,7 @@ async function loadHeroBanner(){
         img.hidden=false;
         img.alt=banner.nome?`Banner ${banner.nome}`:"";
         img.removeAttribute("aria-hidden");
+        document.documentElement.style.setProperty("--hero-banner-image",`url("${url.replace(/"/g,'%22')}")`);
         document.body.classList.add("hero-custom-banner");
         document.body.classList.toggle("hero-promo",banner.tipo==="temporario");
       }
