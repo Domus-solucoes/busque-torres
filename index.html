@@ -817,6 +817,38 @@
       }
     }
 
+
+    /* DESKTOP FINAL: usa a imagem própria do desktop; não altera o mobile */
+    @media(min-width:641px){
+      body.hero-custom-banner .hero{
+        position:relative!important;
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        aspect-ratio:1600/533!important;
+        overflow:hidden!important;
+        padding:0!important;
+        border-radius:0!important;
+        background:#0b1d33 url("assets/banner-home-desktop.avif") center center/cover no-repeat!important;
+      }
+      body.hero-custom-banner .hero:before{
+        display:none!important;
+      }
+      body.hero-custom-banner .hero-city-art{
+        display:none!important;
+      }
+      body.hero-custom-banner .home-nav{
+        position:absolute!important;
+        top:18px!important;
+        left:max(18px,calc((100% - min(var(--max),calc(100% - 36px)))/2))!important;
+        width:auto!important;
+        margin:0!important;
+        padding:0!important;
+        transform:none!important;
+        justify-content:flex-start!important;
+        z-index:5!important;
+      }
+    }
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
 </head>
