@@ -806,10 +806,14 @@
       }
     }
 
-    /* Desktop: mostra o banner inteiro, sem cortar logo/textos */
+    /* Desktop: preenche toda a faixa do banner; mobile permanece como está */
     @media(min-width:641px){
       body.hero-custom-banner .hero:before{
-        content:""!important;
+        display:none!important;
+      }
+      body.hero-custom-banner .hero-city-art{
+        object-fit:cover!important;
+        object-position:center top!important;
       }
     }
 </style>
