@@ -105,6 +105,34 @@
     @media(max-width:390px){.actions{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.overview-health{grid-template-columns:1fr}.overview-health div:nth-child(odd){border-right:0}.overview-health div{border-bottom:1px solid #eef1f4!important}.overview-health div:last-child{border-bottom:0!important}}
   
     .promo-review-media{margin:14px 0;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2)}.promo-review-media img{display:block;width:100%;max-height:420px;object-fit:contain;border-radius:10px;background:#0b1727}.promo-review-warning{margin-top:10px;padding:10px 11px;border-radius:10px;background:var(--amber-soft);color:#80530a;font-size:12px;font-weight:750;line-height:1.45}.promo-review-date{font-weight:900;color:var(--blue)}
+
+    /* Empresas ativas: lista compacta com busca e detalhes expansíveis */
+    .active-company-browser{display:grid;gap:12px}
+    .active-company-search{padding:14px;border:1px solid var(--line);border-radius:13px;background:#f8fafc}
+    .active-company-search label{display:block;margin:0 0 7px;color:#344559;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+    .active-company-search input{width:100%;min-height:42px;border:1px solid #d8e0e8;border-radius:10px;background:#fff;padding:10px 12px;color:var(--ink);font-size:12px}
+    .active-company-search input:focus{outline:2px solid rgba(36,111,181,.18);border-color:#77a9d7}
+    .active-company-search small{display:block;margin-top:7px;color:var(--muted);font-size:10px}
+    .active-company-list{display:grid;gap:7px}
+    .active-company-item{overflow:hidden;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .active-company-summary{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;border:0;background:#fff;padding:13px 14px;text-align:left;cursor:pointer}
+    .active-company-summary:hover{background:#f8fafc}
+    .active-company-summary-main{min-width:0;display:flex;align-items:center;gap:10px}
+    .active-company-summary-name{min-width:0;color:var(--ink);font-size:13px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .active-company-summary-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:4px;color:var(--muted);font-size:9px;font-weight:750}
+    .active-company-summary-side{display:flex;align-items:center;gap:8px}
+    .active-company-chevron{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#eef3f7;color:#486075;font-size:15px;transition:transform .18s ease}
+    .active-company-item.open .active-company-chevron{transform:rotate(180deg)}
+    .active-company-detail{padding:0 10px 10px;background:#f8fafc;border-top:1px solid var(--line)}
+    .active-company-detail>.record{margin-top:10px;box-shadow:none}
+    @media(max-width:680px){
+      .active-company-summary{grid-template-columns:minmax(0,1fr) auto;padding:12px}
+      .active-company-summary-main{align-items:flex-start}
+      .active-company-summary-name{white-space:normal;font-size:12px}
+      .active-company-summary-meta{font-size:8px}
+      .active-company-detail{padding:0 6px 7px}
+    }
+
 </style>
 </head>
 <body>
@@ -594,6 +622,77 @@
   function isFreePeriod(c){if(!c?.periodo_gratis_fim)return false;const end=new Date(`${String(c.periodo_gratis_fim).slice(0,10)}T23:59:59`);return Number.isFinite(end.getTime())&&end>=new Date()}
   function isFreeActiveCompany(c){if(!c||c.status!=="ativo"||c.ativo!==true)return false;if(c.publicacao_cortesia===true)return false;if(isFreePeriod(c))return true;if(c.pagamento_confirmado===true)return false;return c.cadastro_exige_pagamento!==true}
   function activeCompanyCard(c){const r=renewalStatus(c),free=isFreePeriod(c),gratis=isFreeActiveCompany(c),courtesy=c.publicacao_cortesia===true,credits=premiumCreditsHtml(c),freeEnd=c.periodo_gratis_fim||c.data_vencimento;return `<article class="record${gratis?" free-plan-active":""}"><div class="record-top"><div class="record-title"><h3>${gratis?'<span class="free-alert-icon" title="Empresa ainda no plano grátis" aria-label="Plano grátis">!</span>':""}${safe(c.nome)}</h3><p>${safe(plan(c.plano))} · ${safe(r.text)}</p><div class="badges"><span class="badge ${r.cls}">${safe(r.label)}</span><span class="badge plan">Plano atual: ${safe(plan(c.plano))}</span>${courtesy?`<span class="badge free-badge">CORTESIA até ${safe(date(c.data_vencimento))}</span>`:""}${gratis?`<span class="badge free-warning">! PLANO GRÁTIS${freeEnd?` até ${safe(date(freeEnd))}`:""}</span>`:""}${!gratis&&free?`<span class="badge free-badge">30 DIAS GRÁTIS até ${safe(date(c.periodo_gratis_fim))}</span>`:""}${credits}</div></div></div><div class="actions"><button class="action view" data-action="pdf-company" data-id="${c.id}">Gerar PDF</button><button class="action view" data-action="edit-company" data-id="${c.id}">Editar cadastro</button><button class="action approve" data-action="change-company-plan" data-id="${c.id}">Alterar plano</button>${isOwner()?`<button class="action courtesy" data-action="courtesy-company" data-id="${c.id}">Conceder cortesia</button>`:""}<button class="action renewal" data-action="send-management-code" data-id="${c.id}">🔑 Reenviar código de gestão</button>${foguinhoEligible(c)?`<button class="action renewal" data-action="send-foguinho-code" data-id="${c.id}">🔥 Código Foguinho</button>`:""}<button class="action renewal" data-action="send-renewal" data-id="${c.id}">Enviar renovação</button><button class="action view" data-action="copy-renewal" data-id="${c.id}">Copiar link</button><button class="action reject" data-action="suspend-company" data-id="${c.id}">Suspender</button></div></article>`}
+  function activeCompanyListItem(c){
+    const gratis=isFreeActiveCompany(c),courtesy=c.publicacao_cortesia===true;
+    const search=[c.nome,c.whatsapp,c.categoria,c.subcategoria,c.bairro,c.email].filter(Boolean).join(" ").toLocaleLowerCase("pt-BR");
+    const subscriptionLabel=subscription(c.assinatura_periodo);
+    const secondary=[c.categoria,c.subcategoria].filter(Boolean).join(" · ")||"Empresa ativa";
+    return `<div class="active-company-item" data-active-search="${safe(search)}">
+      <button class="active-company-summary" type="button" data-action="toggle-active-company" data-id="${c.id}" aria-expanded="false">
+        <span class="active-company-summary-main">
+          ${gratis?'<span class="free-alert-icon" title="Empresa ainda no plano grátis" aria-label="Plano grátis">!</span>':""}
+          <span style="min-width:0">
+            <span class="active-company-summary-name">${safe(c.nome)}</span>
+            <span class="active-company-summary-meta">
+              <span>${safe(secondary)}</span>
+              <span>•</span>
+              <span>${safe(subscriptionLabel)}</span>
+              ${courtesy?'<span>• CORTESIA</span>':""}
+            </span>
+          </span>
+        </span>
+        <span class="active-company-summary-side">
+          <span class="badge paid">ATIVA</span>
+          <span class="active-company-chevron" aria-hidden="true">⌄</span>
+        </span>
+      </button>
+      <div class="active-company-detail" hidden>${activeCompanyCard(c)}</div>
+    </div>`;
+  }
+  function activeCompaniesHtml(list,freeActiveCount){
+    return `<div class="active-company-browser">
+      <div class="active-company-search">
+        <label for="activeCompanySearch">Buscar empresa</label>
+        <input id="activeCompanySearch" type="search" placeholder="Digite nome, WhatsApp, categoria, bairro ou e-mail..." autocomplete="off">
+        <small id="activeCompanyCount">${list.length} empresa${list.length===1?"":"s"} ativa${list.length===1?"":"s"}</small>
+      </div>
+      ${freeActiveCount?`<div class="free-plan-note">! ${freeActiveCount} empresa${freeActiveCount===1?"":"s"} ainda ${freeActiveCount===1?"está":"estão"} no período grátis e sem pagamento confirmado.</div>`:""}
+      <div id="activeCompanyList" class="active-company-list">
+        ${list.length?list.map(activeCompanyListItem).join(""):'<div class="empty"><strong>Nenhuma empresa ativa</strong><span>Quando houver empresas publicadas, elas aparecerão aqui.</span></div>'}
+      </div>
+    </div>`;
+  }
+  function filterActiveCompanies(query=""){
+    const q=String(query||"").trim().toLocaleLowerCase("pt-BR");
+    const items=[...document.querySelectorAll("#activeCompanyList .active-company-item")];
+    let visible=0;
+    items.forEach(item=>{
+      const show=!q||String(item.dataset.activeSearch||"").includes(q);
+      item.hidden=!show;
+      if(show)visible++;
+    });
+    const count=$("activeCompanyCount");
+    if(count)count.textContent=`${visible} empresa${visible===1?"":"s"} encontrada${visible===1?"":"s"}`;
+  }
+  function toggleActiveCompany(id){
+    const btn=document.querySelector(`.active-company-summary[data-id="${CSS.escape(String(id))}"]`);
+    if(!btn)return;
+    const item=btn.closest(".active-company-item"),detail=item?.querySelector(".active-company-detail");
+    if(!item||!detail)return;
+    const opening=detail.hidden;
+    document.querySelectorAll("#activeCompanyList .active-company-item.open").forEach(other=>{
+      if(other===item)return;
+      other.classList.remove("open");
+      const otherDetail=other.querySelector(".active-company-detail");
+      const otherBtn=other.querySelector(".active-company-summary");
+      if(otherDetail)otherDetail.hidden=true;
+      if(otherBtn)otherBtn.setAttribute("aria-expanded","false");
+    });
+    detail.hidden=!opening;
+    item.classList.toggle("open",opening);
+    btn.setAttribute("aria-expanded",opening?"true":"false");
+  }
+
   function renewalCard(c){const r=renewalStatus(c),expired=c.status==="vencido"||(daysUntil(c.data_vencimento)!==null&&daysUntil(c.data_vencimento)<0);return `<article class="record"><div class="record-top"><div class="record-title"><h3>${safe(c.nome)}</h3><p>${safe(plan(c.plano))} · ${safe(r.text)}</p><div class="badges"><span class="badge ${r.cls}">${safe(r.label)}</span><span class="badge plan">${safe(c.whatsapp)}</span></div></div><div><small>Vencimento</small><br><strong>${safe(date(c.data_vencimento))}</strong></div></div><div class="record-details"><div class="detail"><small>Link permanente</small><div>${safe(renewalUrl(c))}</div></div><div class="detail"><small>Plano</small><div>${safe(plan(c.plano))}</div></div><div class="detail"><small>Situação</small><div>${safe(c.status)}</div></div></div><div class="actions"><button class="action pay" data-action="generate-renewal-pix" data-id="${c.id}">Gerar PIX</button>${isOwner()?`<button class="action approve" data-action="register-received-payment" data-id="${c.id}">Pagamento já recebido</button>`:""}${foguinhoEligible(c)?`<button class="action renewal" data-action="send-foguinho-code" data-id="${c.id}">🔥 Reenviar código</button>`:""}<button class="action renewal" data-action="send-renewal" data-id="${c.id}">Enviar pelo WhatsApp</button><button class="action view" data-action="copy-renewal" data-id="${c.id}">Copiar link</button>${isOwner()?`<button class="action courtesy" data-action="courtesy-company" data-id="${c.id}">Conceder cortesia</button>`:""}${expired?`<button class="action reject" data-action="archive-company" data-id="${c.id}">Arquivar</button>`:""}</div></article>`}
   function archivedCompanyCard(c){const automatic=c.arquivado_automatico===true,search=[c.nome,c.whatsapp,c.categoria,c.subcategoria].filter(Boolean).join(" ").toLocaleLowerCase("pt-BR");return `<article class="record archived-company" data-archive-search="${safe(search)}"><div class="record-top"><div class="record-title"><h3>${safe(c.nome)}</h3><p>${safe([c.categoria,c.subcategoria].filter(Boolean).join(" · ")||"Empresa arquivada")}</p><div class="badges"><span class="badge unpaid">ARQUIVADA</span><span class="badge plan">${automatic?"Automático":"Manual"}</span><span class="badge plan">Assinatura anterior: ${safe(subscription(c.assinatura_periodo))}</span></div></div><div><small>Arquivada em</small><br><strong>${safe(date(c.arquivado_em))}</strong></div></div><div class="record-details"><div class="detail"><small>WhatsApp</small><div>${safe(c.whatsapp||"—")}</div></div><div class="detail"><small>Último vencimento</small><div>${safe(date(c.data_vencimento))}</div></div><div class="detail"><small>Motivo</small><div>${safe(c.arquivado_motivo||"—")}</div></div></div><div class="actions"><button class="action approve" data-action="restore-company" data-id="${c.id}">Voltar para renovações</button><button class="action view" data-action="edit-company" data-id="${c.id}">Editar cadastro</button>${digits(c.whatsapp)?`<button class="action view" data-action="whatsapp-company" data-id="${c.id}">Abrir WhatsApp</button>`:""}</div></article>`}
   function archivedCompaniesHtml(){const list=state.companies.filter(c=>c.status==="arquivado").sort((a,b)=>new Date(b.arquivado_em||0)-new Date(a.arquivado_em||0));return `<div class="pdf-card" style="margin-bottom:14px"><h3>Empresas arquivadas</h3><p>Empresas fora da vitrine e da fila de renovação. O cadastro e o histórico continuam preservados. Use a busca abaixo para localizar quem quiser voltar a anunciar.</p><div class="metrics-search" style="margin-top:12px"><label for="archivedCompanySearch">Buscar empresa arquivada</label><div class="metrics-search-wrap"><input id="archivedCompanySearch" type="search" placeholder="Nome, WhatsApp ou categoria..." autocomplete="off"></div><small id="archivedCompanyCount">${list.length} empresa${list.length===1?"":"s"} arquivada${list.length===1?"":"s"}</small></div></div><div id="archivedCompanyList">${list.length?list.map(archivedCompanyCard).join(""):'<div class="empty"><strong>Nenhuma empresa arquivada</strong><span>Empresas vencidas há mais de 3 dias serão arquivadas automaticamente.</span></div>'}</div>`}
@@ -817,7 +916,7 @@
     }else if(state.tab==="promotions"){
       list=state.promotions.filter(x=>x.status==="pendente"&&x.pagamento_confirmado===true);title="Promoções para revisar";subtitle="Apenas promoções pagas. Aprove a arte para ela entrar automaticamente no dia seguinte ao pagamento.";html=list.map(promotionCard).join("")
     }else if(state.tab==="companies-active"){
-      list=state.companies.filter(x=>x.status==="ativo"&&x.ativo).sort((a,b)=>Number(isFreeActiveCompany(b))-Number(isFreeActiveCompany(a))||String(a.nome||"").localeCompare(String(b.nome||""),"pt-BR"));const freeActiveCount=list.filter(isFreeActiveCompany).length;title="Empresas ativas";subtitle=`Anúncios que estão aparecendo no ${cityName()}.${freeActiveCount?` · ⚠ ${freeActiveCount} ainda no plano grátis.`:""}`;html=(freeActiveCount?`<div class="free-plan-note">! As empresas marcadas abaixo ainda estão no período grátis e sem pagamento confirmado. Elas aparecem primeiro para facilitar sua revisão.</div>`:"")+list.map(activeCompanyCard).join("")
+      list=state.companies.filter(x=>x.status==="ativo"&&x.ativo).sort((a,b)=>String(a.nome||"").localeCompare(String(b.nome||""),"pt-BR"));const freeActiveCount=list.filter(isFreeActiveCompany).length;title="Empresas ativas";subtitle=`Lista rápida das empresas publicadas. Use a busca e toque em uma empresa para abrir todas as opções.`;html=activeCompaniesHtml(list,freeActiveCount)
     }else if(state.tab==="renewals"){
       list=renewalCompanies().sort((a,b)=>new Date(a.data_vencimento||0)-new Date(b.data_vencimento||0));title="Renovações";subtitle="Links permanentes e avisos de vencimento. Empresas vencidas há mais de 3 dias são arquivadas automaticamente.";html=list.map(renewalCard).join("")
     }else if(state.tab==="companies-archived"){
@@ -1315,7 +1414,7 @@ Ela continuará fora do site até um novo pagamento/renovação.`))return;
     }
   });
   $("adminCitySelect").addEventListener("change",async e=>{try{e.target.disabled=true;await switchAdminCity(e.target.value)}catch(error){console.error(error);toast(error.message,"error");e.target.value=ADMIN_CITY_ID}finally{e.target.disabled=false}});
-  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);if(btn.dataset.action==="approve-company-change")return reviewCompanyChange(btn.dataset.id,true);if(btn.dataset.action==="reject-company-change")return reviewCompanyChange(btn.dataset.id,false);if(btn.dataset.action==="generate-courtesy")return generateCourtesy();if(btn.dataset.action==="copy-courtesy")return copyText(courtesyLink(btn.dataset.code)).then(()=>toast("Link copiado."));if(btn.dataset.action==="open-courtesy")return window.open(courtesyLink(btn.dataset.code),"_blank","noopener");if(btn.dataset.action==="cancel-courtesy")return cancelCourtesy(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);if(e.target.id==="archivedCompanySearch")return filterArchivedCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.querySelectorAll("#renewalPixBackdrop [data-pix-plan]").forEach(btn=>btn.addEventListener("click",()=>generateRenewalPix(btn.dataset.pixPlan)));$("renewalPixClose").addEventListener("click",closeRenewalPix);$("renewalPixDone").addEventListener("click",closeRenewalPix);$("renewalPixBackdrop").addEventListener("click",e=>{if(e.target===$("renewalPixBackdrop"))closeRenewalPix()});$("renewalPixCopy").addEventListener("click",copyRenewalPixCode);$("renewalPixDownload").addEventListener("click",downloadRenewalPixQr);$("renewalPixWhatsApp").addEventListener("click",whatsappRenewalPix);$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);$("editCoverInput").addEventListener("change",()=>previewSelectedMedia("editCoverInput","editCoverPreview"));$("editLogoInput").addEventListener("change",()=>previewSelectedMedia("editLogoInput","editLogoPreview"));$("editCoverUpload").addEventListener("click",()=>updateCompanyMedia("capa"));$("editLogoUpload").addEventListener("click",()=>updateCompanyMedia("logo"));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeRenewalPix();closeCompanyEditor();closePanelMenu()}});
+  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="toggle-active-company")return toggleActiveCompany(btn.dataset.id);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);if(btn.dataset.action==="approve-company-change")return reviewCompanyChange(btn.dataset.id,true);if(btn.dataset.action==="reject-company-change")return reviewCompanyChange(btn.dataset.id,false);if(btn.dataset.action==="generate-courtesy")return generateCourtesy();if(btn.dataset.action==="copy-courtesy")return copyText(courtesyLink(btn.dataset.code)).then(()=>toast("Link copiado."));if(btn.dataset.action==="open-courtesy")return window.open(courtesyLink(btn.dataset.code),"_blank","noopener");if(btn.dataset.action==="cancel-courtesy")return cancelCourtesy(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);if(e.target.id==="activeCompanySearch")return filterActiveCompanies(e.target.value);if(e.target.id==="archivedCompanySearch")return filterArchivedCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.querySelectorAll("#renewalPixBackdrop [data-pix-plan]").forEach(btn=>btn.addEventListener("click",()=>generateRenewalPix(btn.dataset.pixPlan)));$("renewalPixClose").addEventListener("click",closeRenewalPix);$("renewalPixDone").addEventListener("click",closeRenewalPix);$("renewalPixBackdrop").addEventListener("click",e=>{if(e.target===$("renewalPixBackdrop"))closeRenewalPix()});$("renewalPixCopy").addEventListener("click",copyRenewalPixCode);$("renewalPixDownload").addEventListener("click",downloadRenewalPixQr);$("renewalPixWhatsApp").addEventListener("click",whatsappRenewalPix);$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);$("editCoverInput").addEventListener("change",()=>previewSelectedMedia("editCoverInput","editCoverPreview"));$("editLogoInput").addEventListener("change",()=>previewSelectedMedia("editLogoInput","editLogoPreview"));$("editCoverUpload").addEventListener("click",()=>updateCompanyMedia("capa"));$("editLogoUpload").addEventListener("click",()=>updateCompanyMedia("logo"));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeRenewalPix();closeCompanyEditor();closePanelMenu()}});
   restoreSession().catch(()=>{});
   </script>
 </body>
