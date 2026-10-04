@@ -549,6 +549,186 @@
       .cards{padding:9px}
     }
 
+
+/* ===== BUSQUE TORRES ADMIN · VISUAL 2026 ===== */
+:root{
+  --nav:#0a3155;--nav-2:#082844;--blue:#1473d2;--blue-soft:#edf5ff;
+  --bg:#f4f7fb;--surface:#fff;--text:#16324f;--muted:#738399;--line:#e3eaf2;
+  --gold:#f5b51b;--shadow:0 8px 28px rgba(31,65,101,.07);--radius:16px;--sidebar:236px;
+}
+body{background:var(--bg);color:var(--text)}
+.sidebar{
+  background:linear-gradient(180deg,#0b355d 0%,#082844 58%,#061f36 100%);
+  box-shadow:8px 0 30px rgba(11,49,85,.09)
+}
+.sidebar-head{padding:22px 16px 16px}
+.sidebar-brand{font-size:23px;line-height:.95;letter-spacing:-.035em}
+.sidebar-brand span{display:block;color:#f6c438;margin-top:2px}
+.sidebar-city{color:#a8bed1;margin-top:10px}
+.sidebar-nav{padding:12px 10px}
+.nav-label{color:#7692aa;padding:0 10px 7px}
+.tab{border-radius:9px;padding:10px 12px;color:#d3deea;font-size:12px}
+.tab:hover{background:rgba(255,255,255,.08)}
+.tab.active{
+  background:linear-gradient(90deg,#1473d2,#1f82dc);
+  box-shadow:0 5px 14px rgba(0,77,153,.28);
+  color:#fff
+}
+.tab.active{box-shadow:0 5px 14px rgba(0,77,153,.28)}
+.sidebar-foot{background:rgba(255,255,255,.035)}
+
+.topbar{height:64px;background:rgba(255,255,255,.96);box-shadow:0 1px 0 rgba(17,57,92,.05)}
+.topbar-inner{padding:0 24px}
+.topbar-title strong{color:#24405d}
+.logout{border-radius:9px;background:#fff}
+
+.workspace{padding:24px;max-width:1480px}
+.page-intro{margin-bottom:18px}
+.page-intro h1{font-size:31px;color:#17395d}
+.page-intro p{font-size:13px;color:#738399}
+.city-switch select,.refresh{border-radius:9px;background:#fff}
+
+.stats{gap:12px;margin-bottom:14px}
+.stat{
+  min-height:104px;border:1px solid #e4ebf3;border-radius:14px;padding:15px 16px;
+  box-shadow:0 5px 18px rgba(26,73,117,.045)
+}
+.stat:before{left:14px;top:14px;bottom:auto;width:36px;height:36px;border-radius:10px;background:#eef5ff}
+.stat small{margin-left:48px;color:#526a83;font-size:10px;letter-spacing:0;text-transform:none}
+.stat strong{margin:8px 0 0 48px;font-size:27px;color:#17395d}
+.stat.pending:before{background:#edf5ff}
+.stat.warning:before{background:#fff6df}
+.stat.expired:before{background:#fff0f1}
+
+.premium-inventory{gap:12px;margin-bottom:16px}
+.premium-slot{
+  border:1px solid #e4ebf3;border-radius:14px;box-shadow:0 5px 18px rgba(26,73,117,.04);
+  min-height:72px
+}
+.premium-slot:first-child{background:linear-gradient(135deg,#fffdf7,#fff8de)}
+.premium-slot:last-child{background:linear-gradient(135deg,#f7fbff,#eef5ff)}
+
+.content-shell{border:0;background:transparent;box-shadow:none;overflow:visible}
+.section-head{
+  padding:0 2px 12px;border:0;background:transparent
+}
+.section-head h2{font-size:19px;color:#17395d}
+.cards{padding:0;background:transparent;gap:12px}
+
+.overview{gap:12px}
+.overview-welcome{
+  background:linear-gradient(135deg,#0e67b7,#0b467d);
+  border-radius:16px;padding:20px 22px;box-shadow:0 8px 24px rgba(10,70,125,.14)
+}
+.overview-welcome:after{background:rgba(255,255,255,.06)}
+.eyebrow{color:#dbeeff}
+.overview-welcome h3{font-size:22px}
+.overview-welcome p{color:#d7e5f1}
+
+.overview-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.overview-action-card{
+  border:1px solid #e4ebf3;border-radius:13px;box-shadow:0 5px 16px rgba(26,73,117,.04);
+  min-height:116px
+}
+.overview-action-card.urgent{background:#fffdf8;border-color:#f2dfb4}
+.overview-card-icon{background:#edf5ff;color:#1473d2}
+.overview-action-card.urgent .overview-card-icon{background:#fff0ca}
+.overview-action-card strong{font-size:13px;color:#17395d}
+.overview-action-card p{font-size:9px}
+
+.overview-panel,.promo-overview{
+  border:1px solid #e4ebf3;border-radius:14px;box-shadow:0 5px 16px rgba(26,73,117,.04)
+}
+.overview-panel-head,.promo-overview-head{background:#fff}
+.overview-panel-head h4,.promo-overview-head h4{color:#17395d}
+.overview-columns{grid-template-columns:1.15fr .85fr;gap:12px}
+
+.record,.active-company-item,.metric-box,.market-row,.banner-item,.agenda-reserva{
+  box-shadow:0 4px 16px rgba(26,73,117,.035)
+}
+
+/* barra inferior exclusiva para celular */
+.mobile-admin-bottom{display:none}
+
+@media(max-width:1180px){
+  .overview-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:980px){
+  .workspace{padding:16px 14px 86px}
+  .topbar{height:58px}
+  .topbar-inner{padding:0 12px}
+  .mobile-menu-btn{border:0;background:#edf5ff;color:#0b5aa0}
+  .page-intro h1{font-size:24px}
+  .stats{
+    display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:9px;
+    margin:0 -14px 12px;padding:0 14px 5px;scrollbar-width:none
+  }
+  .stats::-webkit-scrollbar{display:none}
+  .stat{flex:0 0 158px;min-height:96px;scroll-snap-align:start}
+  .premium-inventory{
+    display:flex;overflow-x:auto;gap:9px;margin:0 -14px 14px;padding:0 14px 4px;scrollbar-width:none
+  }
+  .premium-inventory::-webkit-scrollbar{display:none}
+  .premium-slot{flex:0 0 255px}
+  .overview-grid{grid-template-columns:1fr 1fr}
+  .overview-columns{grid-template-columns:1fr}
+  .mobile-admin-bottom{
+    position:fixed;left:0;right:0;bottom:0;z-index:80;display:grid;
+    grid-template-columns:repeat(5,1fr);padding:7px 6px max(7px,env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.97);backdrop-filter:blur(16px);
+    border-top:1px solid #dfe7ef;box-shadow:0 -8px 28px rgba(18,55,90,.09)
+  }
+  .mobile-bottom-item{
+    border:0;background:transparent;color:#6f8296;border-radius:10px;padding:6px 3px;
+    display:grid;place-items:center;gap:3px;font-size:8px;font-weight:850
+  }
+  .mobile-bottom-item span{font-size:16px;line-height:1}
+  .mobile-bottom-item.active{background:#edf5ff;color:#0e67b7}
+}
+@media(max-width:680px){
+  body{background:#f4f7fb}
+  .workspace{padding:13px 10px 82px}
+  .page-intro{margin-bottom:12px}
+  .page-intro h1{font-size:22px}
+  .page-intro p{font-size:11px}
+  .hero-actions{grid-template-columns:minmax(0,1fr) 42px;gap:7px;margin-top:10px}
+  .city-switch label{display:none}
+  .city-switch select,.refresh{height:40px}
+  .refresh{padding:0;width:42px;font-size:0}
+  .refresh:before{content:"↻";font-size:18px}
+  .section-head{padding:0 2px 9px}
+  .section-head h2{font-size:17px}
+  .section-head span{font-size:10px}
+  .stat{flex-basis:148px;padding:12px}
+  .stat:before{left:11px;top:11px;width:32px;height:32px}
+  .stat small{margin-left:40px;font-size:9px}
+  .stat strong{margin-left:40px;font-size:23px}
+  .overview-welcome{padding:16px;border-radius:14px}
+  .overview-welcome h3{font-size:18px}
+  .overview-welcome p{font-size:10px;line-height:1.45}
+  .overview-welcome-mark{min-width:72px}
+  .overview-welcome-mark span{font-size:27px}
+  .overview-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .overview-action-card{
+    min-height:122px;padding:11px;grid-template-columns:auto 1fr;gap:8px
+  }
+  .overview-card-arrow{display:none}
+  .overview-action-card strong{font-size:12px}
+  .overview-action-card p{font-size:9px}
+  .promo-overview-grid{grid-template-columns:1fr 1fr}
+  .overview-panel-head,.promo-overview-head{padding:12px}
+  .overview-list{padding:4px 10px}
+  .overview-row{padding:9px 0}
+  .content-shell{border-radius:0}
+  .cards{padding:0}
+  .actions{grid-template-columns:1fr 1fr}
+  .panel-menu{width:min(310px,88vw)}
+}
+@media(max-width:390px){
+  .overview-grid{grid-template-columns:1fr}
+  .overview-action-card{min-height:auto}
+}
+
 </style>
 </head>
 <body>
@@ -627,6 +807,14 @@
         <section class="content-shell"><div class="section-head"><div><h2 id="sectionTitle">Visão geral</h2><span id="sectionSubtitle">Prioridades, operação e atalhos do dia.</span></div></div><div id="content" class="cards"></div></section>
       </main>
     </div>
+
+    <nav class="mobile-admin-bottom" aria-label="Atalhos do painel">
+      <button class="mobile-bottom-item active" data-tab="overview" type="button"><span>⌂</span>Início</button>
+      <button class="mobile-bottom-item" data-tab="companies-active" type="button"><span>▦</span>Empresas</button>
+      <button class="mobile-bottom-item" data-tab="jobs-pending" type="button"><span>▣</span>Vagas</button>
+      <button class="mobile-bottom-item" data-tab="metrics" type="button"><span>▥</span>Métricas</button>
+      <button class="mobile-bottom-item" id="mobileBottomMenu" type="button"><span>☰</span>Menu</button>
+    </nav>
   </section>
 
   <div id="panelMenuBackdrop" class="panel-menu-backdrop" hidden>
@@ -1275,7 +1463,7 @@
   function activitiesHtml(){if(!isOwner())return '<div class="empty"><strong>Acesso restrito</strong><span>Esta área é exclusiva do proprietário do painel.</span></div>';const operatorSessions=state.auditSessions.filter(s=>s.papel==="operador");const sessions=(operatorSessions.length?operatorSessions:state.auditSessions).map(s=>{const items=state.auditActivities.filter(a=>sameId(a.sessao_id,s.id));return `<details class="activity-session"><summary><div><strong>${safe(s.administrador_nome||"Administrador")}</strong><div class="meta">Entrou: ${safe(date(s.iniciado_em))} · Última atividade: ${safe(date(s.ultima_atividade_em))}</div></div><span>${safe(s.quantidade_atividades||items.length)} ação(ões)</span></summary><div class="activity-items">${items.length?items.map(a=>`<div class="activity-item"><strong>${safe(a.titulo)}</strong><small>${safe(date(a.created_at))}${a.entidade?` · ${safe(a.entidade)}`:""}</small>${a.detalhes&&Object.keys(a.detalhes).length?`<div class="activity-details">${safe(detailText(a.detalhes))}</div>`:""}</div>`).join(""):'<div class="activity-item"><small>Nenhuma ação detalhada registrada nesta sessão.</small></div>'}</div></details>`}).join("");return `<div class="activity-toolbar"><article class="stat"><small>Sessões exibidas</small><strong>${operatorSessions.length||state.auditSessions.length}</strong></article><article class="stat"><small>Atividades registradas</small><strong>${state.auditActivities.length}</strong></article><article class="stat"><small>Visualização</small><strong>Somente dono</strong></article><article class="stat"><small>Saída</small><strong>Última atividade</strong></article></div>${sessions||'<div class="empty"><strong>Nenhuma atividade registrada</strong><span>Quando o Leonardo entrar e usar o painel, as ações aparecerão aqui.</span></div>'}`}
   async function cancelAgendaReservation(id){const r=state.premiumAgenda.find(x=>sameId(x.id,id));if(!r)return;if(!confirm(`Cancelar a reserva ${String(r.tipo).toUpperCase()} de ${r.empresa_nome}?`))return;try{await rpc("cancelar_reserva_premium",{p_reserva_id:id});await auditActivity("reserva_premium_cancelada","agenda_premium",id,`Cancelou reserva ${String(r.tipo).toUpperCase()} de ${r.empresa_nome}`,{empresa:r.empresa_nome,tipo:r.tipo,inicio:r.data_inicio,fim:r.data_fim,slot:r.slot});toast("Reserva cancelada e vaga liberada.");await loadPremiumAgenda(true);renderContent()}catch(error){toast(error.message,"error")}}
 
-  function syncPanelMenuActive(){document.querySelectorAll(".tab,.panel-menu-item").forEach(x=>x.classList.toggle("active",x.dataset.tab===state.tab))}
+  function syncPanelMenuActive(){document.querySelectorAll(".tab,.panel-menu-item,.mobile-bottom-item[data-tab]").forEach(x=>x.classList.toggle("active",x.dataset.tab===state.tab))}
   function openPanelMenu(){$("panelMenuBackdrop").hidden=false;syncPanelMenuActive()}
   function closePanelMenu(){$("panelMenuBackdrop").hidden=true}
   async function selectPanelTab(tab){if(tab==="activities"&&!isOwner())return toast("A aba Atividade é exclusiva do proprietário.","error");state.tab=tab;syncPanelMenuActive();closePanelMenu();try{setLoading("Carregando esta área...");await ensureTabData(state.tab,true);if(state.tab==="company-changes")await renderContentAsync();else renderContent()}catch(error){console.error(error);toast(error.message,"error");renderContent()}}
@@ -1845,7 +2033,7 @@ Ela continuará fora do site até um novo pagamento/renovação.`))return;
     }
   });
   $("adminCitySelect").addEventListener("change",async e=>{try{e.target.disabled=true;await switchAdminCity(e.target.value)}catch(error){console.error(error);toast(error.message,"error");e.target.value=ADMIN_CITY_ID}finally{e.target.disabled=false}});
-  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="toggle-active-company")return toggleActiveCompany(btn.dataset.id);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);if(btn.dataset.action==="approve-company-change")return reviewCompanyChange(btn.dataset.id,true);if(btn.dataset.action==="reject-company-change")return reviewCompanyChange(btn.dataset.id,false);if(btn.dataset.action==="generate-courtesy")return generateCourtesy();if(btn.dataset.action==="copy-courtesy")return copyText(courtesyLink(btn.dataset.code)).then(()=>toast("Link copiado."));if(btn.dataset.action==="open-courtesy")return window.open(courtesyLink(btn.dataset.code),"_blank","noopener");if(btn.dataset.action==="cancel-courtesy")return cancelCourtesy(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);if(e.target.id==="activeCompanySearch")return filterActiveCompanies(e.target.value);if(e.target.id==="archivedCompanySearch")return filterArchivedCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.querySelectorAll("#renewalPixBackdrop [data-pix-plan]").forEach(btn=>btn.addEventListener("click",()=>generateRenewalPix(btn.dataset.pixPlan)));$("renewalPixClose").addEventListener("click",closeRenewalPix);$("renewalPixDone").addEventListener("click",closeRenewalPix);$("renewalPixBackdrop").addEventListener("click",e=>{if(e.target===$("renewalPixBackdrop"))closeRenewalPix()});$("renewalPixCopy").addEventListener("click",copyRenewalPixCode);$("renewalPixDownload").addEventListener("click",downloadRenewalPixQr);$("renewalPixWhatsApp").addEventListener("click",whatsappRenewalPix);$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);$("editCoverInput").addEventListener("change",()=>previewSelectedMedia("editCoverInput","editCoverPreview"));$("editLogoInput").addEventListener("change",()=>previewSelectedMedia("editLogoInput","editLogoPreview"));$("editCoverUpload").addEventListener("click",()=>updateCompanyMedia("capa"));$("editLogoUpload").addEventListener("click",()=>updateCompanyMedia("logo"));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeRenewalPix();closeCompanyEditor();closePanelMenu()}});
+  $("logoutButton").addEventListener("click",async()=>{try{if(state.adminSessionId)await rpc("encerrar_sessao_painel",{p_sessao_id:state.adminSessionId})}catch{}if(state.heartbeatTimer)clearInterval(state.heartbeatTimer);clearSession();location.reload()});$("refreshButton").addEventListener("click",()=>loadAll({sync:true}));document.querySelectorAll(".tab,.panel-menu-item,.mobile-bottom-item[data-tab]").forEach(btn=>btn.addEventListener("click",()=>selectPanelTab(btn.dataset.tab)));$("mobileMenuButton").addEventListener("click",openPanelMenu);$("mobileBottomMenu")?.addEventListener("click",openPanelMenu);$("panelMenuClose").addEventListener("click",closePanelMenu);$("panelMenuBackdrop").addEventListener("click",e=>{if(e.target===$("panelMenuBackdrop"))closePanelMenu()});$("content").addEventListener("click",e=>{const btn=e.target.closest("[data-action]");if(btn){if(btn.dataset.action==="go-tab")return selectPanelTab(btn.dataset.tab);if(btn.dataset.action==="toggle-active-company")return toggleActiveCompany(btn.dataset.id);if(btn.dataset.action==="pdf-selected"){const id=$("pdfCompanySelect")?.value;if(!id)return toast("Selecione uma empresa.","error");return generateCompanyPdf(id)}if(btn.dataset.action==="pdf-general")return generateGeneralPdf();if(btn.dataset.action==="show-metric-company")return showMetricCompany(btn.dataset.id);if(btn.dataset.action==="toggle-banner")return toggleBanner(btn.dataset.id);if(btn.dataset.action==="delete-banner")return deleteBanner(btn.dataset.id);if(btn.dataset.action==="agenda-cancel")return cancelAgendaReservation(btn.dataset.id);if(btn.dataset.action==="approve-company-change")return reviewCompanyChange(btn.dataset.id,true);if(btn.dataset.action==="reject-company-change")return reviewCompanyChange(btn.dataset.id,false);if(btn.dataset.action==="generate-courtesy")return generateCourtesy();if(btn.dataset.action==="copy-courtesy")return copyText(courtesyLink(btn.dataset.code)).then(()=>toast("Link copiado."));if(btn.dataset.action==="open-courtesy")return window.open(courtesyLink(btn.dataset.code),"_blank","noopener");if(btn.dataset.action==="cancel-courtesy")return cancelCourtesy(btn.dataset.id);return handleAction(btn.dataset.action,btn.dataset.id)}if(e.target.closest("#agendaSalvar"))return saveAgendaReservation();if(e.target.closest("#publishBanner"))return publishBanner();});$("content").addEventListener("input",e=>{if(e.target.id==="metricCompanySearch")return filterMetricCompanies(e.target.value);if(e.target.id==="activeCompanySearch")return filterActiveCompanies(e.target.value);if(e.target.id==="archivedCompanySearch")return filterArchivedCompanies(e.target.value);});$("content").addEventListener("change",e=>{if(e.target.id==="bannerFile"){const file=e.target.files?.[0],box=$("bannerPreview"),img=$("bannerPreviewImg");if(!file){box?.classList.remove("show");return}const url=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(url);img.src=url;box.classList.add("show")}if(e.target.id==="bannerType"){const temporary=e.target.value==="temporario";document.querySelectorAll(".banner-period").forEach(el=>el.style.display=temporary?"block":"none")}});$("modalClose").addEventListener("click",closeModal);$("modalCancel").addEventListener("click",closeModal);$("modalConfirm").addEventListener("click",confirmReason);$("modalBackdrop").addEventListener("click",e=>{if(e.target===$("modalBackdrop"))closeModal()});document.querySelectorAll("#renewalPixBackdrop [data-pix-plan]").forEach(btn=>btn.addEventListener("click",()=>generateRenewalPix(btn.dataset.pixPlan)));$("renewalPixClose").addEventListener("click",closeRenewalPix);$("renewalPixDone").addEventListener("click",closeRenewalPix);$("renewalPixBackdrop").addEventListener("click",e=>{if(e.target===$("renewalPixBackdrop"))closeRenewalPix()});$("renewalPixCopy").addEventListener("click",copyRenewalPixCode);$("renewalPixDownload").addEventListener("click",downloadRenewalPixQr);$("renewalPixWhatsApp").addEventListener("click",whatsappRenewalPix);$("editCompanyClose").addEventListener("click",closeCompanyEditor);$("editCompanyCancel").addEventListener("click",closeCompanyEditor);$("editCompanyBackdrop").addEventListener("click",e=>{if(e.target===$("editCompanyBackdrop"))closeCompanyEditor()});$("editCompanyForm").addEventListener("submit",saveCompanyEditor);$("editCoverInput").addEventListener("change",()=>previewSelectedMedia("editCoverInput","editCoverPreview"));$("editLogoInput").addEventListener("change",()=>previewSelectedMedia("editLogoInput","editLogoPreview"));$("editCoverUpload").addEventListener("click",()=>updateCompanyMedia("capa"));$("editLogoUpload").addEventListener("click",()=>updateCompanyMedia("logo"));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeRenewalPix();closeCompanyEditor();closePanelMenu()}});
   restoreSession().catch(()=>{});
   </script>
 </body>
