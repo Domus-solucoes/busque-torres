@@ -2046,7 +2046,18 @@ registrarMetrica("visita_site",null,"index");
 
   toggle.addEventListener("click",()=>{
     const open=details.hasAttribute("hidden");
-    if(open) details.removeAttribute("hidden"); else details.setAttribute("hidden","");
+    if(open){
+      details.removeAttribute("hidden");
+      try{
+        const metricKey="bt_weather_open_metric_v1";
+        if(!sessionStorage.getItem(metricKey)){
+          BusqueAPI.rpc("registrar_abertura_clima",{}).catch(error=>console.warn("Contagem do clima indisponível:",error?.message||error));
+          sessionStorage.setItem(metricKey,"1");
+        }
+      }catch(_){
+        BusqueAPI.rpc("registrar_abertura_clima",{}).catch(()=>{});
+      }
+    }else details.setAttribute("hidden","");
     toggle.setAttribute("aria-expanded",String(open));
   });
   load();
