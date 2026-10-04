@@ -133,6 +133,28 @@
       .active-company-detail{padding:0 6px 7px}
     }
 
+
+    /* Gráfico de acessos por hora */
+    .hourly-chart-card{margin:14px 0;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .hourly-chart-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:14px}
+    .hourly-chart-head h3{margin:0;color:var(--ink);font-size:14px}
+    .hourly-chart-head p{margin:4px 0 0;color:var(--muted);font-size:10px;line-height:1.45}
+    .hourly-chart-peak{flex:0 0 auto;padding:8px 10px;border-radius:10px;background:var(--blue-soft);color:var(--blue);font-size:10px;font-weight:900}
+    .hourly-chart-scroll{overflow-x:auto;padding:2px 0 4px}
+    .hourly-chart{display:grid;grid-template-columns:repeat(24,minmax(28px,1fr));gap:5px;align-items:end;min-width:760px;height:250px;padding:12px 4px 0;border-bottom:1px solid var(--line)}
+    .hourly-bar-col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;height:100%}
+    .hourly-bar-value{min-height:12px;color:#526274;font-size:8px;font-weight:850}
+    .hourly-bar-wrap{display:flex;align-items:flex-end;width:100%;height:185px}
+    .hourly-bar{width:100%;min-height:2px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,#357ec1,#173f67);box-shadow:0 3px 10px rgba(25,77,126,.12)}
+    .hourly-bar-col.peak .hourly-bar{background:linear-gradient(180deg,#f2c85b,#c99418)}
+    .hourly-bar-hour{color:#718096;font-size:8px;font-weight:800;white-space:nowrap}
+    @media(max-width:680px){
+      .hourly-chart-card{padding:12px}
+      .hourly-chart-head{align-items:flex-start;flex-direction:column}
+      .hourly-chart{height:225px;min-width:720px}
+      .hourly-bar-wrap{height:165px}
+    }
+
 </style>
 </head>
 <body>
@@ -520,7 +542,7 @@
   async function loadActiveJobDetails(force=false){if(state.loaded.activeJobs&&!force)return;const rows=await api(`vagas?select=id,imagem_url&${cityFilter()}&status=eq.ativa&order=created_at.desc`);state.jobs=mergeRows(state.jobs,Array.isArray(rows)?rows:[]);state.loaded.activeJobs=true}
   async function loadFinance(force=false){if(state.loaded.finance&&!force)return;if(!cityConfig().paymentsReady){state.payments=[];state.loaded.finance=true;return}const rows=await api(`pagamentos?select=id,empresa_id,tipo,produto_codigo,status,plano,valor,created_at,pago_em,mercado_pago_payment_id,mercado_pago_preference_id,external_reference,erro_detalhe,checkout_url,forma_pagamento,email_pagador,expira_em&${cityFilter()}&order=created_at.desc`);state.payments=Array.isArray(rows)?rows:[];state.loaded.finance=true}
   async function loadPromoMetrics(){try{state.promoMetrics=await rpc("metricas_promocao_dia_resumo",{p_cidade_id:ADMIN_CITY_ID});return state.promoMetrics}catch(error){console.warn("Métricas da Promoção do Dia ainda não disponíveis:",error?.message||error);state.promoMetrics={hoje:{impressoes:0,aberturas:0,interesses:0,compras_iniciadas:0,checkouts:0},ultimos_7_dias:{impressoes:0,aberturas:0,interesses:0,compras_iniciadas:0,checkouts:0},ultimos_30_dias:{impressoes:0,aberturas:0,interesses:0,compras_iniciadas:0,checkouts:0},amanha:{pagas_aguardando_revisao:0,aprovadas:0,total_confirmado:0}};return state.promoMetrics}}
-  async function loadMetrics(force=false){if(state.loaded.metrics&&!force)return;try{const [main,temosVagas,clima]=await Promise.all([ADMIN_CITY_ID==="torres"?rpc("metricas_resumo_admin",{}):rpc("metricas_resumo_admin_cidade",{p_cidade_id:ADMIN_CITY_ID}),rpc("metricas_temos_vagas_admin_cidade",{p_cidade_id:ADMIN_CITY_ID}),ADMIN_CITY_ID==="torres"?rpc("metricas_clima_admin",{}).catch(()=>null):Promise.resolve(null),loadPromoMetrics()]);if(main&&typeof main==="object"){main.acoes_mes={...(main.acoes_mes||{}),temos_vagas:Number(temosVagas?.mes||0),temos_vagas_total:Number(temosVagas?.total||0),temos_vagas_hoje:Number(temosVagas?.hoje||0),temos_vagas_7d:Number(temosVagas?.ultimos_7_dias||0)};main.temos_vagas_periodos=temosVagas||{}}state.metrics=main;state.climaMetrics=clima;state.loaded.metrics=true}catch(error){state.metrics=null;state.climaMetrics=null;await loadPromoMetrics();console.warn("Métricas ainda não disponíveis:",error?.message||error);throw error}}
+  async function loadMetrics(force=false){if(state.loaded.metrics&&!force)return;try{const [main,temosVagas,clima,hourly]=await Promise.all([ADMIN_CITY_ID==="torres"?rpc("metricas_resumo_admin",{}):rpc("metricas_resumo_admin_cidade",{p_cidade_id:ADMIN_CITY_ID}),rpc("metricas_temos_vagas_admin_cidade",{p_cidade_id:ADMIN_CITY_ID}),ADMIN_CITY_ID==="torres"?rpc("metricas_clima_admin",{}).catch(()=>null):Promise.resolve(null),rpc("metricas_acessos_por_hora_admin",{p_cidade_id:ADMIN_CITY_ID}).catch(()=>[]),loadPromoMetrics()]);if(main&&typeof main==="object"){main.acoes_mes={...(main.acoes_mes||{}),temos_vagas:Number(temosVagas?.mes||0),temos_vagas_total:Number(temosVagas?.total||0),temos_vagas_hoje:Number(temosVagas?.hoje||0),temos_vagas_7d:Number(temosVagas?.ultimos_7_dias||0)};main.temos_vagas_periodos=temosVagas||{}}state.metrics=main;state.climaMetrics=clima;state.hourlyMetrics=Array.isArray(hourly)?hourly:[];state.loaded.metrics=true}catch(error){state.metrics=null;state.climaMetrics=null;state.hourlyMetrics=[];await loadPromoMetrics();console.warn("Métricas ainda não disponíveis:",error?.message||error);throw error}}
   async function loadIntelligence(force=false){if(state.loaded.intelligence&&!force)return;try{state.intelligence=await rpc("inteligencia_mercado_admin",{p_cidade_id:ADMIN_CITY_ID,p_dias:30});state.loaded.intelligence=true}catch(error){state.intelligence=null;console.warn("Inteligência de Mercado ainda não disponível:",error?.message||error);throw error}}
   async function loadBanners(force=false){if(state.loaded.banners&&!force)return;const rows=await api(`banners_site?select=id,nome,tipo,imagem_url,storage_path,inicio_em,fim_em,ativo,created_at,updated_at&${cityFilter()}&order=created_at.desc`);state.banners=Array.isArray(rows)?rows:[];state.loaded.banners=true}
   async function loadPromotions(force=false){if(state.loaded.promotions&&!force)return;const rows=await api(`promocoes?select=id,empresa_id,titulo,descricao,imagem_url,status,duracao_dias,publicada_em,expira_em,motivo_status,moderado_por,moderado_em,created_at,updated_at,cidade_id,pagamento_confirmado,pagamento_id,pago_em,data_exibicao,whatsapp_contato,beneficio_foguinho&${cityFilter()}&order=created_at.desc`);state.promotions=Array.isArray(rows)?rows:[];state.loaded.promotions=true}
@@ -732,6 +754,19 @@
   }
   function climaMetricsHtml(){const c=state.climaMetrics||{};if(ADMIN_CITY_ID!=="torres")return "";return `<div class="market-note" style="margin-bottom:10px"><strong>🌤️ Previsão do tempo</strong> · pessoas que abriram a previsão na página inicial. Uma abertura é contada por sessão do navegador.</div><div class="metrics-summary"><div class="metric-box"><small>Previsão · hoje</small><strong>${metricNumber(c.hoje)}</strong></div><div class="metric-box"><small>Previsão · últimos 7 dias</small><strong>${metricNumber(c.ultimos_7_dias)}</strong></div><div class="metric-box"><small>Previsão · este mês</small><strong>${metricNumber(c.mes_atual)}</strong></div><div class="metric-box"><small>Previsão · total</small><strong>${metricNumber(c.total)}</strong></div></div>`}
   function promoMetricsHtml(){const p=state.promoMetrics||{},h=p.hoje||{},s=p.ultimos_7_dias||{},m=p.ultimos_30_dias||{},a=p.amanha||{};return `<div class="market-note" style="margin-bottom:14px"><strong>🔥 Promoção do Dia</strong> · contagem do funil comercial desde o foguinho até o checkout.</div><div class="metrics-summary"><div class="metric-box"><small>Cliques no foguinho · hoje</small><strong>${metricNumber(h.aberturas)}</strong></div><div class="metric-box"><small>Cliques em anunciar · hoje</small><strong>${metricNumber(h.interesses)}</strong></div><div class="metric-box"><small>Compras iniciadas · hoje</small><strong>${metricNumber(h.compras_iniciadas)}</strong></div><div class="metric-box"><small>Checkouts criados · hoje</small><strong>${metricNumber(h.checkouts)}</strong></div></div><div class="metrics-summary"><div class="metric-box"><small>Foguinho · últimos 7 dias</small><strong>${metricNumber(s.aberturas)}</strong></div><div class="metric-box"><small>Anunciar · últimos 7 dias</small><strong>${metricNumber(s.interesses)}</strong></div><div class="metric-box"><small>Foguinho · últimos 30 dias</small><strong>${metricNumber(m.aberturas)}</strong></div><div class="metric-box"><small>Anunciar · últimos 30 dias</small><strong>${metricNumber(m.interesses)}</strong></div></div><div class="metrics-summary"><div class="metric-box"><small>Pagas p/ amanhã</small><strong>${metricNumber(a.total_confirmado)}</strong></div><div class="metric-box"><small>Aguardando revisão</small><strong>${metricNumber(a.pagas_aguardando_revisao)}</strong></div><div class="metric-box"><small>Aprovadas p/ amanhã</small><strong>${metricNumber(a.aprovadas)}</strong></div><div class="metric-box"><small>Capacidade diária</small><strong>4</strong></div></div>`}
+  function hourlyAccessChartHtml(){
+    const rows=Array.isArray(state.hourlyMetrics)?state.hourlyMetrics:[];
+    if(!rows.length)return '<div class="hourly-chart-card"><div class="hourly-chart-head"><div><h3>Acessos por horário</h3><p>Ainda não há dados suficientes para montar o gráfico.</p></div></div></div>';
+    const normalized=Array.from({length:24},(_,hora)=>{const found=rows.find(r=>Number(r.hora)===hora);return {hora,acessos:Number(found?.acessos||0)}});
+    const max=Math.max(1,...normalized.map(r=>r.acessos));
+    const peak=normalized.reduce((best,r)=>r.acessos>best.acessos?r:best,normalized[0]);
+    const bars=normalized.map(r=>{
+      const pct=Math.max(1,(r.acessos/max)*100);
+      const cls=r.hora===peak.hora?" peak":"";
+      return `<div class="hourly-bar-col${cls}" title="${String(r.hora).padStart(2,"0")}:00 · ${metricNumber(r.acessos)} acessos"><div class="hourly-bar-value">${r.acessos?metricNumber(r.acessos):""}</div><div class="hourly-bar-wrap"><div class="hourly-bar" style="height:${pct}%"></div></div><div class="hourly-bar-hour">${String(r.hora).padStart(2,"0")}h</div></div>`;
+    }).join("");
+    return `<section class="hourly-chart-card"><div class="hourly-chart-head"><div><h3>Acessos por horário</h3><p>Distribuição dos acessos ao site nas últimas medições, agrupada por hora do dia.</p></div><div class="hourly-chart-peak">Pico: ${String(peak.hora).padStart(2,"0")}h · ${metricNumber(peak.acessos)} acessos</div></div><div class="hourly-chart-scroll"><div class="hourly-chart">${bars}</div></div></section>`;
+  }
   function metricsHtml(){
     const m=state.metrics;if(!m)return '<div class="empty"><strong>Métricas ainda não disponíveis</strong><span>Execute o SQL do contador no Supabase e clique em Atualizar dados.</span></div>';const climaTop=climaMetricsHtml(),promoTop=promoMetricsHtml();
     const g=m.geral||{},a=m.acoes_mes||{},companies=metricCompanies();
@@ -739,9 +774,10 @@
     const taxaTemosVagas=acessosMes>0?(temosVagasMes/acessosMes)*100:0;
     const taxaTemosVagasTxt=new Intl.NumberFormat("pt-BR",{minimumFractionDigits:1,maximumFractionDigits:1}).format(taxaTemosVagas);
     const top=`<div class="metrics-summary metrics-primary"><div class="metric-box"><small>Acessos hoje</small><strong>${metricNumber(g.hoje)}</strong></div><div class="metric-box"><small>Últimos 7 dias</small><strong>${metricNumber(g.ultimos_7_dias)}</strong></div><div class="metric-box"><small>Este mês</small><strong>${metricNumber(g.mes_atual)}</strong></div><div class="metric-box"><small>Total acumulado</small><strong>${metricNumber(g.total)}</strong></div><div class="metric-box"><small>TEMOS VAGAS · este mês</small><strong>${metricNumber(temosVagasMes)}</strong><span class="metric-sub">${taxaTemosVagasTxt}% em relação aos acessos · ${metricNumber(temosVagasTotal)} total desde a medição</span></div></div><div class="metrics-summary"><div class="metric-box"><small>Buscas no mês</small><strong>${metricNumber(a.buscas)}</strong></div><div class="metric-box"><small>Perfis abertos</small><strong>${metricNumber(a.perfis)}</strong></div><div class="metric-box"><small>Cliques WhatsApp</small><strong>${metricNumber(a.whatsapp)}</strong></div><div class="metric-box"><small>Aberturas de vagas · legado</small><strong>${metricNumber(a.vagas)}</strong></div></div>`;
-    if(!companies.length)return climaTop+promoTop+top+'<div class="empty"><strong>Ainda não há dados por empresa</strong><span>Os acessos começarão a aparecer após a publicação desta versão.</span></div>';
+    const hourlyChart=hourlyAccessChartHtml();
+    if(!companies.length)return climaTop+promoTop+top+hourlyChart+'<div class="empty"><strong>Ainda não há dados por empresa</strong><span>Os acessos começarão a aparecer após a publicação desta versão.</span></div>';
     const browser=`<div class="metrics-browser"><section class="metrics-picker"><div class="metrics-search"><label for="metricCompanySearch">Pesquisar empresa</label><div class="metrics-search-wrap"><input id="metricCompanySearch" type="search" placeholder="Digite o nome da empresa..." autocomplete="off"></div><span class="metrics-result-count" id="metricCompanyCount">${companies.length} empresa${companies.length===1?"":"s"} cadastrada${companies.length===1?"":"s"}</span></div><div class="metrics-company-list" id="metricCompanyList">${companies.map(metricCompanyButton).join("")}</div></section><section class="metrics-detail" id="metricCompanyDetail"><div class="metrics-detail-empty"><div><strong>Selecione uma empresa</strong><span>Pesquise pelo nome e clique na empresa para abrir acessos, WhatsApp e curtidas.</span></div></div></section></div>`;
-    return climaTop+promoTop+top+browser;
+    return climaTop+promoTop+top+hourlyChart+browser;
   }
   function intelligenceHtml(){
     const d=state.intelligence;
