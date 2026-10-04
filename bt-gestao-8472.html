@@ -155,6 +155,247 @@
       .hourly-bar-wrap{height:165px}
     }
 
+
+    /* =========================================================
+       VISUAL 2026 — layout administrativo moderno e funcional
+       Somente apresentação: mantém fluxos, dados e permissões.
+       ========================================================= */
+    :root{
+      --nav:#082c4c;
+      --nav-2:#0b3a62;
+      --blue:#1677e8;
+      --blue-soft:#edf6ff;
+      --gold:#f3b625;
+      --bg:#f3f7fb;
+      --surface:#fff;
+      --surface-2:#f8fbff;
+      --text:#10213a;
+      --muted:#6f7f95;
+      --line:#dfe7f0;
+      --shadow:0 10px 28px rgba(28,63,101,.08);
+      --radius:16px;
+      --sidebar:250px;
+    }
+    body{background:linear-gradient(180deg,#f7fbff 0,#f2f6fb 220px,#f3f7fb 100%);color:var(--text)}
+    .app{background:transparent}
+
+    /* Sidebar */
+    .sidebar{
+      background:linear-gradient(180deg,#082c4c 0%,#0a365b 55%,#082b49 100%);
+      border-right:0;
+      box-shadow:8px 0 28px rgba(6,37,66,.10)
+    }
+    .sidebar-head{padding:24px 16px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .sidebar-brand{font-size:24px;line-height:1;font-weight:950;letter-spacing:-.05em}
+    .sidebar-brand span{display:inline;color:#ffc43a}
+    .sidebar-city{margin-top:8px;color:#9fb9cf;font-size:11px}
+    .product-switch,.module-switch{background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.06)}
+    .product-switch a,.module-switch a{color:#b8ccdc}
+    .product-switch a.active,.module-switch a.active{background:#fff;color:#0a3152;box-shadow:0 3px 10px rgba(0,0,0,.12)}
+    .sidebar-nav{padding:14px 10px 18px}
+    .nav-group{margin-bottom:12px}
+    .nav-label{padding:8px 10px 5px;color:#6e96b5;font-size:9px}
+    .tab{
+      min-height:42px;
+      border-radius:9px;
+      padding:10px 12px;
+      color:#d5e2ec;
+      font-size:12px;
+      font-weight:700
+    }
+    .tab:hover{background:rgba(255,255,255,.08);color:#fff}
+    .tab.active{
+      background:linear-gradient(90deg,#1978d9,#2b8cf0);
+      color:#fff;
+      box-shadow:0 8px 18px rgba(22,119,232,.28);
+    }
+    .tab.active:before{display:none}
+    .nav-icon{opacity:1}
+    .sidebar-foot{background:rgba(0,0,0,.06);border-top:1px solid rgba(255,255,255,.06)}
+    .sidebar-foot small{color:#7ea0bb}
+    .sidebar-foot strong{color:#dbe7f0}
+
+    /* Top bar */
+    .topbar{
+      height:64px;
+      background:rgba(255,255,255,.96);
+      border-bottom:1px solid #e7edf4;
+      box-shadow:0 2px 10px rgba(33,69,107,.035);
+      backdrop-filter:blur(18px)
+    }
+    .topbar-inner{padding:0 28px}
+    .topbar-title{
+      min-width:180px;
+      padding:8px 12px;
+      border:1px solid #e3eaf2;
+      border-radius:10px;
+      background:#fbfdff
+    }
+    .topbar-title strong{font-size:12px;color:#40546c}
+    .status-live{background:#18a66d}
+    .user-area small{font-size:11px;color:#4b6078}
+    .logout{border-color:#dfe7ef;background:#fff;color:#385069;box-shadow:0 2px 8px rgba(22,56,91,.04)}
+    .logout:hover{background:#f5f9fc}
+
+    /* Main header */
+    .workspace{padding:24px 26px 40px;max-width:1680px}
+    .page-intro{
+      margin-bottom:18px;
+      padding:0 2px;
+      align-items:center
+    }
+    .page-intro-actions{justify-content:space-between}
+    .admin-page-heading h1{margin:0;font-size:28px;line-height:1.1;letter-spacing:-.04em;color:#0e2340}
+    .admin-page-heading p{margin:6px 0 0;color:#74849a;font-size:12px}
+    .hero-actions{gap:8px}
+    .city-switch{min-width:185px}
+    .city-switch label{font-size:9px;color:#8492a3}
+    .city-switch select,.refresh{
+      height:40px;
+      border-radius:9px;
+      border-color:#dfe7f0;
+      background:#fff;
+      box-shadow:0 2px 8px rgba(21,56,91,.04)
+    }
+
+    /* KPI cards */
+    .stats{gap:12px;margin-bottom:14px}
+    .stat{
+      min-height:96px;
+      border:1px solid #e2e9f1;
+      border-radius:14px;
+      padding:16px 16px 14px 18px;
+      box-shadow:0 6px 20px rgba(27,63,102,.055);
+      background:linear-gradient(180deg,#fff,#fbfdff)
+    }
+    .stat:before{width:4px;border-radius:0 4px 4px 0;background:#7db5ef}
+    .stat.pending:before{background:#f1b43b}
+    .stat.warning:before{background:#ff9d3c}
+    .stat.expired:before{background:#ef6670}
+    .stat small{font-size:9px;color:#7c8b9f;letter-spacing:.045em}
+    .stat strong{margin-top:8px;font-size:28px;color:#10213a}
+    .premium-inventory{gap:12px;margin-bottom:16px}
+    .premium-slot{
+      border:1px solid #e2e9f1;
+      border-radius:13px;
+      box-shadow:0 5px 18px rgba(26,61,96,.045)
+    }
+    .capacity{background:#edf5fd;color:#1266b3}
+
+    /* Main content */
+    .content-shell{
+      border:1px solid #e2e9f1;
+      border-radius:15px;
+      box-shadow:0 8px 28px rgba(23,56,90,.055);
+      background:#fff
+    }
+    .section-head{padding:17px 20px 15px;background:#fff}
+    .section-head h2{font-size:18px;color:#10213a}
+    .section-head span{font-size:11px;color:#7c8b9e}
+    .cards{padding:14px;background:#f9fbfd;gap:10px}
+
+    /* Overview */
+    .overview{gap:12px}
+    .overview-welcome{
+      background:linear-gradient(135deg,#0f5ea7,#1678d6 62%,#1f8aec);
+      border:0;
+      border-radius:14px;
+      padding:20px 22px;
+      box-shadow:0 12px 26px rgba(20,105,183,.18)
+    }
+    .overview-welcome:after{background:rgba(255,255,255,.08)}
+    .eyebrow{color:#d9ecff}
+    .overview-welcome h3{font-size:22px}
+    .overview-welcome p{color:#d7e8f7}
+    .overview-welcome-mark small{color:#d9e8f5}
+    .overview-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+    .overview-action-card{
+      min-height:118px;
+      border:1px solid #e2e9f1;
+      border-radius:13px;
+      padding:14px;
+      background:#fff;
+      box-shadow:0 5px 17px rgba(28,63,100,.045)
+    }
+    .overview-action-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(29,67,107,.09);border-color:#cddceb}
+    .overview-action-card.urgent{background:#fffaf0;border-color:#f5d997}
+    .overview-card-icon{
+      width:32px;height:32px;border-radius:9px;background:#edf6ff;color:#1776d1
+    }
+    .overview-action-card.urgent .overview-card-icon{background:#fff0ce;color:#b87900}
+    .overview-action-card strong{font-size:13px}
+    .overview-columns{grid-template-columns:1.15fr .85fr;gap:10px}
+    .overview-panel,.promo-overview{
+      border:1px solid #e2e9f1;
+      border-radius:13px;
+      box-shadow:0 5px 17px rgba(27,62,99,.04)
+    }
+    .overview-panel-head,.promo-overview-head{background:#fff;padding:13px 15px}
+    .overview-row-action,.text-button,.promo-overview-head button{color:#1477d4}
+    .overview-health strong,.promo-overview-box strong{color:#10213a}
+    .wide-soft-button{background:#edf6ff;color:#176fbe}
+
+    /* Lists and detail cards */
+    .record{
+      border:1px solid #e0e8f0;
+      border-radius:12px;
+      box-shadow:0 3px 12px rgba(26,61,96,.035)
+    }
+    .record-top{padding:14px 16px}
+    .record-title h3{font-size:15px}
+    .record-title p{font-size:11px}
+    .record-details{background:#fbfdff}
+    .actions{background:#f8fbfd;padding:10px 16px}
+    .action{border-radius:8px}
+    .action.view{background:#fff}
+    .action.approve{background:#16825c}
+    .action.renewal{background:#123d64}
+    .active-company-search,.metrics-picker,.metrics-detail,.hourly-chart-card{
+      border-color:#e0e8f0;
+      box-shadow:0 4px 16px rgba(26,61,97,.04)
+    }
+    .active-company-summary{padding:12px 14px}
+    .active-company-item{border-color:#e2e9f1}
+
+    /* Metrics + chart */
+    .metric-box{
+      border-color:#e1e9f1;
+      border-radius:12px;
+      box-shadow:0 4px 14px rgba(27,61,97,.035)
+    }
+    .metric-box strong{color:#10213a}
+    .hourly-chart-card{background:#fff;border-radius:14px}
+    .hourly-chart-head h3{font-size:15px}
+    .hourly-chart-peak{background:#edf6ff;color:#126fca}
+    .hourly-bar{background:linear-gradient(180deg,#59a8f4,#1c7cd5)}
+    .hourly-bar-col.peak .hourly-bar{background:linear-gradient(180deg,#ffcb46,#f0a91c)}
+
+    /* Agenda */
+    .agenda-form,.agenda-column,.pdf-card,.market-day{
+      border-color:#e1e9f1!important;
+      box-shadow:0 4px 16px rgba(27,61,97,.035)
+    }
+
+    /* Mobile refinements */
+    @media(max-width:1180px){
+      .overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:980px){
+      .workspace{padding:18px 14px 80px}
+      .page-intro-actions{align-items:flex-start}
+      .admin-page-heading h1{font-size:24px}
+      .topbar-inner{padding:0 14px}
+    }
+    @media(max-width:680px){
+      .page-intro-actions{display:block}
+      .admin-page-heading{margin-bottom:14px}
+      .hero-actions{display:grid;grid-template-columns:1fr auto}
+      .stats{grid-template-columns:1fr 1fr}
+      .overview-grid{grid-template-columns:1fr}
+      .overview-columns{grid-template-columns:1fr}
+      .overview-welcome{padding:18px}
+    }
+
 </style>
 </head>
 <body>
@@ -218,7 +459,7 @@
         <div class="user-area"><small id="adminEmail"></small><button id="logoutButton" class="logout" type="button">Sair</button></div>
       </div></header>
       <main class="workspace">
-        <div class="page-intro page-intro-actions"><div class="hero-actions"><div class="city-switch"><label for="adminCitySelect">Cidade administrada</label><select id="adminCitySelect"><option value="torres">Busque Torres</option><option value="caxias">Busque Caxias</option></select></div><button id="refreshButton" class="refresh" type="button">↻ Atualizar</button></div></div>
+        <div class="page-intro page-intro-actions"><div class="admin-page-heading"><h1>Painel Administrativo</h1><p>Controle completo do Busque Torres em um só lugar.</p></div><div class="hero-actions"><div class="city-switch"><label for="adminCitySelect">Cidade administrada</label><select id="adminCitySelect"><option value="torres">Busque Torres</option><option value="caxias">Busque Caxias</option></select></div><button id="refreshButton" class="refresh" type="button">↻ Atualizar</button></div></div>
         <div class="stats" id="overviewStats">
           <article class="stat pending"><small>Empresas pendentes</small><strong id="statCompaniesPending">0</strong></article>
           <article class="stat pending"><small>Vagas pendentes</small><strong id="statJobsPending">0</strong></article>
