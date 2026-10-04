@@ -869,6 +869,22 @@
         flex-wrap:nowrap!important;
       }
     }
+
+    /* CLIMA DE TORRES — faixa leve, sem Supabase */
+    .weather-strip{position:relative;z-index:6;width:min(850px,calc(100% - 28px));margin:-12px auto 20px;border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 8px 24px rgba(8,27,51,.08);overflow:hidden}
+    .weather-summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:11px;width:100%;padding:10px 14px;border:0;background:#fff;color:var(--navy);text-align:left;cursor:pointer}
+    .weather-summary:hover{background:#fbfcfe}.weather-icon{font-size:1.45rem;line-height:1}
+    .weather-main{display:grid;gap:1px}.weather-main strong{font-size:.84rem}.weather-main span{font-size:.79rem;color:var(--muted);font-weight:700}
+    .weather-action{font-size:.76rem;font-weight:900;color:#8a6714;white-space:nowrap}
+    .weather-details{border-top:1px solid var(--line);padding:12px 14px 10px;background:#fbfcfe}
+    .weather-days{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .weather-day{padding:10px 8px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center}
+    .weather-day strong{display:block;color:var(--navy);font-size:.78rem}.weather-day .wi{display:block;margin:4px 0;font-size:1.25rem}.weather-day span{display:block;color:#52647a;font-size:.72rem;line-height:1.35}
+    .weather-credit{margin-top:8px;color:#8a94a4;font-size:.61rem;text-align:right}.weather-credit a{color:inherit}
+    .weather-error{padding:10px 12px;color:var(--muted);font-size:.76rem;text-align:center}
+    body.search-mode .weather-strip{display:none}
+    @media(max-width:640px){.weather-strip{width:calc(100% - 20px);margin:-2px auto 10px;border-radius:14px}.weather-summary{padding:9px 11px;gap:8px}.weather-icon{font-size:1.25rem}.weather-main strong{font-size:.78rem}.weather-main span{font-size:.72rem}.weather-action{font-size:.68rem}.weather-details{padding:10px}.weather-days{gap:6px}.weather-day{padding:8px 5px}.weather-day strong{font-size:.7rem}.weather-day span{font-size:.65rem}}
+
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
 </head>
@@ -895,6 +911,18 @@
     <button id="searchClose" class="search-close" type="button" aria-label="Fechar busca">Fechar</button>
   </div>
 </div>
+
+<section class="weather-strip" id="weatherStrip" aria-label="Clima em Torres">
+  <button class="weather-summary" id="weatherToggle" type="button" aria-expanded="false" aria-controls="weatherDetails">
+    <span class="weather-icon" id="weatherIcon" aria-hidden="true">☀️</span>
+    <span class="weather-main"><strong>Torres agora</strong><span id="weatherTemp">Carregando clima...</span></span>
+    <span class="weather-action">Ver previsão <span aria-hidden="true">⌄</span></span>
+  </button>
+  <div class="weather-details" id="weatherDetails" hidden>
+    <div class="weather-days" id="weatherDays"></div>
+    <div class="weather-credit">Dados: <a href="https://api.met.no/" target="_blank" rel="noopener noreferrer">MET Norway</a> · CC BY 4.0</div>
+  </div>
+</section>
 
 <main class="shell">
   <nav class="categories" id="categories" aria-label="Categorias">
@@ -1921,6 +1949,118 @@ registrarMetrica("visita_site",null,"index");
 
   setTimeout(()=>{runAttention(true,true);scheduleAttention()},450);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&panel.hidden)scheduleAttention()});
+})();
+</script>
+
+
+<script>
+/* CLIMA DE TORRES — MET Norway, cache local de 30 min */
+(()=>{
+  const strip=document.getElementById("weatherStrip");
+  const toggle=document.getElementById("weatherToggle");
+  const details=document.getElementById("weatherDetails");
+  const tempEl=document.getElementById("weatherTemp");
+  const iconEl=document.getElementById("weatherIcon");
+  const daysEl=document.getElementById("weatherDays");
+  if(!strip||!toggle||!details||!tempEl||!iconEl||!daysEl) return;
+
+  const LAT=-29.3350, LON=-49.7266;
+  const CACHE_KEY="bt_weather_torres_v1";
+  const CACHE_MS=30*60*1000;
+  const endpoint=`https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${LAT}&lon=${LON}`;
+
+  const iconFor=(code="")=>{
+    if(code.includes("thunder")) return "⛈️";
+    if(code.includes("snow")||code.includes("sleet")) return "🌨️";
+    if(code.includes("rain")||code.includes("drizzle")) return "🌧️";
+    if(code.includes("fog")) return "🌫️";
+    if(code.includes("cloudy")) return "☁️";
+    if(code.includes("partlycloudy")) return "⛅";
+    if(code.includes("fair")) return "🌤️";
+    return "☀️";
+  };
+  const labelFor=(code="")=>{
+    if(code.includes("thunder")) return "Trovoadas";
+    if(code.includes("snow")) return "Neve";
+    if(code.includes("sleet")) return "Chuva congelada";
+    if(code.includes("rain")||code.includes("drizzle")) return "Chuva";
+    if(code.includes("fog")) return "Neblina";
+    if(code.includes("cloudy")) return "Nublado";
+    if(code.includes("partlycloudy")) return "Parcialmente nublado";
+    if(code.includes("fair")) return "Poucas nuvens";
+    if(code.includes("clearsky")) return "Céu limpo";
+    return "Tempo estável";
+  };
+  const localDay=(iso)=>new Intl.DateTimeFormat("en-CA",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(iso));
+  const dayName=(key,index)=>{
+    if(index===0) return "Hoje";
+    if(index===1) return "Amanhã";
+    return new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",weekday:"short"}).format(new Date(key+"T15:00:00-03:00")).replace(".","");
+  };
+
+  function build(data){
+    const ts=data?.properties?.timeseries;
+    if(!Array.isArray(ts)||!ts.length) throw new Error("previsão indisponível");
+    const now=ts[0];
+    const current=Math.round(now.data?.instant?.details?.air_temperature);
+    const currentCode=now.data?.next_1_hours?.summary?.symbol_code||now.data?.next_6_hours?.summary?.symbol_code||"";
+    iconEl.textContent=iconFor(currentCode);
+    tempEl.textContent=`${current}°C · ${labelFor(currentCode)}`;
+
+    const grouped=new Map();
+    ts.forEach(item=>{
+      const key=localDay(item.time);
+      if(!grouped.has(key)) grouped.set(key,[]);
+      grouped.get(key).push(item);
+    });
+    const first3=[...grouped.entries()].slice(0,3);
+    daysEl.innerHTML=first3.map(([key,items],i)=>{
+      const temps=items.map(x=>x.data?.instant?.details?.air_temperature).filter(Number.isFinite);
+      const min=Math.round(Math.min(...temps)), max=Math.round(Math.max(...temps));
+      const preferred=items.find(x=>{
+        const h=Number(new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",hour:"2-digit",hour12:false}).format(new Date(x.time)));
+        return h>=11&&h<=14;
+      })||items[Math.floor(items.length/2)]||items[0];
+      const code=preferred?.data?.next_1_hours?.summary?.symbol_code||preferred?.data?.next_6_hours?.summary?.symbol_code||"";
+      return `<div class="weather-day"><strong>${dayName(key,i)}</strong><span class="wi" aria-hidden="true">${iconFor(code)}</span><span>${labelFor(code)}</span><span><b>${max}°</b> / ${min}°</span></div>`;
+    }).join("");
+  }
+
+  async function load(){
+    try{
+      const cached=JSON.parse(localStorage.getItem(CACHE_KEY)||"null");
+      if(cached?.savedAt&&Date.now()-cached.savedAt<CACHE_MS&&cached.data){
+        build(cached.data); return;
+      }
+      const res=await fetch(endpoint,{headers:{"Accept":"application/json"}});
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      const data=await res.json();
+      try{localStorage.setItem(CACHE_KEY,JSON.stringify({savedAt:Date.now(),data}));}catch(_){}
+      build(data);
+    }catch(err){
+      tempEl.textContent="Previsão indisponível no momento";
+      iconEl.textContent="🌤️";
+      daysEl.innerHTML='<div class="weather-error" style="grid-column:1/-1">Não foi possível carregar a previsão agora. Tente novamente em alguns minutos.</div>';
+    }
+  }
+
+  toggle.addEventListener("click",()=>{
+    const open=details.hasAttribute("hidden");
+    if(open){
+      details.removeAttribute("hidden");
+      try{
+        const metricKey="bt_weather_open_metric_v1";
+        if(!sessionStorage.getItem(metricKey)){
+          BusqueAPI.rpc("registrar_abertura_clima",{}).catch(error=>console.warn("Contagem do clima indisponível:",error?.message||error));
+          sessionStorage.setItem(metricKey,"1");
+        }
+      }catch(_){
+        BusqueAPI.rpc("registrar_abertura_clima",{}).catch(()=>{});
+      }
+    }else details.setAttribute("hidden","");
+    toggle.setAttribute("aria-expanded",String(open));
+  });
+  load();
 })();
 </script>
 
