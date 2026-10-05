@@ -885,18 +885,12 @@
     body.search-mode .weather-strip{display:none}
     @media(max-width:640px){.weather-strip{width:calc(100% - 20px);margin:-2px auto 10px;border-radius:14px}.weather-summary{padding:9px 11px;gap:8px}.weather-icon{font-size:1.25rem}.weather-main strong{font-size:.78rem}.weather-main span{font-size:.72rem}.weather-action{font-size:.68rem}.weather-details{padding:10px}.weather-days{gap:6px}.weather-day{padding:8px 5px}.weather-day strong{font-size:.7rem}.weather-day span{font-size:.65rem}}
 
-    /* Divulgação cruzada: Clube da Beleza */
-    .beauty-cross-promo{position:relative;z-index:6;width:min(var(--max),calc(100% - 32px));margin:0 auto 18px;text-decoration:none;display:block}
-    .beauty-cross-promo-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;min-height:190px;padding:34px 38px;border:1px solid rgba(122,73,108,.18);border-radius:26px;background:linear-gradient(120deg,#fff8fc 0%,#f9e9f3 48%,#efd8e8 100%);box-shadow:0 14px 34px rgba(73,35,66,.12);color:#43253b;transition:transform .2s ease,box-shadow .2s ease}
-    .beauty-cross-promo-card:before{content:"";position:absolute;width:240px;height:240px;right:-75px;top:-92px;border-radius:50%;background:rgba(255,255,255,.56);box-shadow:0 0 0 34px rgba(255,255,255,.22),0 0 0 70px rgba(255,255,255,.12)}
-    .beauty-cross-copy{position:relative;z-index:2;max-width:760px}
-    .beauty-cross-kicker{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:#6f3d62;color:#fff;font-size:.7rem;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
-    .beauty-cross-title{display:block;margin:0 0 8px;font-size:clamp(1.8rem,4vw,3rem);line-height:1;letter-spacing:-.045em;font-weight:950;color:#5a2f50}
-    .beauty-cross-text{display:block;max-width:680px;font-size:1rem;line-height:1.55;color:#694b61;font-weight:700}
-    .beauty-cross-tags{display:block;margin-top:10px;color:#816078;font-size:.82rem;font-weight:800}
-    .beauty-cross-cta{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;min-width:210px;padding:14px 18px;border-radius:15px;background:#5a2f50;color:#fff;font-weight:950;box-shadow:0 10px 24px rgba(90,47,80,.22);white-space:nowrap}
-    .beauty-cross-promo:hover .beauty-cross-promo-card{transform:translateY(-2px);box-shadow:0 19px 42px rgba(73,35,66,.16)}
-    @media(max-width:700px){.beauty-cross-promo{width:calc(100% - 20px);margin:0 auto 14px}.beauty-cross-promo-card{grid-template-columns:1fr;gap:18px;min-height:0;padding:25px 23px;border-radius:21px}.beauty-cross-title{font-size:2rem}.beauty-cross-text{font-size:.9rem}.beauty-cross-tags{font-size:.74rem;line-height:1.45}.beauty-cross-cta{width:100%;min-width:0;padding:13px 15px}}
+    /* Clube da Beleza — sobreposto ao hero, sem alterar o fluxo da home */
+    .beauty-hero-promo{position:absolute;z-index:6;right:max(18px,calc((100vw - var(--max))/2 + 18px));top:78px;width:clamp(175px,18vw,240px);overflow:hidden;border:2px solid rgba(255,255,255,.82);border-radius:22px;background:#f8ead8;text-decoration:none;box-shadow:0 18px 42px rgba(3,12,28,.34);transform:translateZ(0);transition:transform .2s ease,box-shadow .2s ease}
+    .beauty-hero-promo:hover{transform:translateY(-3px);box-shadow:0 24px 50px rgba(3,12,28,.4)}
+    .beauty-hero-promo img{display:block;width:100%;height:auto}
+    .beauty-hero-access{position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:999px;background:rgba(75,22,56,.95);color:#fff;font-size:.78rem;font-weight:950;letter-spacing:.035em;box-shadow:0 8px 18px rgba(70,18,52,.3);backdrop-filter:blur(6px)}
+    @media(max-width:760px){.beauty-hero-promo{top:64px;right:10px;width:clamp(120px,34vw,155px);border-width:1px;border-radius:16px;box-shadow:0 12px 28px rgba(3,12,28,.28)}.beauty-hero-access{left:7px;right:7px;bottom:7px;padding:8px 7px;font-size:.66rem}}
 
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
@@ -914,6 +908,10 @@
       <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog" aria-label="Abrir planos e valores">PLANOS</button>
     </div>
   </div>
+  <a class="beauty-hero-promo" id="clubeBelezaBanner" href="https://clubedabeleza.space/" aria-label="Acessar o Clube da Beleza">
+    <img src="assets/clube-beleza-banner.webp" alt="Clube da Beleza — encontre e agende profissionais de beleza perto de você" width="520" height="600" decoding="async" fetchpriority="high">
+    <span class="beauty-hero-access">ACESSAR <span aria-hidden="true">→</span></span>
+  </a>
 </header>
 
 <div class="search-wrap">
@@ -925,17 +923,7 @@
   </div>
 </div>
 
-<a class="beauty-cross-promo" id="clubeBelezaBanner" href="https://clubedabeleza.space/" aria-label="Acessar Clube da Beleza">
-  <span class="beauty-cross-promo-card">
-    <span class="beauty-cross-copy">
-      <span class="beauty-cross-kicker">Uma novidade para Torres</span>
-      <strong class="beauty-cross-title">CLUBE DA BELEZA</strong>
-      <span class="beauty-cross-text">Profissionais de beleza e clientes agora se encontram em um só lugar. Veja serviços, encontre profissionais e agende seu horário.</span>
-      <span class="beauty-cross-tags">Cabelo · unhas · cílios · sobrancelhas · maquiagem · estética</span>
-    </span>
-    <span class="beauty-cross-cta">ACESSAR O CLUBE <span aria-hidden="true">→</span></span>
-  </span>
-</a>
+
 
 <section class="weather-strip" id="weatherStrip" aria-label="Clima em Torres">
   <button class="weather-summary" id="weatherToggle" type="button" aria-expanded="false" aria-controls="weatherDetails">
