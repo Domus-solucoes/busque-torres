@@ -885,6 +885,19 @@
     body.search-mode .weather-strip{display:none}
     @media(max-width:640px){.weather-strip{width:calc(100% - 20px);margin:-2px auto 10px;border-radius:14px}.weather-summary{padding:9px 11px;gap:8px}.weather-icon{font-size:1.25rem}.weather-main strong{font-size:.78rem}.weather-main span{font-size:.72rem}.weather-action{font-size:.68rem}.weather-details{padding:10px}.weather-days{gap:6px}.weather-day{padding:8px 5px}.weather-day strong{font-size:.7rem}.weather-day span{font-size:.65rem}}
 
+    /* Divulgação cruzada: Clube da Beleza */
+    .beauty-cross-promo{position:relative;z-index:6;width:min(var(--max),calc(100% - 32px));margin:0 auto 18px;text-decoration:none;display:block}
+    .beauty-cross-promo-card{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;min-height:190px;padding:34px 38px;border:1px solid rgba(122,73,108,.18);border-radius:26px;background:linear-gradient(120deg,#fff8fc 0%,#f9e9f3 48%,#efd8e8 100%);box-shadow:0 14px 34px rgba(73,35,66,.12);color:#43253b;transition:transform .2s ease,box-shadow .2s ease}
+    .beauty-cross-promo-card:before{content:"";position:absolute;width:240px;height:240px;right:-75px;top:-92px;border-radius:50%;background:rgba(255,255,255,.56);box-shadow:0 0 0 34px rgba(255,255,255,.22),0 0 0 70px rgba(255,255,255,.12)}
+    .beauty-cross-copy{position:relative;z-index:2;max-width:760px}
+    .beauty-cross-kicker{display:inline-flex;align-items:center;gap:7px;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:#6f3d62;color:#fff;font-size:.7rem;font-weight:950;letter-spacing:.06em;text-transform:uppercase}
+    .beauty-cross-title{display:block;margin:0 0 8px;font-size:clamp(1.8rem,4vw,3rem);line-height:1;letter-spacing:-.045em;font-weight:950;color:#5a2f50}
+    .beauty-cross-text{display:block;max-width:680px;font-size:1rem;line-height:1.55;color:#694b61;font-weight:700}
+    .beauty-cross-tags{display:block;margin-top:10px;color:#816078;font-size:.82rem;font-weight:800}
+    .beauty-cross-cta{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;min-width:210px;padding:14px 18px;border-radius:15px;background:#5a2f50;color:#fff;font-weight:950;box-shadow:0 10px 24px rgba(90,47,80,.22);white-space:nowrap}
+    .beauty-cross-promo:hover .beauty-cross-promo-card{transform:translateY(-2px);box-shadow:0 19px 42px rgba(73,35,66,.16)}
+    @media(max-width:700px){.beauty-cross-promo{width:calc(100% - 20px);margin:0 auto 14px}.beauty-cross-promo-card{grid-template-columns:1fr;gap:18px;min-height:0;padding:25px 23px;border-radius:21px}.beauty-cross-title{font-size:2rem}.beauty-cross-text{font-size:.9rem}.beauty-cross-tags{font-size:.74rem;line-height:1.45}.beauty-cross-cta{width:100%;min-width:0;padding:13px 15px}}
+
 </style>
   <!-- BUSQUE TORRES: MOBILE MASTER FULL + 3 DESTAQUES FIXOS + METRICA FOGUINHO V2 2026-09-04 -->
 </head>
@@ -911,6 +924,18 @@
     <button id="searchClose" class="search-close" type="button" aria-label="Fechar busca">Fechar</button>
   </div>
 </div>
+
+<a class="beauty-cross-promo" id="clubeBelezaBanner" href="https://clubedabeleza.space/" aria-label="Acessar Clube da Beleza">
+  <span class="beauty-cross-promo-card">
+    <span class="beauty-cross-copy">
+      <span class="beauty-cross-kicker">Uma novidade para Torres</span>
+      <strong class="beauty-cross-title">CLUBE DA BELEZA</strong>
+      <span class="beauty-cross-text">Profissionais de beleza e clientes agora se encontram em um só lugar. Veja serviços, encontre profissionais e agende seu horário.</span>
+      <span class="beauty-cross-tags">Cabelo · unhas · cílios · sobrancelhas · maquiagem · estética</span>
+    </span>
+    <span class="beauty-cross-cta">ACESSAR O CLUBE <span aria-hidden="true">→</span></span>
+  </span>
+</a>
 
 <section class="weather-strip" id="weatherStrip" aria-label="Clima em Torres">
   <button class="weather-summary" id="weatherToggle" type="button" aria-expanded="false" aria-controls="weatherDetails">
@@ -1166,6 +1191,17 @@ const categoryInfo={alimentacao:{name:"Alimentação",c1:"#f7e3d9",c2:"#fcf2ed"}
 async function registrarMetrica(evento,empresaId=null,pagina="index"){
   try{await BusqueAPI.rpc("registrar_metrica",{p_evento:evento,p_empresa_id:empresaId?String(empresaId):null,p_pagina:pagina})}catch(error){console.warn("Métrica não registrada:",error?.message||error)}
 }
+function registrarCliqueClubeBeleza(){
+  try{
+    fetch(`${BUSQUE_SUPABASE_URL}/rest/v1/rpc/registrar_clique_clube_beleza`,{
+      method:"POST",
+      keepalive:true,
+      headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${BUSQUE_SUPABASE_KEY}`,"Content-Type":"application/json"},
+      body:"{}"
+    }).catch(()=>{});
+  }catch(_){}
+}
+$("clubeBelezaBanner")?.addEventListener("click",registrarCliqueClubeBeleza);
 function getJobMetricSession(){
   const key="bt_job_metric_session_v1";
   try{
