@@ -1,4 +1,6 @@
 /*
-  Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src https://wqfkysoodjyweanhsquk.supabase.co; form-action 'none'; base-uri 'none'; frame-ancestors 'none'
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer

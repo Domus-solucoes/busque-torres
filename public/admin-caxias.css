@@ -1,0 +1,31 @@
+
+    :root{
+      --ink:#0b1220;--ink-2:#172033;--nav:#081625;--nav-2:#0d2237;--gold:#efbd45;--gold-soft:#fff8df;
+      --bg:#f4f6f8;--surface:#ffffff;--surface-2:#f8fafc;--text:#172033;--muted:#687386;--line:#e3e8ee;
+      --green:#12805a;--green-soft:#eaf8f2;--red:#c63d4a;--red-soft:#fff0f2;--amber:#a96608;--amber-soft:#fff6e8;
+      --blue:#2867b2;--blue-soft:#eef5ff;--purple:#7453b7;--purple-soft:#f4efff;
+      --shadow:0 18px 45px rgba(14,28,45,.08);--radius:18px;--sidebar:252px;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    button,input,textarea,select{font:inherit}button{cursor:pointer}[hidden]{display:none!important}a{color:inherit}
+    input,textarea,select{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;background:#fff;color:var(--text);outline:none;transition:.18s}
+    input:focus,textarea:focus,select:focus{border-color:#8ca8c2;box-shadow:0 0 0 3px rgba(40,103,178,.10)}
+    label{display:block;font-size:12px;font-weight:800;color:#455367;margin:14px 0 6px;letter-spacing:.01em}
+
+    /* Login */
+    .login-page{min-height:100svh;background:var(--nav);display:grid;place-items:center;padding:24px;position:relative;overflow:hidden}
+    .login-page:before{content:"";position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(239,189,69,.16),transparent 67%);right:-180px;top:-260px}
+    .login-shell{position:relative;width:min(980px,100%);min-height:590px;display:grid;grid-template-columns:1.08fr .92fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 36px 100px rgba(0,0,0,.32)}
+    .login-showcase{background:linear-gradient(150deg,#0a1d30,#102c49);padding:56px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+    .login-showcase:after{content:"BC";position:absolute;right:-12px;bottom:-65px;font-size:220px;font-weight:950;color:rgba(255,255,255,.035);letter-spacing:-18px}
+    .login-logo{font-size:25px;font-weight:950;letter-spacing:-.04em}.login-logo span{color:var(--gold)}
+    .login-copy{position:relative;z-index:1}.login-kicker{display:inline-flex;padding:7px 10px;border:1px solid rgba(255,255,255,.18);border-radius:999px;color:#cbd6e3;font-size:11px;font-weight:850;letter-spacing:.09em}
+    .login-copy h2{font-size:42px;line-height:1.04;letter-spacing:-.045em;margin:18px 0 14px;max-width:420px}.login-copy p{max-width:430px;color:#bdc9d7;line-height:1.65;margin:0}
+    .login-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;position:relative;z-index:1}.login-meta div{padding:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:14px}.login-meta small{display:block;color:#9fb0c2;font-size:11px;font-weight:800}.login-meta strong{display:block;margin-top:4px;font-size:14px}
+    .login-card{padding:56px 52px;align-self:center}.login-card .mobile-brand{display:none;font-size:22px;font-weight:950;color:var(--nav)}.login-card .mobile-brand span{color:#d49e20}
+    .login-card h1{font-size:31px;letter-spacing:-.035em;margin:6px 0 9px}.login-card>p{color:var(--muted);line-height:1.55;margin:0 0 28px}.login-card label{margin-top:16px}
+    .primary{width:100%;border:0;border-radius:11px;background:var(--nav);color:#fff;font-weight:850;padding:13px 16px;margin-top:20px;min-height:48px;box-shadow:0 7px 18px rgba(8,22,37,.16)}.primary:hover{background:#0e263e}.primary:disabled{opacity:.55;cursor:not-allowed}
+    .password-recovery{width:100%;border:0;background:transparent;color:var(--blue);font-weight:750;padding:13px 4px 0}.form-message{margin-top:14px;padding:11px 12px;border-radius:10px;font-size:13px;line-height:1.45}.form-message.error{background:var(--red-soft);color:#a12f3b}.form-message.success{background:var(--green-soft);color:#0d6949}
+
+    
+@media(max-width:680px){.login-page{padding:0}.login-shell{display:block;min-height:100svh;border-radius:0}.login-showcase{display:none}.login-card{padding:42px 22px}.login-card .mobile-brand{display:block;margin-bottom:28px}}
