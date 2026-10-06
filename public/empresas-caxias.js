@@ -54,7 +54,9 @@
         $("companyMessage").hidden = true;
         $("companyFormTitle").scrollIntoView({ block: "start", behavior: "smooth" });
       });
-      card.append(title,detail,status,edit); $("companyList").append(card);
+      const images = document.createElement("button"); images.type = "button"; images.className = "company-button secondary"; images.textContent = "Logo e foto";
+      images.addEventListener("click", () => window.CaxiasMidias.open(row,readToken));
+      card.append(title,detail,status,edit,images); $("companyList").append(card);
     });
     $("companyPrevious").disabled = offset === 0;
     $("companyNext").disabled = rows.length < 50;
@@ -106,6 +108,6 @@
   });
   window.CaxiasEmpresas = {
     start(getToken) { generation++; readToken = getToken; offset = 0; $("companiesModule").hidden = false; return load(); },
-    clear() { generation++; readToken = () => null; rows = []; offset = 0; resetForm(); $("companyForm").hidden = true; $("companiesModule").hidden = true; $("companyList").replaceChildren(); $("companySearch").value = ""; $("companyMessage").hidden = true; $("companySave").disabled = false; }
+    clear() { window.CaxiasMidias.clear(); generation++; readToken = () => null; rows = []; offset = 0; resetForm(); $("companyForm").hidden = true; $("companiesModule").hidden = true; $("companyList").replaceChildren(); $("companySearch").value = ""; $("companyMessage").hidden = true; $("companySave").disabled = false; }
   };
 })();
