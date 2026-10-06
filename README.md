@@ -1,12 +1,15 @@
-# Busque Torres
+# Busque Caxias — etapa 2
 
-Versão V5 preparada em 07/08/2026.
+Branch destinada exclusivamente ao Worker busque-caxias-rs.
+Base do código: main em 28027f5bd55256d3f3685ec4c7ba212f7abf4487.
 
-Principais ajustes desta versão:
-- preços comerciais alinhados: Normal R$ 9,90, Destaque R$ 15,90 e MASTER R$ 25,90;
-- sessão administrativa mantida apenas em memória enquanto a página estiver aberta;
-- remoção de código legado de armazenamento local do cadastro;
-- pacote público sem scripts SQL ou documentação técnica interna.
+## Publicação
 
-Os dados oficiais do sistema permanecem no Supabase.
-Deploy Cloudflare Busque Caxias
+Comando Cloudflare: npx wrangler deploy --assets ./public --name busque-caxias-rs
+Apenas public/ pode ser publicada. source/ contém código de referência ainda não adaptado e não deve ser servido nem executado. Existem referências a Torres nessa pasta.
+
+A página pública é estática, sem scripts, formulários, banco ou pagamentos.
+Configuração Supabase da cópia foi bloqueada. Páginas geradas de empresas de Torres, sitemap e automação SEO não foram copiadas.
+
+Próxima etapa: Supabase exclusivo de Caxias; depois adaptar e testar source/ antes de habilitar os fluxos.
+Não mesclar esta branch na main. Não executar migrations ou funções no projeto de Torres.

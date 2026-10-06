@@ -1,11 +1,4 @@
-.git
-.git/**
-.github
+source/**
 .github/**
-.wrangler
-.wrangler/**
-wrangler.jsonc
-README.md
-LEIA-ME-DEPLOY.txt
-*.sql
-*.zip
+*.md
+wrangler.json

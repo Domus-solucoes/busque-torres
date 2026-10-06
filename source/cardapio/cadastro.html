@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505">
+  <title>Cadastrar empresa — Busque Cardápio</title>
+  <link rel="stylesheet" href="styles.css"><script src="../supabase-config.js"></script><script src="cardapio-core.js"></script>
+</head>
+<body>
+<header class="top"><div class="shell topin"><a class="brand" href="./"><img class="brand-logo" src="logo-cardapio.jpg" alt="Busque Cardápio"></a><div class="actions"><a class="btn" href="painel.html">Já tenho conta</a><a class="btn gold desktop" href="./">Ver cardápios</a></div></div></header>
+<main class="shell main signup-shell">
+  <section class="signup-card">
+    <div class="signup-intro">
+      <span class="tag warn">Cadastro rápido</span>
+      <h1>Coloque sua empresa no Busque Cardápio</h1>
+      <p>Primeiro cadastramos a empresa. Depois, dentro do painel, você monta o cardápio com calma. Você já começa com <strong>3 créditos gratuitos</strong>.</p>
+    </div>
+
+    <div class="wizard-progress" aria-label="Etapas do cadastro">
+      <button class="wizard-dot active" data-step-go="1"><span>1</span><b>Empresa</b></button>
+      <i></i>
+      <button class="wizard-dot" data-step-go="2"><span>2</span><b>Entrega</b></button>
+      <i></i>
+      <button class="wizard-dot" data-step-go="3"><span>3</span><b>Acesso</b></button>
+    </div>
+    <div id="msg"></div>
+
+    <section class="wizard-step active" data-step="1">
+      <div class="step-title"><span>1</span><div><h2>Dados da empresa</h2><p>O básico que o cliente precisa ver.</p></div></div>
+      <div class="signup-form-grid">
+        <div class="field wide"><label>Nome da empresa *</label><input id="nome" autocomplete="organization" placeholder="Ex.: Nome do seu restaurante"></div>
+        <div class="field"><label>WhatsApp *</label><input id="whatsapp" inputmode="tel" placeholder="(51) 99999-9999"></div>
+        <div class="field"><label>Categoria principal *</label><input id="categoria" placeholder="Ex.: Pastéis, Pizzas, Marmitas"></div>
+        <div class="field wide"><label>Endereço *</label><input id="endereco" autocomplete="street-address" placeholder="Rua, número, bairro"></div>
+        <div class="field wide"><label>Foto ou logo</label><input id="fotoEmpresa" type="file" accept="image/*"><span class="small muted">Pode ser logo, fachada ou uma foto do negócio. Reduzimos automaticamente para WebP otimizado, normalmente até 90 KB.</span></div>
+      </div>
+      <div class="wizard-actions"><span></span><button class="btn gold" id="step1Next">Continuar →</button></div>
+    </section>
+
+    <section class="wizard-step" data-step="2">
+      <div class="step-title"><span>2</span><div><h2>Como você atende?</h2><p>Escolha retirada, entrega própria ou as duas.</p></div></div>
+      <div class="field"><label>Atendimento</label><select id="delivery"><option value="pickup">Somente retirada no local</option><option value="own">Retirada + entrega própria</option></select></div>
+      <div id="faixaWrap" class="hidden">
+        <div class="location-setup"><div><strong>📍 Ponto de saída das entregas *</strong><div class="small muted">Fique no estabelecimento e toque no botão. Usaremos o Mapbox para calcular a rota real pelas ruas até o cliente.</div><div id="signupLocationStatus" class="small location-status">Localização ainda não salva.</div></div><button class="btn" id="capturarLocalCadastro" type="button">Usar localização atual</button></div>
+        <div class="delivery-box">
+          <div class="inline" style="margin-bottom:10px"><div><strong>Faixas de frete</strong><div class="small muted"><strong>Os valores não somam.</strong> Ex.: 0 a 2 KM = R$ 5,00; acima de 2 até 5 KM = R$ 8,00.</div></div><button class="mini primary right" id="addSignupRange" type="button">+ Nova faixa</button></div>
+          <div id="signupRanges" class="delivery-ranges"></div>
+        </div>
+      </div>
+      <div class="field"><label>Fechamento automático <span class="muted">(opcional)</span></label><input id="fechamento" type="time"><span class="small muted">Você abre a empresa manualmente no painel quando quiser. Se preencher aqui, o sistema pausa os pedidos nesse horário.</span></div>
+      <div class="wizard-actions"><button class="btn" id="step2Back">← Voltar</button><button class="btn gold" id="step2Next">Continuar →</button></div>
+    </section>
+
+    <section class="wizard-step" data-step="3">
+      <div class="step-title"><span>3</span><div><h2>Crie seu acesso</h2><p>Sem confirmação por e-mail. Você entra no painel na hora.</p></div></div>
+      <div class="grid grid2"><div class="field"><label>E-mail *</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>Senha *</label><input id="senha" type="password" minlength="8" autocomplete="new-password"><span class="small muted">Mínimo de 8 caracteres.</span></div></div>
+      <div id="resumoCadastro" class="signup-summary"></div>
+      <div class="notice ok"><strong>3 créditos gratuitos.</strong><br>Se você escolher receber por outro banco, já consegue começar com 3 pedidos pagos sem fazer recarga. Se usar Mercado Pago, continua valendo o split de R$ 1 por pedido.</div><div class="small muted legal-consent">Ao criar a empresa, você declara que leu os <a href="termos.html" target="_blank">Termos de Uso</a> e a <a href="privacidade.html" target="_blank">Política de Privacidade</a>.</div>
+      <div class="wizard-actions"><button class="btn" id="step3Back">← Voltar</button><button class="btn gold" id="criar">Criar empresa e entrar</button></div>
+    </section>
+  </section>
+</main>
+<footer class="legal-footer"><div class="shell"><a href="termos.html">Termos de Uso</a><span>·</span><a href="privacidade.html">Política de Privacidade</a><span class="legal-copy">© 2026 Busque Torres · Desenvolvido por <strong>DOMUS SISTEMAS</strong></span></div></footer>
+<script>
+const $=id=>document.getElementById(id);
+let step=1,signupRanges=[{km:2,fee:5},{km:5,fee:8}],signupLat=null,signupLon=null;
+function goStep(n){step=n;document.querySelectorAll('.wizard-step').forEach(x=>x.classList.toggle('active',Number(x.dataset.step)===n));document.querySelectorAll('.wizard-dot').forEach(x=>x.classList.toggle('active',Number(x.dataset.stepGo)<=n));if(n===3)renderSummary();window.scrollTo({top:0,behavior:'smooth'})}
+function showError(m){$('msg').innerHTML='<div class="notice bad">'+CardapioCore.esc(m)+'</div>';window.scrollTo({top:0,behavior:'smooth'})}
+function validateStep1(){if($('nome').value.trim().length<2)throw new Error('Informe o nome da empresa.');if($('whatsapp').value.replace(/\D/g,'').length<8)throw new Error('Informe um WhatsApp válido.');if(!$('endereco').value.trim())throw new Error('Informe o endereço da empresa.');if(!$('categoria').value.trim())throw new Error('Informe a categoria principal.');}
+function renderSignupRanges(){let anterior=0;$('signupRanges').innerHTML=signupRanges.map((r,i)=>{const atual=Number(r.km);const inicio=i===0?'0':(Number(anterior)>0?String(Number(anterior).toLocaleString('pt-BR',{maximumFractionDigits:1})):'—');const faixa=i===0?`0 a ${r.km||'—'} KM`:`Acima de ${inicio} até ${r.km||'—'} KM`;anterior=Number.isFinite(atual)&&atual>0?atual:anterior;return `<div class="delivery-range-row"><div class="field"><label>Distância <span class="small muted">(${faixa})</span></label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${r.km??''}"><span class="suffix">KM</span></div></div><div class="field"><label>Frete desta faixa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${r.fee??''}"></div></div><button class="mini danger delivery-remove" type="button" onclick="removeSignupRange(${i})" ${signupRanges.length===1?'disabled':''}>×</button></div>`}).join('')}
+function syncRanges(){signupRanges=[...$('signupRanges').querySelectorAll('.delivery-range-row')].map(row=>({km:row.querySelector('[data-km]').value,fee:row.querySelector('[data-fee]').value}))}
+window.removeSignupRange=i=>{syncRanges();signupRanges.splice(i,1);if(!signupRanges.length)signupRanges=[{km:'',fee:''}];renderSignupRanges()};
+$('addSignupRange').onclick=()=>{syncRanges();if(signupRanges.length>=40)return;const p=signupRanges.at(-1)||{};signupRanges.push({km:Number(p.km)>0?Math.round((Number(p.km)+1)*10)/10:'',fee:''});renderSignupRanges()};
+function collectRanges(){syncRanges();const out=signupRanges.map(r=>({km:Number(r.km),fee:Number(r.fee)}));if(out.some(r=>!Number.isFinite(r.km)||r.km<=0||!Number.isFinite(r.fee)||r.fee<0))throw new Error('Preencha corretamente todas as faixas de frete.');out.sort((a,b)=>a.km-b.km);const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('Não repita a mesma distância em duas faixas.');seen.add(r.km)}return out}
+function validateStep2(){if($('delivery').value==='own'){if(signupLat==null||signupLon==null)throw new Error('Para fazer entrega, salve a localização do estabelecimento.');collectRanges()}}
+function renderSummary(){let t=`<strong>${CardapioCore.esc($('nome').value)}</strong><span>${CardapioCore.esc($('categoria').value)} · ${CardapioCore.esc($('endereco').value)}</span>`;if($('delivery').value==='own'){const f=collectRanges();t+=`<span>Entrega própria · ${f.length} faixa${f.length===1?'':'s'} de frete · rota calculada pelo Mapbox</span>`}else t+='<span>Somente retirada no local</span>';$('resumoCadastro').innerHTML=t}
+$('step1Next').onclick=()=>{try{validateStep1();$('msg').innerHTML='';goStep(2)}catch(e){showError(e.message)}};$('step2Back').onclick=()=>goStep(1);$('step2Next').onclick=()=>{try{validateStep2();$('msg').innerHTML='';goStep(3)}catch(e){showError(e.message)}};$('step3Back').onclick=()=>goStep(2);
+$('delivery').onchange=()=>$('faixaWrap').classList.toggle('hidden',$('delivery').value!=='own');
+$('capturarLocalCadastro').onclick=()=>{const b=$('capturarLocalCadastro');if(!navigator.geolocation)return showError('Este navegador não permite obter a localização.');b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(pos=>{signupLat=pos.coords.latitude;signupLon=pos.coords.longitude;$('signupLocationStatus').textContent='Localização salva com sucesso.';$('signupLocationStatus').className='small location-status oktext';b.disabled=false;b.textContent='Atualizar localização'},()=>{b.disabled=false;b.textContent='Usar localização atual';showError('Não conseguimos acessar a localização. Autorize o navegador e tente novamente.')},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
+async function uploadEmpresa(file){if(!file)return;const webp=await CardapioCore.toWebp(file),form=new FormData();form.append('tipo','empresa');form.append('file',webp);await CardapioCore.fn('cardapio-upload-imagem',{auth:true,form})}
+$('criar').onclick=async()=>{const b=$('criar');if(b.disabled)return;b.disabled=true;const old=b.textContent;b.textContent='Criando...';$('msg').innerHTML='';try{validateStep1();validateStep2();const email=$('email').value.trim().toLowerCase(),password=$('senha').value;if(!email.includes('@'))throw new Error('Informe um e-mail válido.');if(password.length<8)throw new Error('A senha precisa ter pelo menos 8 caracteres.');const payload={email,password,nome:$('nome').value.trim(),whatsapp:$('whatsapp').value,endereco:$('endereco').value.trim(),categorias:[$('categoria').value.trim()],horario_abertura:null,horario_fechamento:$('fechamento').value||null,delivery_mode:$('delivery').value,delivery_ranges:$('delivery').value==='own'?collectRanges():[],latitude:signupLat,longitude:signupLon};await CardapioCore.fn('cardapio-cadastrar-empresa',{body:payload});await CardapioCore.signIn(email,password);await uploadEmpresa($('fotoEmpresa').files[0]);location.href='painel.html?onboarding=1&tab=cardapio'}catch(e){const code=e.data?.error||'';let m=e.message;if(code==='email_ja_cadastrado')m='Esse e-mail já está cadastrado. Use “Já tenho conta” para entrar.';if(code==='senha_minimo_8')m='A senha precisa ter pelo menos 8 caracteres.';if(code==='email_invalido')m='Digite um e-mail válido.';showError(m)}finally{b.disabled=false;b.textContent=old}};
+document.querySelectorAll('.wizard-dot').forEach(b=>b.onclick=()=>{const n=Number(b.dataset.stepGo);if(n<step)goStep(n)});renderSignupRanges();
+</script></body></html>

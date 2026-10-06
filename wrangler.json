@@ -1,0 +1,8 @@
+{
+  "name": "busque-caxias-rs",
+  "compatibility_date": "2026-10-06",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public"
+  }
+}

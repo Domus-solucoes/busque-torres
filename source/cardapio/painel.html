@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505">
+  <title>Painel da empresa — Busque Cardápio</title>
+  <meta name="busque-cardapio-version" content="15">
+  <link rel="stylesheet" href="styles.css"><script src="../supabase-config.js"></script><script src="cardapio-core.js"></script>
+</head>
+<body>
+<header class="top"><div class="shell topin"><a class="brand" href="./"><img class="brand-logo" src="logo-cardapio.jpg" alt="Busque Cardápio"></a><div class="actions"><a class="btn desktop" href="./">Abrir Cardápio</a><button id="logout" class="btn danger hidden">Sair</button></div></div></header>
+<section id="login" class="auth-wrap"><div class="auth-card"><div class="auth-brand"><img src="logo-cardapio.jpg" alt="Busque Cardápio"></div><div id="loginForm"><h1>Entrar no painel</h1><p class="muted">Use o e-mail e a senha cadastrados para sua empresa.</p><div id="loginMsg"></div><div class="field"><label>E-mail</label><input id="loginEmail" type="email" autocomplete="email"></div><div class="field"><label>Senha</label><input id="loginSenha" type="password" autocomplete="current-password"></div><button id="entrar" class="btn primary">Entrar</button><button id="forgotPassword" class="auth-link" type="button">Esqueci minha senha</button><a class="btn" href="cadastro.html">Criar conta</a></div><div id="recoverForm" class="hidden"><h1>Recuperar senha</h1><p class="muted">Informe o e-mail da empresa. Você receberá um link para criar uma nova senha.</p><div id="recoverMsg"></div><div class="field"><label>E-mail</label><input id="recoverEmail" type="email" autocomplete="email"></div><button id="sendRecovery" class="btn primary">Enviar link por e-mail</button><button id="backLogin" class="auth-link" type="button">← Voltar para entrar</button></div><div id="newPasswordForm" class="hidden"><h1>Crie uma nova senha</h1><p class="muted">O link de recuperação foi validado. Escolha uma senha com pelo menos 8 caracteres.</p><div id="newPasswordMsg"></div><div class="field"><label>Nova senha</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password"></div><div class="field"><label>Repita a nova senha</label><input id="newPassword2" type="password" minlength="8" autocomplete="new-password"></div><button id="saveNewPassword" class="btn primary">Salvar nova senha</button></div></div></section>
+
+<main id="app" class="shell main hidden">
+  <div class="panel-head">
+    <div><h1 id="empresaNome">Minha empresa</h1><div id="statusLinha" class="small muted"></div></div>
+    <div class="actions"><button class="btn" id="refresh">Atualizar</button><button class="btn gold" id="toggleOpen">Abrir empresa</button></div>
+  </div>
+  <div id="alerta"></div>
+  <div class="kpis" style="margin-bottom:16px"><div class="kpi"><small>Pedidos</small><strong id="kPedidos">0</strong></div><div class="kpi"><small>Créditos</small><strong id="kCreditos">—</strong></div><div class="kpi"><small>Recebimento</small><strong id="kModelo" class="kpi-text">—</strong></div><div class="kpi"><small>Cadastro</small><strong id="kCadastro" class="kpi-text">—</strong></div></div>
+  <nav class="tabs"><button class="tab active" data-pane="pedidos">Pedidos</button><button class="tab" data-pane="cardapio">Cardápio</button><button class="tab" data-pane="divulgacao">Divulgação</button><button class="tab" data-pane="empresa">Empresa</button><button class="tab" data-pane="recebimento">Recebimento</button></nav>
+
+  <section class="pane active" id="pane-pedidos"><div class="card"><div class="section-head compact"><div><h2>Pedidos</h2><p>A própria empresa avança cada pedido. O cliente acompanha pelo código.</p><div id="ordersAutoStatus" class="small muted auto-status">Atualização automática a cada 60 segundos enquanto o painel estiver aberto.</div></div></div><div id="pedidos" class="list"></div></div></section>
+
+  <section class="pane" id="pane-cardapio">
+    <div id="onboardingCardapio" class="onboarding-card hidden"><div><span class="tag warn">Próximo passo</span><h2>Monte seu primeiro produto</h2><p>Agora que a empresa está criada, cadastre um produto. Depois, na mesma tela, você adiciona sabores, tamanhos e adicionais sem duplicar a foto.</p></div><button class="btn gold" id="onboardingProduto">Cadastrar primeiro produto</button></div>
+    <div class="card"><div class="inline"><div><h2>Seu cardápio</h2><p class="small muted">Cada produto tem uma foto. Sabores, tamanhos e adicionais ficam organizados dentro dele.</p></div><button class="btn gold right" id="novoProduto">+ Novo produto</button></div><div id="produtos" class="list product-list"></div></div>
+  </section>
+
+  <section class="pane" id="pane-divulgacao">
+    <div class="commercial-hero card">
+      <div><span class="tag warn">🚀 MAIS VISIBILIDADE</span><h2>Divulgue sua empresa no Busque Cardápio</h2><p>Escolha um espaço, pague por PIX e a ativação acontece automaticamente após a confirmação.</p></div>
+      <div class="commercial-home-note">Vitrine Premium: 3 espaços<br>Destaque: 2 espaços<br>Oferta: 2 espaços</div>
+    </div>
+    <div id="commercialCurrent" class="commercial-current"></div>
+    <div id="commercialProducts" class="commercial-grid"></div>
+    <div id="commercialPix" class="commercial-pix-wrap"></div>
+  </section>
+
+  <section class="pane" id="pane-empresa">
+    <div class="grid grid2">
+      <div class="card"><h2>Dados da empresa</h2><div class="field"><label>Nome</label><input id="cfgNome"></div><div class="field"><label>WhatsApp</label><input id="cfgWhats"></div><div class="field"><label>Endereço</label><input id="cfgEndereco"></div><div class="field"><label>Categorias</label><input id="cfgCats" placeholder="Pastéis, Lanches"></div><div class="field"><label>Fechamento automático (opcional)</label><input id="cfgFecha" type="time"><span class="small muted">Você abre manualmente quando quiser. Se definir um horário, os pedidos são pausados automaticamente nele.</span></div><button class="btn primary" id="salvarEmpresa">Salvar dados</button></div>
+      <div class="card"><h2>Foto e operação</h2><div id="fotoAtual" class="company-photo-preview">Sem foto</div><div class="field"><label>Foto/logo da empresa</label><input id="fotoFile" type="file" accept="image/*"><span class="small muted">Convertida automaticamente para WebP otimizado, normalmente até 90 KB.</span></div><button class="btn" id="enviarFoto">Atualizar foto</button><div class="sep"></div><div class="notice" id="openHelp"></div></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="section-head compact"><div><h2>Entrega</h2><p><strong>Os valores não somam.</strong> Ex.: 0 a 2 km = R$ 5; acima de 2 até 5 km = R$ 8; acima de 5 até 10 km = R$ 12.</p></div></div>
+      <div class="field"><label>Modalidade</label><select id="cfgDelivery"><option value="pickup">Somente retirada</option><option value="own">Entrega própria + retirada</option></select></div>
+      <div class="delivery-own">
+        <div class="location-setup"><div><strong>📍 Localização da empresa</strong><div class="small muted">Necessária para o Mapbox calcular a rota real de carro pelas ruas até o cliente e escolher automaticamente a faixa de frete.</div><div id="companyLocationStatus" class="small location-status">Ainda não definida.</div></div><button class="btn" id="setCompanyLocation" type="button">Usar localização atual</button></div>
+        <div class="inline" style="margin-bottom:10px"><strong>Faixas de distância e taxa</strong><button class="mini primary right" id="addDeliveryRange" type="button">+ Adicionar faixa</button></div>
+        <div id="deliveryRanges" class="delivery-ranges"></div>
+        <div class="small muted">Você pode cadastrar até 40 faixas. KM e R$ são apenas unidades visuais; os valores são digitados por você.</div>
+      </div>
+      <button class="btn primary" id="salvarEntrega" style="margin-top:12px">Salvar entrega</button>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-recebimento">
+    <div class="receiving-intro card">
+      <div>
+        <span class="tag warn">Configuração guiada</span>
+        <h2>Como sua empresa quer receber?</h2>
+        <p>Escolha uma opção. O Busque Cardápio faz o máximo possível sozinho e mostra apenas o que você realmente precisa preencher.</p>
+      </div>
+      <div id="recebStatus" class="receiving-current"></div>
+    </div>
+
+    <div class="receive-method-grid">
+      <label class="receive-method payment-choice" data-receive-card="mercadopago_split">
+        <input type="radio" name="modelo" value="mercadopago_split">
+        <span class="receive-method-icon">⚡</span>
+        <span><b class="receive-badge">MAIS FÁCIL</b><strong>Mercado Pago</strong><small>Você clica, autoriza sua conta e volta. O Busque configura a conexão automaticamente.</small><em>R$ 1 por pedido pago via split.</em></span>
+      </label>
+      <label class="receive-method payment-choice" data-receive-card="banco_creditos">
+        <input type="radio" name="modelo" value="banco_creditos">
+        <span class="receive-method-icon">🏦</span>
+        <span><strong>Meu banco / Pix</strong><small>100% do valor do pedido entra direto na conta da empresa. O Busque usa créditos.</small><em>Começa com 3 créditos gratuitos.</em></span>
+      </label>
+    </div>
+
+    <div id="mpBox" class="card receive-connect-card" style="margin-top:16px">
+      <div class="receive-connect-head"><div><span class="receive-step-number">1</span><div><h2>Conectar Mercado Pago</h2><p>Não precisa copiar Client ID, Secret nem certificado. A autorização acontece diretamente no Mercado Pago.</p></div></div><span id="mpConnectionPill" class="connection-pill">Não conectado</span></div>
+      <div class="auto-explainer"><span>✓ Login no Mercado Pago</span><span>✓ Autorização segura</span><span>✓ Split configurado pelo sistema</span><span>✓ Retorno automático ao painel</span></div>
+      <div class="receive-actions"><button id="conectarMP" class="btn gold">⚡ Conectar Mercado Pago automaticamente</button><button id="verificarMP" class="btn">Já autorizei — verificar agora</button></div>
+      <div id="mpConnectHelp" class="small muted" style="margin-top:10px">Uma janela do Mercado Pago será aberta. Depois da autorização, este painel verifica a conexão automaticamente.</div>
+    </div>
+
+    <div id="bankBox" class="card receive-connect-card" style="margin-top:16px">
+      <div class="receive-connect-head"><div><span class="receive-step-number">1</span><div><h2>Escolha sua instituição</h2><p>Mostramos somente integrações que o Busque Cardápio já consegue testar e conectar.</p></div></div><span id="bankConnectionPill" class="connection-pill">Não conectado</span></div>
+
+      <div id="bankConnectedBanner" class="notice ok hidden" style="margin-bottom:14px"></div>
+      <div id="bankSetupFlow">
+        <div class="grid grid2 bank-select-row"><div class="field"><label>Banco / instituição</label><select id="bankCode"></select></div><div class="field" id="bankEnvironmentField"><label>Ambiente</label><select id="bankAmbiente"><option value="producao">Produção</option><option value="sandbox">Homologação / Sandbox</option></select></div></div>
+        <div id="bankSupportNote" class="notice" style="margin-bottom:12px"></div>
+
+        <div class="bank-auto-box">
+          <div><strong>🤖 O que o Busque faz sozinho</strong><p>Depois que você informar os dados fornecidos pelo banco, o sistema testa a autenticação, guarda as credenciais no cofre seguro e configura o recebimento. Quando o banco permite, o webhook também é configurado automaticamente.</p></div>
+          <div id="bankAutoChecklist" class="bank-auto-checklist"></div>
+        </div>
+
+        <div class="receive-step-block">
+          <div class="receive-step-title"><span class="receive-step-number">2</span><div><h3>Pegue os dados no seu banco</h3><p>Não sabe onde achar? Abra o guia abaixo. Você nunca deve informar a senha do aplicativo ou internet banking.</p></div></div>
+          <details class="bank-help-details" id="bankHelpDetails"><summary>📘 Como conseguir os dados desta instituição</summary><div id="bankGuide" class="bank-guide"></div></details>
+        </div>
+
+        <div class="receive-step-block">
+          <div class="receive-step-title"><span class="receive-step-number">3</span><div><h3>Cole somente os dados pedidos</h3><p id="bankFieldsIntro">O formulário muda automaticamente conforme a instituição escolhida.</p></div></div>
+
+          <div id="bankFieldsBcb"><div class="bank-fields"><div class="field"><label>Chave Pix</label><input id="bankPix" placeholder="Sua chave Pix de recebimento"><span class="field-help">A mesma chave habilitada na API Pix do banco.</span></div><div class="field"><label>Client ID</label><input id="bankClient" autocomplete="off" placeholder="Fornecido pelo portal/API do banco"></div><div class="field"><label>Client Secret</label><input id="bankSecret" type="password" autocomplete="new-password" placeholder="Fornecido pelo portal/API do banco"></div><div class="field wide"><label>Certificado PEM</label><textarea id="bankCert" spellcheck="false" placeholder="-----BEGIN CERTIFICATE-----"></textarea></div><div class="field wide"><label>Chave privada PEM</label><textarea id="bankKey" spellcheck="false" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></div></div></div>
+          <div id="bankFieldsPicpay" class="hidden"><div class="grid grid2"><div class="field"><label>Client ID</label><input id="picpayClient" autocomplete="off" placeholder="Fornecido pelo PicPay"></div><div class="field"><label>Client Secret</label><input id="picpaySecret" type="password" autocomplete="new-password" placeholder="Fornecido pelo PicPay"></div></div><div class="field"><label>Token do webhook</label><input id="picpayWebhook" type="password" autocomplete="new-password" placeholder="Token criado no Painel Lojista PicPay"><span class="field-help">No PicPay, cadastre a URL abaixo e depois informe aqui o token gerado.</span></div><div class="field"><label>URL de webhook</label><div class="copy-field"><input id="bankWebhookUrl" readonly><button class="mini" type="button" id="copyBankWebhook">Copiar</button></div></div></div>
+          <div id="bankFieldsPagbank" class="hidden"><div class="field"><label>Token API PagBank / PagSeguro</label><input id="pagbankToken" type="password" autocomplete="new-password" placeholder="Token da conta da empresa"><span class="field-help">O dinheiro do pedido continuará entrando diretamente na conta do estabelecimento.</span></div></div>
+
+          <div id="bankConnectResult"></div>
+          <div class="receive-actions"><button id="conectarBanco" class="btn gold">🤖 Testar e conectar automaticamente</button><button id="desconectarBanco" class="btn danger hidden">Desconectar banco</button></div>
+        </div>
+      </div>
+
+      <div class="sep"></div>
+      <div class="credit-summary"><div><span class="receive-step-number">4</span><div><strong>Créditos do Busque</strong><div class="small muted">Saldo disponível: <b id="saldoCreditos">0</b> · 1 crédito é consumido somente quando um pedido é confirmado como pago.</div></div></div><div class="right inline"><input id="qtdCreditos" type="number" min="1" value="20" style="width:90px"><button id="recarregar" class="btn">Carregar créditos</button></div></div><div id="pixRecarga" style="margin-top:12px"></div>
+    </div>
+  </section>
+</main>
+<footer class="legal-footer"><div class="shell"><a href="termos.html">Termos de Uso</a><span>·</span><a href="privacidade.html">Política de Privacidade</a><span class="legal-copy">© 2026 Busque Torres · Desenvolvido por <strong>DOMUS SISTEMAS</strong></span></div></footer>
+
+<div class="modal" id="produtoForm" hidden><div class="dialog dialog-wide product-editor">
+  <div class="dialog-head"><div><h2 id="pfTitulo">Novo produto</h2><p class="small muted" id="pfSubtitulo">Cadastre as informações básicas. Depois você adiciona sabores, tamanhos ou adicionais.</p></div><button class="x" data-close="produtoForm">×</button></div>
+  <input id="pfId" type="hidden">
+  <div class="editor-tabs"><button class="editor-tab active" data-editor-pane="dados">1. Produto</button><button class="editor-tab" id="editorOpcoesTab" data-editor-pane="opcoes" disabled>2. Tamanhos e adicionais</button></div>
+
+  <section class="editor-pane active" id="editor-dados">
+    <div class="product-editor-grid">
+      <div class="product-image-box"><div id="pfFotoAtual" class="product-photo-preview"><span>🍽️</span><small>Foto do produto</small></div><label class="btn upload-btn">Escolher foto<input id="pfFoto" type="file" accept="image/*" hidden></label><div class="small muted">A mesma imagem será usada para todos os sabores e tamanhos.</div></div>
+      <div>
+        <div class="field"><label>O que você está cadastrando?</label><select id="pfTipo"><option value="">Escolha uma opção</option><option value="pizza">🍕 Pizza</option><option value="lanche">🍔 Lanche</option><option value="bebida">🥤 Bebida</option><option value="porcao">🍟 Porção</option><option value="combo">🍱 Combo</option><option value="outro">🍽️ Outro</option></select></div>
+        <div class="field"><label>Nome do produto *</label><input id="pfNome" placeholder="Ex.: Pizza Calabresa"></div>
+        <div class="grid grid2"><div class="field"><label id="pfPrecoLabel">Preço inicial *</label><div class="input-affix"><span class="prefix">R$</span><input id="pfPreco" type="number" min="0" step="0.01" placeholder="29,90"></div><span id="pfPrecoHelp" class="small muted">Se houver tamanhos, use aqui o preço do menor tamanho.</span></div><div class="field"><label>Categoria *</label><input id="pfCat" placeholder="Ex.: Pizzas"></div></div>
+        <div class="field"><label>Descrição <span class="muted">(opcional)</span></label><textarea id="pfDesc" placeholder="Ex.: massa crocante, recheio bem servido..."></textarea></div>
+        <label class="availability-toggle"><input id="pfDisp" type="checkbox" checked><span><strong>Disponível para venda</strong><small>Você pode pausar o produto depois sem excluir.</small></span></label>
+      </div>
+    </div>
+    <div class="wizard-actions"><span class="small muted">Primeiro salve o produto. As opções aparecem no próximo passo.</span><button id="salvarProduto" class="btn gold">Salvar e continuar →</button></div>
+  </section>
+
+  <section class="editor-pane" id="editor-opcoes">
+    <div class="options-intro"><div><h3>Agora deixe o produto fácil de pedir</h3><p>Para pizza, cadastre cada sabor como um produto separado (Calabresa, Frango, Portuguesa...). Aqui você adiciona somente tamanhos e extras.</p></div></div>
+    <div class="preset-grid">
+      <button class="preset-card" data-preset="tamanhos"><span>📏</span><strong>Adicionar tamanhos</strong><small>Informe o preço final: Pequena R$ 29,90 · Média R$ 39,90 · Grande R$ 49,90</small></button>
+      <button class="preset-card" data-preset="adicionais"><span>➕</span><strong>Adicionar adicionais</strong><small>Informe só o acréscimo: Queijo + R$ 3 · Bacon + R$ 5</small></button>
+    </div>
+    <div class="notice ok" style="margin:12px 0"><strong>🍕 Outro sabor?</strong><br>Conclua este produto e use <b>+ Novo produto</b>. Assim cada sabor pode ter foto, descrição, tamanhos e preço próprios.</div>
+    <div id="gruposAdmin" class="list option-groups-simple"></div>
+    
+    <div class="wizard-actions"><button class="btn" id="voltarDadosProduto">← Dados do produto</button><button class="btn gold" id="concluirProduto">Concluir produto</button></div>
+  </section>
+</div></div>
+
+<div class="toast" id="toast"></div>
+<script>
+const $=id=>document.getElementById(id),toast=m=>{const e=$('toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2800)};
+let cfg=null,orders=null,products=[],bankInfo=null,commercialInfo=null,opProduto=null,opGrupos=[],deliveryDraft=[],orderPollTimer=null,lastOrderSnapshot=new Map(),bankSetupForceOpen=false,mpPopup=null;
+const statusLabel=s=>({aguardando_pagamento:'Aguardando pagamento',pago:'Pedido recebido',preparando:'Em preparo',pronto:'Pronto para retirada',em_entrega:'Saiu para entrega',concluido:'Concluído',cancelado:'Cancelado'}[s]||s);
+async function boot(){const s=await CardapioCore.session();if(CardapioCore.isRecoveryMode()&&s){showPasswordReset();return}if(!s){showLogin();return}try{await loadAll();showApp();applyInitialTab()}catch(e){if(e.status===404){try{await CardapioCore.fn('cardapio-bootstrap-empresa',{auth:true,body:{nome:s.user?.user_metadata?.cardapio_nome||'Minha empresa'}});await loadAll();showApp();applyInitialTab()}catch(x){CardapioCore.clear();showLogin()}}else{CardapioCore.clear();showLogin()}}}
+function stopOrderPolling(){if(orderPollTimer){clearInterval(orderPollTimer);orderPollTimer=null}}
+function startOrderPolling(){stopOrderPolling();orderPollTimer=setInterval(()=>{if(!document.hidden)refreshOrdersOnly()},60000)}
+function showLogin(){stopOrderPolling();$('login').classList.remove('hidden');$('app').classList.add('hidden');$('logout').classList.add('hidden');$('loginForm').classList.remove('hidden');$('recoverForm').classList.add('hidden');$('newPasswordForm').classList.add('hidden')}
+function showPasswordReset(){stopOrderPolling();$('login').classList.remove('hidden');$('app').classList.add('hidden');$('logout').classList.add('hidden');$('loginForm').classList.add('hidden');$('recoverForm').classList.add('hidden');$('newPasswordForm').classList.remove('hidden')}
+function showApp(){$('login').classList.add('hidden');$('app').classList.remove('hidden');$('logout').classList.remove('hidden');startOrderPolling()}
+$('entrar').onclick=async()=>{try{CardapioCore.clearRecoveryMode();await CardapioCore.signIn($('loginEmail').value,$('loginSenha').value);await loadAll();showApp()}catch(e){$('loginMsg').innerHTML='<div class="notice bad">'+CardapioCore.esc(e.message)+'</div>'}};
+$('forgotPassword').onclick=()=>{$('loginForm').classList.add('hidden');$('recoverForm').classList.remove('hidden');$('recoverEmail').value=$('loginEmail').value||'';$('recoverMsg').innerHTML=''};
+$('backLogin').onclick=()=>{$('recoverForm').classList.add('hidden');$('loginForm').classList.remove('hidden')};
+$('sendRecovery').onclick=async()=>{const email=$('recoverEmail').value.trim().toLowerCase(),b=$('sendRecovery');if(!email.includes('@'))return $('recoverMsg').innerHTML='<div class="notice bad">Informe um e-mail válido.</div>';b.disabled=true;const old=b.textContent;b.textContent='Enviando...';try{await CardapioCore.requestPasswordRecovery(email);$('recoverMsg').innerHTML='<div class="notice ok"><strong>Link enviado.</strong><br>Confira sua caixa de entrada e também o spam. O link abrirá esta página para você criar uma nova senha.</div>'}catch(e){$('recoverMsg').innerHTML='<div class="notice bad">Não foi possível enviar o link agora. Tente novamente em alguns minutos.</div>'}finally{b.disabled=false;b.textContent=old}};
+$('saveNewPassword').onclick=async()=>{const a=$('newPassword').value,b=$('newPassword2').value,btn=$('saveNewPassword');if(a.length<8)return $('newPasswordMsg').innerHTML='<div class="notice bad">A senha precisa ter pelo menos 8 caracteres.</div>';if(a!==b)return $('newPasswordMsg').innerHTML='<div class="notice bad">As duas senhas precisam ser iguais.</div>';btn.disabled=true;const old=btn.textContent;btn.textContent='Salvando...';try{await CardapioCore.updatePassword(a);CardapioCore.clearRecoveryMode();$('newPasswordMsg').innerHTML='<div class="notice ok">Senha alterada com sucesso. Abrindo o painel...</div>';await loadAll();showApp();applyInitialTab()}catch(e){$('newPasswordMsg').innerHTML='<div class="notice bad">'+CardapioCore.esc(e.message)+'</div>'}finally{btn.disabled=false;btn.textContent=old}};
+$('logout').onclick=()=>{stopOrderPolling();CardapioCore.clear();CardapioCore.clearRecoveryMode();location.reload()};$('refresh').onclick=loadAll;
+async function loadAll(){[cfg,orders,bankInfo,commercialInfo]=await Promise.all([CardapioCore.fn('cardapio-configuracoes-empresa',{method:'GET',auth:true}),CardapioCore.fn('cardapio-painel-pedidos',{method:'GET',auth:true}),CardapioCore.fn('cardapio-banco-conexao',{method:'GET',auth:true}),CardapioCore.fn('cardapio-comercial-status',{method:'GET',auth:true}).catch(e=>({ok:false,error:e.data?.error||e.message||'indisponivel'}))]);const p=await CardapioCore.fn('cardapio-gerenciar-produtos',{method:'GET',auth:true});products=p.produtos||[];lastOrderSnapshot=new Map((orders.pedidos||[]).map(x=>[String(x.id),String(x.status)]));render();updateAutoStatus()}
+async function refreshOrdersOnly(){if(!cfg||document.hidden)return;try{const fresh=await CardapioCore.fn('cardapio-painel-pedidos',{method:'GET',auth:true});const next=new Map((fresh.pedidos||[]).map(x=>[String(x.id),String(x.status)]));const novoPago=(fresh.pedidos||[]).find(x=>['pago','preparando','pronto','em_entrega'].includes(String(x.status))&&!['pago','preparando','pronto','em_entrega','concluido'].includes(String(lastOrderSnapshot.get(String(x.id))||'')));orders=fresh;if(cfg)cfg.creditos=fresh.creditos||cfg.creditos;lastOrderSnapshot=next;render();updateAutoStatus();if(novoPago){toast('🔔 Novo pedido recebido: '+novoPago.codigo);try{navigator.vibrate?.([180,100,180])}catch{}}}catch(e){updateAutoStatus(false)}}
+function updateAutoStatus(ok=true){if(!$('ordersAutoStatus'))return;$('ordersAutoStatus').textContent=(ok?'Atualizado ':'Falha na atualização · tentativa novamente em até 60 s · ')+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})+' · atualização automática a cada 60 s.'}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg)refreshOrdersOnly()});
+function render(){const e=cfg.empresa;$('empresaNome').textContent=e.nome;$('statusLinha').textContent=e.aceitando_pedidos?'🟢 Empresa aberta e recebendo pedidos':'⚫ Empresa fechada para pedidos';$('toggleOpen').textContent=e.aceitando_pedidos?'Pausar pedidos':'Abrir empresa';$('toggleOpen').className=e.aceitando_pedidos?'btn danger':'btn gold';$('kPedidos').textContent=(orders.pedidos||[]).length;$('kCreditos').textContent=e.modelo_recebimento==='banco_creditos'?(cfg.creditos?.disponiveis??0):'—';$('kModelo').textContent=e.modelo_recebimento==='banco_creditos'?'Banco + créditos':'Mercado Pago';$('kCadastro').textContent=cfg.cadastro?.completo?'Completo':'Incompleto';let alerts=[];if(e.modelo_recebimento==='banco_creditos'&&Number(cfg.creditos?.saldo_total||0)===3&&Number(cfg.creditos?.reservados||0)===0)alerts.push('<div class="notice ok"><strong>Você começou com 3 créditos gratuitos.</strong><br>Assim que conectar o banco, já pode receber até 3 pedidos pagos sem fazer recarga.</div>');if(!cfg.cadastro?.completo&&Array.isArray(cfg.cadastro?.faltando)&&cfg.cadastro.faltando.length)alerts.push(`<div class="notice warn"><strong>Falta para receber pedidos:</strong><br>${cfg.cadastro.faltando.map(CardapioCore.esc).join(' · ')}</div>`);if(orders.alerta_creditos)alerts.push(`<div class="notice ${orders.alerta_creditos.tipo==='sem_creditos'?'bad':'warn'}">${CardapioCore.esc(orders.alerta_creditos.mensagem)}</div>`);$('alerta').innerHTML=alerts.join('');renderCommercial();renderPedidos();renderProdutos();renderEmpresa();renderRecebimento()}
+function commercialMoney(v){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(Number(v||0))}
+function commercialDate(v){if(!v)return '—';try{return new Date(v).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}catch{return String(v)}}
+function commercialTypeByCode(code){return commercialInfo?.catalogo?.find(x=>x.codigo===code)?.tipo||''}
+function renderCommercial(){
+  const box=$('commercialProducts'),current=$('commercialCurrent'),pix=$('commercialPix');if(!box||!current||!pix)return;
+  if(!commercialInfo?.ok){box.innerHTML='<div class="notice warn">A área comercial não pôde ser carregada agora. Clique em Atualizar para tentar novamente.</div>';current.innerHTML='';pix.innerHTML='';return}
+  const catalogo=commercialInfo.catalogo||[],compras=commercialInfo.compras||[],prods=commercialInfo.produtos||[];
+  const ativos=compras.filter(x=>x.status==='ativo'),pendentes=compras.filter(x=>x.status==='pendente');
+  current.innerHTML=ativos.length||pendentes.length?`<div class="card commercial-status-card"><h3>Seus espaços</h3>${[...ativos,...pendentes].map(c=>{const p=catalogo.find(x=>x.codigo===c.codigo_produto);return `<div class="commercial-status-row"><span><strong>${CardapioCore.esc(p?.nome||c.codigo_produto)}</strong><small>${c.status==='ativo'?'Ativo até '+commercialDate(c.fim_em):'PIX aguardando pagamento até '+commercialDate(c.reserva_expira_em)}</small></span><span class="tag ${c.status==='ativo'?'ok':'warn'}">${c.status==='ativo'?'ATIVO':'PENDENTE'}</span></div>`}).join('')}</div>`:'';
+  const ownTypes=new Set(compras.filter(x=>x.status==='ativo'||x.status==='pendente').map(x=>commercialTypeByCode(x.codigo_produto)));
+  box.innerHTML=catalogo.map(c=>{
+    const blocked=ownTypes.has(c.tipo)||Number(c.disponiveis||0)<=0;
+    const offer=c.tipo==='oferta';
+    const choices=prods.map(p=>`<option value="${p.id}" data-price="${Number(p.preco||0)}">${CardapioCore.esc(p.nome)} — ${commercialMoney(p.preco)}</option>`).join('');
+    return `<article class="commercial-product ${c.tipo}"><div class="commercial-product-head"><span class="commercial-icon">${c.tipo==='vitrine'?'★':c.tipo==='destaque'?'◆':'%'}</span><span class="tag ${Number(c.disponiveis||0)>0?'ok':'bad'}">${Number(c.disponiveis||0)} espaço${Number(c.disponiveis||0)===1?'':'s'} livre${Number(c.disponiveis||0)===1?'':'s'}</span></div><h3>${CardapioCore.esc(c.nome)}</h3><p>${CardapioCore.esc(c.descricao)}</p><div class="commercial-price">${commercialMoney(c.valor)} <small>/ ${Number(c.duracao_dias)} dia${Number(c.duracao_dias)===1?'':'s'}</small></div>${offer?`<div class="field"><label>Produto da oferta</label><select id="commercialProd_${c.codigo}">${choices||'<option value="">Cadastre um produto primeiro</option>'}</select></div><div class="field"><label>Preço promocional</label><input id="commercialPrice_${c.codigo}" inputmode="decimal" placeholder="Ex.: 19,90"><span class="small muted">O preço da oferta deve ser igual ou menor que o preço atual.</span></div>`:''}<button class="btn gold commercial-buy" type="button" data-commercial-buy="${c.codigo}" ${blocked||offer&&!prods.length?'disabled':''}>${ownTypes.has(c.tipo)?'Você já tem este tipo ativo':Number(c.disponiveis||0)<=0?'Sem espaço agora':'Comprar com PIX'}</button></article>`;
+  }).join('');
+  const pend=pendentes.find(x=>x.qr_code);
+  pix.innerHTML=pend?`<div class="card commercial-pix"><div>${pend.qr_code_base64?`<img src="data:image/png;base64,${pend.qr_code_base64}" alt="QR Code PIX">`:''}</div><div><span class="tag warn">PIX PENDENTE</span><h3>Finalize sua contratação</h3><p>${commercialMoney(pend.valor)} · reserva até ${commercialDate(pend.reserva_expira_em)}</p><textarea readonly id="commercialPixCode">${CardapioCore.esc(pend.qr_code||'')}</textarea><div class="inline"><button class="btn gold" type="button" id="copyCommercialPix">Copiar PIX</button><button class="btn" type="button" id="refreshCommercial">Já paguei — verificar</button></div></div></div>`:'';
+  if($('copyCommercialPix'))$('copyCommercialPix').onclick=()=>navigator.clipboard.writeText($('commercialPixCode').value||'').then(()=>toast('PIX copiado.')).catch(()=>toast('Não foi possível copiar.'));
+  if($('refreshCommercial'))$('refreshCommercial').onclick=refreshCommercial;
+}
+async function refreshCommercial(){try{commercialInfo=await CardapioCore.fn('cardapio-comercial-status',{method:'GET',auth:true});renderCommercial();toast('Situação atualizada.')}catch(e){toast('Não foi possível atualizar agora.')}}
+async function buyCommercial(codigo){
+  const c=commercialInfo?.catalogo?.find(x=>x.codigo===codigo);if(!c)return;
+  const body={codigo};
+  if(c.tipo==='oferta'){
+    const sel=$('commercialProd_'+codigo),price=$('commercialPrice_'+codigo);if(!sel?.value)return toast('Escolha o produto da oferta.');
+    let raw=String(price?.value||'').trim();if(raw.includes(',')&&raw.includes('.'))raw=raw.replace(/\./g,'').replace(',','.');else raw=raw.replace(',','.');const v=Number(raw);if(!Number.isFinite(v)||v<=0)return toast('Informe o preço promocional.');
+    body.produto_id=sel.value;body.preco_oferta=v;
+  }
+  const btn=document.querySelector(`[data-commercial-buy="${codigo}"]`);if(btn)btn.disabled=true;
+  try{await CardapioCore.fn('cardapio-comercial-comprar',{method:'POST',auth:true,body});commercialInfo=await CardapioCore.fn('cardapio-comercial-status',{method:'GET',auth:true});renderCommercial();toast('PIX gerado. O espaço ficou reservado por alguns minutos.')}catch(e){toast(e.data?.message||e.data?.error||'Não foi possível gerar a contratação.')}finally{if(btn)btn.disabled=false}
+}
+$('toggleOpen').onclick=async()=>{try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{aceitando_pedidos:!cfg.empresa.aceitando_pedidos}});await loadAll();toast(cfg.empresa.aceitando_pedidos?'Empresa aberta para pedidos.':'Pedidos pausados.')}catch(e){toast('Não foi possível alterar a operação.')}};
+function statusFlow(o){const steps=o.modalidade==='entrega'?['pago','preparando','em_entrega','concluido']:['pago','preparando','pronto','concluido'];const idx=steps.indexOf(o.status);if(o.status==='aguardando_pagamento')return '<div class="status-flow"><span class="current">Aguardando pagamento</span></div>';if(o.status==='cancelado')return '<div class="status-flow"><span class="cancel">Cancelado</span></div>';return '<div class="status-flow">'+steps.map((s,i)=>`<span class="${i<idx?'done':i===idx?'current':''}">${statusLabel(s)}</span>`).join('')+'</div>'}
+function renderPedidos(){const rows=orders.pedidos||[];$('pedidos').innerHTML=rows.length?rows.map(o=>{const telefone=String(o.cliente_telefone||''),isEntrega=o.modalidade==='entrega',msg=`Olá, ${o.cliente_nome||'cliente'}! Sou da ${cfg?.empresa?.nome||'empresa'} e estamos com seu pedido ${o.codigo} no Busque Cardápio. Precisamos confirmar uma informação${isEntrega?' para a entrega':''}. Pode nos ajudar?`,wa=CardapioCore.waLink(telefone,msg),loc=o.localizacao_entrega,map=loc?.latitude!=null&&loc?.longitude!=null?`https://www.google.com/maps?q=${encodeURIComponent(loc.latitude+','+loc.longitude)}`:'';return `<div class="order-card"><div class="inline"><div><strong>${CardapioCore.esc(o.codigo)}</strong><div class="small muted">${CardapioCore.fmt(o.created_at)} · ${CardapioCore.money(o.total)}</div></div><span class="tag right">${CardapioCore.esc(statusLabel(o.status))}</span></div>${statusFlow(o)}<div class="customer-box"><div class="customer-grid"><div><small>Cliente</small><strong>${CardapioCore.esc(o.cliente_nome||'Cliente')}</strong></div><div><small>WhatsApp</small><strong>${CardapioCore.esc(telefone||'Não informado')}</strong></div><div><small>Modalidade</small><strong>${isEntrega?'Entrega':'Retirada'}</strong></div><div><small>Frete</small><strong>${CardapioCore.money(o.frete||0)}${Number(o.distancia_entrega_km||loc?.distancia_km||0)>0?' · '+Number(o.distancia_entrega_km||loc?.distancia_km).toFixed(1)+' km':''}</strong></div>${isEntrega?`<div class="customer-wide"><small>Endereço de entrega</small><strong>${CardapioCore.esc(o.endereco_entrega||'Não informado')}</strong>${o.complemento?`<span>${CardapioCore.esc(o.complemento)}</span>`:''}</div>`:''}</div><div class="contact-actions">${wa?`<a class="btn whatsapp-action" target="_blank" rel="noopener" href="${CardapioCore.esc(wa)}">💬 Chamar cliente no WhatsApp</a>`:''}${map?`<a class="btn" target="_blank" rel="noopener" href="${CardapioCore.esc(map)}">📍 Abrir localização usada no frete</a>`:''}</div>${isEntrega?'<div class="small muted">Se houver dúvida sobre o ponto exato de entrega, use o WhatsApp para pedir ao cliente que envie a localização atual.</div>':''}</div><div class="small order-items">${(o.itens||[]).map(i=>`${i.quantidade}x ${CardapioCore.esc(i.nome)}${(i.opcoes||[]).length?' — '+i.opcoes.map(x=>CardapioCore.esc(x.nome)).join(', '):''}`).join('<br>')}</div><div class="row-actions">${nextButtons(o).join('')}</div></div>`}).join(''):'<div class="empty"><strong>Nenhum pedido ainda</strong>Quando um cliente pagar, o pedido aparecerá aqui. Esta tela verifica novos pedidos automaticamente a cada 60 segundos enquanto estiver aberta.</div>'}
+function nextButtons(o){const a=[];if(o.status==='pago')a.push(btnStatus(o,'preparando','Iniciar preparo'));if(o.status==='preparando')a.push(btnStatus(o,o.modalidade==='entrega'?'em_entrega':'pronto',o.modalidade==='entrega'?'Saiu para entrega':'Marcar como pronto'));if(['pronto','em_entrega'].includes(o.status))a.push(btnStatus(o,'concluido','Concluir pedido'));return a}function btnStatus(o,s,t){return `<button class="mini primary" onclick="setStatus('${o.id}','${s}')">${t}</button>`}window.setStatus=async(id,status)=>{try{await CardapioCore.fn('cardapio-atualizar-status-pedido',{auth:true,body:{pedido_id:id,status}});await loadAll()}catch(e){toast('Não foi possível atualizar o pedido.')}};
+function renderProdutos(){
+  $('onboardingCardapio').classList.toggle('hidden',products.length>0);
+  if(!products.length){$('produtos').innerHTML='<div class="empty product-empty"><strong>Seu cardápio começa aqui</strong>Cadastre um produto com foto, nome e preço. Na mesma tela você poderá criar sabores, tamanhos e adicionais.<br><button class="btn gold" style="margin-top:14px" onclick="novoProdutoEditor()">Cadastrar primeiro produto</button></div>';return}
+  $('produtos').innerHTML=products.map(p=>`<div class="product-card-simple"><div class="thumb">${p.imagem_url?`<img src="${CardapioCore.esc(p.imagem_url)}" alt="${CardapioCore.esc(p.nome)}" loading="lazy" decoding="async" fetchpriority="low">`:'🍽️'}</div><div class="product-main"><strong>${CardapioCore.esc(p.nome)}</strong><div class="small muted">${CardapioCore.esc(p.categoria)} · a partir de ${CardapioCore.money(p.preco)}</div><span class="tag ${p.disponivel?'ok':'warn'}">${p.disponivel?'Disponível':'Pausado'}</span></div><div class="row-actions"><button class="mini primary" onclick='editProduto(${JSON.stringify(JSON.stringify(p))})'>Editar produto</button><button class="mini danger" onclick="delProduto('${p.id}')">Excluir</button></div></div>`).join('')
+}
+function switchEditorPane(name){const canOptions=Boolean(opProduto?.id);if(name==='opcoes'&&!canOptions)return toast('Salve o produto primeiro.');document.querySelectorAll('.editor-tab').forEach(b=>b.classList.toggle('active',b.dataset.editorPane===name));document.querySelectorAll('.editor-pane').forEach(x=>x.classList.toggle('active',x.id==='editor-'+name));if(name==='opcoes'&&canOptions)loadOpcoes()}
+function fillProductForm(p){$('pfId').value=p?.id||'';$('pfNome').value=p?.nome||'';$('pfDesc').value=p?.descricao||'';$('pfPreco').value=p?.preco??'';$('pfCat').value=p?.categoria||'';$('pfTipo').value='';$('pfDisp').checked=p?.disponivel!==false;$('pfFoto').value='';if(p?.imagem_url){$('pfFotoAtual').innerHTML=`<img src="${CardapioCore.esc(p.imagem_url)}" alt="Foto atual" loading="lazy" decoding="async">`}else{$('pfFotoAtual').innerHTML='<span>🍽️</span><small>Foto do produto</small>'}}
+function openProductEditor(p=null,pane='dados'){opProduto=p;opGrupos=[];$('pfTitulo').textContent=p?'Editar '+p.nome:'Novo produto';$('pfSubtitulo').textContent=p?'Altere os dados ou organize sabores, tamanhos e adicionais.':'Cadastre as informações básicas. Depois você adiciona sabores, tamanhos ou adicionais.';fillProductForm(p);$('editorOpcoesTab').disabled=!p?.id;$('produtoForm').hidden=false;switchEditorPane(pane)}
+window.novoProdutoEditor=()=>openProductEditor(null,'dados');$('novoProduto').onclick=window.novoProdutoEditor;$('onboardingProduto').onclick=window.novoProdutoEditor;
+const PRODUCT_TYPES={pizza:{cat:'Pizzas',name:'Pizza ',price:'Preço do menor tamanho *',help:'Ex.: Pequena R$ 29,90. Depois cadastre Média e Grande em “Tamanhos”.'},lanche:{cat:'Lanches',name:'',price:'Preço *',help:'Preço normal do lanche. Extras entram como acréscimo.'},bebida:{cat:'Bebidas',name:'',price:'Preço inicial *',help:'Pode ser o preço da lata ou menor tamanho. Depois adicione tamanhos se precisar.'},porcao:{cat:'Porções',name:'',price:'Preço *',help:'Preço da porção. Se houver P/M/G, use o menor tamanho aqui.'},combo:{cat:'Combos',name:'Combo ',price:'Preço *',help:'Preço do combo. Adicione escolhas e extras no próximo passo.'},outro:{cat:'',name:'',price:'Preço *',help:'Informe o preço inicial do produto.'}};
+$('pfTipo').onchange=()=>{const t=PRODUCT_TYPES[$('pfTipo').value];if(!t)return;$('pfCat').value=t.cat||$('pfCat').value;$('pfPrecoLabel').textContent=t.price;$('pfPrecoHelp').textContent=t.help;if(!$('pfNome').value&&t.name)$('pfNome').value=t.name;};
+window.editProduto=s=>{const p=JSON.parse(s);openProductEditor(p,'dados')};
+window.delProduto=async id=>{if(!confirm('Excluir este produto? A foto e as opções dele também serão removidas.'))return;try{await CardapioCore.fn('cardapio-gerenciar-produtos',{method:'DELETE',auth:true,body:{id}});await loadAll();toast('Produto excluído.')}catch(e){toast('Não foi possível excluir o produto.')}};
+async function uploadProductImage(id,file){if(!file)return;const webp=await CardapioCore.toWebp(file),form=new FormData();form.append('tipo','produto');form.append('produto_id',id);form.append('file',webp);await CardapioCore.fn('cardapio-upload-imagem',{auth:true,form})}
+$('pfFoto').onchange=()=>{const f=$('pfFoto').files[0];if(f){const u=URL.createObjectURL(f);$('pfFotoAtual').innerHTML=`<img src="${u}" alt="Prévia">`}};
+$('salvarProduto').onclick=async()=>{const btn=$('salvarProduto');if(btn.disabled)return;const nome=$('pfNome').value.trim(),categoria=$('pfCat').value.trim(),preco=Number($('pfPreco').value);if(nome.length<2)return toast('Informe o nome do produto.');if(!categoria)return toast('Informe a categoria.');if(!Number.isFinite(preco)||preco<0)return toast('Informe um preço válido.');btn.disabled=true;const original=btn.textContent;btn.textContent='Salvando...';const id=$('pfId').value,body={nome,descricao:$('pfDesc').value,preco,categoria,disponivel:$('pfDisp').checked};try{const d=await CardapioCore.fn('cardapio-gerenciar-produtos',{method:id?'PATCH':'POST',auth:true,body:id?{...body,id}:body});const productId=id||d.produto?.id;if(productId&&$('pfFoto').files[0])await uploadProductImage(productId,$('pfFoto').files[0]);await loadAll();opProduto=products.find(x=>String(x.id)===String(productId))||d.produto;$('pfId').value=productId;$('pfTitulo').textContent='Editar '+opProduto.nome;$('editorOpcoesTab').disabled=false;fillProductForm(opProduto);toast(d.reutilizado?'Produto já estava sendo salvo; mantivemos apenas um.':'Produto salvo.');switchEditorPane('opcoes')}catch(e){toast('Não foi possível salvar o produto.')}finally{btn.disabled=false;btn.textContent=original}};
+async function loadOpcoes(){if(!opProduto?.id)return;try{const d=await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'GET',auth:true,query:'?produto_id='+encodeURIComponent(opProduto.id)});opGrupos=d.grupos||[];renderOpcoes()}catch(e){toast('Não foi possível carregar as opções.')}}
+function optionDisplayValue(g,o){const base=Number(opProduto?.preco||0),extra=Number(o?.preco_adicional||0);return g.modo_preco==='final'?base+extra:extra}
+function optionStoredValue(g,entered){const n=Number(entered);if(!Number.isFinite(n)||n<0)throw new Error('preco_invalido');if(g.modo_preco==='final'){const base=Number(opProduto?.preco||0);if(n+0.0001<base)throw new Error('preco_final_menor_que_base');return Math.round((n-base)*100)/100}return Math.round(n*100)/100}
+function renderOpcoes(){
+  if(!opGrupos.length){$('gruposAdmin').innerHTML='<div class="empty simple-options-empty"><strong>Nenhuma opção extra ainda</strong>Se o produto é vendido de uma única forma, pode concluir agora. Se tem sabores, tamanhos ou adicionais, use um dos botões acima.</div>';return}
+  $('gruposAdmin').innerHTML=opGrupos.map(g=>{const finalMode=g.modo_preco==='final',label=finalMode?'Preço final':'Valor adicional';const rows=(g.opcoes||[]).map(o=>`<div class="option-simple-row"><input id="on_${o.id}" value="${CardapioCore.esc(o.nome)}" aria-label="Nome da opção"><div class="input-affix compact">${finalMode?'':'<span class="prefix">+</span>'}<span class="prefix currency">R$</span><input id="op_${o.id}" type="number" min="0" step="0.01" value="${optionDisplayValue(g,o).toFixed(2)}" aria-label="${label}"></div><button class="mini" onclick="saveOpcao('${o.id}','${g.id}')">Salvar</button><button class="mini danger" onclick="deleteOpcao('${o.id}')">×</button></div>`).join('');const defaultPrice=finalMode?Number(opProduto?.preco||0).toFixed(2):'0.00';return `<div class="option-simple-group"><div class="option-simple-head"><div><strong>${CardapioCore.esc(g.nome)}</strong><div class="small muted">${g.tipo==='single'?'Cliente escolhe uma opção':'Cliente pode escolher várias'} · ${label}</div></div><button class="mini danger" onclick="deleteGrupo('${g.id}')">Excluir</button></div><div>${rows}</div><div class="option-simple-add"><input id="newName_${g.id}" placeholder="${finalMode?'Nome da opção, ex.: Bacon':'Ex.: Bacon extra'}"><div class="input-affix compact">${finalMode?'':'<span class="prefix">+</span>'}<span class="prefix currency">R$</span><input id="newPrice_${g.id}" type="number" min="0" step="0.01" value="${defaultPrice}"></div><button class="mini primary" onclick="addOpcao('${g.id}')">+ Adicionar</button></div></div>`}).join('')
+}
+function grupoById(id){return opGrupos.find(g=>String(g.id)===String(id))}
+async function createGroup(data){if(!opProduto?.id)return;if(opGrupos.some(g=>String(g.nome).trim().toLowerCase()===String(data.nome).trim().toLowerCase()))return toast('Essa opção já existe neste produto.');try{await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'POST',auth:true,body:{acao:'criar_grupo',produto_id:opProduto.id,...data}});await loadOpcoes();toast('Opção criada. Agora adicione os itens.')}catch(e){toast('Não foi possível criar essa opção.')}}
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{const kind=b.dataset.preset;if(kind==='tamanhos')createGroup({nome:'Escolha o tamanho',tipo:'single',modo_preco:'final',obrigatorio:false,minimo:0,maximo:1});if(kind==='adicionais')createGroup({nome:'Adicionais',tipo:'multiple',modo_preco:'adicional',obrigatorio:false,minimo:0,maximo:20})});
+
+window.addOpcao=async gid=>{const g=grupoById(gid);if(!g)return;const name=$('newName_'+gid).value.trim();if(!name)return toast('Digite o nome da opção.');try{const stored=optionStoredValue(g,$('newPrice_'+gid).value);await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'POST',auth:true,body:{acao:'criar_opcao',grupo_id:gid,nome:name,preco_adicional:stored,disponivel:true}});await loadOpcoes()}catch(e){toast(e.message==='preco_final_menor_que_base'?'O preço final não pode ser menor que o preço base do produto.':'Não foi possível adicionar a opção.')}};
+window.saveOpcao=async(id,gid)=>{const g=grupoById(gid);if(!g)return;try{const stored=optionStoredValue(g,$('op_'+id).value);await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'PATCH',auth:true,body:{acao:'atualizar_opcao',id,nome:$('on_'+id).value,preco_adicional:stored,disponivel:true}});await loadOpcoes();toast('Opção salva.')}catch(e){toast(e.message==='preco_final_menor_que_base'?'O preço final não pode ser menor que o preço base do produto.':'Não foi possível salvar a opção.')}};
+window.deleteOpcao=async id=>{if(!confirm('Excluir esta opção?'))return;await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'DELETE',auth:true,body:{acao:'excluir_opcao',id}});await loadOpcoes()};window.deleteGrupo=async id=>{if(!confirm('Excluir este conjunto de opções?'))return;await CardapioCore.fn('cardapio-gerenciar-opcoes',{method:'DELETE',auth:true,body:{acao:'excluir_grupo',id}});await loadOpcoes()};
+$('voltarDadosProduto').onclick=()=>switchEditorPane('dados');$('concluirProduto').onclick=()=>{$('produtoForm').hidden=true;toast('Produto concluído.')};document.querySelectorAll('.editor-tab').forEach(b=>b.onclick=()=>switchEditorPane(b.dataset.editorPane));
+function syncDeliveryDraft(){
+  if(!$('deliveryRanges'))return deliveryDraft;
+  deliveryDraft=[...$('deliveryRanges').querySelectorAll('.delivery-range-row')].map((row,i)=>({
+    km:row.querySelector('[data-km]')?.value??'',
+    fee:row.querySelector('[data-fee]')?.value??''
+  }));
+  return deliveryDraft;
+}
+function renderDeliveryRanges(){
+  const wrap=$('deliveryRanges');if(!wrap)return;
+  if(!deliveryDraft.length)deliveryDraft=[{km:'',fee:''}];
+  let anterior=0;
+  wrap.innerHTML=deliveryDraft.map((r,i)=>{const atual=Number(r.km),inicio=i===0?'0':(Number(anterior)>0?String(Number(anterior).toLocaleString('pt-BR',{maximumFractionDigits:1})):'—'),faixa=i===0?`0 a ${r.km||'—'} KM`:`Acima de ${inicio} até ${r.km||'—'} KM`;anterior=Number.isFinite(atual)&&atual>0?atual:anterior;return `<div class="delivery-range-row">
+    <div class="field"><label>Distância <span class="small muted">(${faixa})</span></label><div class="input-affix"><input data-km type="number" min="0.1" step="0.1" value="${CardapioCore.esc(r.km??'')}"><span class="suffix">KM</span></div></div>
+    <div class="field"><label>Frete desta faixa</label><div class="input-affix"><span class="prefix">R$</span><input data-fee type="number" min="0" step="0.01" value="${CardapioCore.esc(r.fee??'')}"></div></div>
+    <button class="mini danger delivery-remove" type="button" onclick="removeDeliveryRange(${i})" ${deliveryDraft.length===1?'disabled':''}>×</button>
+  </div>`}).join('');
+}
+window.removeDeliveryRange=i=>{syncDeliveryDraft();deliveryDraft.splice(i,1);if(!deliveryDraft.length)deliveryDraft=[{km:'',fee:''}];renderDeliveryRanges()};
+$('addDeliveryRange').onclick=()=>{syncDeliveryDraft();if(deliveryDraft.length>=40)return toast('Limite de 40 faixas de entrega.');const prev=deliveryDraft[deliveryDraft.length-1]||{};const nextKm=Number(prev.km)>0?Math.round((Number(prev.km)+1)*10)/10:'';deliveryDraft.push({km:nextKm,fee:''});renderDeliveryRanges()};
+function collectDeliveryRanges(){
+  syncDeliveryDraft();
+  const out=deliveryDraft.map(r=>({km:Number(r.km),fee:Number(r.fee)}));
+  if(out.some(r=>!Number.isFinite(r.km)||r.km<=0||!Number.isFinite(r.fee)||r.fee<0))throw new Error('faixa_invalida');
+  out.sort((a,b)=>a.km-b.km);
+  const seen=new Set();for(const r of out){if(seen.has(r.km))throw new Error('km_repetido');seen.add(r.km)}
+  return out;
+}
+function renderEmpresa(){const e=cfg.empresa;$('cfgNome').value=e.nome||'';$('cfgWhats').value=e.whatsapp||'';$('cfgEndereco').value=e.endereco||'';$('cfgCats').value=(e.categorias||[]).join(', ');$('cfgFecha').value=(e.horario_fechamento||'').slice(0,5);$('fotoAtual').innerHTML=e.foto_url?`<img src="${CardapioCore.esc(e.foto_url)}" alt="Foto da empresa" loading="lazy" decoding="async">`:'Sem foto';$('openHelp').className='notice '+(e.aceitando_pedidos?'ok':'warn');$('openHelp').innerHTML=e.aceitando_pedidos?'<strong>Empresa aberta.</strong><br>Ela aparece para clientes. Se o recebimento ainda não estiver pronto, o cardápio fica visível mas o pedido fica bloqueado.':'<strong>Empresa fechada.</strong><br>Use “Abrir empresa” no topo quando quiser começar a receber pedidos.';const locOk=e.latitude!=null&&e.longitude!=null;$('companyLocationStatus').textContent=locOk?'Localização salva e pronta para cálculo de rota pelas ruas.':'Ainda não definida. A retirada continua funcionando, mas a entrega automática precisa desta localização.';$('companyLocationStatus').className='small location-status '+(locOk?'oktext':'warntext');$('setCompanyLocation').textContent=locOk?'Atualizar localização':'Usar localização atual';const del=cfg.entrega||{modo:'pickup',faixas:[]};$('cfgDelivery').value=del.modo||'pickup';deliveryDraft=(Array.isArray(del.faixas)&&del.faixas.length?del.faixas:[{km:'',fee:''}]).map(x=>({km:x.km??'',fee:x.fee??''}));renderDeliveryRanges();toggleDeliveryFields()}
+$('salvarEmpresa').onclick=async()=>{try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{nome:$('cfgNome').value,whatsapp:$('cfgWhats').value,endereco:$('cfgEndereco').value,categorias:$('cfgCats').value.split(',').map(x=>x.trim()).filter(Boolean),horario_abertura:null,horario_fechamento:$('cfgFecha').value||null}});await loadAll();toast('Dados salvos.')}catch(e){toast('Não foi possível salvar.')}};
+$('enviarFoto').onclick=async()=>{const f=$('fotoFile').files[0];if(!f)return toast('Escolha uma imagem.');try{const webp=await CardapioCore.toWebp(f),form=new FormData();form.append('tipo','empresa');form.append('file',webp);await CardapioCore.fn('cardapio-upload-imagem',{auth:true,form});await loadAll();toast('Foto atualizada.')}catch(e){toast(e.message)}};
+function toggleDeliveryFields(){document.querySelectorAll('.delivery-own').forEach(x=>x.classList.toggle('hidden',$('cfgDelivery').value!=='own'))}
+
+$('setCompanyLocation').onclick=()=>{const b=$('setCompanyLocation');if(!navigator.geolocation)return toast('Seu navegador não permite obter a localização.');b.disabled=true;b.textContent='Localizando...';navigator.geolocation.getCurrentPosition(async pos=>{try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{latitude:pos.coords.latitude,longitude:pos.coords.longitude}});await loadAll();toast('Localização da empresa salva.')}catch(e){toast('Não foi possível salvar a localização.')}finally{b.disabled=false}},()=>{b.disabled=false;b.textContent='Usar localização atual';toast('Não foi possível acessar a localização. Autorize o navegador e tente novamente.')},{enableHighAccuracy:true,timeout:12000,maximumAge:60000})};
+$('cfgDelivery').onchange=toggleDeliveryFields;
+$('salvarEntrega').onclick=async()=>{const own=$('cfgDelivery').value==='own';try{const faixas=own?collectDeliveryRanges():[];await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{entrega:{modo:$('cfgDelivery').value,faixas}}});await loadAll();toast('Entrega salva.')}catch(e){toast(e.message==='km_repetido'?'Não repita a mesma distância em duas faixas.':e.message==='faixa_invalida'?'Preencha KM e taxa corretamente em todas as faixas.':'Não foi possível salvar a entrega.')}};
+function connectionLabel(status){return status==='conectado'?'Conectado':status==='erro'?'Erro na conexão':status==='pendente'?'Configuração pendente':'Não conectado'}
+function renderRecebimento(){
+  document.querySelectorAll('input[name=modelo]').forEach(r=>r.checked=r.value===cfg.empresa.modelo_recebimento);
+  document.querySelectorAll('.payment-choice').forEach(l=>l.classList.toggle('selected',l.querySelector('input').checked));
+  const banco=bankInfo?.conexao||cfg.banco||null,mpConnected=cfg.mercado_pago?.status==='conectado',bankConnected=banco?.status==='conectado';
+  $('recebStatus').innerHTML=cfg.empresa.modelo_recebimento==='mercadopago_split'
+    ?`<div class="connection-summary ${mpConnected?'ok':''}"><span>${mpConnected?'✅':'⚠️'}</span><div><strong>Mercado Pago</strong><small>${mpConnected?'Conta conectada e pronta para pagamentos.':'Falta conectar a conta para liberar pedidos.'}</small></div></div>`
+    :`<div class="connection-summary ${bankConnected?'ok':''}"><span>${bankConnected?'✅':'⚠️'}</span><div><strong>${CardapioCore.esc(banco?.banco_nome||'Banco ainda não conectado')}</strong><small>${bankConnected?'Recebimento direto configurado.':'Escolha uma instituição e conclua a conexão.'}</small></div></div>`;
+  $('mpBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='mercadopago_split');
+  $('bankBox').classList.toggle('hidden',cfg.empresa.modelo_recebimento!=='banco_creditos');
+  $('saldoCreditos').textContent=cfg.creditos?.disponiveis??0;
+  $('mpConnectionPill').textContent=mpConnected?'✓ Conectado':'Não conectado';$('mpConnectionPill').className='connection-pill '+(mpConnected?'connected':'');
+  $('conectarMP').textContent=mpConnected?'Reconectar Mercado Pago':'⚡ Conectar Mercado Pago automaticamente';
+  renderBankCatalog();
+}
+function renderBankCatalog(){
+  const banks=bankInfo?.bancos_suportados||[],current=bankInfo?.conexao?.banco_codigo||'';
+  const active=banks.filter(b=>b.selecionavel),future=banks.filter(b=>!b.selecionavel);
+  $('bankCode').innerHTML='<optgroup label="Disponíveis agora">'+active.map(b=>`<option value="${CardapioCore.esc(b.codigo)}" ${b.codigo===current?'selected':''}>${CardapioCore.esc(b.nome)}</option>`).join('')+'</optgroup>'+(future.length?'<optgroup label="Em homologação / em breve">'+future.map(b=>`<option value="${CardapioCore.esc(b.codigo)}" disabled>${CardapioCore.esc(b.nome)} — em breve</option>`).join('')+'</optgroup>':'');
+  if(!$('bankCode').value&&active[0])$('bankCode').value=active[0].codigo;
+  $('bankWebhookUrl').value=bankInfo?.webhook_url||'';
+  if(bankInfo?.conexao?.pix_chave)$('bankPix').value=bankInfo.conexao.pix_chave;
+  const connected=bankInfo?.conexao?.status==='conectado';
+  $('bankConnectionPill').textContent=connectionLabel(bankInfo?.conexao?.status);$('bankConnectionPill').className='connection-pill '+(connected?'connected':bankInfo?.conexao?.status==='erro'?'error':'');
+  $('bankConnectedBanner').classList.toggle('hidden',!connected);
+  if(connected)$('bankConnectedBanner').innerHTML=`<strong>✅ ${CardapioCore.esc(bankInfo.conexao.banco_nome)} conectado.</strong><br>O sistema já validou a integração${bankInfo.conexao.webhook_configurado?' e o webhook está configurado':''}. Você pode receber pedidos por este modelo. <button class="mini" type="button" id="editBankConnection" style="margin-left:8px">Alterar configuração</button>`;
+  $('bankSetupFlow').classList.toggle('hidden',connected&&!bankSetupForceOpen);
+  $('desconectarBanco').classList.toggle('hidden',!connected);
+  updateBankFields();
+  const edit=$('editBankConnection');if(edit)edit.onclick=()=>{bankSetupForceOpen=true;$('bankSetupFlow').classList.remove('hidden');updateBankFields()};
+}
+function selectedBank(){return (bankInfo?.bancos_suportados||[]).find(b=>b.codigo===$('bankCode').value)||null}
+const BANK_GUIDES={
+  banrisul:['Entre no portal de desenvolvedores/integrações da sua conta empresarial.','Habilite a API Pix para cobrança e recebimento.','Gere ou obtenha Client ID, Client Secret, certificado mTLS e chave privada.','Use uma chave Pix da mesma conta habilitada na API.'],
+  sicredi:['Solicite ou habilite o acesso à API Pix da conta PJ no Sicredi.','No ambiente de desenvolvedores, obtenha Client ID e Client Secret.','Baixe o certificado mTLS e a respectiva chave privada.','Informe a chave Pix vinculada à conta recebedora.'],
+  inter:['Use uma conta Inter Empresas PJ com API Banking habilitada.','No portal de APIs do Inter, crie a aplicação e gere Client ID e Client Secret.','Baixe o certificado e a chave privada da aplicação.','Informe a chave Pix da conta que receberá os pedidos.'],
+  efi:['No painel Efí, crie uma aplicação para API Pix.','Copie Client ID e Client Secret da aplicação.','Baixe o certificado de produção da aplicação e tenha a chave privada correspondente.','Informe a chave Pix cadastrada na Efí.'],
+  picpay:['No ambiente PicPay Empresas/Business, habilite a API Pix Checkout.','Obtenha Client ID e Client Secret.','Cadastre a URL de webhook mostrada nesta tela.','Copie o token de webhook criado no PicPay e cole aqui.'],
+  pagbank:['No PagBank/PagSeguro, acesse as credenciais da API da conta empresarial.','Gere/copiei o Token API da conta que receberá os pagamentos.','Cole apenas o token aqui. O Busque valida a chave pública do webhook automaticamente.']
+};
+function renderBankGuide(b){
+  const steps=BANK_GUIDES[b?.codigo]||['Acesse o portal ou suporte empresarial da instituição.','Procure por API Pix, cobrança Pix ou credenciais para integração.','Copie somente as credenciais solicitadas abaixo.'];
+  const link=b?.fonte_oficial?`<a class="btn" target="_blank" rel="noopener" href="${CardapioCore.esc(b.fonte_oficial)}">Abrir página oficial da instituição ↗</a>`:'';
+  $('bankGuide').innerHTML=`<ol>${steps.map(x=>`<li>${CardapioCore.esc(x)}</li>`).join('')}</ol><div class="notice warn"><strong>Importante:</strong> nunca informe senha do aplicativo, internet banking, cartão ou código de segurança.</div>${link}`;
+}
+function updateBankFields(){
+  const b=selectedBank(),code=b?.codigo||'',pic=code==='picpay',pag=code==='pagbank',bcb=!pic&&!pag&&b?.tipo_integracao==='pix_bcb_mtls';
+  $('bankFieldsBcb').classList.toggle('hidden',!bcb);$('bankFieldsPicpay').classList.toggle('hidden',!pic);$('bankFieldsPagbank').classList.toggle('hidden',!pag);
+  const sandboxOpt=$('bankAmbiente').querySelector('option[value=sandbox]');sandboxOpt.disabled=!b?.ambiente_homologacao;if(!b?.ambiente_homologacao&&$('bankAmbiente').value==='sandbox')$('bankAmbiente').value='producao';
+  $('bankEnvironmentField').classList.toggle('hidden',!b?.ambiente_homologacao);
+  $('bankSupportNote').className='notice '+(b?.selecionavel?'ok':'warn');
+  $('bankSupportNote').innerHTML=b?`<strong>${CardapioCore.esc(b.nome)}</strong><br>${CardapioCore.esc(b.observacao||'Integração disponível.')}`:'Selecione uma instituição.';
+  $('conectarBanco').disabled=!b?.selecionavel;
+  $('bankFieldsIntro').textContent=bcb?'Este banco usa API Pix com certificado. Cole os quatro dados técnicos fornecidos pelo banco e sua chave Pix.':pic?'O PicPay precisa das credenciais da API e do token do webhook.':pag?'O PagBank precisa apenas do token API da conta empresarial.':'Selecione uma instituição.';
+  const items=[];if(b?.requer_pix_chave)items.push('Chave Pix');if(b?.requer_client_credentials)items.push('Client ID + Secret');if(b?.requer_certificado)items.push('Certificado mTLS');if(b?.requer_api_token)items.push('Token API');if(b?.requer_webhook_token)items.push('Token de webhook');
+  $('bankAutoChecklist').innerHTML=(items.length?items:['Nenhuma credencial disponível']).map(x=>`<span>✓ ${CardapioCore.esc(x)}</span>`).join('');
+  renderBankGuide(b);
+  $('bankConnectResult').innerHTML=bankInfo?.conexao?.ultimo_erro&&bankInfo?.conexao?.banco_codigo===code?`<div class="notice bad"><strong>Último teste não passou.</strong><br>${CardapioCore.esc(bankInfo.conexao.ultimo_erro)}</div>`:'';
+}
+$('bankCode').onchange=()=>{bankSetupForceOpen=true;updateBankFields()};
+async function trocarModelo(m){$('mpBox').classList.toggle('hidden',m!=='mercadopago_split');$('bankBox').classList.toggle('hidden',m!=='banco_creditos');document.querySelectorAll('.payment-choice').forEach(l=>l.classList.toggle('selected',l.querySelector('input').value===m));try{await CardapioCore.fn('cardapio-configuracoes-empresa',{method:'PATCH',auth:true,body:{modelo_recebimento:m}});await loadAll();toast(m==='banco_creditos'?'Modo banco + créditos selecionado.':'Modo Mercado Pago selecionado.')}catch(e){toast('Não foi possível mudar a forma de recebimento.')}}document.querySelectorAll('input[name=modelo]').forEach(r=>r.onchange=()=>trocarModelo(r.value));
+$('conectarMP').onclick=async()=>{try{const d=await CardapioCore.fn('cardapio-mp-oauth-start-real',{auth:true,body:{}});mpPopup=window.open(d.url,'busque_cardapio_mp','width=720,height=780');if(!mpPopup)return toast('O navegador bloqueou a janela. Libere pop-ups e tente novamente.');$('mpConnectHelp').textContent='Aguardando autorização no Mercado Pago...';toast('Autorize a conta na janela do Mercado Pago.')}catch(e){toast(e.data?.faltando?.length?'Complete o cadastro: '+e.data.faltando.join(', '):'Não foi possível iniciar a conexão.')}};
+$('verificarMP').onclick=async()=>{try{await loadAll();toast(cfg.mercado_pago?.status==='conectado'?'Mercado Pago conectado e pronto.':'A autorização ainda não apareceu.')}catch(e){toast('Não foi possível verificar agora.')}};
+window.addEventListener('message',async ev=>{if(ev.origin!=='https://xwkmsqawiimouilldwit.supabase.co')return;if(ev.data?.type==='busque-cardapio-mp-connected'){try{await loadAll();$('mpConnectHelp').textContent='✅ Mercado Pago autorizado e conectado.';toast('Mercado Pago conectado com sucesso.')}catch(e){toast('A conta foi autorizada. Clique em Atualizar para confirmar.')}}if(ev.data?.type==='busque-cardapio-mp-error'){toast('O Mercado Pago não concluiu a autorização.')}});
+$('conectarBanco').onclick=async()=>{const btn=$('conectarBanco'),old=btn.textContent;try{const code=$('bankCode').value,b=selectedBank();if(!b?.selecionavel)return toast('Essa instituição ainda está em homologação.');btn.disabled=true;btn.textContent='Testando conexão...';$('bankConnectResult').innerHTML='<div class="notice">⏳ Validando os dados diretamente com a instituição. Não feche esta tela.</div>';let body={banco_codigo:code,ambiente:$('bankAmbiente').value};if(code==='picpay')body={...body,client_id:$('picpayClient').value,client_secret:$('picpaySecret').value,webhook_token:$('picpayWebhook').value};else if(code==='pagbank')body={...body,api_token:$('pagbankToken').value};else body={...body,pix_chave:$('bankPix').value,client_id:$('bankClient').value,client_secret:$('bankSecret').value,certificado_pem:$('bankCert').value,chave_privada_pem:$('bankKey').value};const d=await CardapioCore.fn('cardapio-banco-conexao',{method:'PUT',auth:true,body});bankSetupForceOpen=!d.conectado;await loadAll();$('bankConnectResult').innerHTML=d.conectado?'<div class="notice ok"><strong>✅ Conexão concluída.</strong><br>Credenciais validadas e recebimento liberado.</div>':`<div class="notice warn">${CardapioCore.esc(d.proxima_etapa||'Configuração salva. Complete a próxima etapa indicada.')}</div>`;toast(d.conectado?'Instituição conectada e testada.':(d.proxima_etapa||'Configuração salva.'))}catch(e){const m=e.data?.detalhe||e.data?.observacao||'Não foi possível conectar a instituição.';$('bankConnectResult').innerHTML=`<div class="notice bad"><strong>Não conseguimos validar a conexão.</strong><br>${CardapioCore.esc(m)}</div>`;toast(m)}finally{btn.disabled=false;btn.textContent=old}};
+$('desconectarBanco').onclick=async()=>{if(!confirm('Desconectar esta instituição? Os dados de conexão serão removidos do sistema.'))return;try{await CardapioCore.fn('cardapio-banco-conexao',{method:'DELETE',auth:true});bankSetupForceOpen=true;await loadAll();toast('Instituição desconectada.')}catch(e){toast('Não foi possível desconectar agora.')}};
+$('copyBankWebhook').onclick=()=>navigator.clipboard.writeText($('bankWebhookUrl').value||'').then(()=>toast('URL do webhook copiada.')).catch(()=>toast('Não foi possível copiar.'));
+$('recarregar').onclick=async()=>{try{const d=await CardapioCore.fn('cardapio-creditos-criar-recarga',{auth:true,body:{quantidade:Number($('qtdCreditos').value)}});const qrImg=d.qr_code_base64?`<img class="qr-img" src="data:image/png;base64,${d.qr_code_base64}" alt="QR Code Pix">`:'';$('pixRecarga').innerHTML=`<div class="qr-box">${qrImg}<div><strong>Pix da recarga</strong><div class="small muted">${d.quantidade} créditos · ${CardapioCore.money(d.valor_total)}</div><code>${CardapioCore.esc(d.qr_code)}</code><br><button class="mini" id="copyRecharge">Copiar Pix</button><div class="small muted">O saldo só aumenta após o Mercado Pago confirmar o pagamento.</div></div></div>`;$('copyRecharge').onclick=()=>navigator.clipboard.writeText(d.qr_code||'')}catch(e){toast('Não foi possível gerar a recarga.')}};
+$('commercialProducts').onclick=e=>{const b=e.target.closest('[data-commercial-buy]');if(b)buyCommercial(b.dataset.commercialBuy)};
+function selectPane(name){const btn=[...document.querySelectorAll('.tab')].find(x=>x.dataset.pane===name);if(!btn)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('active',x.id==='pane-'+name))}function applyInitialTab(){const q=new URLSearchParams(location.search);const name=q.get('tab');if(name)selectPane(name)}document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>selectPane(b.dataset.pane));document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).hidden=true);boot();
+</script></body></html>

@@ -20,8 +20,10 @@
         content="Cadastre sua empresa ou serviço no Busque Torres."
     >
     <meta name="theme-color" content="#0a192f">
+    <link rel="preconnect" href="https://xwkmsqawiimouilldwit.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="//xwkmsqawiimouilldwit.supabase.co">
 
-    <title>Cadastre seu Negócio - Busque Torres</title>
+    <title>Cortesia 30 dias | Cadastre seu Negócio - Busque Torres</title>
 
     <style>
         :root {
@@ -432,6 +434,7 @@
         }
         .sucesso-acoes a { background: var(--azul-escuro); color: var(--dourado); }
         .sucesso-acoes button { background: #fff; color: var(--azul-escuro); border: 1px solid var(--borda); }
+        .beneficio-cadastro{max-width:620px;margin:0 auto 20px;padding:17px;border:1px solid #86efac;border-radius:13px;background:#fff;text-align:left}.beneficio-cadastro[hidden]{display:none!important}.beneficio-cadastro strong{display:block;color:#14532d;margin-bottom:6px}.beneficio-codigo-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.beneficio-codigo{display:inline-flex;padding:10px 13px;border:1px dashed #16a34a;border-radius:10px;background:#f0fdf4;color:#14532d;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:1.05rem;font-weight:950;letter-spacing:.05em}.beneficio-copy{border:1px solid #86efac;border-radius:10px;padding:10px 12px;background:#fff;color:#14532d;font-weight:850;cursor:pointer}.beneficio-cadastro small{display:block;color:#3f6b50;line-height:1.5}
 
         .aviso-gratuidade {
             margin: 0 0 18px; padding: 16px 18px; border-radius: 12px;
@@ -655,6 +658,8 @@
         .wizard-step-indicator span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#e2e8f0;color:#475569}
         .wizard-step-indicator.ativo{color:var(--azul-escuro)}
         .wizard-step-indicator.ativo span,.wizard-step-indicator.concluido span{background:var(--azul-escuro);color:var(--dourado)}
+        .wizard-step-indicator.erro{color:var(--vermelho)}
+        .wizard-step-indicator.erro span{background:var(--vermelho);color:#fff}
         .form-etapa{display:none}
         .form-etapa.ativa{display:block;animation:etapaEntrada .22s ease}
         @keyframes etapaEntrada{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -664,6 +669,16 @@
         .wizard-next{margin-left:auto;background:var(--azul-escuro);color:var(--dourado)}
         .subcategoria-hint{margin-top:6px;color:var(--texto-suave);font-size:.79rem}
         @media(max-width:680px){.wizard-progress{margin-left:20px;margin-right:20px;gap:3px}.wizard-step-indicator{font-size:.62rem}.wizard-step-indicator span{width:30px;height:30px}}
+
+
+        .pagamento-cadastro{margin:0 34px 30px;border:1px solid var(--borda-clara);border-radius:16px;background:#fff;overflow:hidden;box-shadow:var(--sombra)}
+        .pagamento-cadastro[hidden]{display:none!important}.pagamento-cabecalho{padding:24px 24px 18px;background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:#fff}.pagamento-cabecalho h2{margin:6px 0 6px;font-size:1.55rem}.pagamento-cabecalho p{margin:0;color:#d7e0ea;line-height:1.5;font-size:.9rem}.pagamento-kicker{display:inline-block;color:var(--dourado-claro);font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+        .pagamento-resumo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:18px 24px;background:#f8fafc;border-bottom:1px solid var(--borda-clara)}.pagamento-resumo div{padding:11px;border:1px solid #e8edf3;border-radius:10px;background:#fff}.pagamento-resumo small{display:block;color:var(--texto-suave);font-size:.72rem;font-weight:800}.pagamento-resumo strong{display:block;margin-top:4px;color:var(--azul-escuro);font-size:.95rem}
+        .pagamento-bloco{padding:21px 24px;border-bottom:1px solid var(--borda-clara)}.pagamento-bloco:last-child{border-bottom:0}.pagamento-bloco h3{margin:0 0 5px;color:var(--azul-escuro);font-size:1.05rem}.pagamento-ajuda,.pagamento-nota{margin:0 0 14px;color:var(--texto-suave);font-size:.8rem;line-height:1.5}.pagamento-nota{text-align:center;margin:10px 0 0}.pagamento-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pagamento-campo{display:flex;flex-direction:column;gap:6px;color:var(--azul-escuro);font-size:.82rem;font-weight:800}.pagamento-campo.full{grid-column:1/-1}.pagamento-campo input,.pagamento-campo select{width:100%;border:1px solid var(--borda);border-radius:9px;padding:12px 13px;background:#fff;color:var(--texto);outline:none}.pagamento-campo input:focus,.pagamento-campo select:focus{border-color:var(--azul);box-shadow:0 0 0 3px rgba(23,42,69,.1)}
+        .pagamento-escolhas{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.pagamento-escolhas label,.pagamento-check{display:flex;align-items:flex-start;gap:9px;padding:11px 12px;border:1px solid var(--borda-clara);border-radius:10px;background:#f8fafc;color:#475569;font-size:.8rem;line-height:1.45}.pagamento-escolhas input,.pagamento-check input{margin-top:2px;flex:0 0 auto;accent-color:var(--azul-escuro)}.pagamento-check{margin-top:10px}.pagamento-check a{color:#0e4d82;font-weight:800}.pagamento-meta{margin-top:8px;color:var(--texto-suave);font-size:.72rem;overflow-wrap:anywhere}
+        .pagamento-acoes{display:grid;gap:9px;margin-top:14px}.pagamento-btn{width:100%;border:0;border-radius:11px;padding:14px 16px;background:linear-gradient(135deg,var(--dourado-claro),var(--dourado));color:var(--azul-escuro);font-weight:900;cursor:pointer}.pagamento-btn.secundario{background:#fff;border:1px solid var(--borda);color:var(--azul-escuro);padding:12px}.pagamento-btn:disabled{opacity:.5;cursor:not-allowed}.pagamento-msg{display:none;margin-top:12px;padding:11px 12px;border-radius:10px;font-size:.82rem;font-weight:700;line-height:1.45}.pagamento-msg.show{display:block}.pagamento-msg.erro{background:var(--vermelho-claro);color:var(--vermelho)}.pagamento-msg.sucesso{background:var(--verde-claro);color:var(--verde)}
+        .pagamento-pix{margin-top:18px;padding:18px;border:1px solid #e2d39c;border-radius:14px;background:#fffdf5;text-align:center}.pagamento-pix[hidden]{display:none!important}.pagamento-pix h3{margin:6px 0 4px;font-size:1.3rem}.pagamento-pix>p{margin:0;color:var(--texto-suave);font-size:.8rem}.pagamento-qr{width:min(270px,80vw);aspect-ratio:1;margin:16px auto 10px;padding:12px;border:1px solid var(--borda-clara);border-radius:14px;background:#fff}.pagamento-qr img{display:block;width:100%;height:100%;object-fit:contain}.pagamento-pix textarea{width:100%;min-height:78px;resize:none;border:1px solid var(--borda);border-radius:10px;padding:10px;background:#fff;color:#334155;font:10px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace}.pagamento-status{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:14px;color:#7a5a0a;font-size:.82rem;font-weight:900}.pagamento-status.sucesso{color:var(--verde)}.pagamento-status.falha{color:var(--vermelho)}.pagamento-dot{width:8px;height:8px;border-radius:50%;background:var(--dourado);box-shadow:0 0 0 4px rgba(212,175,55,.15);animation:pagPulse 1.2s infinite}.pagamento-status.sucesso .pagamento-dot{background:var(--verde);animation:none}.pagamento-status.falha .pagamento-dot{background:var(--vermelho);animation:none}.pagamento-expira{margin-top:6px!important;font-size:.72rem!important}.pagamento-retry{display:flex;gap:8px;margin-top:12px}.pagamento-retry button{flex:1;border:1px solid var(--borda);border-radius:9px;padding:10px;background:#fff;color:var(--azul-escuro);font-size:.78rem;font-weight:800;cursor:pointer}@keyframes pagPulse{50%{opacity:.35;transform:scale(.82)}}
+        @media(max-width:680px){.pagamento-cadastro{margin-left:12px;margin-right:12px}.pagamento-cabecalho,.pagamento-bloco{padding-left:16px;padding-right:16px}.pagamento-resumo{grid-template-columns:1fr;padding:14px 16px}.pagamento-grid,.pagamento-escolhas{grid-template-columns:1fr}.pagamento-campo.full{grid-column:auto}.pagamento-btn{min-height:50px}}
 
         footer {
             padding: 26px 20px 34px;
@@ -738,12 +753,22 @@
                 exatamente como foram preenchidas pelo anunciante.
             </div>
 
+            <div id="conviteCortesiaAviso" class="aviso" style="display:none;border-color:#b8923b;background:#fffaf0;">
+                <strong>Cortesia Busque Torres:</strong> <span id="conviteCortesiaTexto">30 dias gratuitos. Nenhum pagamento será necessário.</span>
+            </div>
+
             <div id="mensagemFormulario" class="mensagem" role="status" aria-live="polite"></div>
 
             <section id="sucessoCadastro" class="sucesso-cadastro" role="status" aria-live="assertive" tabindex="-1" hidden>
                 <div class="sucesso-icone" aria-hidden="true">✓</div>
-                <h2>Cadastro enviado com sucesso!</h2>
-                <p>Recebemos os dados da sua empresa. Agora nossa equipe fará a análise antes da publicação. Caso seja necessário algum ajuste, entraremos em contato pelo WhatsApp informado.</p>
+                <h2>Pagamento confirmado!</h2>
+                <p>Seu cadastro está pago e aguardando revisão da equipe. Ele ainda não aparece no site. A validade do plano começa somente quando o cadastro for aprovado e publicado.</p>
+                <div id="beneficioCadastro" class="beneficio-cadastro" hidden>
+                    <strong>🔥 Benefício Promoção do Dia incluído no seu plano</strong>
+                    <div id="beneficioCadastroResumo"></div>
+                    <div class="beneficio-codigo-row"><span id="beneficioCadastroCodigo" class="beneficio-codigo"></span><button type="button" id="copiarBeneficioCadastro" class="beneficio-copy">Copiar código</button></div>
+                    <small>Guarde este código. Ele é vinculado à sua empresa e ao WhatsApp cadastrado. Se perder, a equipe do Busque Torres consegue reenviar o mesmo código. O uso fica disponível quando o cadastro estiver aprovado, publicado e com a assinatura ativa.</small>
+                </div>
                 <div class="sucesso-acoes">
                     <a href="index.html">Voltar para o Busque Torres</a>
                     <button type="button" id="novoCadastroBtn">Cadastrar outra empresa</button>
@@ -799,15 +824,29 @@
 <option value="educacao">Educação</option>
 <option value="esportes">Esportes</option>
 <option value="profissionais">Profissionais</option>
-<option value="eventos">Eventos</option>
+<option value="consultoria">Consultoria e Treinamentos</option>
+<option value="contabilidade">Contabilidade e Serviços Contábeis</option>
+<option value="eventos">Eventos, Festas e Salões</option>
 <option value="turismo">Turismo</option>
 <option value="agro">Agro</option>
 <option value="transporte">Transporte</option>
 <option value="industria">Indústria</option>
-<option value="servicos">Serviços</option>
+<option value="servicos">Serviços Gerais e Prestadores</option>
 <option value="publicos">Serviços Públicos</option>
 <option value="religiao">Religião</option>
 <option value="outros">Outros</option>
+<option value="grafica">Gráfica e Comunicação Visual</option>
+<option value="publicidade">Publicidade e Comunicação</option>
+<option value="financeiro">Financeiro e Crédito</option>
+<option value="imoveis">Imóveis e Condomínios</option>
+<option value="entretenimento">Entretenimento e Lazer</option>
+<option value="moda">Moda e Acessórios</option>
+<option value="infantil">Infantil</option>
+<option value="artesanato">Artesanato e Personalizados</option>
+<option value="seguranca">Segurança e Monitoramento</option>
+<option value="nautica">Náutica, Pesca e Praia</option>
+<option value="meioambiente">Meio Ambiente e Reciclagem</option>
+<option value="funerarios">Serviços Funerários</option>
                         </select>
                         <p class="erro-campo" id="erroCategoria"></p>
                     </div>
@@ -825,7 +864,7 @@
 
                     <div class="form-group">
                         <label for="cidade">
-                            Cidade / Localidade
+                            Cidade
                             <span class="obrigatorio">*</span>
                         </label>
                         <input
@@ -835,9 +874,8 @@
                             maxlength="60"
                             required
                             autocomplete="address-level2"
-                            placeholder="Ex.: Caxias do Sul, Farroupilha, Passo de Torres..."
+                            placeholder="Ex.: Canoas"
                         >
-                        <p class="subcategoria-hint">Pode informar uma cidade ou localidade próxima. O anúncio continuará vinculado ao <strong id="cidadePlataformaHint">Busque local</strong>.</p>
                         <p class="erro-campo" id="erroCidade"></p>
                     </div>
                 </div>
@@ -1162,73 +1200,51 @@
                 </section>
 
                 <section class="form-etapa" data-etapa="4">
-<div class="secao-titulo">Tipo de anúncio</div>
+<div class="secao-titulo">Escolha seu plano</div>
 
                 <div class="aviso-gratuidade">
-                    <strong>🎉 Lançamento: cadastro gratuito até 10/09/2026</strong>
-                    Empresas cadastradas e aprovadas até essa data recebem os primeiros 30 dias sem cobrança. Depois desse período promocional, passam a valer os valores abaixo.
+                    <strong>Pagamento antes da publicação</strong>
+                    Depois de concluir o cadastro, o pagamento abre nesta mesma página. A empresa só entra no Busque Torres após o pagamento ser confirmado e a equipe revisar e aprovar o cadastro. A validade do plano começa na publicação.
                 </div>
 
-                <div class="tabela-planos-wrap" aria-label="Valores dos planos">
+                <div class="tabela-planos-wrap" aria-label="Modalidades de assinatura">
                     <table class="tabela-planos">
-                        <thead><tr><th>Plano</th><th>Valor</th><th>O que inclui</th></tr></thead>
+                        <thead><tr><th>Assinatura</th><th>Valor</th><th>O que inclui</th></tr></thead>
                         <tbody>
-                            <tr><td><strong>Normal</strong></td><td><strong>R$ 9,90</strong></td><td>30 dias de cadastro, presença nas buscas e categorias.</td></tr>
-                            <tr><td><strong>Destaque</strong></td><td><strong>R$ 15,90</strong></td><td>30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.</td></tr>
-                            <tr><td><strong>Master</strong></td><td><strong>R$ 25,90</strong></td><td>30 dias de cadastro + 7 dias no banner MASTER, conforme disponibilidade.</td></tr>
+                            <tr><td><strong>Mensal</strong></td><td><strong>R$ 14,90</strong></td><td>30 dias de anúncio no Busque, com perfil e presença nas buscas e categorias.</td></tr>
+                            <tr><td><strong>Trimestral</strong></td><td><strong>R$ 34,90</strong></td><td>90 dias de anúncio + 1 semana em Destaque + <strong>2 Promoções do Dia por mês</strong>.</td></tr>
+                            <tr><td><strong>Anual</strong></td><td><strong>R$ 119,90</strong></td><td>365 dias de anúncio + 3 semanas em MASTER + 2 semanas em Destaque + <strong>4 Promoções do Dia por mês</strong>.</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="planos" role="radiogroup" aria-label="Tipo de anúncio">
+                <div class="planos" role="radiogroup" aria-label="Modalidade de assinatura">
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoComum"
-                            name="plano"
-                            value="comum"
-                            checked
-                        >
-                        <label for="planoComum" class="plano-card">
-                            <span class="plano-nome">Normal — R$ 9,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro com presença nas buscas e categorias.
-                            </span>
+                        <input type="radio" id="assinaturaMensal" name="assinatura_periodo" value="mensal" checked>
+                        <label for="assinaturaMensal" class="plano-card">
+                            <span class="plano-nome">Mensal — R$ 14,90</span>
+                            <span class="plano-descricao">30 dias de anúncio. Sem bônus premium automático.</span>
                         </label>
                     </div>
 
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoDestaque"
-                            name="plano"
-                            value="destaque"
-                        >
-                        <label for="planoDestaque" class="plano-card">
-                            <span class="plano-nome">Destaque — R$ 15,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro + 7 dias em uma das posições de Destaque, conforme disponibilidade.
-                            </span>
+                        <input type="radio" id="assinaturaTrimestral" name="assinatura_periodo" value="trimestral">
+                        <label for="assinaturaTrimestral" class="plano-card">
+                            <span class="plano-nome">Trimestral — R$ 34,90</span>
+                            <span class="plano-descricao">90 dias + 1 semana de Destaque + 2 Promoções do Dia por mês. Os benefícios são liberados após o pagamento.</span>
                         </label>
                     </div>
 
                     <div class="plano-opcao">
-                        <input
-                            type="radio"
-                            id="planoMaster"
-                            name="plano"
-                            value="master"
-                        >
-                        <label for="planoMaster" class="plano-card plano-master">
-                            <span class="plano-nome">MASTER — R$ 25,90</span>
-                            <span class="plano-descricao">
-                                30 dias de cadastro + 7 dias no banner principal MASTER, conforme disponibilidade.
-                            </span>
+                        <input type="radio" id="assinaturaAnual" name="assinatura_periodo" value="anual">
+                        <label for="assinaturaAnual" class="plano-card">
+                            <span class="plano-nome">Anual — R$ 119,90</span>
+                            <span class="plano-descricao">365 dias + 3 semanas MASTER + 2 semanas Destaque + 4 Promoções do Dia por mês. Os benefícios são liberados após o pagamento.</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="legal-box"><strong>Antes de enviar</strong>Até 10/09/2026, empresas cadastradas e aprovadas participam da campanha de lançamento com os primeiros 30 dias gratuitos. O período começa na publicação. Após o período promocional, os valores e condições do plano escolhido serão informados antes de qualquer cobrança. Correções solicitadas não exigem novo pagamento.</div>
+                <div class="legal-box"><strong>Como funciona</strong>Ao continuar, seus dados e imagens são enviados e a etapa de pagamento abre logo abaixo. PIX com QR Code e Copia e Cola é a opção principal; cartão também fica disponível. O anúncio permanece fora do site até pagamento confirmado e aprovação da equipe.</div>
                 <label class="termos">
                     <input type="checkbox" id="termos" required>
                     <span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a>, a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>, a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a> e a <a href="politica-conteudo.html" target="_blank" rel="noopener">Política de Conteúdo</a>.</span>
@@ -1239,29 +1255,88 @@
                 </label>
                 <p class="erro-campo" id="erroTermos"></p>
 
-                
-            
-                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="submit" class="submit-btn" id="submitBtn">Cadastrar negócio</button></div>
+                    <div class="wizard-actions"><button type="button" class="wizard-btn wizard-prev">Voltar</button><button type="submit" class="submit-btn" id="submitBtn">Continuar para pagamento</button></div>
                 </section>
 </form>
+
+            <section id="pagamentoCadastro" class="pagamento-cadastro" hidden aria-live="polite">
+                <div class="pagamento-cabecalho">
+                    <span class="pagamento-kicker">Cadastro recebido</span>
+                    <h2>Finalize o pagamento</h2>
+                    <p>Seu cadastro foi salvo, mas ainda não está publicado. Confirme o responsável e escolha PIX ou cartão.</p>
+                </div>
+
+                <div class="pagamento-resumo">
+                    <div><small>Empresa</small><strong id="pagamentoEmpresa">—</strong></div>
+                    <div><small>Plano escolhido</small><strong id="pagamentoPlano">—</strong></div>
+                    <div><small>Valor</small><strong id="pagamentoValor">—</strong></div>
+                    <div><small>Benefícios</small><strong id="pagamentoBeneficios">—</strong></div>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>1. Responsável pela contratação</h3>
+                    <p class="pagamento-ajuda">Esses dados ficam vinculados ao aceite e não aparecem no perfil público.</p>
+                    <div class="pagamento-grid">
+                        <label class="pagamento-campo full">Nome completo do responsável<input id="pagResponsavelNome" maxlength="160" autocomplete="name" placeholder="Nome completo"></label>
+                        <label class="pagamento-campo">Documento<select id="pagDocumentoTipo"><option value="cpf">CPF</option><option value="cnpj">CNPJ</option></select></label>
+                        <label class="pagamento-campo">Número do documento<input id="pagDocumentoNumero" inputmode="numeric" maxlength="18" autocomplete="off" placeholder="Digite o documento"></label>
+                    </div>
+                    <div class="pagamento-escolhas">
+                        <label><input type="radio" name="pagCapacidade" value="titular_responsavel"><span>Sou o titular/responsável por esta atividade.</span></label>
+                        <label><input type="radio" name="pagCapacidade" value="autorizado"><span>Estou autorizado a contratar em nome deste negócio.</span></label>
+                    </div>
+                    <label class="pagamento-check"><input id="pagConfirmaWhatsapp" type="checkbox"><span>Confirmo que o WhatsApp <strong id="pagWhatsapp">—</strong> é o contato informado neste cadastro.</span></label>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>2. Contrato e políticas</h3>
+                    <label class="pagamento-check"><input id="pagAceiteContrato" type="checkbox"><span>Li e aceito o <a id="pagContratoLink" href="contrato-adesao-busque-torres-v7.pdf" target="_blank" rel="noopener">Contrato de Adesão do Busque Torres</a>.</span></label>
+                    <label class="pagamento-check"><input id="pagAceitePrivacidade" type="checkbox"><span>Li e aceito a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+                    <label class="pagamento-check"><input id="pagAceiteComercial" type="checkbox"><span>Li e aceito a <a href="politica-comercial.html" target="_blank" rel="noopener">Política Comercial</a>.</span></label>
+                    <div id="pagContratoMeta" class="pagamento-meta"></div>
+                </div>
+
+                <div class="pagamento-bloco">
+                    <h3>3. Pagamento</h3>
+                    <label class="pagamento-campo full">E-mail para o pagamento<input id="pagEmail" type="email" maxlength="180" autocomplete="email" placeholder="seuemail@exemplo.com"></label>
+                    <div id="pagamentoAcoes" class="pagamento-acoes">
+                        <button id="pagPixBtn" class="pagamento-btn" type="button" disabled>GERAR PIX</button>
+                        <button id="pagCardBtn" class="pagamento-btn secundario" type="button" disabled>Pagar com cartão</button>
+                    </div>
+                    <p class="pagamento-nota">No PIX, o QR Code e o código Copia e Cola aparecem aqui mesmo. No cartão, o ambiente seguro do Mercado Pago abre em outra aba; mantenha esta página aberta para acompanhar a confirmação.</p>
+                    <div id="pagMsg" class="pagamento-msg" role="status"></div>
+
+                    <div id="pagPixPanel" class="pagamento-pix" hidden>
+                        <span class="pagamento-kicker">PIX gerado</span>
+                        <h3 id="pagPixTitulo">Escaneie ou copie o PIX</h3>
+                        <p id="pagPixProduto"></p>
+                        <div class="pagamento-qr"><img id="pagPixQr" alt="QR Code PIX"></div>
+                        <textarea id="pagPixCode" readonly aria-label="Código PIX Copia e Cola"></textarea>
+                        <button id="pagCopyPix" class="pagamento-btn" type="button">COPIAR PIX</button>
+                        <div id="pagPixStatus" class="pagamento-status"><span class="pagamento-dot"></span><span id="pagPixStatusTexto">Aguardando pagamento...</span></div>
+                        <p id="pagPixExpira" class="pagamento-expira"></p>
+                        <div id="pagRetry" class="pagamento-retry" hidden><button id="pagRetryPix" type="button">Gerar novo PIX</button><button id="pagRetryCard" type="button">Pagar com cartão</button></div>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 
     <footer>Busque Torres &bull; <a href="contato.html">Contato</a> &bull; <a href="termos.html">Termos</a> &bull; <a href="privacidade.html">Privacidade</a> &bull; <a href="politica-comercial.html">Comercial</a> &bull; <a href="politica-conteudo.html">Conteúdo</a><br>Desenvolvido por <strong>DOMUS SISTEMAS</strong></footer>
 
     <script src="supabase-config.js"></script>
-<script src="site-config.js"></script>
     <script>
         "use strict";
 
-        const SITE=BusqueSite.current();
-BusqueSite.applyBranding();
+        const conviteCortesiaCodigo = new URLSearchParams(location.search).get("convite") || "";
+        let conviteCortesiaValido = false;
+        let conviteCortesiaDias = 0;
 
         const CONFIG = {
             chaveCadastros: "novos_cadastros",
             codigoPais: "55",
             mensagemWhatsapp:
-                `Olá, vim do ${SITE.name} e gostaria de mais informações.`
+                "Olá, vim do Busque Torres e gostaria de mais informações."
         };
 
         const form = document.getElementById("cadastroForm");
@@ -1271,7 +1346,22 @@ BusqueSite.applyBranding();
         const mensagemFormulario = document.getElementById("mensagemFormulario");
         const sucessoCadastro = document.getElementById("sucessoCadastro");
         const novoCadastroBtn = document.getElementById("novoCadastroBtn");
+        const beneficioCadastro = document.getElementById("beneficioCadastro");
+        const beneficioCadastroCodigo = document.getElementById("beneficioCadastroCodigo");
+        const beneficioCadastroResumo = document.getElementById("beneficioCadastroResumo");
+        const copiarBeneficioCadastro = document.getElementById("copiarBeneficioCadastro");
         const submitBtn = document.getElementById("submitBtn");
+        const pagamentoCadastro = document.getElementById("pagamentoCadastro");
+        const pag = id => document.getElementById(id);
+        let pagamentoData = null;
+        let pagamentoCodigo = "";
+        let pagamentoProdutoCodigo = "";
+        let pagamentoReferencia = "";
+        let pagamentoTentativa = crypto.randomUUID();
+        let pagamentoTrabalhando = false;
+        let pagamentoTravado = false;
+        let pagamentoPoll = null;
+        let pagamentoCountdown = null;
 
         const campos = {
             nome: document.getElementById("nome"),
@@ -1410,11 +1500,8 @@ BusqueSite.applyBranding();
             elementosImagem.previewLocal.textContent = local;
             elementosImagem.previewIniciais.textContent = obterIniciais(nome);
 
-            const plano = document.querySelector('input[name="plano"]:checked');
-            const planoComSelo = plano && ["destaque", "master"].includes(plano.value);
-            elementosImagem.previewSelo.classList.toggle("visivel", Boolean(planoComSelo));
-            elementosImagem.previewSelo.textContent =
-                plano && plano.value === "master" ? "Master" : "Destaque";
+            elementosImagem.previewSelo.classList.remove("visivel");
+            elementosImagem.previewSelo.textContent = "";
         }
 
         function mostrarFotoCapa(base64) {
@@ -1428,6 +1515,7 @@ BusqueSite.applyBranding();
 
             elementosImagem.erroFotoCapa.textContent = "";
             elementosImagem.erroFotoCapa.classList.remove("visivel");
+            atualizarIndicadorErro(3);
         }
 
         function removerFotoCapa() {
@@ -1480,7 +1568,7 @@ BusqueSite.applyBranding();
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 900, 600, 0.60);
+                const base64 = await comprimirImagem(arquivo, 800, 540, 0.56);
                 mostrarFotoCapa(base64);
             } catch (erro) {
                 elementosImagem.erroFotoCapa.textContent = erro.message;
@@ -1506,7 +1594,7 @@ BusqueSite.applyBranding();
             }
 
             try {
-                const base64 = await comprimirImagem(arquivo, 240, 240, 0.68);
+                const base64 = await comprimirImagem(arquivo, 200, 200, 0.62);
                 mostrarLogo(base64);
             } catch (erro) {
                 mostrarMensagem("erro", "Imagem inválida", erro.message);
@@ -1530,7 +1618,7 @@ BusqueSite.applyBranding();
             campos.bairro
         ].forEach(campo => campo.addEventListener("input", atualizarPreviewAnuncio));
 
-        document.querySelectorAll('input[name="plano"]').forEach(opcao => {
+        document.querySelectorAll('input[name="assinatura_periodo"]').forEach(opcao => {
             opcao.addEventListener("change", atualizarPreviewAnuncio);
         });
 
@@ -1748,6 +1836,10 @@ BusqueSite.applyBranding();
                 valido = false;
             }
 
+            indicadoresEtapa.forEach((indicador, indice) => {
+                indicador.classList.toggle("erro", !valido && etapaPossuiErro(indice));
+            });
+
             if (!valido && primeiroCampoInvalido) {
                 primeiroCampoInvalido.focus();
             }
@@ -1756,8 +1848,8 @@ BusqueSite.applyBranding();
         }
 
         function montarCadastro() {
-            const planoSelecionado = document.querySelector(
-                'input[name="plano"]:checked'
+            const assinaturaSelecionada = document.querySelector(
+                'input[name="assinatura_periodo"]:checked'
             );
 
             const numeroWhatsapp = apenasNumeros(campos.whatsapp.value);
@@ -1783,13 +1875,10 @@ BusqueSite.applyBranding();
                 palavrasChave: limparTexto(campos.palavrasChave.value),
                 imagem: fotoCapaBase64,
                 logo: logoBase64,
-                planoSolicitado: planoSelecionado
-                    ? planoSelecionado.value
-                    : "comum",
-                premium: Boolean(
-                    planoSelecionado && ["destaque", "master"].includes(planoSelecionado.value)
-                ),
-                master: Boolean(planoSelecionado && planoSelecionado.value === "master"),
+                planoSolicitado: "comum",
+                assinaturaPeriodo: assinaturaSelecionada ? assinaturaSelecionada.value : "mensal",
+                premium: false,
+                master: false,
                 status: "ativo",
                 ativo: true,
                 criadoEm: new Date().toISOString(),
@@ -1814,7 +1903,7 @@ BusqueSite.applyBranding();
         }
 
 
-        const SUBCATEGORIAS = {"alimentacao": ["Restaurante", "Lanchonete", "Hamburgueria", "Pizzaria", "Churrascaria", "Padaria", "Confeitaria", "Cafeteria", "Sorveteria", "Açaiteria", "Marmitaria", "Pastelaria", "Sushi", "Food truck", "Distribuidora de bebidas", "Mercado", "Supermercado", "Mercearia", "Hortifruti", "Casa de carnes"], "saude": ["Clínica médica", "Hospital", "Farmácia", "Odontologia", "Psicologia", "Psiquiatria", "Nutrição", "Fisioterapia", "Quiropraxia", "Fonoaudiologia", "Laboratório", "Ótica", "Enfermagem", "Terapias", "Home care"], "beleza": ["Salão de beleza", "Barbearia", "Manicure e pedicure", "Estética", "Massagem", "Podologia", "Maquiagem", "Depilação", "Sobrancelhas e cílios", "Tatuagem e piercing", "Cosméticos", "Spa", "Bronzeamento"], "pets": ["Pet shop", "Clínica veterinária", "Banho e tosa", "Hotel para pets", "Rações", "Adestramento", "Passeador de cães", "Creche para pets", "Veterinário rural", "Acessórios para animais"], "automotivo": ["Oficina mecânica", "Auto elétrica", "Autopeças", "Pneus", "Chapeação e pintura", "Lavagem automotiva", "Guincho", "Som automotivo", "Insulfilm", "Auto center", "Despachante", "Revenda de veículos", "Motos e peças", "Bicicletaria"], "construcao": ["Construtora", "Pedreiro", "Eletricista", "Encanador", "Pintor", "Gesseiro", "Serralheria", "Vidraçaria", "Marmoraria", "Marcenaria", "Madeireira", "Materiais de construção", "Esquadrias", "Telhados", "Arquitetura", "Engenharia", "Terraplenagem", "Energia solar"], "casa": ["Móveis", "Decoração", "Colchões", "Eletrodomésticos", "Cortinas e persianas", "Limpeza residencial", "Jardinagem", "Dedetização", "Mudanças", "Chaveiro", "Ar-condicionado", "Piscinas", "Segurança eletrônica", "Internet residencial"], "comercio": ["Loja de roupas femininas", "Loja de roupas masculinas", "Loja infantil", "Calçados", "Bolsas e acessórios", "Joalheria", "Bijuterias", "Moda íntima", "Uniformes", "Papelaria", "Presentes", "Armarinho", "Eletrônicos", "Celulares", "Utilidades domésticas", "Brechó", "Loja de variedades"], "tecnologia": ["Informática", "Assistência técnica", "Celulares", "Desenvolvimento de software", "Marketing digital", "Design gráfico", "Criação de sites", "Provedor de internet", "Impressão 3D", "Automação", "Segurança da informação", "Suporte técnico"], "educacao": ["Escola", "Educação infantil", "Faculdade", "Curso técnico", "Curso de idiomas", "Reforço escolar", "Autoescola", "Professor particular", "Música", "Dança", "Informática", "Preparatório para concursos"], "esportes": ["Academia", "Personal trainer", "Pilates", "Yoga", "CrossFit", "Treinamento funcional", "Artes marciais", "Futebol", "Natação", "Dança", "Artigos esportivos", "Pesca e camping", "Quadra esportiva"], "profissionais": ["Advocacia", "Contabilidade", "Imobiliária", "Corretor de imóveis", "Seguros", "Consultoria", "Fotografia", "Videomaker", "Arquitetura", "Engenharia", "Recursos humanos", "Tradução", "Despachante documental", "Cerimonialista"], "eventos": ["Buffet", "Decoração de festas", "Fotografia de eventos", "Filmagem", "DJ", "Som e iluminação", "Locação de equipamentos", "Salão de festas", "Brinquedos para festas", "Doces e bolos", "Convites e personalizados", "Bandas e músicos"], "turismo": ["Hotel", "Pousada", "Agência de viagens", "Transporte turístico", "Passeios", "Camping", "Aluguel por temporada", "Guia turístico", "Restaurante turístico"], "agro": ["Agropecuária", "Rações", "Máquinas agrícolas", "Sementes", "Fertilizantes", "Irrigação", "Veterinário rural", "Produtos veterinários", "Cooperativa", "Silagem", "Serviços agrícolas"], "transporte": ["Táxi", "Transporte por aplicativo", "Frete", "Transportadora", "Motoboy", "Van escolar", "Ônibus e excursões", "Mudanças", "Entrega rápida", "Locação de veículos"], "industria": ["Metalúrgica", "Indústria de alimentos", "Confecção", "Gráfica", "Embalagens", "Móveis planejados", "Plásticos", "Química", "Madeireira", "Manutenção industrial"], "servicos": ["Limpeza", "Jardinagem", "Costura", "Lavanderia", "Conserto de eletrodomésticos", "Chaveiro", "Segurança", "Portaria", "Locação de equipamentos", "Reparos gerais", "Serviços domésticos", "Manutenção predial"], "publicos": ["Prefeitura", "Câmara de vereadores", "Polícia", "Bombeiros", "Correios", "Cartório", "Hospital público", "Posto de saúde", "Escola pública", "Assistência social"], "religiao": ["Igreja católica", "Igreja evangélica", "Centro espírita", "Templo religioso", "Comunidade religiosa", "Livraria religiosa"], "outros": ["Profissional autônomo", "Associação", "ONG", "Cooperativa", "Serviço diverso", "Outro nicho"]};
+        const SUBCATEGORIAS = {"alimentacao": ["Restaurante","Lanchonete","Hamburgueria","Pizzaria","Churrascaria","Padaria","Confeitaria","Cafeteria","Sorveteria","Açaiteria","Marmitaria","Pastelaria","Sushi","Food truck","Distribuidora de bebidas","Mercado","Supermercado","Mercearia","Hortifruti","Casa de carnes","Bistrô","Comida caseira","Comida saudável","Comida vegana e vegetariana","Frutos do mar","Petiscaria","Bar e pub","Doceria","Salgaderia","Rotisseria","Congelados","Cestas e café da manhã","Produtos coloniais","Empório","Loja de conveniência","Adega","Atacado de alimentos","Cozinha industrial","Serviço de buffet","Outro / não encontrei meu nicho"],"saude": ["Clínica médica","Hospital","Farmácia","Odontologia","Psicologia","Psiquiatria","Nutrição","Fisioterapia","Quiropraxia","Fonoaudiologia","Laboratório","Ótica","Enfermagem","Terapias","Home care","Clínica de especialidades","Cardiologia","Dermatologia","Ginecologia e obstetrícia","Pediatria","Ortopedia","Oftalmologia","Otorrinolaringologia","Neurologia","Endocrinologia","Urologia","Geriatria","Clínica de imagem","Radiologia","Ultrassonografia","Análises clínicas","Prótese dentária","Odontopediatria","Implantodontia","Acupuntura","Terapia ocupacional","Psicopedagogia","Cuidador de idosos","Casa de repouso","Ortopedia e produtos médicos","Outro / não encontrei meu nicho"],"beleza": ["Salão de beleza","Barbearia","Manicure e pedicure","Estética","Massagem","Podologia","Maquiagem","Depilação","Sobrancelhas e cílios","Tatuagem e piercing","Cosméticos","Spa","Bronzeamento","Cabeleireiro","Colorimetria capilar","Tranças e penteados","Alongamento de unhas","Nail designer","Lash designer","Designer de sobrancelhas","Micropigmentação","Limpeza de pele","Estética facial","Estética corporal","Drenagem linfática","Massoterapia","Extensão capilar","Perfumaria","Loja de produtos de beleza","Outro / não encontrei meu nicho"],"pets": ["Pet shop","Clínica veterinária","Banho e tosa","Hotel para pets","Rações","Adestramento","Passeador de cães","Creche para pets","Veterinário rural","Acessórios para animais","Pet sitter","Táxi pet","Fotografia pet","Petiscos e alimentação natural","Aquarismo","Aves e pequenos animais","Farmácia veterinária","Cemitério e cremação pet","Outro / não encontrei meu nicho"],"automotivo": ["Oficina mecânica","Auto elétrica","Autopeças","Pneus","Chapeação e pintura","Lavagem automotiva","Guincho","Som automotivo","Insulfilm","Auto center","Despachante","Revenda de veículos","Motos e peças","Bicicletaria","Mecânica de motos","Injeção eletrônica","Ar-condicionado automotivo","Radiadores","Escapamentos","Suspensão e freios","Alinhamento e balanceamento","Troca de óleo","Baterias","Estética automotiva","Polimento e vitrificação","Martelinho de ouro","Funilaria","Vidros automotivos","Acessórios automotivos","Rastreamento veicular","Locadora de veículos","Estacionamento","Auto escola de direção especializada","Outro / não encontrei meu nicho"],"construcao": ["Construtora","Pedreiro","Eletricista","Encanador","Pintor","Gesseiro","Serralheria","Vidraçaria","Marmoraria","Marcenaria","Madeireira","Materiais de construção","Esquadrias","Telhados","Arquitetura","Engenharia","Terraplenagem","Energia solar","Mestre de obras","Servente","Azulejista","Pisos e revestimentos","Reboco","Impermeabilização","Calhas e rufos","Forro PVC","Drywall","Pintura predial","Pintura residencial","Paisagismo","Topografia","Georreferenciamento","Projetos elétricos","Projetos hidráulicos","Automação residencial","Portões e cercas","Cercas elétricas","Concreto e usinado","Locação de máquinas para obra","Caçambas e entulho","Reformas em geral","Construção a seco","Outro / não encontrei meu nicho"],"casa": ["Móveis","Decoração","Colchões","Eletrodomésticos","Cortinas e persianas","Limpeza residencial","Jardinagem","Dedetização","Mudanças","Chaveiro","Ar-condicionado","Piscinas","Segurança eletrônica","Internet residencial","Móveis planejados","Estofados","Tapeçaria","Reforma de estofados","Organização residencial","Diarista","Limpeza pós-obra","Limpeza de vidros","Higienização de estofados","Higienização de colchões","Controle de pragas","Manutenção de piscinas","Construção de piscinas","Manutenção de ar-condicionado","Instalação de ar-condicionado","Antenas e TV","Portões eletrônicos","Câmeras e alarmes","Utilidades para casa","Iluminação","Outro / não encontrei meu nicho"],"comercio": ["Loja de roupas femininas","Loja de roupas masculinas","Loja infantil","Calçados","Bolsas e acessórios","Joalheria","Bijuterias","Moda íntima","Uniformes","Papelaria","Presentes","Armarinho","Eletrônicos","Celulares","Utilidades domésticas","Brechó","Loja de variedades","Loja de departamentos","Loja de móveis","Loja de decoração","Loja de materiais de construção","Loja de ferramentas","Ferragem","Loja de tintas","Loja de iluminação","Loja de brinquedos","Loja de artigos para festa","Loja de produtos naturais","Loja de suplementos","Sex shop","Tabacaria","Loja de conveniência","Bazar","Importados","Ótica e acessórios","Relógios","Artigos para praia","Souvenires","Outro / não encontrei meu nicho"],"tecnologia": ["Informática","Assistência técnica","Celulares","Desenvolvimento de software","Marketing digital","Design gráfico","Criação de sites","Provedor de internet","Impressão 3D","Automação","Segurança da informação","Suporte técnico","Manutenção de computadores","Manutenção de notebooks","Manutenção de impressoras","Redes e Wi-Fi","Cabeamento estruturado","Venda de informática","Sistemas para empresas","Aplicativos","Inteligência artificial","Consultoria em TI","Hospedagem e domínio","E-commerce","Gestão de redes sociais","Tráfego pago","SEO","Edição de vídeo","Identidade visual","Outro / não encontrei meu nicho"],"educacao": ["Escola","Educação infantil","Faculdade","Curso técnico","Curso de idiomas","Reforço escolar","Autoescola","Professor particular","Música","Dança","Informática","Preparatório para concursos","Cursos profissionalizantes","Curso preparatório","Aulas de reforço","Alfabetização","Educação especial","Psicopedagogia","Aulas de matemática","Aulas de português","Aulas de inglês","Aulas de espanhol","Aulas de violão","Aulas de canto","Aulas de desenho","Aulas de informática","Robótica e programação","Treinamentos empresariais","Escola de esportes","Outro / não encontrei meu nicho"],"esportes": ["Academia","Personal trainer","Pilates","Yoga","CrossFit","Treinamento funcional","Artes marciais","Futebol","Natação","Dança","Artigos esportivos","Pesca e camping","Quadra esportiva","Musculação","Corrida","Ciclismo","Beach tennis","Futevôlei","Vôlei","Tênis","Pádel","Skate","Surf","Kitesurf","Stand up paddle","Treinador esportivo","Assessoria esportiva","Fisiologia do exercício","Suplementação esportiva","Loja de bicicletas","Outro / não encontrei meu nicho"],"consultoria": ["Consultoria empresarial","Consultoria de gestão","Consultoria estratégica","Consultoria comercial e vendas","Consultoria financeira","Consultoria de marketing","Consultoria de recursos humanos","Consultoria em processos","Consultoria em tecnologia","Consultoria ambiental","Consultoria em qualidade","Consultoria em segurança do trabalho","Consultoria para MEI e pequenos negócios","Planejamento e gestão de negócios","Treinamentos empresariais","Treinamento de vendas","Treinamento de atendimento ao cliente","Treinamento de liderança","Treinamento de equipes","Treinamento de comunicação e oratória","Treinamento de segurança do trabalho","Capacitação profissional","Cursos in company","Palestras","Workshops","Mentoria empresarial","Coaching executivo","Desenvolvimento de pessoas","Recrutamento e seleção","Compliance e LGPD","Outro / não encontrei meu nicho"],"contabilidade": ["Escritório de contabilidade","Contador","Contabilidade empresarial","Contabilidade para MEI","Abertura de empresas","Regularização de empresas","Departamento pessoal","Folha de pagamento","Fiscal e tributário","Planejamento tributário","Imposto de Renda","Consultoria contábil","BPO financeiro","Contabilidade rural","Contabilidade para condomínios","Contabilidade para profissionais liberais","Certificado digital","Outro / não encontrei meu nicho"],"profissionais": ["Advocacia","Contabilidade","Imobiliária","Corretor de imóveis","Seguros","Consultoria","Fotografia","Videomaker","Arquitetura","Engenharia","Recursos humanos","Tradução","Despachante documental","Cerimonialista","Administrador","Assistente administrativo","Economista","Corretor de seguros","Correspondente bancário","Consultor financeiro","Consultor empresarial","Coach e mentoria","Designer","Designer de interiores","Social media","Redator","Locutor","Mestre de cerimônias","Perito","Topógrafo","Agrimensor","Representante comercial","Vendedor autônomo","Digitador","Cuidador","Babá","Diarista","Outro / não encontrei meu nicho"],"eventos": ["Salão de festas","Espaço para eventos","Espaço para festas","Casa de festas","Salão para casamento","Salão para aniversário","Chácara ou sítio para eventos","Espaço infantil para festas","Espaço corporativo para eventos","Buffet","Decoração de festas","Fotografia de eventos","Filmagem","DJ","Som e iluminação","Locação de equipamentos","Brinquedos para festas","Doces e bolos","Convites e personalizados","Bandas e músicos","Assessoria de eventos","Organização de eventos","Casamentos","Aniversários","Formaturas","Eventos corporativos","Locação de mesas e cadeiras","Locação de tendas","Locação de louças","Gerador de energia","Chopeira e bebidas para eventos","Recreação infantil","Personagens vivos","Mágico","Cabine de fotos","Plataforma 360","Fogos e efeitos especiais","Segurança para eventos","Outro / não encontrei meu nicho"],"turismo": ["Hotel","Pousada","Agência de viagens","Transporte turístico","Passeios","Camping","Aluguel por temporada","Guia turístico","Restaurante turístico","Hostel","Resort","Hotel fazenda","Chalés e cabanas","Imobiliária de temporada","Passeio de barco","Passeio de balão","Turismo de aventura","Ecoturismo","Pesca turística","Aluguel de bicicletas","Aluguel de equipamentos de praia","Receptivo turístico","Transfer","Outro / não encontrei meu nicho"],"agro": ["Agropecuária","Rações","Máquinas agrícolas","Sementes","Fertilizantes","Irrigação","Veterinário rural","Produtos veterinários","Cooperativa","Silagem","Serviços agrícolas","Produtor rural","Agricultura familiar","Hortas e orgânicos","Pecuária","Avicultura","Apicultura","Piscicultura","Implementos agrícolas","Manutenção de máquinas agrícolas","Cercas rurais","Poços artesianos","Análise de solo","Agronomia","Outro / não encontrei meu nicho"],"transporte": ["Táxi","Transporte por aplicativo","Frete","Transportadora","Motoboy","Van escolar","Ônibus e excursões","Mudanças","Entrega rápida","Locação de veículos","Motorista particular","Transporte executivo","Transporte de passageiros","Transporte escolar","Transporte de cargas","Frete pequeno","Frete de móveis","Guincho pesado","Entregador","Logística","Armazenagem","Serviço de courier","Outro / não encontrei meu nicho"],"industria": ["Metalúrgica","Indústria de alimentos","Confecção","Gráfica","Embalagens","Móveis planejados","Plásticos","Química","Madeireira","Manutenção industrial","Usinagem","Solda industrial","Caldeiraria","Serralheria industrial","Fabricação de esquadrias","Fabricação de móveis","Indústria têxtil","Indústria química","Indústria plástica","Indústria de bebidas","Panificação industrial","Beneficiamento de alimentos","Reciclagem industrial","Outro / não encontrei meu nicho"],"servicos": ["Prestador de serviços","Serviços gerais","Serviços para empresas","Serviços residenciais","Serviços terceirizados","Montagem e desmontagem","Manutenção e pequenos reparos","Apoio para eventos","Limpeza","Limpeza comercial","Limpeza de eventos","Jardinagem","Costura","Lavanderia","Conserto de eletrodomésticos","Chaveiro","Segurança","Portaria","Locação de equipamentos","Reparos gerais","Serviços domésticos","Manutenção predial","Marido de aluguel","Montador de móveis","Instalador","Técnico em refrigeração","Técnico em eletrônica","Conserto de celulares","Conserto de máquinas","Afiação","Sapateiro","Relojoeiro","Lavagem de tapetes","Lavagem de cortinas","Limpeza de caixas d'água","Desentupidora","Caça vazamentos","Serviço de entregas","Zeladoria","Síndico profissional","Outro / não encontrei meu nicho"],"publicos": ["Prefeitura","Câmara de vereadores","Polícia","Bombeiros","Correios","Cartório","Hospital público","Posto de saúde","Escola pública","Assistência social","Defesa Civil","SAMU","CRAS","CREAS","Conselho Tutelar","Procon","Sine e agência de emprego","Detran","Fórum","Ministério Público","Receita Federal","INSS","Biblioteca pública","Outro / não encontrei meu nicho"],"religiao": ["Igreja católica","Igreja evangélica","Centro espírita","Templo religioso","Comunidade religiosa","Livraria religiosa","Igreja pentecostal","Igreja batista","Igreja luterana","Igreja adventista","Testemunhas de Jeová","Centro de umbanda","Centro de candomblé","Casa de oração","Loja de artigos religiosos","Música religiosa","Outro / não encontrei meu nicho"],"outros": ["Profissional autônomo","Associação","ONG","Cooperativa","Serviço diverso","Outro nicho","Artista","Artesão","Inventor","Produtor independente","Microempreendedor","Prestador de serviço","Projeto social","Clube e associação","Coletivo cultural","Outro / não encontrei meu nicho"],"grafica": ["Gráfica rápida","Gráfica offset","Impressão digital","Comunicação visual","Cartões de visita","Panfletos e folders","Banners e faixas","Adesivos","Adesivagem de veículos","Plotagem","Fachadas","Letreiros","Luminosos","Placas","Impressão em lona","Impressão UV","Sublimação","Serigrafia","Carimbos","Encadernação","Convites","Brindes personalizados","Camisetas personalizadas","Copiadora e xerox","Impressão de projetos","Outro / não encontrei meu nicho"],"publicidade": ["Agência de publicidade","Agência de marketing","Marketing digital","Gestão de redes sociais","Social media","Tráfego pago","Criação de conteúdo","Design gráfico","Identidade visual","Branding","Fotografia publicitária","Vídeo publicitário","Produção audiovisual","Locução","Rádio","Jornal e portal de notícias","Mídia exterior","Outdoor","Painel de LED","Influenciador digital","Outro / não encontrei meu nicho"],"financeiro": ["Banco","Cooperativa de crédito","Correspondente bancário","Empréstimos e crédito","Financiamento","Consórcio","Seguros","Corretora de seguros","Investimentos","Planejamento financeiro","Consultoria financeira","Cobrança","Meios de pagamento","Máquinas de cartão","Crédito imobiliário","Crédito para veículos","Outro / não encontrei meu nicho"],"imoveis": ["Imobiliária","Corretor de imóveis","Administração de imóveis","Locação anual","Locação por temporada","Venda de imóveis","Avaliação de imóveis","Condomínios","Administradora de condomínios","Síndico profissional","Limpeza de condomínios","Portaria e zeladoria","Manutenção condominial","Incorporação imobiliária","Loteamentos","Outro / não encontrei meu nicho"],"entretenimento": ["Cinema","Teatro","Casa de shows","Bar com música","Música ao vivo","Karaokê","Boliche","Sinuca","Parque infantil","Parque de diversões","Games e fliperama","Escape room","Recreação","Espaço de lazer","Pesque e pague","Outro / não encontrei meu nicho"],"moda": ["Moda feminina","Moda masculina","Moda infantil","Moda praia","Moda fitness","Moda plus size","Moda íntima","Calçados","Bolsas","Acessórios","Joias","Semijoias","Bijuterias","Óculos e acessórios","Bonés e chapéus","Uniformes","Costura e ajustes","Brechó","Outro / não encontrei meu nicho"],"infantil": ["Loja infantil","Brinquedos","Roupas infantis","Calçados infantis","Berçário","Creche","Educação infantil","Babá","Recreação infantil","Festas infantis","Fotografia infantil","Gestante e bebê","Amamentação","Produtos para bebê","Outro / não encontrei meu nicho"],"artesanato": ["Artesanato","Personalizados","Lembrancinhas","Papelaria personalizada","Topo de bolo","Canecas personalizadas","Camisetas personalizadas","Bordado","Crochê","Tricô","Costura criativa","Madeira artesanal","Resina","Velas artesanais","Sabonetes artesanais","Cerâmica","Quadros e decoração","Outro / não encontrei meu nicho"],"seguranca": ["Empresa de segurança","Vigilância","Segurança patrimonial","Segurança para eventos","Monitoramento 24 horas","Câmeras de segurança","Alarmes","Cerca elétrica","Controle de acesso","Interfone","Portaria remota","Rastreamento veicular","Instalação de portões","Chaveiro","Outro / não encontrei meu nicho"],"nautica": ["Marina","Garagem náutica","Barcos e lanchas","Manutenção náutica","Moto aquática","Passeio de barco","Pesca","Pesca esportiva","Artigos de pesca","Iscas e equipamentos","Surf shop","Pranchas de surf","Stand up paddle","Caiaque","Equipamentos de praia","Cadeiras e guarda-sóis","Outro / não encontrei meu nicho"],"meioambiente": ["Reciclagem","Coleta seletiva","Sucata e ferro-velho","Descarte de eletrônicos","Coleta de óleo","Gestão de resíduos","Licenciamento ambiental","Consultoria ambiental","Paisagismo sustentável","Compostagem","Ecoponto","Limpeza ambiental","Outro / não encontrei meu nicho"],"funerarios": ["Funerária","Plano funerário","Cemitério","Cremação","Translado funerário","Florista para homenagens","Marmoraria funerária","Assistência familiar","Outro / não encontrei meu nicho"]};
         let etapaAtual = 0;
         const etapasFormulario = [...document.querySelectorAll(".form-etapa")];
         const indicadoresEtapa = [...document.querySelectorAll(".wizard-step-indicator")];
@@ -1853,6 +1942,44 @@ BusqueSite.applyBranding();
                 indicador.classList.toggle("concluido", indice < etapaAtual);
             });
             window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function etapaPossuiErro(indice) {
+            const etapa = etapasFormulario[indice];
+            if (!etapa) return false;
+
+            const obrigatorios = [...etapa.querySelectorAll("[required]")];
+            for (const campo of obrigatorios) {
+                if (campo.type === "checkbox") {
+                    if (!campo.checked) return true;
+                } else if (!campo.value || !campo.checkValidity()) {
+                    return true;
+                }
+            }
+
+            if (indice === 0) {
+                const nome = limparTexto(campos.nome.value);
+                const cidade = limparTexto(campos.cidade.value);
+                const descricaoTexto = limparTexto(campos.descricao.value);
+                return nome.length < 3 || !campos.categoria.value || !campos.subcategoria.value ||
+                    cidade.length < 2 || descricaoTexto.length < 15 || descricaoTexto.length > 120;
+            }
+
+            if (indice === 1) {
+                const numero = apenasNumeros(campos.whatsapp.value);
+                return numero.length < 10 || numero.length > 11;
+            }
+
+            if (indice === 3) return !fotoCapaBase64;
+
+            return false;
+        }
+
+        function atualizarIndicadorErro(indice, forcar = false) {
+            const indicador = indicadoresEtapa[indice];
+            if (!indicador) return;
+            if (!forcar && !indicador.classList.contains("erro")) return;
+            indicador.classList.toggle("erro", etapaPossuiErro(indice));
         }
 
         function validarEtapaAtual() {
@@ -1906,16 +2033,24 @@ BusqueSite.applyBranding();
 
         document.addEventListener("click", evento => {
             if (evento.target.closest(".wizard-next")) {
-                if (validarEtapaAtual()) mostrarEtapa(etapaAtual + 1);
+                const etapaValida = validarEtapaAtual();
+                indicadoresEtapa[etapaAtual]?.classList.toggle("erro", !etapaValida);
+                if (etapaValida) mostrarEtapa(etapaAtual + 1);
             }
             if (evento.target.closest(".wizard-prev")) {
                 mostrarEtapa(etapaAtual - 1);
             }
         });
 
-        campos.cidade.value = SITE.city;
-        const cidadePlataformaHint = document.getElementById("cidadePlataformaHint");
-        if (cidadePlataformaHint) cidadePlataformaHint.textContent = SITE.name;
+        function atualizarIndicadorDoCampo(campo) {
+            const etapa = campo.closest?.(".form-etapa");
+            if (!etapa) return;
+            const indice = Number(etapa.dataset.etapa);
+            if (Number.isInteger(indice)) atualizarIndicadorErro(indice);
+        }
+
+        form.addEventListener("input", evento => atualizarIndicadorDoCampo(evento.target));
+        form.addEventListener("change", evento => atualizarIndicadorDoCampo(evento.target));
 
         descricao.addEventListener("input", atualizarContadorDescricao);
 
@@ -1931,6 +2066,364 @@ BusqueSite.applyBranding();
         campos.termos.addEventListener("change", () => limparErro("termos"));
         campos.responsabilidadeConteudo.addEventListener("change", () => limparErro("termos"));
 
+        function dinheiro(v) {
+            return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Number(v || 0));
+        }
+
+        function produtoAssinatura() {
+            if (!pagamentoData) return null;
+            return (Array.isArray(pagamentoData.produtos) ? pagamentoData.produtos : []).find(p => p.codigo === pagamentoProdutoCodigo) || null;
+        }
+
+        function textoBeneficios(p) {
+            if (!p) return "—";
+            const partes = [`${Number(p.duracao_dias || 30)} dias`];
+            if (Number(p.bonus_master || 0) > 0) partes.push(`${Number(p.bonus_master)} MASTER`);
+            if (Number(p.bonus_destaque || 0) > 0) partes.push(`${Number(p.bonus_destaque)} Destaque${Number(p.bonus_destaque) > 1 ? "s" : ""}`);
+            const periodo = pagamentoProdutoCodigo === "assinatura_trimestral" ? "trimestral" : pagamentoProdutoCodigo === "assinatura_anual" ? "anual" : "mensal";
+            if (periodo === "trimestral") partes.push("2 Promoções do Dia/mês");
+            if (periodo === "anual") partes.push("4 Promoções do Dia/mês");
+            return partes.join(" + ");
+        }
+
+        function capacidadePagamento() {
+            return document.querySelector('input[name="pagCapacidade"]:checked')?.value || "";
+        }
+
+        function emailPagamentoValido() {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(pag("pagEmail").value || "").trim());
+        }
+
+        function pagamentoPronto() {
+            const doc = apenasNumeros(pag("pagDocumentoNumero").value);
+            return Boolean(
+                produtoAssinatura() &&
+                pag("pagResponsavelNome").value.trim().length >= 3 &&
+                doc.length >= 11 &&
+                capacidadePagamento() &&
+                pag("pagConfirmaWhatsapp").checked &&
+                pag("pagAceiteContrato").checked &&
+                pag("pagAceitePrivacidade").checked &&
+                pag("pagAceiteComercial").checked &&
+                emailPagamentoValido()
+            );
+        }
+
+        function atualizarBotoesPagamento() {
+            const p = produtoAssinatura();
+            const habilitado = pagamentoPronto() && !pagamentoTrabalhando && !pagamentoTravado;
+            pag("pagPixBtn").disabled = !habilitado;
+            pag("pagCardBtn").disabled = !habilitado;
+            pag("pagPixBtn").textContent = p ? `GERAR PIX — ${dinheiro(p.valor)}` : "GERAR PIX";
+            pag("pagCardBtn").textContent = p ? `Pagar com cartão — ${dinheiro(p.valor)}` : "Pagar com cartão";
+        }
+
+        function mensagemPagamento(texto, tipo = "erro") {
+            const el = pag("pagMsg");
+            el.textContent = texto;
+            el.className = `pagamento-msg show ${tipo}`;
+        }
+
+        function limparMensagemPagamento() {
+            const el = pag("pagMsg");
+            el.textContent = "";
+            el.className = "pagamento-msg";
+        }
+
+        function novaTentativaPagamento() {
+            pagamentoTentativa = crypto.randomUUID();
+            pagamentoReferencia = "";
+        }
+
+        function pararTimersPagamento() {
+            if (pagamentoPoll) { clearInterval(pagamentoPoll); pagamentoPoll = null; }
+            if (pagamentoCountdown) { clearInterval(pagamentoCountdown); pagamentoCountdown = null; }
+        }
+
+        function qrPagamentoSrc(v) {
+            const s = String(v || "");
+            return s.startsWith("data:") ? s : `data:image/png;base64,${s}`;
+        }
+
+        function estadoPix(texto, tipo = "pendente") {
+            pag("pagPixStatusTexto").textContent = texto;
+            pag("pagPixStatus").className = `pagamento-status${tipo === "sucesso" ? " sucesso" : tipo === "falha" ? " falha" : ""}`;
+        }
+
+        function iniciarContagemPix(expiraEm) {
+            if (pagamentoCountdown) clearInterval(pagamentoCountdown);
+            const tick = () => {
+                const fim = new Date(expiraEm || 0).getTime();
+                const falta = fim - Date.now();
+                if (!Number.isFinite(fim) || fim <= 0) { pag("pagPixExpira").textContent = ""; return; }
+                if (falta <= 0) {
+                    pag("pagPixExpira").textContent = "Este PIX chegou ao prazo de vencimento.";
+                    clearInterval(pagamentoCountdown); pagamentoCountdown = null; return;
+                }
+                const min = Math.floor(falta / 60000), seg = Math.floor((falta % 60000) / 1000);
+                pag("pagPixExpira").textContent = `PIX válido por aproximadamente ${String(min).padStart(2, "0")}:${String(seg).padStart(2, "0")}.`;
+            };
+            tick();
+            pagamentoCountdown = setInterval(tick, 1000);
+        }
+
+        function mostrarPixPagamento(r) {
+            pagamentoTravado = true;
+            pag("pagamentoAcoes").hidden = true;
+            pag("pagPixPanel").hidden = false;
+            pag("pagPixQr").src = qrPagamentoSrc(r.qr_code_base64);
+            pag("pagPixCode").value = r.qr_code || "";
+            pag("pagPixProduto").textContent = `${r.produto || produtoAssinatura()?.nome || "Plano"} · ${dinheiro(r.valor)}`;
+            pag("pagPixTitulo").textContent = "Escaneie ou copie o PIX";
+            estadoPix("Aguardando pagamento...");
+            pag("pagRetry").hidden = true;
+            pagamentoReferencia = String(r.referencia || "");
+            sessionStorage.setItem("busque_cadastro_pagamento_ref", pagamentoReferencia);
+            iniciarContagemPix(r.expires_at);
+            iniciarPollingPagamento();
+        }
+
+
+        async function carregarBeneficioFoguinhoCadastro() {
+            beneficioCadastro.hidden = true;
+            beneficioCadastroCodigo.textContent = "";
+            beneficioCadastroResumo.textContent = "";
+            if (!pagamentoCodigo) return;
+            for (let tentativa = 0; tentativa < 4; tentativa++) {
+                try {
+                    let b = await BusqueAPI.rpc("consultar_beneficio_foguinho_checkout", { p_codigo_renovacao: pagamentoCodigo });
+                    if (Array.isArray(b)) b = b[0];
+                    if (b?.ok && b?.elegivel && b?.codigo_beneficio) {
+                        beneficioCadastroCodigo.textContent = String(b.codigo_beneficio);
+                        beneficioCadastroResumo.textContent = `Seu plano ${String(b.assinatura_periodo || "").toLowerCase() === "anual" ? "Anual" : "Trimestral"} inclui ${Number(b.cota_mes || 0)} Promoções do Dia por mês. Neste mês, ${Number(b.restantes_mes || 0)} uso(s) estão disponíveis.`;
+                        beneficioCadastro.hidden = false;
+                        return;
+                    }
+                    if (b?.assinatura_periodo === "mensal" || b?.cota_mes === 0) return;
+                } catch (erro) {
+                    console.warn("Benefício Foguinho ainda não disponível:", erro?.message || erro);
+                }
+                if (tentativa < 3) await new Promise(resolve => setTimeout(resolve, 800));
+            }
+        }
+
+        async function copiarCodigoBeneficioCadastro() {
+            const codigo = String(beneficioCadastroCodigo.textContent || "").trim();
+            if (!codigo) return;
+            try { await navigator.clipboard.writeText(codigo); }
+            catch { window.prompt("Copie seu código de benefício:", codigo); return; }
+            copiarBeneficioCadastro.textContent = "Código copiado ✓";
+            setTimeout(() => copiarBeneficioCadastro.textContent = "Copiar código", 1800);
+        }
+
+        async function conferirPagamento() {
+            if (!pagamentoReferencia) return;
+            try {
+                const r = await BusqueAPI.invokeFunction("consultar-pagamento", { referencia: pagamentoReferencia });
+                const status = String(r?.status || "");
+                if (status === "aprovado") {
+                    pararTimersPagamento();
+                    estadoPix("Pagamento confirmado!", "sucesso");
+                    pag("pagPixTitulo").textContent = "✅ PAGAMENTO CONFIRMADO";
+                    pag("pagPixExpira").textContent = "";
+                    pag("pagRetry").hidden = true;
+                    mensagemPagamento("Pagamento confirmado. Seu cadastro está aguardando revisão e ainda não aparece no site.", "sucesso");
+                    await carregarBeneficioFoguinhoCadastro();
+                    pagamentoCadastro.hidden = true;
+                    sucessoCadastro.hidden = false;
+                    sessionStorage.removeItem("busque_cadastro_pagamento_ref");
+                    sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
+                    window.scrollTo({ top: 0, behavior: "auto" });
+                    setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
+                    return;
+                }
+                if (["expirado", "rejeitado", "cancelado", "erro", "reembolsado"].includes(status)) {
+                    pararTimersPagamento();
+                    estadoPix(status === "expirado" ? "PIX expirado. Gere um novo pagamento." : "Pagamento não concluído.", "falha");
+                    pag("pagRetry").hidden = false;
+                }
+            } catch (erro) {
+                console.warn("Consulta do pagamento:", erro?.message || erro);
+            }
+        }
+
+        function iniciarPollingPagamento() {
+            if (pagamentoPoll) clearInterval(pagamentoPoll);
+            conferirPagamento();
+            pagamentoPoll = setInterval(conferirPagamento, 4000);
+        }
+
+        async function copiarPixPagamento() {
+            const valor = pag("pagPixCode").value;
+            if (!valor) return;
+            try {
+                await navigator.clipboard.writeText(valor);
+            } catch {
+                pag("pagPixCode").focus(); pag("pagPixCode").select(); document.execCommand("copy");
+            }
+            pag("pagCopyPix").textContent = "PIX COPIADO ✓";
+            setTimeout(() => pag("pagCopyPix").textContent = "COPIAR PIX", 1800);
+        }
+
+        function liberarNovaTentativa() {
+            pararTimersPagamento();
+            pagamentoTravado = false;
+            pagamentoTrabalhando = false;
+            pag("pagPixPanel").hidden = true;
+            pag("pagamentoAcoes").hidden = false;
+            novaTentativaPagamento();
+            limparMensagemPagamento();
+            atualizarBotoesPagamento();
+        }
+
+        function payloadPagamento() {
+            const p = produtoAssinatura();
+            return {
+                codigo: pagamentoCodigo,
+                produto_codigo: p.codigo,
+                quantidade: 1,
+                email_pagador: pag("pagEmail").value.trim().toLowerCase(),
+                fluxo_juridico_v7: true,
+                responsavel_nome: pag("pagResponsavelNome").value.trim(),
+                documento_tipo: pag("pagDocumentoTipo").value,
+                documento_numero: pag("pagDocumentoNumero").value,
+                capacidade: capacidadePagamento(),
+                confirmou_whatsapp_cadastrado: true,
+                aceite_contrato: true,
+                aceite_privacidade: true,
+                aceite_politica_comercial: true,
+                contrato_codigo: pagamentoData.contrato.codigo,
+                contrato_sha256: pagamentoData.contrato.sha256,
+                idempotency_token: pagamentoTentativa
+            };
+        }
+
+        async function iniciarPagamento(metodo, janelaCartao = null) {
+            if (!pagamentoPronto() || !pagamentoData || pagamentoTrabalhando || pagamentoTravado) {
+                if (janelaCartao && !janelaCartao.closed) janelaCartao.close();
+                return;
+            }
+            limparMensagemPagamento();
+            pagamentoTrabalhando = true;
+            atualizarBotoesPagamento();
+            const pix = metodo === "pix";
+            (pix ? pag("pagPixBtn") : pag("pagCardBtn")).textContent = pix ? "GERANDO PIX..." : "ABRINDO PAGAMENTO...";
+            try {
+                const r = await BusqueAPI.invokeFunction("criar-pagamento", { ...payloadPagamento(), forma_pagamento: pix ? "pix" : "checkout_pro" });
+                if (r?.codigo === "TENTATIVA_ENCERRADA") { novaTentativaPagamento(); throw new Error(r.erro || "A tentativa anterior encerrou. Tente novamente."); }
+                if (r?.codigo === "TENTATIVA_EM_PROCESSAMENTO") throw new Error(r.erro || "O pagamento ainda está sendo preparado. Aguarde alguns segundos.");
+                if (r?.erro) throw new Error(r.erro);
+                pagamentoReferencia = String(r?.referencia || "");
+                if (pagamentoReferencia) {
+                    sessionStorage.setItem("busque_cadastro_pagamento_ref", pagamentoReferencia);
+                    iniciarPollingPagamento();
+                }
+                if (pix) {
+                    if (!r?.qr_code || !r?.referencia) throw new Error("O Mercado Pago não devolveu o código PIX.");
+                    pagamentoTrabalhando = false;
+                    mostrarPixPagamento(r);
+                    return;
+                }
+                if (r?.checkout_url) {
+                    pagamentoTravado = true;
+                    pagamentoTrabalhando = false;
+                    mensagemPagamento("Pagamento com cartão aberto em outra aba. Mantenha esta página aberta; a confirmação aparecerá aqui automaticamente.", "sucesso");
+                    atualizarBotoesPagamento();
+                    if (janelaCartao && !janelaCartao.closed) janelaCartao.location.href = r.checkout_url;
+                    else window.open(r.checkout_url, "_blank", "noopener");
+                    return;
+                }
+                throw new Error("O Mercado Pago não devolveu o pagamento.");
+            } catch (erro) {
+                if (janelaCartao && !janelaCartao.closed) janelaCartao.close();
+                console.error("Pagamento do cadastro:", erro);
+                pagamentoTrabalhando = false;
+                mensagemPagamento(erro?.message || "Não foi possível iniciar o pagamento.");
+                atualizarBotoesPagamento();
+            }
+        }
+
+        async function abrirPagamentoCadastro(c, resultadoCadastro) {
+            pagamentoCodigo = String(resultadoCadastro?.codigo_pagamento || "");
+            if (!pagamentoCodigo) throw new Error("O cadastro foi recebido, mas o código de pagamento não foi retornado.");
+            let d = await BusqueAPI.rpc("consultar_checkout_renovacao", { p_codigo: pagamentoCodigo });
+            if (Array.isArray(d)) d = d[0];
+            if (!d?.contrato) throw new Error("O contrato vigente não está disponível para o pagamento.");
+            pagamentoData = d;
+            pagamentoProdutoCodigo = `assinatura_${c.assinaturaPeriodo}`;
+            const p = produtoAssinatura();
+            if (!p) throw new Error("O plano escolhido não está disponível para pagamento.");
+            pag("pagamentoEmpresa").textContent = c.nome;
+            pag("pagamentoPlano").textContent = p.nome;
+            pag("pagamentoValor").textContent = dinheiro(p.valor);
+            pag("pagamentoBeneficios").textContent = textoBeneficios(p);
+            pag("pagWhatsapp").textContent = campos.whatsapp.value;
+            pag("pagEmail").value = c.email || "";
+            pag("pagContratoLink").href = d.contrato.arquivo_url || "contrato-adesao-busque-torres-v7.pdf";
+            pag("pagContratoMeta").textContent = `Contrato ${d.contrato.codigo} · SHA-256 ${String(d.contrato.sha256 || "").slice(0,16)}…`;
+            novaTentativaPagamento();
+            sessionStorage.setItem("busque_cadastro_pagamento_codigo", pagamentoCodigo);
+            form.hidden = true;
+            pagamentoCadastro.hidden = false;
+            window.scrollTo({ top: 0, behavior: "auto" });
+            atualizarBotoesPagamento();
+            setTimeout(() => pag("pagResponsavelNome").focus({ preventScroll: true }), 0);
+        }
+
+        ["pagResponsavelNome","pagDocumentoNumero","pagDocumentoTipo","pagConfirmaWhatsapp","pagAceiteContrato","pagAceitePrivacidade","pagAceiteComercial","pagEmail"].forEach(id => {
+            pag(id).addEventListener("input", atualizarBotoesPagamento);
+            pag(id).addEventListener("change", atualizarBotoesPagamento);
+        });
+        document.querySelectorAll('input[name="pagCapacidade"]').forEach(x => x.addEventListener("change", atualizarBotoesPagamento));
+        pag("pagDocumentoTipo").addEventListener("change", () => { pag("pagDocumentoNumero").value = ""; atualizarBotoesPagamento(); });
+        pag("pagDocumentoNumero").addEventListener("input", evento => {
+            let n = evento.target.value.replace(/\D/g, "");
+            if (pag("pagDocumentoTipo").value === "cpf") {
+                n = n.slice(0,11).replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+            } else {
+                n = n.slice(0,14).replace(/^(\d{2})(\d)/,"$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3").replace(/\.(\d{3})(\d)/,".$1/$2").replace(/(\d{4})(\d{1,2})$/,"$1-$2");
+            }
+            evento.target.value = n;
+            atualizarBotoesPagamento();
+        });
+        pag("pagPixBtn").addEventListener("click", () => iniciarPagamento("pix"));
+        pag("pagCardBtn").addEventListener("click", () => {
+            const janela = window.open("about:blank", "_blank");
+            iniciarPagamento("checkout_pro", janela);
+        });
+        pag("pagCopyPix").addEventListener("click", copiarPixPagamento);
+        pag("pagRetryPix").addEventListener("click", () => { liberarNovaTentativa(); setTimeout(() => iniciarPagamento("pix"), 0); });
+        pag("pagRetryCard").addEventListener("click", () => {
+            liberarNovaTentativa();
+            const janela = window.open("about:blank", "_blank");
+            setTimeout(() => iniciarPagamento("checkout_pro", janela), 0);
+        });
+
+        async function prepararConviteCortesia() {
+            if (!conviteCortesiaCodigo) {
+                conviteCortesiaValido = false;
+                document.getElementById("formCadastro").style.display = "none";
+                mostrarErro("Link de cortesia inválido. Solicite um novo convite ao Busque Torres.");
+                return;
+            }
+            try {
+                let r = await BusqueAPI.rpc("validar_convite_cortesia", { p_codigo: conviteCortesiaCodigo, p_cidade_id: "torres" });
+                if (Array.isArray(r)) r = r[0];
+                if (!r?.valido) throw new Error("Convite inválido ou expirado.");
+                conviteCortesiaValido = true;
+                conviteCortesiaDias = Number(r.dias || 30);
+                const aviso = document.getElementById("conviteCortesiaAviso");
+                const texto = document.getElementById("conviteCortesiaTexto");
+                if (texto) texto.textContent = `${conviteCortesiaDias} dias gratuitos. Nenhum pagamento será necessário.`;
+                if (aviso) aviso.style.display = "block";
+                submitBtn.textContent = `Enviar cadastro — ${conviteCortesiaDias} dias grátis`;
+            } catch (e) {
+                mostrarMensagem("erro", "Cortesia indisponível", "Este link de cortesia é inválido, já foi utilizado ou expirou.");
+            }
+        }
+
+        prepararConviteCortesia();
+
         form.addEventListener("submit", async evento => {
             evento.preventDefault();
             mensagemFormulario.className = "mensagem";
@@ -1940,11 +2433,11 @@ BusqueSite.applyBranding();
                 return;
             }
             submitBtn.disabled = true;
-            submitBtn.textContent = "Enviando...";
+            submitBtn.textContent = "Preparando pagamento...";
             try {
                 const c = montarCadastro();
-                await BusqueAPI.rpc("enviar_empresa_cidade", {
-                    p_cidade_id: SITE.id,
+                const resultado = await BusqueAPI.invokeFunction("enviar-empresa-midias-cdn", {
+                    p_cidade_id: "torres",
                     p_nome: c.nome,
                     p_categoria: c.categoria,
                     p_subcategoria: c.subcategoria,
@@ -1963,35 +2456,51 @@ BusqueSite.applyBranding();
                     p_palavras_chave: c.palavrasChave || null,
                     p_imagem_url: c.imagem || null,
                     p_logo_url: c.logo || null,
-                    p_plano: c.planoSolicitado
+                    p_plano: c.planoSolicitado,
+                    p_assinatura_periodo: c.assinaturaPeriodo,
+                    p_pagamento_imediato: false
                 });
-                form.reset();
-                campos.cidade.value = SITE.city;
-                removerFotoCapa();
-                removerLogo();
-                carregarSubcategorias();
-                mostrarEtapa(0);
-
-                // Confirmação persistente e compatível com Safari/macOS/iOS.
-                // Em vez de depender apenas de um aviso com scroll suave, esconde o formulário
-                // e exibe um painel de sucesso que permanece visível até a ação do usuário.
-                form.hidden = true;
-                mensagemFormulario.className = "mensagem";
-                mensagemFormulario.innerHTML = "";
-                sucessoCadastro.hidden = false;
-                window.scrollTo({ top: 0, behavior: "auto" });
-                setTimeout(() => sucessoCadastro.focus({ preventScroll: true }), 0);
+                if (resultado?.erro) throw new Error(resultado.erro);
+                if (conviteCortesiaValido) {
+                    let cortesia = await BusqueAPI.rpc("consumir_convite_cortesia", {
+                        p_codigo: conviteCortesiaCodigo,
+                        p_empresa_id: resultado.id,
+                        p_cidade_id: "torres"
+                    });
+                    if (Array.isArray(cortesia)) cortesia = cortesia[0];
+                    if (!cortesia?.ok) throw new Error("Não foi possível aplicar a cortesia ao cadastro.");
+                    const titulo = sucessoCadastro.querySelector("h2");
+                    const paragrafo = sucessoCadastro.querySelector("p");
+                    if (titulo) titulo.textContent = "Cadastro recebido com sucesso!";
+                    if (paragrafo) paragrafo.textContent = `Cortesia Busque Torres de ${conviteCortesiaDias} dias aplicada. Nenhum pagamento é necessário. Seu cadastro está aguardando revisão da equipe e o período começa quando ele for aprovado e publicado.`;
+                    form.hidden = true;
+                    sucessoCadastro.hidden = false;
+                    sucessoCadastro.focus();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                } else {
+                    throw new Error("A cortesia não foi validada. Nenhum pagamento foi iniciado.");
+                }
             } catch (erro) {
                 console.error("Erro ao enviar cadastro:", erro);
-                mostrarMensagem("erro", "Não foi possível enviar", "Verifique sua internet e tente novamente. Nenhum cadastro duplicado foi criado nesta tentativa.");
+                mostrarMensagem("erro", "Não foi possível continuar", erro?.message || "Verifique sua internet e tente novamente.");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = "Cadastrar negócio";
+                submitBtn.textContent = conviteCortesiaValido ? `Enviar cadastro — ${conviteCortesiaDias} dias grátis` : "Continuar para pagamento";
             }
         });
 
+        copiarBeneficioCadastro.addEventListener("click", copiarCodigoBeneficioCadastro);
+
         novoCadastroBtn.addEventListener("click", () => {
+            pararTimersPagamento();
+            sessionStorage.removeItem("busque_cadastro_pagamento_ref");
+            sessionStorage.removeItem("busque_cadastro_pagamento_codigo");
+            pagamentoData = null; pagamentoCodigo = ""; pagamentoReferencia = ""; pagamentoTravado = false; pagamentoTrabalhando = false;
             sucessoCadastro.hidden = true;
+            beneficioCadastro.hidden = true;
+            beneficioCadastroCodigo.textContent = "";
+            beneficioCadastroResumo.textContent = "";
+            pagamentoCadastro.hidden = true;
             form.hidden = false;
             form.reset();
             removerFotoCapa();
