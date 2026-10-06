@@ -1,0 +1,33 @@
+BEGIN;
+DO $$
+DECLARE dono uuid:=gen_random_uuid(); comum uuid:=gen_random_uuid(); inativo uuid:=gen_random_uuid(); n integer;
+BEGIN
+ INSERT INTO auth.users(id,email) VALUES(dono,'caxias-teste-dono@example.invalid'),(comum,'caxias-teste-comum@example.invalid'),(inativo,'caxias-teste-inativo@example.invalid');
+ INSERT INTO public.administradores(user_id,nome,papel,ativo) VALUES(dono,'Teste Dono','dono',true),(inativo,'Teste Inativo','dono',false);
+ PERFORM set_config('request.jwt.claim.sub',dono::text,true);
+ PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',dono,'role','authenticated')::text,true);
+ EXECUTE 'SET LOCAL ROLE authenticated';
+ IF NOT public.usuario_e_admin() OR NOT public.usuario_e_dono() THEN RAISE EXCEPTION 'Dono não reconhecido'; END IF;
+ SELECT count(*) INTO n FROM public.administradores;
+ IF n<>1 THEN RAISE EXCEPTION 'Perfil de outro usuário exposto'; END IF;
+ BEGIN UPDATE public.administradores SET papel='dono'; RAISE EXCEPTION 'Alteração de papel permitida'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ EXECUTE 'RESET ROLE';
+ PERFORM set_config('request.jwt.claim.sub',comum::text,true);
+ PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',comum,'role','authenticated','user_metadata',jsonb_build_object('papel','dono'))::text,true);
+ EXECUTE 'SET LOCAL ROLE authenticated';
+ IF public.usuario_e_admin() OR public.usuario_e_dono() THEN RAISE EXCEPTION 'Usuário comum ganhou acesso'; END IF;
+ SELECT count(*) INTO n FROM public.administradores;
+ IF n<>0 THEN RAISE EXCEPTION 'Usuário comum viu perfil administrativo'; END IF;
+ BEGIN INSERT INTO public.administradores(user_id,nome,papel) VALUES(comum,'Invasor Teste','dono'); RAISE EXCEPTION 'Auto promoção permitida'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ EXECUTE 'RESET ROLE';
+ PERFORM set_config('request.jwt.claim.sub',inativo::text,true);
+ PERFORM set_config('request.jwt.claims',jsonb_build_object('sub',inativo,'role','authenticated')::text,true);
+ EXECUTE 'SET LOCAL ROLE authenticated';
+ IF public.usuario_e_admin() OR public.usuario_e_dono() THEN RAISE EXCEPTION 'Admin inativo ganhou acesso'; END IF;
+ EXECUTE 'RESET ROLE';
+ EXECUTE 'SET LOCAL ROLE anon';
+ BEGIN PERFORM public.usuario_e_admin(); RAISE EXCEPTION 'Anon acessou função administrativa'; EXCEPTION WHEN insufficient_privilege THEN NULL; END;
+ EXECUTE 'RESET ROLE';
+END $$;
+ROLLBACK;
+SELECT 'testes_autorizacao_passaram_dados_descartados' AS resultado;
