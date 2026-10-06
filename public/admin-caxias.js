@@ -54,6 +54,7 @@
       $("authorizedEmail").textContent = user.email || "Administrador";
       $("loginPage").hidden = true;
       $("authorizedPage").hidden = false;
+      await window.CaxiasEmpresas.start(() => token);
     } catch (error) {
       if (pendingToken) { try { await revoke(pendingToken); } catch {} }
       message(error instanceof TypeError ? "Não foi possível conectar. Verifique sua conexão e tente novamente." : error.message);
@@ -63,6 +64,7 @@
     }
   });
   $("logoutButton").addEventListener("click", async () => {
+    window.CaxiasEmpresas.clear();
     const current = token;
     token = null;
     $("authorizedEmail").textContent = "";
