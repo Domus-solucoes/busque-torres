@@ -461,6 +461,12 @@
     .promo-day-carousel{margin:0 0 10px}.promo-day-viewport{overflow:hidden;border-radius:18px}.promo-day-track{display:flex;transition:transform .28s ease}.promo-day-slide{flex:0 0 100%;min-width:100%}
     .promo-day-card{position:relative;overflow:hidden;min-height:186px;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:#12243d}.promo-day-card.real img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92}.promo-day-card.real::after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,rgba(5,11,19,.94))}
     .promo-day-card-content{position:absolute;left:14px;right:14px;bottom:12px;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.55)}.promo-day-card-content small{display:block;margin-bottom:4px;font-size:.63rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#ffd38b}.promo-day-card-content strong{display:block;font-size:1rem;line-height:1.3;color:#fff}.promo-day-card-content p{margin:5px 0 0;font-size:.76rem;line-height:1.45;color:#dde7f2}
+    /* Banner semanal da Rafaela: formato integral, sem corte, em celular e desktop. */
+    .promo-day-card.rafaela-weekly{height:auto;min-height:0;background:#fff}
+    .promo-day-card.rafaela-weekly a{display:block;text-decoration:none;position:relative}
+    .promo-day-card.rafaela-weekly img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff}
+    .promo-day-card.rafaela-weekly .rafaela-whatsapp{display:block;padding:12px 14px;background:#168a55;color:#fff;text-align:center;font-size:.84rem;font-weight:900}
+    .promo-day-card.rafaela-weekly a:focus-visible{outline:3px solid #e6b84b;outline-offset:-3px}
     .promo-day-card.demo{background:linear-gradient(145deg,#10233e,#172d4b)}.promo-day-card.demo::before{content:"PROMOÇÃO DO DIA";position:absolute;left:14px;top:14px;font-size:.62rem;letter-spacing:.07em;font-weight:900;color:#ffd38b}.promo-day-card.demo .promo-day-card-content{left:16px;right:16px;bottom:16px;text-shadow:none}.promo-day-card.demo .promo-day-card-content small{color:#cfd9e6}.promo-day-card.demo .promo-day-card-content strong{color:#fff}.promo-day-card.demo .promo-day-card-content p{color:#c9d4e0}
     .promo-day-carousel-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.promo-day-dots{display:flex;align-items:center;gap:6px}.promo-day-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.24);cursor:pointer}.promo-day-dots button.active{background:#ffd38b;transform:scale(1.15)}.promo-day-position{color:#c6d2de;font-size:.72rem;font-weight:900}.promo-day-nav{display:flex;gap:7px}.promo-day-nav button{width:34px;height:34px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.04);color:#fff;font-size:1rem;font-weight:900;cursor:pointer}.promo-day-nav button:disabled{opacity:.4;cursor:default}
     .promo-day-help{margin:0 0 10px;color:#c6d2de;font-size:.71rem;line-height:1.45;text-align:center}.promo-day-cta{display:block;width:100%;border:0;border-radius:14px;padding:13px 14px;background:linear-gradient(135deg,#f0c06b,#df9d39);color:#152338;font-size:.81rem;font-weight:950;letter-spacing:.02em;cursor:pointer;box-shadow:0 12px 22px rgba(0,0,0,.2);text-align:center;text-decoration:none}.promo-day-cta:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
@@ -1874,9 +1880,19 @@ registrarMetrica("visita_site",null,"index");
     nextBtn.disabled=!multiple||currentIndex===total-1;
   }
 
+  // A agenda semanal usa o calendário de Brasília, independentemente do fuso do visitante.
+  function isWednesdayInBrazil(){
+    const weekday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:'America/Sao_Paulo'}).format(new Date());
+    return weekday==='Wed';
+  }
+  const RAFAELA_WHATSAPP='https://wa.me/5548992128712?text='+encodeURIComponent('Olá, Rafaela! Vim do Foguinho do Busque Torres e gostaria de saber mais sobre as opções para imóvel, veículo ou crédito.');
+
   function renderRealPromos(items){
     slides=items;
     track.innerHTML=items.map(item=>{
+      if(item._rafaelaSemanal){
+        return `<div class="promo-day-slide"><article class="promo-day-card rafaela-weekly"><a href="${RAFAELA_WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Falar com Rafaela Dreher Jungermann pelo WhatsApp"><img src="assets/rafaela-ademicon-quarta.svg" alt="Rafaela Dreher Jungermann, Ademicon: imóvel, veículo e crédito. WhatsApp 48 99212-8712" decoding="async"><span class="rafaela-whatsapp">CONVERSAR COM A RAFAELA NO WHATSAPP ↗</span></a></article></div>`;
+      }
       const img=String(item.imagem_url||"").trim(),title=htmlEscape(item.titulo||"Promoção do Dia"),company=htmlEscape(item.empresa_nome||"Empresa"),description=htmlEscape(item.descricao||"");
       return `<div class="promo-day-slide"><article class="promo-day-card real">${img?`<img src="${htmlEscape(img)}" alt="${title}" loading="lazy" decoding="async">`:''}<div class="promo-day-card-content"><small>${company}</small><strong>${title}</strong>${description?`<p>${description}</p>`:''}</div></article></div>`;
     }).join('');
@@ -1887,7 +1903,9 @@ registrarMetrica("visita_site",null,"index");
   }
 
   function renderToday(promos){
-    currentPromos=Array.isArray(promos)?promos.slice(0,4):[];
+    const normalPromos=Array.isArray(promos)?promos.slice(0,4):[];
+    // Vaga extra às quartas: não remove nem substitui as promoções pagas existentes.
+    currentPromos=isWednesdayInBrazil()?[{_rafaelaSemanal:true},...normalPromos]:normalPromos;
       const todayCount=currentPromos.length;
       dot.hidden=todayCount===0;
       dot.textContent=todayCount?String(todayCount):'';
