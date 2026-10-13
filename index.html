@@ -1880,17 +1880,12 @@ registrarMetrica("visita_site",null,"index");
     nextBtn.disabled=!multiple||currentIndex===total-1;
   }
 
-  // A agenda semanal usa o calendário de Brasília, independentemente do fuso do visitante.
-  function isWednesdayInBrazil(){
-    const weekday=new Intl.DateTimeFormat('en-US',{weekday:'short',timeZone:'America/Sao_Paulo'}).format(new Date());
-    return weekday==='Wed';
-  }
   const RAFAELA_WHATSAPP='https://wa.me/5548992128712?text='+encodeURIComponent('Olá, Rafaela! Vim do Foguinho do Busque Torres e gostaria de saber mais sobre as opções para imóvel, veículo ou crédito.');
 
   function renderRealPromos(items){
     slides=items;
     track.innerHTML=items.map(item=>{
-      if(item._rafaelaSemanal){
+      if(item.empresa_id==='f5d8e5e6-566f-45ec-9901-2ad81dcc971e' && item.titulo==='Realize seus planos — Ademicon'){
         return `<div class="promo-day-slide"><article class="promo-day-card rafaela-weekly"><a href="${RAFAELA_WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Falar com Rafaela Dreher Jungermann pelo WhatsApp"><img src="assets/rafaela-ademicon-quarta.svg" alt="Rafaela Dreher Jungermann, Ademicon: imóvel, veículo e crédito. WhatsApp 48 99212-8712" decoding="async"><span class="rafaela-whatsapp">CONVERSAR COM A RAFAELA NO WHATSAPP ↗</span></a></article></div>`;
       }
       const img=String(item.imagem_url||"").trim(),title=htmlEscape(item.titulo||"Promoção do Dia"),company=htmlEscape(item.empresa_nome||"Empresa"),description=htmlEscape(item.descricao||"");
@@ -1903,9 +1898,7 @@ registrarMetrica("visita_site",null,"index");
   }
 
   function renderToday(promos){
-    const normalPromos=Array.isArray(promos)?promos.slice(0,4):[];
-    // Vaga extra às quartas: não remove nem substitui as promoções pagas existentes.
-    currentPromos=isWednesdayInBrazil()?[{_rafaelaSemanal:true},...normalPromos]:normalPromos;
+    currentPromos=Array.isArray(promos)?promos.slice(0,4):[];
       const todayCount=currentPromos.length;
       dot.hidden=todayCount===0;
       dot.textContent=todayCount?String(todayCount):'';
