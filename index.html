@@ -467,6 +467,11 @@
     .promo-day-card.rafaela-weekly img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff}
     .promo-day-card.rafaela-weekly .rafaela-whatsapp{display:block;padding:12px 14px;background:#168a55;color:#fff;text-align:center;font-size:.84rem;font-weight:900}
     .promo-day-card.rafaela-weekly a:focus-visible{outline:3px solid #e6b84b;outline-offset:-3px}
+    .promo-day-card.karina-weekly{height:auto;min-height:0;background:#fff}
+    .promo-day-card.karina-weekly a{display:block;position:relative;text-decoration:none}
+    .promo-day-card.karina-weekly img{display:block;position:static;width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;background:#fff;opacity:1}
+    .promo-day-card.karina-weekly::after{display:none}
+    .promo-day-card.karina-weekly .karina-whatsapp{display:block;padding:12px;background:#168a55;color:#fff;text-align:center;font-size:.84rem;font-weight:900}
     .promo-day-card.demo{background:linear-gradient(145deg,#10233e,#172d4b)}.promo-day-card.demo::before{content:"PROMOÇÃO DO DIA";position:absolute;left:14px;top:14px;font-size:.62rem;letter-spacing:.07em;font-weight:900;color:#ffd38b}.promo-day-card.demo .promo-day-card-content{left:16px;right:16px;bottom:16px;text-shadow:none}.promo-day-card.demo .promo-day-card-content small{color:#cfd9e6}.promo-day-card.demo .promo-day-card-content strong{color:#fff}.promo-day-card.demo .promo-day-card-content p{color:#c9d4e0}
     .promo-day-carousel-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}.promo-day-dots{display:flex;align-items:center;gap:6px}.promo-day-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.24);cursor:pointer}.promo-day-dots button.active{background:#ffd38b;transform:scale(1.15)}.promo-day-position{color:#c6d2de;font-size:.72rem;font-weight:900}.promo-day-nav{display:flex;gap:7px}.promo-day-nav button{width:34px;height:34px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.04);color:#fff;font-size:1rem;font-weight:900;cursor:pointer}.promo-day-nav button:disabled{opacity:.4;cursor:default}
     .promo-day-help{margin:0 0 10px;color:#c6d2de;font-size:.71rem;line-height:1.45;text-align:center}.promo-day-cta{display:block;width:100%;border:0;border-radius:14px;padding:13px 14px;background:linear-gradient(135deg,#f0c06b,#df9d39);color:#152338;font-size:.81rem;font-weight:950;letter-spacing:.02em;cursor:pointer;box-shadow:0 12px 22px rgba(0,0,0,.2);text-align:center;text-decoration:none}.promo-day-cta:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
@@ -1887,6 +1892,13 @@ registrarMetrica("visita_site",null,"index");
     track.innerHTML=items.map(item=>{
       if(item.empresa_id==='f5d8e5e6-566f-45ec-9901-2ad81dcc971e' && item.titulo==='Realize seus planos — Ademicon'){
         return `<div class="promo-day-slide"><article class="promo-day-card rafaela-weekly"><a href="${RAFAELA_WHATSAPP}" target="_blank" rel="noopener noreferrer" aria-label="Falar com Rafaela Dreher Jungermann pelo WhatsApp"><img src="assets/rafaela-ademicon-quarta.svg" alt="Rafaela Dreher Jungermann, Ademicon: imóvel, veículo e crédito. WhatsApp 48 99212-8712" decoding="async"><span class="rafaela-whatsapp">CONVERSAR COM A RAFAELA NO WHATSAPP ↗</span></a></article></div>`;
+      }
+      if(item.empresa_id==='3f6ff5d7-f096-49ea-bb91-937c1afe0c7a' && item.titulo==='Motorista Particular — Karina Diaz'){
+        const phone='5551992274028';
+        const message=encodeURIComponent('Olá, Karina! Vim do Foguinho do Busque Torres e gostaria de saber mais sobre seus serviços de motorista particular.');
+        const url='https://wa.me/'+phone+'?text='+message;
+        const img=htmlEscape(String(item.imagem_url||''));
+        return `<div class="promo-day-slide"><article class="promo-day-card karina-weekly"><a href="${url}" target="_blank" rel="noopener noreferrer" aria-label="Falar com Karina Diaz pelo WhatsApp"><img src="${img}" alt="Karina Diaz Motorista Particular" loading="lazy" decoding="async"><span class="karina-whatsapp">FALAR COM A KARINA NO WHATSAPP ↗</span></a></article></div>`;
       }
       const img=String(item.imagem_url||"").trim(),title=htmlEscape(item.titulo||"Promoção do Dia"),company=htmlEscape(item.empresa_nome||"Empresa"),description=htmlEscape(item.descricao||"");
       return `<div class="promo-day-slide"><article class="promo-day-card real">${img?`<img src="${htmlEscape(img)}" alt="${title}" loading="lazy" decoding="async">`:''}<div class="promo-day-card-content"><small>${company}</small><strong>${title}</strong>${description?`<p>${description}</p>`:''}</div></article></div>`;
