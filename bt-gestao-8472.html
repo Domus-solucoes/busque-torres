@@ -756,6 +756,7 @@ body{background:var(--bg);color:var(--text)}
 @media(max-width:390px){.overview-grid{grid-template-columns:1fr}.powerbi-mini-stats{grid-template-columns:1fr}.powerbi-mini-stats div{border-right:0;border-bottom:1px solid #e9eff4}}
 
 </style>
+  <meta name="bt-admin-build" content="2026-10-15-agrorural-fix-2">
 </head>
 <body>
   <section id="loginPage" class="login-page">
@@ -1170,7 +1171,7 @@ body{background:var(--bg);color:var(--text)}
       state.companies=mergeRows(state.companies,Array.isArray(rows)?rows:[]);renderStats();renderContent();
     }catch(error){console.warn("Sincronização de vencimentos em segundo plano:",error?.message||error)}finally{state.syncRunning=false}
   }
-  async function loadPendingCompanyDetails(force=false){if(state.loaded.pendingCompanies&&!force)return;const rows=await api(`empresas?select=id,descricao,produtos,servicos,imagem_url,logo_url&${cityFilter()}&status=eq.pendente&order=created_at.desc`);state.companies=mergeRows(state.companies,Array.isArray(rows)?rows:[]);state.loaded.pendingCompanies=true}
+  async function loadPendingCompanyDetails(force=false){if(state.loaded.pendingCompanies&&!force)return;const rows=await api(`empresas?select=id,descricao,produtos,servicos,imagem_url,logo_url,motivo_status,status,pagamento_confirmado,cadastro_exige_pagamento&${cityFilter()}&order=created_at.desc`);state.companies=mergeRows(state.companies,Array.isArray(rows)?rows:[]);state.loaded.pendingCompanies=true}
   async function loadPendingJobDetails(force=false){if(state.loaded.pendingJobs&&!force)return;const rows=await api(`vagas?select=id,descricao,requisitos,imagem_url&${cityFilter()}&status=eq.pendente&order=created_at.desc`);state.jobs=mergeRows(state.jobs,Array.isArray(rows)?rows:[]);state.loaded.pendingJobs=true}
   async function loadActiveJobDetails(force=false){if(state.loaded.activeJobs&&!force)return;const rows=await api(`vagas?select=id,imagem_url&${cityFilter()}&status=eq.ativa&order=created_at.desc`);state.jobs=mergeRows(state.jobs,Array.isArray(rows)?rows:[]);state.loaded.activeJobs=true}
   async function loadFinance(force=false){if(state.loaded.finance&&!force)return;if(!cityConfig().paymentsReady){state.payments=[];state.loaded.finance=true;return}const rows=await api(`pagamentos?select=id,empresa_id,tipo,produto_codigo,status,plano,valor,created_at,pago_em,mercado_pago_payment_id,mercado_pago_preference_id,external_reference,erro_detalhe,checkout_url,forma_pagamento,email_pagador,expira_em&${cityFilter()}&order=created_at.desc`);state.payments=Array.isArray(rows)?rows:[];state.loaded.finance=true}
