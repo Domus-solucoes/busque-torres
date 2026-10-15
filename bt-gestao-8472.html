@@ -1548,7 +1548,7 @@ body{background:var(--bg);color:var(--text)}
   function dashboardHtml(){
     const activeCompanies=state.companies.filter(x=>x.status==="ativo"&&x.ativo);
     const activeJobs=state.jobs.filter(x=>x.status==="ativa");
-    const pendingCompanies=state.companies.filter(x=>x.status==="pendente");
+    const pendingCompanies=state.companies.filter(x=>x.status==="pendente"||String(x.motivo_status||"").startsWith("[ADM] Aguardando pagamento"));
     const pendingJobs=state.jobs.filter(x=>x.status==="pendente");
     const renewals=renewalCompanies().sort((a,b)=>new Date(a.data_vencimento||0)-new Date(b.data_vencimento||0));
     const master=activePlanCount("master"), destaque=activePlanCount("destaque");
@@ -1610,7 +1610,7 @@ body{background:var(--bg);color:var(--text)}
     }else if(state.tab==="overview"){
       title="Visão geral";subtitle="Prioridades, operação e atalhos do dia.";html=dashboardHtml()
     }else if(state.tab==="companies-pending"){
-      list=state.companies.filter(x=>x.status==="pendente");title="Empresas pendentes";subtitle="Confirme o pagamento antes de publicar.";html=list.map(companyCard).join("")
+      list=state.companies.filter(x=>x.status==="pendente"||String(x.motivo_status||"").startsWith("[ADM] Aguardando pagamento"));title="Empresas pendentes";subtitle="Confirme o pagamento antes de publicar.";html=list.map(companyCard).join("")
     }else if(state.tab==="jobs-pending"){
       list=state.jobs.filter(x=>x.status==="pendente");title="Vagas pendentes";subtitle="Analise os dados e escolha uma ação.";html=list.map(jobCard).join("")
     }else if(state.tab==="promotions"){
