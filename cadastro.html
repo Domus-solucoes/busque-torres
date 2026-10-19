@@ -807,6 +807,12 @@
                     >
                     <p class="erro-campo" id="erroNome"></p>
                 </div>
+                <div class="form-group">
+                    <label for="atividadeBusca">O que sua empresa faz? <span style="font-weight:400;color:#9aa9bd">(ajuda para encontrar o nicho)</span></label>
+                    <input type="search" id="atividadeBusca" autocomplete="off" placeholder="Ex.: instalação de painel solar, diarista, manicure...">
+                    <div id="sugestoesAtividade" aria-live="polite" style="margin-top:8px"></div>
+                    <p class="subcategoria-hint">Digite a atividade e selecione uma sugestão. A categoria e o nicho serão preenchidos automaticamente.</p>
+                </div>
 
                 <div class="grid-dois">
                     <div class="form-group">
@@ -1917,6 +1923,46 @@
         const etapasFormulario = [...document.querySelectorAll(".form-etapa")];
         const indicadoresEtapa = [...document.querySelectorAll(".wizard-step-indicator")];
 
+        const compararCategoria=(a,b)=>a.localeCompare(b,"pt-BR",{sensitivity:"base"});
+        function ordenarCategorias(){
+            const select=campos.categoria,placeholder=select.options[0];
+            const options=[...select.options].slice(1).sort((a,b)=>compararCategoria(a.textContent,b.textContent));
+            select.replaceChildren(placeholder,...options);
+        }
+        function normalizarAtividade(v){return String(v||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
+        const sinonimosAtividade=[
+            {categoria:"construcao",nicho:"Energia solar",termos:["painel solar","placa solar","fotovoltaica","energia solar","instalacao solar"]},
+            {categoria:"casa",nicho:"Diarista",termos:["diarista","faxineira","faxina"]},
+            {categoria:"casa",nicho:"Limpeza residencial",termos:["limpeza residencial","limpeza de casas","limpeza de apartamento"]},
+            {categoria:"casa",nicho:"Instalação de ar-condicionado",termos:["instalacao de ar condicionado","instalar split"]},
+            {categoria:"casa",nicho:"Manutenção de ar-condicionado",termos:["conserto de ar condicionado","manutencao de split"]},
+            {categoria:"saude",nicho:"Odontologia",termos:["dentista","clinica odontologica","odontologia"]},
+            {categoria:"construcao",nicho:"Eletricista",termos:["eletricista","instalacao eletrica"]},
+            {categoria:"beleza",nicho:"Manicure e pedicure",termos:["manicure","pedicure","unhas"]}
+        ];
+        function sugerirAtividades(){
+            const input=document.getElementById("atividadeBusca"),box=document.getElementById("sugestoesAtividade"),termo=normalizarAtividade(input.value);
+            box.replaceChildren();if(termo.length<3)return;
+            const itens=[];
+            Object.entries(SUBCATEGORIAS).forEach(([categoria,nomes])=>nomes.forEach(nicho=>{
+                if(nicho.startsWith("Outro"))return;
+                const alvo=normalizarAtividade(nicho),alias=sinonimosAtividade.find(x=>x.categoria===categoria&&x.nicho===nicho);
+                const matches=alias?.termos.map(normalizarAtividade)||[];
+                const pontos=alvo===termo?100:matches.some(t=>t===termo)?95:alvo.includes(termo)?70:matches.some(t=>t.includes(termo)||termo.includes(t))?65:termo.includes(alvo)&&alvo.length>4?50:0;
+                if(pontos)itens.push({categoria,nicho,pontos});
+            }));
+            itens.sort((a,b)=>b.pontos-a.pontos||compararCategoria(a.nicho,b.nicho));
+            itens.slice(0,5).forEach(item=>{
+                const button=document.createElement("button");button.type="button";button.style.cssText="display:block;width:100%;text-align:left;padding:10px;margin:4px 0;border:1px solid #334155;border-radius:9px;background:#1b2432;color:#fff;cursor:pointer";
+                const categoriaLabel=[...campos.categoria.options].find(o=>o.value===item.categoria)?.textContent||item.categoria;
+                button.textContent=item.nicho+" — "+categoriaLabel;
+                button.addEventListener("click",()=>{campos.categoria.value=item.categoria;carregarSubcategorias();campos.subcategoria.value=item.nicho;input.value=item.nicho;box.replaceChildren();limparErro("categoria");limparErro("subcategoria")});
+                box.appendChild(button);
+            });
+        }
+        ordenarCategorias();
+        document.getElementById("atividadeBusca").addEventListener("input",sugerirAtividades);
+
         function carregarSubcategorias() {
             const categoria = campos.categoria.value;
             const opcoes = SUBCATEGORIAS[categoria] || [];
@@ -1929,7 +1975,7 @@
                 : "Escolha primeiro a categoria";
             campos.subcategoria.appendChild(inicial);
 
-            opcoes.forEach(nome => {
+            [...opcoes].sort(compararCategoria).forEach(nome => {
                 const option = document.createElement("option");
                 option.value = nome;
                 option.textContent = nome;
