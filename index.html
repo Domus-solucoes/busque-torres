@@ -33,6 +33,13 @@
 })();
 </script>
   <style>
+    .smart-search-suggestions{position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:30;background:#fff;color:#172033;border:1px solid #e6eaf0;border-radius:14px;box-shadow:0 12px 30px rgba(8,27,51,.16);padding:9px;max-height:245px;overflow:auto}
+    .smart-search-suggestions[hidden]{display:none!important}
+    .smart-search-option{display:block;width:100%;border:0;border-radius:9px;background:transparent;padding:10px 12px;text-align:left;cursor:pointer;color:#172033}
+    .smart-search-option:hover,.smart-search-option:focus-visible{background:#f2f5fa}
+    .smart-search-option strong{display:block;font-size:.9rem}
+    .smart-search-option small{display:block;color:#667085;font-size:.76rem;margin-top:3px}
+
     :root{
       --navy:#081b33;--navy2:#102d4f;--gold:#e6b84b;--gold2:#f3d184;
       --bg:#f5f7fb;--surface:#fff;--text:#172033;--muted:#667085;
@@ -947,7 +954,8 @@
 <div class="search-wrap">
   <div class="search">
     <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16.5 16.5 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-    <input id="searchInput" type="search" placeholder="Busque por empresa, profissão ou serviço..." autocomplete="off">
+    <input id="searchInput" type="search" placeholder="Busque por empresa, profissão ou serviço..." autocomplete="off" aria-controls="smartSearchSuggestions" aria-expanded="false">
+    <div id="smartSearchSuggestions" class="smart-search-suggestions" hidden aria-live="polite"></div>
     <button id="searchButton" type="button">Buscar</button>
     <button id="searchClose" class="search-close" type="button" aria-label="Fechar busca">Fechar</button>
   </div>
@@ -1188,6 +1196,7 @@
 <div class="access-overlay" id="accessOverlay" aria-hidden="true"><div class="access-modal" role="dialog" aria-modal="true" aria-labelledby="accessTitle"><div class="access-modal-head"><h3 id="accessTitle">Acessos do Busque Torres</h3><button class="access-modal-close" id="closeAccessCounter" type="button" aria-label="Fechar">×</button></div><p>Visualizações registradas na página inicial.</p><div class="access-stats"><div class="access-stat"><strong id="accessToday">—</strong><span>HOJE</span></div><div class="access-stat"><strong id="accessWeek">—</strong><span>7 DIAS</span></div><div class="access-stat"><strong id="accessMonth">—</strong><span>ESTE MÊS</span></div><div class="access-stat"><strong id="accessTotal">—</strong><span>GERAL</span></div></div><small class="access-note">Cada carregamento da página inicial é contabilizado nesta primeira versão.</small></div></div>
 
 <script src="supabase-config.js"></script>
+<script src="js/busca-inteligente.js"></script>
 <script>
 "use strict";
 let JOBS=[];
@@ -1578,6 +1587,24 @@ function prepararOrdemNormais(){const seed=normalSeed();normalOrder=allCompanies
 function normalCompanyRow(company){const info=categoryInfo[company.categoria]||{name:"Empresa"};const subtitle=company.subcategoria||info.name||"Empresa local";const a=document.createElement("a");a.className="normal-company-row";a.href=profileUrl(company);a.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);a.innerHTML=`<span class="normal-company-name">${escapeHtml(company.nome)}</span><span class="normal-company-sep">—</span><span class="normal-company-subtitle">${escapeHtml(subtitle)}</span>`;return a}
 function renderNormalCompanies(){if(!normalOrder.length)prepararOrdemNormais();const section=$("normalCompaniesSection"),grid=$("normalCompanyCards"),count=$("normalCompaniesCount"),more=$("loadMoreCompanies");const total=normalOrder.length;if(!total){section.hidden=true;grid.replaceChildren();count.textContent="";more.hidden=true;return}section.hidden=false;const visible=normalOrder.slice(0,normalVisible);grid.replaceChildren(...visible.map(normalCompanyRow));count.textContent=`${total} empresa${total===1?"":"s"}`;more.hidden=visible.length>=total;more.textContent=visible.length<total?`Ver mais empresas (${total-visible.length})`:"Todas as empresas exibidas"}
 function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map((company,index)=>card(company,index<3)));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";prepararOrdemNormais();renderNormalCompanies();atualizarBannersMaster(master)}
+function updateSmartSuggestions(){
+  const panel=$("smartSearchSuggestions"),input=$("searchInput");
+  if(!panel||!input||!window.BusqueBuscaInteligente)return;
+  const suggestions=BusqueBuscaInteligente.suggestions(input.value).filter(item=>item.score>=24);
+  panel.replaceChildren();
+  suggestions.forEach(item=>{
+    const button=document.createElement("button");button.type="button";button.className="smart-search-option";
+    const title=document.createElement("strong");title.textContent=item.sub;
+    const detail=document.createElement("small");detail.textContent=`Categoria sugerida: ${categoryInfo[item.category]?.name||item.category} · Ver empresas relacionadas`;
+    button.append(title,detail);
+    button.addEventListener("click",()=>{
+      input.value=item.sub;selected="todos";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));
+      updateSmartSuggestions();updateSearch();input.focus();
+    });
+    panel.append(button);
+  });
+  panel.hidden=!suggestions.length;input.setAttribute("aria-expanded",String(Boolean(suggestions.length)));
+}
 function renderSearch(){
   const hasQuery=Boolean(query),hasCategory=selected!=="todos";
   const remoteReady=hasQuery&&searchRemoteQuery===query&&Array.isArray(searchRemoteCompanies);
@@ -1585,7 +1612,7 @@ function renderSearch(){
   if(hasQuery&&!remoteReady)list=list.filter(c=>searchableText(c).includes(query));
   else if(!hasQuery&&!hasCategory)list=[];
   if(hasCategory)list=list.filter(c=>c.categoria===selected);
-  list.sort((a,b)=>String(a.nome).localeCompare(String(b.nome),"pt-BR"));
+  list.sort((a,b)=>hasQuery&&window.BusqueBuscaInteligente?(BusqueBuscaInteligente.rankBusiness(b,query)-BusqueBuscaInteligente.rankBusiness(a,query))||String(a.nome).localeCompare(String(b.nome),"pt-BR"):String(a.nome).localeCompare(String(b.nome),"pt-BR"));
   $("cards").replaceChildren(...list.map(company=>card(company,false)));
   const hasFilter=hasQuery||hasCategory;
   $("resultCount").textContent=hasFilter?`${list.length} ${list.length===1?"resultado":"resultados"}`:"";
@@ -1733,7 +1760,19 @@ async function loadRemoteSearch(rawTerm){
   try{
     const rows=await BusqueAPI.rpc("buscar_empresas",{p_termo:term});
     if(token!==searchRequestToken||normalized!==query)return;
-    searchRemoteCompanies=(Array.isArray(rows)?rows:[]).map(mapCompany).map(mergeSearchCompany);
+    let found=Array.isArray(rows)?rows:[];
+    // Complementa apenas buscas sem resultados, preservando a pesquisa original.
+    if(found.length===0&&window.BusqueBuscaInteligente){
+      const match=BusqueBuscaInteligente.suggestions(term,1)[0];
+      if(match&&match.score>=55){
+        const aliases=[match.sub,...match.terms].filter(x=>clean(x)!==normalized);
+        for(const alias of aliases.slice(0,3)){
+          try{const extra=await BusqueAPI.rpc("buscar_empresas",{p_termo:alias});if(Array.isArray(extra)&&extra.length){found=extra;break}}catch(_){break}
+        }
+      }
+    }
+    if(token!==searchRequestToken||normalized!==query)return;
+    searchRemoteCompanies=found.map(mapCompany).map(mergeSearchCompany);
     searchRemoteQuery=normalized;
     renderSearch();
     scheduleMarketSearchRegistration(term,searchRemoteCompanies.length,normalized);
@@ -1754,8 +1793,8 @@ function scheduleRemoteSearch(immediate=false){
   else searchDebounceTimer=setTimeout(()=>loadRemoteSearch(raw),220);
 }
 function openSearch(){document.body.classList.add("search-mode");clearInterval(bannerTimer);query=clean($("searchInput").value);render();if(query)scheduleRemoteSearch();requestAnimationFrame(()=>{$("companiesSection")?.scrollIntoView({behavior:"smooth",block:"start"})})}
-function closeSearch(){document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";clearTimeout(searchDebounceTimer);clearTimeout(marketSearchRegisterTimer);searchRequestToken++;searchRemoteCompanies=null;searchRemoteQuery="";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
-function updateSearch(){query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render();scheduleRemoteSearch()}
+function closeSearch(){if($("smartSearchSuggestions"))$("smartSearchSuggestions").hidden=true;$("searchInput").setAttribute("aria-expanded","false");document.body.classList.remove("search-mode");$("searchInput").value="";query="";selected="todos";clearTimeout(searchDebounceTimer);clearTimeout(marketSearchRegisterTimer);searchRequestToken++;searchRemoteCompanies=null;searchRemoteQuery="";document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.category==="todos"));restartBanner();render()}
+function updateSearch(){updateSmartSuggestions();query=clean($("searchInput").value);if(!document.body.classList.contains("search-mode"))openSearch();else render();scheduleRemoteSearch()}
 $("searchInput").addEventListener("input",updateSearch);$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape")closeSearch();if(e.key==="Enter"){e.preventDefault();registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true)}});$("searchButton").addEventListener("click",()=>{registrarMetrica("busca",null,"index");openSearch();scheduleRemoteSearch(true);$("searchInput").focus()});$("searchClose").addEventListener("click",closeSearch);$("bannerPrev").addEventListener("click",()=>moveBanner(-1));$("bannerNext").addEventListener("click",()=>moveBanner(1));
 
 // Swipe do MASTER no celular. Não altera clique do CTA nem os controles desktop.
