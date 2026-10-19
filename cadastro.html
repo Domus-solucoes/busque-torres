@@ -1929,7 +1929,7 @@
             const options=[...select.options].slice(1).sort((a,b)=>compararCategoria(a.textContent,b.textContent));
             select.replaceChildren(placeholder,...options);
         }
-        function normalizarAtividade(v){return String(v||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
+        function normalizarAtividade(v){return String(v||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
         const sinonimosAtividade=[
             {categoria:"construcao",nicho:"Energia solar",termos:["painel solar","placa solar","fotovoltaica","energia solar","instalacao solar"]},
             {categoria:"casa",nicho:"Diarista",termos:["diarista","faxineira","faxina"]},
