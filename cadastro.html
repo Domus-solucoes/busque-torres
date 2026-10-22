@@ -2578,7 +2578,16 @@
                 }
             } catch (erro) {
                 console.error("Erro ao enviar cadastro:", erro);
-                mostrarMensagem("erro", "Não foi possível continuar", erro?.message || "Verifique sua internet e tente novamente.");
+                const detalhe = erro?.context?.body || erro?.details || erro?.message || erro;
+                let mensagem = "Verifique os dados e tente novamente.";
+                if (typeof detalhe === "string") {
+                    try { const parsed = JSON.parse(detalhe); mensagem = parsed?.erro || parsed?.message || detalhe; }
+                    catch { mensagem = detalhe; }
+                } else if (detalhe && typeof detalhe === "object") {
+                    mensagem = detalhe.erro || detalhe.message || detalhe.error_description || detalhe.error || mensagem;
+                }
+                if (typeof mensagem !== "string") mensagem = "Falha ao enviar o cadastro. Confira as imagens e os campos obrigatórios.";
+                mostrarMensagem("erro", "Não foi possível continuar", mensagem);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = textoBotaoCadastro();
