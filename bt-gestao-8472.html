@@ -963,6 +963,7 @@ body{background:var(--bg);color:var(--text)}
 </script>
   <script>
   "use strict";
+  document.addEventListener("click",function(e){const btn=e.target.closest(".admin-shortcuts [data-action='go-tab']");if(btn){e.preventDefault();if(typeof selectPanelTab==="function")selectPanelTab(btn.dataset.tab)}});
   const CITIES={
     torres:{id:"torres",name:"Busque Torres",short:"Torres",renewalBase:"https://busquetorres.com.br/renovar.html",paymentsReady:true},
     caxias:{id:"caxias",name:"Busque Caxias",short:"Caxias",renewalBase:"https://busque-caxias-rs.martoandre-a-j2.workers.dev/renovar.html",paymentsReady:true}
