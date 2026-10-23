@@ -755,6 +755,13 @@ body{background:var(--bg);color:var(--text)}
 @media(max-width:680px){.global-admin-search{display:none}.topbar-actions{margin-left:auto}.overview-grid{grid-template-columns:1fr 1fr}.powerbi-main-grid{grid-template-columns:1fr}.company-quick-row{grid-template-columns:28px minmax(0,1fr) auto}.company-quick-row button{display:none}.powerbi-mini-stats{grid-template-columns:1fr 1fr 1fr}.promo-overview-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:390px){.overview-grid{grid-template-columns:1fr}.powerbi-mini-stats{grid-template-columns:1fr}.powerbi-mini-stats div{border-right:0;border-bottom:1px solid #e9eff4}}
 
+
+    /* Navegação simplificada: camada visual, sem alterar operações nem permissões */
+    .admin-shortcuts{margin:0 0 22px;padding:20px;border:1px solid #e3eaf1;border-radius:18px;background:linear-gradient(135deg,#fff,#f7faff);box-shadow:0 10px 28px rgba(14,28,45,.045)}
+    .admin-shortcuts-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}.admin-shortcuts-heading strong{display:block;font-size:17px;letter-spacing:-.025em;color:#13243b}.admin-shortcuts-heading span{display:block;margin-top:4px;color:#66778a;font-size:12px}
+    .admin-shortcuts-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.admin-shortcuts-grid button{display:grid;grid-template-columns:36px 1fr;grid-template-rows:auto auto;align-items:center;column-gap:10px;text-align:left;min-height:76px;padding:13px;border:1px solid #e1e9f1;border-radius:13px;background:#fff;color:#182c45;transition:transform .15s,border-color .15s,box-shadow .15s}.admin-shortcuts-grid button:hover,.admin-shortcuts-grid button:focus-visible{transform:translateY(-2px);border-color:#9dbbd5;box-shadow:0 7px 20px rgba(18,52,82,.09);outline:none}.admin-shortcuts-grid button>span{grid-row:1/3;display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#eef5ff;color:#2462a5;font-size:21px}.admin-shortcuts-grid button strong{font-size:12px;font-weight:800}.admin-shortcuts-grid button small{font-size:10px;color:#738296;margin-top:3px}
+    .sidebar-nav .nav-group{margin-bottom:13px}.sidebar-nav .tab{min-height:40px}.sidebar-nav .tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+    @media(max-width:1180px){.admin-shortcuts-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.admin-shortcuts{padding:14px}.admin-shortcuts-grid{gap:8px}.admin-shortcuts-grid button{padding:10px;grid-template-columns:29px 1fr;column-gap:7px;min-height:70px}.admin-shortcuts-grid button>span{width:29px;height:29px;font-size:17px}.admin-shortcuts-grid button strong{font-size:11px}.admin-shortcuts-grid button small{font-size:9px}}
 </style>
   <meta name="bt-admin-build" content="2026-10-15-agrorural-fix-2">
 </head>
@@ -824,6 +831,16 @@ body{background:var(--bg);color:var(--text)}
       </div></header>
       <main class="workspace">
         <div class="page-intro page-intro-actions"><div class="admin-page-heading"><h1>Painel Administrativo</h1><p>Controle completo do Busque Torres em um só lugar.</p></div><div class="hero-actions"><div class="city-switch"><label for="adminCitySelect">Cidade administrada</label><select id="adminCitySelect"><option value="torres">Busque Torres</option><option value="caxias">Busque Caxias</option></select></div><button id="refreshButton" class="refresh" type="button">↻ Atualizar</button></div></div>
+        <section class="admin-shortcuts" aria-label="Acesso rápido às tarefas"><div class="admin-shortcuts-heading"><div><strong>O que você precisa fazer?</strong><span>Atalhos para as tarefas mais usadas</span></div></div><div class="admin-shortcuts-grid">
+<button type="button" data-action="go-tab" data-tab="companies-pending"><span>＋</span><strong>Aprovar cadastro</strong><small>Novas empresas</small></button>
+<button type="button" data-action="go-tab" data-tab="companies-active"><span>▦</span><strong>Encontrar empresa</strong><small>Consultar e editar</small></button>
+<button type="button" data-action="go-tab" data-tab="renewals"><span>↻</span><strong>Renovações</strong><small>Assinaturas</small></button>
+<button type="button" data-action="go-tab" data-tab="jobs-pending"><span>▤</span><strong>Revisar vagas</strong><small>Empregos</small></button>
+<button type="button" data-action="go-tab" data-tab="promotions"><span>♨</span><strong>Promoções</strong><small>Foguinho</small></button>
+<button type="button" data-action="go-tab" data-tab="agenda-premium"><span>★</span><strong>Agenda Premium</strong><small>MASTER e Destaque</small></button>
+<button type="button" data-action="go-tab" data-tab="intelligence"><span>⌕</span><strong>Buscas no site</strong><small>Inteligência</small></button>
+<button type="button" data-action="go-tab" data-tab="metrics"><span>↗</span><strong>Métricas</strong><small>Visitas e cliques</small></button>
+</div></section>
         <div class="stats powerbi-kpis" id="overviewStats">
           <article class="stat kpi-blue"><span class="stat-icon">↗</span><div><small>Acessos hoje</small><strong id="statAccessToday">0</strong><em>visitas registradas</em></div></article>
           <article class="stat kpi-cyan"><span class="stat-icon">▥</span><div><small>Empresas ativas</small><strong id="statActiveCompanies">0</strong><em>publicadas no site</em></div></article>
