@@ -46,7 +46,7 @@ Deno.serve(async req=>{
    .update({chave_acesso_hash:accessKeyHash}).eq("id",reservaId).eq("status","pendente").is("chave_acesso_hash",null).select("id").maybeSingle();
   if(bindError||!bound)return reply({error:"Não foi possível preparar a chave de acesso"},503,origin);
   const accessToken=env("MERCADO_PAGO_ACCESS_TOKEN");
-  if(!accessToken)return reply({error:"Provedor indisponível"},503,origin);
+  if(!accessToken){await db.from("busque_servicos_pagamentos").update({status:"cancelado",reserva_expira_em:new Date().toISOString()}).eq("id",reservaId).eq("status","pendente");return reply({error:"Provedor indisponível"},503,origin);}
   // PIX direto: nunca receber valor do cliente; enviar sempre R$ 3,50.
   const mp=await fetch("https://api.mercadopago.com/v1/payments",{
    method:"POST",headers:{"Authorization":"Bearer "+accessToken,"Content-Type":"application/json","X-Idempotency-Key":reservaId},
