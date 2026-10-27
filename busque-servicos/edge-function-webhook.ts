@@ -23,6 +23,10 @@ Deno.serve(async req=>{
   if(!/^[0-9]{1,30}$/.test(id))return out({status:"ignorado"},200);
   const urlId=new URL(req.url).searchParams.get("data.id")||id;
   if(urlId!==id)return out({error:"Identificador divergente"},401);
+  // Rejeita notificações antigas ou com relógio muito distante (anti-replay).
+  const epoch=Number(ts), seconds=ts.length>10?epoch/1000:epoch;
+  if(!Number.isFinite(seconds)||Math.abs(Date.now()/1000-seconds)>300)
+   return out({error:"Notificação fora da janela de validade"},401);
   const manifest="id:"+id.toLowerCase()+";request-id:"+requestId+";ts:"+ts+";";
   const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
   const signed=new Uint8Array(await crypto.subtle.sign("HMAC",key,new TextEncoder().encode(manifest)));
@@ -34,7 +38,7 @@ Deno.serve(async req=>{
   const response=await fetch("https://api.mercadopago.com/v1/payments/"+id,{headers:{"Authorization":"Bearer "+token}});
   if(!response.ok)return out({error:"Consulta ao provedor falhou"},502);
   const mp=await response.json();
-  if(String(mp.id)!==id||mp.currency_id!=="BRL")return out({error:"Pagamento incompatível"},409);
+  if(String(mp.id)!==id||mp.currency_id!=="BRL"||mp.payment_method_id!=="pix")return out({error:"Pagamento incompatível"},409);
   const ref=String(mp.external_reference||"");
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ref))return out({status:"ignorado"},200);
   const map:Record<string,string>={approved:"aprovado",pending:"pendente",in_process:"pendente",rejected:"rejeitado",cancelled:"cancelado",refunded:"reembolsado",charged_back:"reembolsado"};
