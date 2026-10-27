@@ -21,6 +21,14 @@ Deno.serve(async req=>{
   const {data:pedido,error}=await db.from("busque_servicos_pedidos").select("id,status,expira_em,limite_orcamentos").eq("id",id).maybeSingle();
   if(error)throw error;
   if(!pedido||pedido.status!=="aprovado"||new Date(pedido.expira_em).getTime()<=Date.now())return reply({error:"Pedido indisponível"},409,origin);
+  if(tipo==="premium"){
+   const ownerKey=String(body.chave_solicitante||"");
+   if(!/^[a-f0-9]{64}$/.test(ownerKey))return reply({error:"Chave do solicitante inválida"},403,origin);
+   const ownerHash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(ownerKey))),x=>x.toString(16).padStart(2,"0")).join("");
+   const {data:owner,error:ownerError}=await db.from("busque_servicos_pedidos").select("id").eq("id",id).eq("chave_solicitante_hash",ownerHash).maybeSingle();
+   if(ownerError)throw ownerError;
+   if(!owner)return reply({error:"Somente o solicitante pode promover este pedido"},403,origin);
+  }
   const nome=String(body.profissional_nome||"").trim().slice(0,100);
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
   const telefone=digits(body.profissional_whatsapp);
@@ -57,6 +65,7 @@ Deno.serve(async req=>{
    .eq("id",reservaId).eq("status","pendente");
   if(saveError)return reply({error:"Pagamento criado, aguardando conciliação segura.",referencia:reservaId},503,origin);
   const tx=payment.point_of_interaction?.transaction_data||{};
+  if(!String(tx.qr_code||""))return reply({error:"Cobrança criada sem código PIX. Consulte o suporte com a referência.",referencia:reservaId},503,origin);
   return reply({referencia:reservaId,chave_acesso:accessKey,status:"pendente",qr_code:String(tx.qr_code||""),
    qr_code_base64:String(tx.qr_code_base64||""),ticket_url:String(tx.ticket_url||"")},200,origin);
  }catch(e){console.error("busque-servicos-pix",e instanceof Error?e.message:"erro");return reply({error:"Erro interno"},500,origin)}
