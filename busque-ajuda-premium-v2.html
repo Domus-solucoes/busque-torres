@@ -11,17 +11,17 @@ function list(){
   if(!(j.title+' '+j.text+' '+j.area).toLocaleLowerCase('pt-BR').includes(q)||n&&j.area!==n)return;
   found++;
   const el=document.createElement('article');el.className='card';
-  const badge=document.createElement('span');badge.className='badge';badge.textContent='Até '+j.limit+' orçamentos';
+  const badge=document.createElement('span');badge.className=j.premium?'crown':'badge';badge.textContent=j.premium?'♛ Premium':'Vagas: '+Math.max(0,j.limit-j.occupied)+' de '+j.limit;
   const title=document.createElement('h2');title.textContent=j.title;
   const p=document.createElement('p');p.textContent=j.text;
   const meta=document.createElement('p');meta.className='meta';meta.textContent=j.area+' • Publicado em '+escapeDate(j.published)+' • Válido até '+escapeDate(j.expires);
   const btn=document.createElement('button');btn.textContent='Ver oportunidade';btn.onclick=()=>show(i);
-  el.append(badge,title,p,meta,btn);$('cards').append(el);
+  el.append(badge,title,p,meta,btn);if(j.premium){el.classList.add('premium');$('premiumCards').append(el)}else $('cards').append(el);
  });
  if(!found){const p=document.createElement('p');p.className='notice';p.textContent='Nenhuma oportunidade disponível nesta busca.';$('cards').append(p)}
- const premiumNotice=document.createElement('p');premiumNotice.className='notice';premiumNotice.textContent='Destaques Premium aparecerão aqui após a integração segura dos pagamentos.';$('premiumCards').append(premiumNotice);
+ if(!$('premiumCards').children.length){const p=document.createElement('p');p.className='notice';p.textContent='Nenhum destaque Premium ativo.';$('premiumCards').append(p)}
 }
-function show(i){const j=jobs[i];$('title').textContent=j.title;$('description').textContent=j.text;$('meta').textContent=j.area+' • Válido até '+escapeDate(j.expires);$('status').textContent='Até '+j.limit+' orçamentos';$('listing').classList.add('hidden');$('detail').classList.remove('hidden');window.scrollTo(0,0)}
+function show(i){const j=jobs[i];$('title').textContent=j.title;$('description').textContent=j.text;$('meta').textContent=j.area+' • Válido até '+escapeDate(j.expires);$('status').textContent='Vagas disponíveis: '+Math.max(0,j.limit-j.occupied)+' de '+j.limit;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');window.scrollTo(0,0)}
 $('back').onclick=()=>{$('detail').classList.add('hidden');$('listing').classList.remove('hidden')};
 $('search').oninput=list;$('neighborhood').onchange=list;
 async function carregar(){
@@ -29,7 +29,7 @@ async function carregar(){
   const resp=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public_list'})});
   if(!resp.ok)throw Error('Consulta indisponível');
   const data=await resp.json();
-  jobs=(data.pedidos||[]).map(p=>({title:p.titulo,text:p.descricao,area:p.bairro,limit:p.limite_orcamentos,published:p.aprovado_em,expires:p.expira_em}));
+  jobs=(data.pedidos||[]).map(p=>({title:p.titulo,text:p.descricao,area:p.bairro,limit:p.limite_orcamentos,occupied:p.orcamentos_ocupados||0,premium:p.premium===true,published:p.aprovado_em,expires:p.expira_em}));
   const bairros=[...new Set(jobs.map(j=>j.area))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
   $('neighborhood').replaceChildren(new Option('Todos os bairros',''),...bairros.map(b=>new Option(b,b)));
   list();
