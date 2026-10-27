@@ -1,5 +1,5 @@
--- BUSQUE SERVIÇOS — ETAPA 1 / MIGRAÇÃO PROPOSTA, NÃO APLICADA EM PRODUÇÃO
--- Nenhuma tabela existente é alterada. Executar somente após homologação.
+-- BUSQUE SERVIÇOS — ETAPA 1 / MIGRAÇÃO JÁ APLICADA NO SUPABASE DO BUSQUE TORRES
+-- Tabelas existentes não foram alteradas. Este arquivo documenta a estrutura implantada; não reaplicar sem revisão.
 create table if not exists public.busque_servicos_pedidos (
  id uuid primary key default gen_random_uuid(),
  titulo text not null check (char_length(trim(titulo)) between 5 and 120),
