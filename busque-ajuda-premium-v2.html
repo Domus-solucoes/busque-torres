@@ -92,7 +92,12 @@ async function verify(silent=false){
  }catch(e){if(!silent)msg(e.message)}finally{verifying=false}
 }
 $('verifyPix').onclick=()=>verify(false);
-$('recoverButton').onclick=()=>{currentPayment=$('recoverPayment').value.trim();currentKey=$('recoverKey').value.trim();verify(false)};
+$('recoverButton').onclick=()=>{
+ if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
+ currentPayment=$('recoverPayment').value.trim();currentKey=$('recoverKey').value.trim().toLowerCase();
+ $('unlocked').hidden=true;$('paymentBox').hidden=true;
+ msg('Consultando sua compra...');verify(false);
+};
 try{const last=JSON.parse(localStorage.getItem('busque_servicos_ultima_compra')||'null');if(last?.pagamento&&last?.chave){$('recoverPayment').value=last.pagamento;$('recoverKey').value=last.chave}}catch(_){}
 $('copyPix').onclick=()=>navigator.clipboard.writeText($('pixText').value).then(()=>msg('Código copiado.')).catch(()=>msg('Copie o código manualmente.'));
 $('copyKey').onclick=()=>navigator.clipboard.writeText(currentKey).then(()=>msg('Chave copiada.')).catch(()=>msg('Copie a chave manualmente.'));
