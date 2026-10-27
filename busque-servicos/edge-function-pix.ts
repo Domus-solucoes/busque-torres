@@ -21,10 +21,35 @@ Deno.serve(async req=>{
   const {data:pedido,error}=await db.from("busque_servicos_pedidos").select("id,status,expira_em,limite_orcamentos").eq("id",id).maybeSingle();
   if(error)throw error;
   if(!pedido||pedido.status!=="aprovado"||new Date(pedido.expira_em).getTime()<=Date.now())return reply({error:"Pedido indisponível"},409,origin);
-  // TODO: executar RPC transacional de reserva com limite de 3 Premium / 3 ou 5 contatos.
-  // TODO: validar pagador e criar pagamento Mercado Pago PIX com valor fixo 3.50 BRL.
-  // TODO: gravar referência única e identificador MP para webhook.
-  // Nunca substituir os TODOs por chamadas isoladas de contagem + insert (race condition).
-  return reply({error:"Reserva transacional ainda não habilitada"},503,origin);
+  const nome=String(body.profissional_nome||"").trim().slice(0,100);
+  if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
+  const telefone=digits(body.profissional_whatsapp);
+  if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
+  // Reserva deve ser atômica; não chamar MP sem uma vaga garantida.
+  const {data:reserva,error:reservaError}=await db.rpc("busque_servicos_reservar_pagamento",{
+   p_pedido_id:id,p_tipo:tipo,p_profissional_nome:tipo==="premium"?null:nome,
+   p_profissional_whatsapp:tipo==="premium"?null:telefone
+  });
+  if(reservaError)return reply({error:"Não foi possível reservar uma vaga"},409,origin);
+  const reservaId=String(reserva?.id||"");
+  if(!uuid.test(reservaId))return reply({error:"Reserva indisponível"},503,origin);
+  const accessToken=env("MERCADO_PAGO_ACCESS_TOKEN");
+  if(!accessToken)return reply({error:"Provedor indisponível"},503,origin);
+  // PIX direto: nunca receber valor do cliente; enviar sempre R$ 3,50.
+  const mp=await fetch("https://api.mercadopago.com/v1/payments",{
+   method:"POST",headers:{"Authorization":"Bearer "+accessToken,"Content-Type":"application/json","X-Idempotency-Key":reservaId},
+   body:JSON.stringify({transaction_amount:3.5,description:tipo==="premium"?"Busque Serviços - Premium":"Busque Serviços - Contato",
+    payment_method_id:"pix",external_reference:reservaId,
+    payer:{email:String(body.email_pagador||"").trim().toLowerCase(),first_name:nome||"Solicitante"}})
+  });
+  const payment=await mp.json().catch(()=>null);
+  if(!mp.ok||!payment?.id)return reply({error:"Não foi possível gerar o PIX. Tente novamente mais tarde."},502,origin);
+  const {error:saveError}=await db.from("busque_servicos_pagamentos")
+   .update({provedor_pagamento_id:String(payment.id)})
+   .eq("id",reservaId).eq("status","pendente");
+  if(saveError)return reply({error:"Pagamento criado, aguardando conciliação segura.",referencia:reservaId},503,origin);
+  const tx=payment.point_of_interaction?.transaction_data||{};
+  return reply({referencia:reservaId,status:"pendente",qr_code:String(tx.qr_code||""),
+   qr_code_base64:String(tx.qr_code_base64||""),ticket_url:String(tx.ticket_url||"")},200,origin);
  }catch(e){console.error("busque-servicos-pix",e instanceof Error?e.message:"erro");return reply({error:"Erro interno"},500,origin)}
 });
