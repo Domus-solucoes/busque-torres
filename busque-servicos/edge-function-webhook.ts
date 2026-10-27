@@ -9,11 +9,26 @@ Deno.serve(async req=>{
  if(env("BUSQUE_SERVICOS_PIX_HABILITADO")!=="true")return out({status:"desabilitado"},503);
  try{
   // Defesa adicional: endpoint exclusivo, sem reutilizar webhook das assinaturas.
-  const secret=env("BUSQUE_SERVICOS_WEBHOOK_TOKEN");
-  if(!secret||req.headers.get("x-busque-servicos-token")!==secret)return out({error:"Não autorizado"},401);
+  // O Mercado Pago assina webhooks com x-signature e x-request-id.
+  // Não aceitar um header privado arbitrário: o provedor não o envia.
+  const secret=env("BUSQUE_SERVICOS_MP_WEBHOOK_SECRET");
+  const signature=req.headers.get("x-signature")||"";
+  const requestId=req.headers.get("x-request-id")||"";
+  const parts=Object.fromEntries(signature.split(",").map(x=>x.trim().split("=",2)));
+  const ts=String(parts.ts||""),hash=String(parts.v1||"");
+  if(!secret||!/^\\d{10,16}$/.test(ts)||!/^[0-9a-f]{64}$/i.test(hash)||!requestId)
+   return out({error:"Assinatura ausente"},401);
   const body=await req.json().catch(()=>({}));
   const id=String(body?.data?.id||"");
   if(!/^[0-9]{1,30}$/.test(id))return out({status:"ignorado"},200);
+  const urlId=new URL(req.url).searchParams.get("data.id")||id;
+  if(urlId!==id)return out({error:"Identificador divergente"},401);
+  const manifest="id:"+id.toLowerCase()+";request-id:"+requestId+";ts:"+ts+";";
+  const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
+  const signed=new Uint8Array(await crypto.subtle.sign("HMAC",key,new TextEncoder().encode(manifest)));
+  const expected=Array.from(signed).map(b=>b.toString(16).padStart(2,"0")).join("");
+  let diff=0;for(let i=0;i<64;i++)diff|=expected.charCodeAt(i)^hash.toLowerCase().charCodeAt(i);
+  if(diff!==0)return out({error:"Assinatura inválida"},401);
   const token=env("MERCADO_PAGO_ACCESS_TOKEN");
   if(!token)return out({error:"Provedor indisponível"},503);
   const response=await fetch("https://api.mercadopago.com/v1/payments/"+id,{headers:{"Authorization":"Bearer "+token}});
