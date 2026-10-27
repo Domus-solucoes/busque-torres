@@ -44,6 +44,7 @@ Deno.serve(async req=>{
    method:"POST",headers:{"Authorization":"Bearer "+accessToken,"Content-Type":"application/json","X-Idempotency-Key":reservaId},
    body:JSON.stringify({transaction_amount:3.5,description:tipo==="premium"?"Busque Serviços - Premium":"Busque Serviços - Contato",
     payment_method_id:"pix",external_reference:reservaId,date_of_expiration:String(reserva.reserva_expira_em),
+    notification_url:env("SUPABASE_URL")+"/functions/v1/busque-servicos-webhook",
     payer:{email:String(body.email_pagador||"").trim().toLowerCase(),first_name:nome||"Solicitante"}})
   });
   const payment=await mp.json().catch(()=>null);
