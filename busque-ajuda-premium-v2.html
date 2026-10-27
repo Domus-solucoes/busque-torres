@@ -41,7 +41,7 @@ async function carregar(){
   list();
  }catch(e){$('cards').replaceChildren();const p=document.createElement('p');p.className='notice';p.textContent='Não foi possível carregar as oportunidades. Tente novamente mais tarde.';$('cards').append(p);$('premiumCards').replaceChildren()}
 }
-let currentPayment="",currentKey="",poll=null;
+let currentPayment="",currentKey="",poll=null,pollStop=null;
 const base='https://xwkmsqawiimouilldwit.supabase.co/functions/v1/';
 function msg(t){$('paymentInfo').textContent=t}
 $('buyContact').onclick=()=>{
@@ -49,7 +49,7 @@ $('buyContact').onclick=()=>{
  if(selectedJob.occupied>=selectedJob.limit){alert('Esta oportunidade não possui vagas.');return}
  $('checkout').showModal();
 };
-$('closeCheckout').onclick=()=>{$('checkout').close();if(poll)clearInterval(poll)};
+$('closeCheckout').onclick=()=>{$('checkout').close();if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop)};
 async function callFunction(name,payload){
  const r=await fetch(base+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
  const j=await r.json();if(!r.ok)throw Error(j.error||'Serviço indisponível');return j;
@@ -67,7 +67,7 @@ $('generatePix').onclick=async()=>{
   $('pixImage').hidden=!j.qr_code_base64;
   if(j.qr_code_base64)$('pixImage').src='data:image/png;base64,'+j.qr_code_base64;
   $('paymentBox').hidden=false;msg('PIX gerado. Após pagar, o contato aparecerá aqui.');
-  if(poll)clearInterval(poll);poll=setInterval(()=>verify(true),12000);
+  if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=setInterval(()=>verify(true),12000);pollStop=setTimeout(()=>{clearInterval(poll);poll=null;msg("Se pagou, clique em Verificar pagamento. A chave permanece válida.")},720000);
  }catch(e){msg(e.message)}finally{btn.disabled=false}
 };
 async function verify(silent=false){
@@ -79,7 +79,7 @@ async function verify(silent=false){
    $('contactName').textContent=p.nome;
    $('contactWhatsapp').href='https://wa.me/'+String(p.whatsapp).replace(/[^0-9]/g,'');
    $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
-   if(poll)clearInterval(poll);poll=null;
+   if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
   }else if(!silent)msg('Pagamento ainda não confirmado.');
  }catch(e){if(!silent)msg(e.message)}
 }
