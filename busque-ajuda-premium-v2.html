@@ -73,15 +73,19 @@ $('generatePix').onclick=async()=>{
 };
 async function verify(silent=false){
  if(verifying)return;
+ $('unlocked').hidden=true;
+ $('contactWhatsapp').removeAttribute('href');
  if(!/^[0-9a-f-]{36}$/i.test(currentPayment)||!/^[0-9a-f]{64}$/.test(currentKey)){if(!silent)msg('Confira o número da compra e a chave de acesso.');return;}
  verifying=true;
  try{
   const j=await callFunction('busque-servicos-status-pagamento',{pagamento_id:currentPayment,chave_acesso:currentKey});
   if(j.liberado){
    const p=await callFunction('busque-servicos-contato',{pagamento_id:currentPayment,chave_acesso:currentKey});
-   $('contactName').textContent=p.nome;
-   const digits=String(p.whatsapp).replace(/[^0-9]/g,'');
-   $('contactWhatsapp').href='https://wa.me/'+(digits.startsWith('55')?digits:'55'+digits);
+   const digits=String(p.whatsapp||'').replace(/[^0-9]/g,'');
+   const fullNumber=digits.startsWith('55')?digits:'55'+digits;
+   if(!/^55\d{10,11}$/.test(fullNumber))throw Error('Contato confirmado, mas o número cadastrado precisa ser corrigido pelo administrador.');
+   $('contactName').textContent=String(p.nome||'Solicitante');
+   $('contactWhatsapp').href='https://wa.me/'+fullNumber;
    $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
    if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
   }else if(!silent)msg(j.status==='aprovado'?'Pagamento confirmado, aguardando liberação do contato.':'Pagamento ainda não confirmado: '+(j.status||'pendente')+'.');
