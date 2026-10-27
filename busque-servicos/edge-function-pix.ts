@@ -48,7 +48,10 @@ Deno.serve(async req=>{
     payer:{email:String(body.email_pagador||"").trim().toLowerCase(),first_name:nome||"Solicitante"}})
   });
   const payment=await mp.json().catch(()=>null);
-  if(!mp.ok||!payment?.id)return reply({error:"Não foi possível gerar o PIX. Tente novamente mais tarde."},502,origin);
+  if(!mp.ok||!payment?.id){
+   await db.from("busque_servicos_pagamentos").update({status:"cancelado",reserva_expira_em:new Date().toISOString()}).eq("id",reservaId).eq("status","pendente");
+   return reply({error:"Não foi possível gerar o PIX. Tente novamente mais tarde."},502,origin);
+  }
   const {error:saveError}=await db.from("busque_servicos_pagamentos")
    .update({provedor_pagamento_id:String(payment.id)})
    .eq("id",reservaId).eq("status","pendente");
