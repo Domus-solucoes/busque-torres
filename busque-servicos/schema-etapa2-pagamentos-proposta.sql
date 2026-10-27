@@ -1,4 +1,4 @@
--- BUSQUE SERVIÇOS — ETAPA 2 / PROPOSTA DE MIGRAÇÃO, NÃO EXECUTAR EM PRODUÇÃO SEM REVISÃO
+-- BUSQUE SERVIÇOS — ETAPA 2 / TABELAS APLICADAS EM 2026-10-27; PROCESSAMENTO PIX AINDA NÃO IMPLEMENTADO
 -- Isolada de pagamentos e pedidos existentes do Busque Torres e Busque Cardápio.
 -- Cobranças em centavos; nunca confiar em valor/status recebido do navegador.
 -- Mercado Pago: validar webhook na origem, consultar pagamento pelo provedor e aplicar idempotência.
@@ -47,6 +47,7 @@ alter table public.busque_servicos_destaques enable row level security;
 alter table public.busque_servicos_contatos_liberados enable row level security;
 revoke all on public.busque_servicos_pagamentos,public.busque_servicos_destaques,public.busque_servicos_contatos_liberados from anon,authenticated;
 
+-- ATENÇÃO: A migração das três tabelas já foi aplicada. NÃO executar novamente sem revisão.
 -- O limite de 3 destaques simultâneos, expiração, verificação de pagamento,
 -- máximo de 3/5 contatos e concorrência DEVEM ser impostos por transação
 -- atômica no backend antes da implantação. Este SQL sozinho NÃO os garante.
