@@ -29,7 +29,7 @@ Deno.serve(async(req)=>{
   const pics: {bytes:Uint8Array,mime:string,ext:string}[]=[];
   for(const f of body.fotos){if(!f||typeof f.data!=="string"||f.data.length>7_000_000||!["image/jpeg","image/png","image/webp"].includes(f.mime))return out({error:"Foto inválida (máximo 5 MB)."},400,origin);
    const bytes=Uint8Array.from(atob(f.data),c=>c.charCodeAt(0));if(bytes.length>5_242_880)return out({error:"Foto excede 5 MB."},400,origin);
-   const signatures={"image/jpeg":[255,216,255],"image/png":[137,80,78,71],"image/webp":[82,73,70,70]} as Record<string,number[]>;if(!signatures[f.mime].every((n,i)=>bytes[i]===n))return out({error:"Formato de imagem inválido."},400,origin);
+   const signatures={"image/jpeg":[255,216,255],"image/png":[137,80,78,71],"image/webp":[82,73,70,70]} as Record<string,number[]>;if(!signatures[f.mime].every((n,i)=>bytes[i]===n)||(f.mime==="image/webp"&&String.fromCharCode(...bytes.slice(8,12))!=="WEBP"))return out({error:"Formato de imagem inválido."},400,origin);
    pics.push({bytes,mime:f.mime,ext:f.mime==="image/jpeg"?"jpg":f.mime==="image/png"?"png":"webp"});}
   const id=crypto.randomUUID();const paths:string[]=[];
   for(let i=0;i<pics.length;i++){const p=pics[i],path=`${id}/${i}.${p.ext}`;const {error}=await db.storage.from("busque-servicos-fotos").upload(path,p.bytes,{contentType:p.mime,upsert:false});if(error){for(const prev of paths)await db.storage.from("busque-servicos-fotos").remove([prev]);return out({error:"Falha ao enviar fotos."},500,origin)}paths.push(path)}
