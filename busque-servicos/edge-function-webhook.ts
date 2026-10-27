@@ -19,10 +19,12 @@ Deno.serve(async req=>{
   if(!secret||!/^\d{10,16}$/.test(ts)||!/^[0-9a-f]{64}$/i.test(hash)||!requestId)
    return out({error:"Assinatura ausente"},401);
   const body=await req.json().catch(()=>({}));
-  const id=String(body?.data?.id||"");
-  if(!/^[0-9]{1,30}$/.test(id))return out({status:"ignorado"},200);
-  const urlId=new URL(req.url).searchParams.get("data.id")||id;
-  if(urlId!==id)return out({error:"Identificador divergente"},401);
+  const urlId=new URL(req.url).searchParams.get("data.id")||"";
+  const bodyId=String(body?.data?.id||"");
+  // O manifest oficial assina o identificador presente na URL; não aceitar troca no corpo.
+  if(!urlId||!/^\d{1,30}$/.test(urlId))return out({error:"ID da notificação ausente"},400);
+  if(bodyId&&bodyId!==urlId)return out({error:"Identificador divergente"},401);
+  const id=urlId;
   // Rejeita notificações antigas ou com relógio muito distante (anti-replay).
   const epoch=Number(ts), seconds=ts.length>10?epoch/1000:epoch;
   if(!Number.isFinite(seconds)||Math.abs(Date.now()/1000-seconds)>300)
