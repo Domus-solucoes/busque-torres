@@ -19,7 +19,7 @@ Deno.serve(async(req)=>{
   const cfIp=req.headers.get("cf-connecting-ip")||"";
   const captchaResp=await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({secret:turnstileSecret,response:captcha,remoteip:cfIp})});
   const captchaResult=await captchaResp.json().catch(()=>({success:false}));
-  if(!captchaResult.success)return out({error:"Verificação anti-spam não aprovada."},403,origin);
+  if(!captchaResult.success||!["busquetorres.com.br","www.busquetorres.com.br","raw.githack.com"].includes(captchaResult.hostname))return out({error:"Verificação anti-spam não aprovada."},403,origin);
   // Fase 1: fotos são enviadas por esta função ao bucket privado.
   if(str(body.website,200))return out({error:"Não foi possível enviar"},400,origin);
   const title=str(body.titulo,120),desc=str(body.descricao,2000),bairro=str(body.bairro,100),nome=str(body.nome,100),whatsapp=str(body.whatsapp,20).replace(/\D/g,""),endereco=str(body.endereco,180);
