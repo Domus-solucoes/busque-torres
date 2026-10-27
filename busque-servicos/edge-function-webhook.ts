@@ -16,7 +16,7 @@ Deno.serve(async req=>{
   const requestId=req.headers.get("x-request-id")||"";
   const parts=Object.fromEntries(signature.split(",").map(x=>x.trim().split("=",2)));
   const ts=String(parts.ts||""),hash=String(parts.v1||"");
-  if(!secret||!/^\\d{10,16}$/.test(ts)||!/^[0-9a-f]{64}$/i.test(hash)||!requestId)
+  if(!secret||!/^\d{10,16}$/.test(ts)||!/^[0-9a-f]{64}$/i.test(hash)||!requestId)
    return out({error:"Assinatura ausente"},401);
   const body=await req.json().catch(()=>({}));
   const id=String(body?.data?.id||"");
