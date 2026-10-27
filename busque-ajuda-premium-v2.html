@@ -41,7 +41,7 @@ async function carregar(){
   list();
  }catch(e){$('cards').replaceChildren();const p=document.createElement('p');p.className='notice';p.textContent='Não foi possível carregar as oportunidades. Tente novamente mais tarde.';$('cards').append(p);$('premiumCards').replaceChildren()}
 }
-let currentPayment="",currentKey="",poll=null,pollStop=null;
+let currentPayment="",currentKey="",poll=null,pollStop=null,verifying=false;
 const base='https://xwkmsqawiimouilldwit.supabase.co/functions/v1/';
 function msg(t){$('paymentInfo').textContent=t}
 $('buyContact').onclick=()=>{
@@ -72,17 +72,20 @@ $('generatePix').onclick=async()=>{
  }catch(e){msg(e.message)}finally{btn.disabled=false}
 };
 async function verify(silent=false){
+ if(verifying)return;
  if(!/^[0-9a-f-]{36}$/i.test(currentPayment)||!/^[0-9a-f]{64}$/.test(currentKey)){if(!silent)msg('Confira o número da compra e a chave de acesso.');return;}
+ verifying=true;
  try{
   const j=await callFunction('busque-servicos-status-pagamento',{pagamento_id:currentPayment,chave_acesso:currentKey});
   if(j.liberado){
    const p=await callFunction('busque-servicos-contato',{pagamento_id:currentPayment,chave_acesso:currentKey});
    $('contactName').textContent=p.nome;
-   $('contactWhatsapp').href='https://wa.me/'+String(p.whatsapp).replace(/[^0-9]/g,'');
+   const digits=String(p.whatsapp).replace(/[^0-9]/g,'');
+   $('contactWhatsapp').href='https://wa.me/'+(digits.startsWith('55')?digits:'55'+digits);
    $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
    if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
   }else if(!silent)msg(j.status==='aprovado'?'Pagamento confirmado, aguardando liberação do contato.':'Pagamento ainda não confirmado: '+(j.status||'pendente')+'.');
- }catch(e){if(!silent)msg(e.message)}
+ }catch(e){if(!silent)msg(e.message)}finally{verifying=false}
 }
 $('verifyPix').onclick=()=>verify(false);
 $('recoverButton').onclick=()=>{currentPayment=$('recoverPayment').value.trim();currentKey=$('recoverKey').value.trim();verify(false)};
