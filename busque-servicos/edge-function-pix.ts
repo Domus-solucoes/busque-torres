@@ -3,7 +3,7 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.57.0";
 const env=(k:string)=>Deno.env.get(k)||"";
 const db=createClient(env("SUPABASE_URL"),env("SUPABASE_SERVICE_ROLE_KEY"),{auth:{persistSession:false}});
-const origins=["https://busquetorres.com.br","https://www.busquetorres.com.br"];
+const origins=["https://busquetorres.com.br","https://www.busquetorres.com.br","https://raw.githack.com"];
 const reply=(data:unknown,status=200,origin="https://busquetorres.com.br")=>new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json","Access-Control-Allow-Origin":origin,"Access-Control-Allow-Headers":"content-type,authorization,apikey","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"}});
 const digits=(v:unknown)=>String(v||"").replace(/\D/g,"");
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -25,7 +25,7 @@ Deno.serve(async req=>{
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
   const telefone=digits(body.profissional_whatsapp);
   if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
-  // Identidade obrigatória: token JWT válido, validado no Supabase Auth.
+  // Identidade validada antes da emissão de cobrança.
   const bearer=req.headers.get("authorization")||"";
   if(!/^Bearer\s+\S+$/i.test(bearer))return reply({error:"Entre na sua conta antes de pagar"},401,origin);
   const {data:authData,error:authError}=await db.auth.getUser(bearer.replace(/^Bearer\s+/i,""));
