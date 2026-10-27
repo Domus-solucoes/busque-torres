@@ -25,11 +25,15 @@ Deno.serve(async req=>{
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
   const telefone=digits(body.profissional_whatsapp);
   if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
-  // Reserva deve ser atômica; não chamar MP sem uma vaga garantida.
-  // A compra exige uma prova de titularidade que ainda será implementada.
-  // Sem isso, qualquer pessoa pode tentar reservar vagas com dados de terceiros.
-  if(env("BUSQUE_SERVICOS_IDENTIDADE_VERIFICADA")!=="true")
-   return reply({error:"Validação de titularidade em homologação"},503,origin);
+  // Identidade obrigatória: token JWT válido, validado no Supabase Auth.
+  const bearer=req.headers.get("authorization")||"";
+  if(!/^Bearer\\s+\\S+$/i.test(bearer))return reply({error:"Entre na sua conta antes de pagar"},401,origin);
+  const {data:authData,error:authError}=await db.auth.getUser(bearer.replace(/^Bearer\\s+/i,""));
+  if(authError||!authData?.user?.id)return reply({error:"Sessão inválida"},401,origin);
+  const buyerId=authData.user.id;
+  if(!authData.user.email_confirmed_at)return reply({error:"Confirme seu e-mail antes de pagar"},403,origin);
+  if(String(authData.user.email||"").toLowerCase()!==String(body.email_pagador||"").trim().toLowerCase())
+   return reply({error:"O e-mail pagador deve ser o da conta autenticada"},403,origin);
   const {data:reserva,error:reservaError}=await db.rpc("busque_servicos_reservar_pagamento",{
    p_pedido_id:id,p_tipo:tipo,p_profissional_nome:tipo==="premium"?null:nome,
    p_profissional_whatsapp:tipo==="premium"?null:telefone
@@ -37,13 +41,17 @@ Deno.serve(async req=>{
   if(reservaError)return reply({error:"Não foi possível reservar uma vaga"},409,origin);
   const reservaId=String(reserva?.id||"");
   if(!uuid.test(reservaId))return reply({error:"Reserva indisponível"},503,origin);
+  // Atribui a reserva ao usuário autenticado ANTES de criar a cobrança.
+  const {data:bound,error:bindError}=await db.from("busque_servicos_pagamentos")
+   .update({comprador_user_id:buyerId}).eq("id",reservaId).eq("status","pendente").is("comprador_user_id",null).select("id").maybeSingle();
+  if(bindError||!bound)return reply({error:"Falha na identificação do comprador"},503,origin);
   const accessToken=env("MERCADO_PAGO_ACCESS_TOKEN");
   if(!accessToken)return reply({error:"Provedor indisponível"},503,origin);
   // PIX direto: nunca receber valor do cliente; enviar sempre R$ 3,50.
   const mp=await fetch("https://api.mercadopago.com/v1/payments",{
    method:"POST",headers:{"Authorization":"Bearer "+accessToken,"Content-Type":"application/json","X-Idempotency-Key":reservaId},
    body:JSON.stringify({transaction_amount:3.5,description:tipo==="premium"?"Busque Serviços - Premium":"Busque Serviços - Contato",
-    payment_method_id:"pix",external_reference:reservaId,
+    payment_method_id:"pix",external_reference:reservaId,date_of_expiration:String(reserva.reserva_expira_em),
     payer:{email:String(body.email_pagador||"").trim().toLowerCase(),first_name:nome||"Solicitante"}})
   });
   const payment=await mp.json().catch(()=>null);
