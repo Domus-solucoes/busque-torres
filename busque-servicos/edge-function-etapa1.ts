@@ -11,6 +11,16 @@ Deno.serve(async(req)=>{
  if(origin&&!allowed.includes(origin))return out({error:"Origem não autorizada"},403,origin);
  try{
  const body=await req.json();const action=body?.action;
+ if(action==="public_list"){
+  // Lista pública estritamente limitada: nunca retornar nome, WhatsApp, endereço ou caminhos privados.
+  const now=new Date().toISOString();
+  const {data,error}=await db.from("busque_servicos_pedidos")
+    .select("id,titulo,descricao,bairro,limite_orcamentos,aprovado_em,expira_em")
+    .eq("status","aprovado").gt("expira_em",now)
+    .order("aprovado_em",{ascending:true}).limit(100);
+  if(error)throw error;
+  return out({pedidos:data||[]},200,origin);
+ }
  if(action==="submit"){
   const turnstileSecret=Deno.env.get("BUSQUE_SERVICOS_TURNSTILE_SECRET");
   if(!turnstileSecret)return out({error:"Envio temporariamente indisponível: proteção anti-spam não configurada."},503,origin);
