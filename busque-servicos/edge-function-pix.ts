@@ -3,7 +3,7 @@
 import {createClient} from "https://esm.sh/@supabase/supabase-js@2.57.0";
 const env=(k:string)=>Deno.env.get(k)||"";
 const db=createClient(env("SUPABASE_URL"),env("SUPABASE_SERVICE_ROLE_KEY"),{auth:{persistSession:false}});
-const origins=["https://busquetorres.com.br","https://www.busquetorres.com.br","https://raw.githack.com"];
+const origins=["https://busquetorres.com.br","https://www.busquetorres.com.br"];
 const reply=(data:unknown,status=200,origin="https://busquetorres.com.br")=>new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json","Access-Control-Allow-Origin":origin,"Access-Control-Allow-Headers":"content-type,authorization,apikey","Access-Control-Allow-Methods":"POST,OPTIONS","Vary":"Origin"}});
 const digits=(v:unknown)=>String(v||"").replace(/\D/g,"");
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -22,10 +22,14 @@ Deno.serve(async req=>{
   if(error)throw error;
   if(!pedido||pedido.status!=="aprovado"||new Date(pedido.expira_em).getTime()<=Date.now())return reply({error:"Pedido indisponível"},409,origin);
   const nome=String(body.profissional_nome||"").trim().slice(0,100);
-  if(!/^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
   const telefone=digits(body.profissional_whatsapp);
   if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
   // Reserva deve ser atômica; não chamar MP sem uma vaga garantida.
+  // A compra exige uma prova de titularidade que ainda será implementada.
+  // Sem isso, qualquer pessoa pode tentar reservar vagas com dados de terceiros.
+  if(env("BUSQUE_SERVICOS_IDENTIDADE_VERIFICADA")!=="true")
+   return reply({error:"Validação de titularidade em homologação"},503,origin);
   const {data:reserva,error:reservaError}=await db.rpc("busque_servicos_reservar_pagamento",{
    p_pedido_id:id,p_tipo:tipo,p_profissional_nome:tipo==="premium"?null:nome,
    p_profissional_whatsapp:tipo==="premium"?null:telefone
