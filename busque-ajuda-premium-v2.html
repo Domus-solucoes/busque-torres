@@ -72,7 +72,7 @@ $('generatePix').onclick=async()=>{
  }catch(e){msg(e.message)}finally{btn.disabled=false}
 };
 async function verify(silent=false){
- if(!currentPayment||!currentKey)return;
+ if(!/^[0-9a-f-]{36}$/i.test(currentPayment)||!/^[0-9a-f]{64}$/.test(currentKey)){if(!silent)msg('Confira o número da compra e a chave de acesso.');return;}
  try{
   const j=await callFunction('busque-servicos-status-pagamento',{pagamento_id:currentPayment,chave_acesso:currentKey});
   if(j.liberado){
@@ -81,7 +81,7 @@ async function verify(silent=false){
    $('contactWhatsapp').href='https://wa.me/'+String(p.whatsapp).replace(/[^0-9]/g,'');
    $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
    if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
-  }else if(!silent)msg('Pagamento ainda não confirmado.');
+  }else if(!silent)msg(j.status==='aprovado'?'Pagamento confirmado, aguardando liberação do contato.':'Pagamento ainda não confirmado: '+(j.status||'pendente')+'.');
  }catch(e){if(!silent)msg(e.message)}
 }
 $('verifyPix').onclick=()=>verify(false);
