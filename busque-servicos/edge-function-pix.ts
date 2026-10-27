@@ -25,15 +25,8 @@ Deno.serve(async req=>{
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.email_pagador||"").trim()))return reply({error:"Informe e-mail válido"},422,origin);
   const telefone=digits(body.profissional_whatsapp);
   if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
-  // Identidade validada antes da emissão de cobrança.
-  const bearer=req.headers.get("authorization")||"";
-  if(!/^Bearer\s+\S+$/i.test(bearer))return reply({error:"Entre na sua conta antes de pagar"},401,origin);
-  const {data:authData,error:authError}=await db.auth.getUser(bearer.replace(/^Bearer\s+/i,""));
-  if(authError||!authData?.user?.id)return reply({error:"Sessão inválida"},401,origin);
-  const buyerId=authData.user.id;
-  if(!authData.user.email_confirmed_at)return reply({error:"Confirme seu e-mail antes de pagar"},403,origin);
-  if(String(authData.user.email||"").toLowerCase()!==String(body.email_pagador||"").trim().toLowerCase())
-   return reply({error:"O e-mail pagador deve ser o da conta autenticada"},403,origin);
+  const accessKey=Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,"0")).join("");
+  const accessKeyHash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(accessKey))),x=>x.toString(16).padStart(2,"0")).join("");
   const {data:reserva,error:reservaError}=await db.rpc("busque_servicos_reservar_pagamento",{
    p_pedido_id:id,p_tipo:tipo,p_profissional_nome:tipo==="premium"?null:nome,
    p_profissional_whatsapp:tipo==="premium"?null:telefone
@@ -41,10 +34,9 @@ Deno.serve(async req=>{
   if(reservaError)return reply({error:"Não foi possível reservar uma vaga"},409,origin);
   const reservaId=String(reserva?.id||"");
   if(!uuid.test(reservaId))return reply({error:"Reserva indisponível"},503,origin);
-  // Atribui a reserva ao usuário autenticado ANTES de criar a cobrança.
   const {data:bound,error:bindError}=await db.from("busque_servicos_pagamentos")
-   .update({comprador_user_id:buyerId}).eq("id",reservaId).eq("status","pendente").is("comprador_user_id",null).select("id").maybeSingle();
-  if(bindError||!bound)return reply({error:"Falha na identificação do comprador"},503,origin);
+   .update({chave_acesso_hash:accessKeyHash}).eq("id",reservaId).eq("status","pendente").is("chave_acesso_hash",null).select("id").maybeSingle();
+  if(bindError||!bound)return reply({error:"Não foi possível preparar a chave de acesso"},503,origin);
   const accessToken=env("MERCADO_PAGO_ACCESS_TOKEN");
   if(!accessToken)return reply({error:"Provedor indisponível"},503,origin);
   // PIX direto: nunca receber valor do cliente; enviar sempre R$ 3,50.
@@ -61,7 +53,7 @@ Deno.serve(async req=>{
    .eq("id",reservaId).eq("status","pendente");
   if(saveError)return reply({error:"Pagamento criado, aguardando conciliação segura.",referencia:reservaId},503,origin);
   const tx=payment.point_of_interaction?.transaction_data||{};
-  return reply({referencia:reservaId,status:"pendente",qr_code:String(tx.qr_code||""),
+  return reply({referencia:reservaId,chave_acesso:accessKey,status:"pendente",qr_code:String(tx.qr_code||""),
    qr_code_base64:String(tx.qr_code_base64||""),ticket_url:String(tx.ticket_url||"")},200,origin);
  }catch(e){console.error("busque-servicos-pix",e instanceof Error?e.message:"erro");return reply({error:"Erro interno"},500,origin)}
 });
