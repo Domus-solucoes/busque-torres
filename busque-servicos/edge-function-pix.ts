@@ -27,8 +27,8 @@ Deno.serve(async req=>{
   if(tipo==="desbloqueio_contato"&&(nome.length<2||telefone.length<10||telefone.length>13))return reply({error:"Informe nome e WhatsApp do profissional"},422,origin);
   // Identidade obrigatória: token JWT válido, validado no Supabase Auth.
   const bearer=req.headers.get("authorization")||"";
-  if(!/^Bearer\\s+\\S+$/i.test(bearer))return reply({error:"Entre na sua conta antes de pagar"},401,origin);
-  const {data:authData,error:authError}=await db.auth.getUser(bearer.replace(/^Bearer\\s+/i,""));
+  if(!/^Bearer\s+\S+$/i.test(bearer))return reply({error:"Entre na sua conta antes de pagar"},401,origin);
+  const {data:authData,error:authError}=await db.auth.getUser(bearer.replace(/^Bearer\s+/i,""));
   if(authError||!authData?.user?.id)return reply({error:"Sessão inválida"},401,origin);
   const buyerId=authData.user.id;
   if(!authData.user.email_confirmed_at)return reply({error:"Confirme seu e-mail antes de pagar"},403,origin);
