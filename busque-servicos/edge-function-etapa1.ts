@@ -19,7 +19,22 @@ Deno.serve(async(req)=>{
     .eq("status","aprovado").gt("expira_em",now)
     .order("aprovado_em",{ascending:true}).limit(100);
   if(error)throw error;
-  return out({pedidos:data||[]},200,origin);
+  const ids=(data||[]).map(p=>p.id);
+  let premiumIds=new Set<string>();
+  let contatosPorPedido=new Map<string,number>();
+  if(ids.length){
+   const {data:destaques,error:destaquesError}=await db.from("busque_servicos_destaques")
+    .select("pedido_id").in("pedido_id",ids).is("encerrado_em",null);
+   if(destaquesError)throw destaquesError;
+   premiumIds=new Set((destaques||[]).map(d=>d.pedido_id));
+   const {data:contatos,error:contatosError}=await db.from("busque_servicos_contatos_liberados")
+    .select("pedido_id").in("pedido_id",ids);
+   if(contatosError)throw contatosError;
+   for(const contato of contatos||[])contatosPorPedido.set(contato.pedido_id,(contatosPorPedido.get(contato.pedido_id)||0)+1);
+  }
+  const pedidos=(data||[]).map(p=>({...p,premium:premiumIds.has(p.id),orcamentos_ocupados:contatosPorPedido.get(p.id)||0}));
+  pedidos.sort((a,b)=>Number(b.premium)-Number(a.premium)||new Date(a.aprovado_em).getTime()-new Date(b.aprovado_em).getTime());
+  return out({pedidos},200,origin);
  }
  if(action==="submit"){
   const turnstileSecret=Deno.env.get("BUSQUE_SERVICOS_TURNSTILE_SECRET");
