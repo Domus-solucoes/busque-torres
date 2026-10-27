@@ -25,9 +25,9 @@ Deno.serve(async req=>{
   if(!urlId||!/^\d{1,30}$/.test(urlId))return out({error:"ID da notificação ausente"},400);
   if(bodyId&&bodyId!==urlId)return out({error:"Identificador divergente"},401);
   const id=urlId;
-  // Rejeita notificações antigas ou com relógio muito distante (anti-replay).
+  // Permite reentregas legítimas do provedor; idempotência ocorre na conciliação.
   const epoch=Number(ts), seconds=ts.length>10?epoch/1000:epoch;
-  if(!Number.isFinite(seconds)||Math.abs(Date.now()/1000-seconds)>300)
+  if(!Number.isFinite(seconds)||seconds>Date.now()/1000+300||seconds<Date.now()/1000-7*86400)
    return out({error:"Notificação fora da janela de validade"},401);
   const manifest="id:"+id.toLowerCase()+";request-id:"+requestId+";ts:"+ts+";";
   const key=await crypto.subtle.importKey("raw",new TextEncoder().encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
