@@ -954,6 +954,17 @@
 .busque-servicos-action strong{font-size:.8rem;line-height:1.3}
 .busque-servicos-action small{font-size:.67rem;color:#64748b;line-height:1.3}
 @media(max-width:420px){.busque-servicos-actions{gap:7px}.busque-servicos-action{padding:10px 6px}.busque-servicos-action strong{font-size:.72rem}.busque-servicos-action small{font-size:.62rem}}
+</style><style>
+/* Destaque suave no mesmo tamanho da antiga barra de previsão */
+#busqueServicosStrip{border-color:rgba(241,128,42,.44);background:linear-gradient(115deg,#fff 0%,#fff7ef 52%,#f2f7ff 100%);box-shadow:0 8px 24px rgba(8,27,51,.10),0 0 0 1px rgba(245,139,50,.10)}
+#busqueServicosToggle{position:relative;isolation:isolate;overflow:hidden;background:transparent}
+#busqueServicosToggle:before{content:"";position:absolute;inset:-55% -20%;z-index:-1;background:radial-gradient(ellipse at 15% 60%,rgba(255,147,48,.20),transparent 40%),radial-gradient(ellipse at 80% 25%,rgba(42,113,188,.16),transparent 46%);background-size:140% 140%;animation:busqueServicosGlow 10s ease-in-out infinite alternate;pointer-events:none}
+#busqueServicosToggle .weather-icon{filter:drop-shadow(0 1px 2px rgba(255,139,43,.2))}
+#busqueServicosToggle .weather-main strong{color:#092f60;font-weight:950;letter-spacing:.025em}
+#busqueServicosToggle .weather-action{color:#bd5618}
+#busqueServicosToggle:hover{background:rgba(255,245,233,.45)}
+@keyframes busqueServicosGlow{0%{background-position:0% 35%;opacity:.7}100%{background-position:100% 70%;opacity:1}}
+@media(prefers-reduced-motion:reduce){#busqueServicosToggle:before{animation:none}}
 </style></head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
