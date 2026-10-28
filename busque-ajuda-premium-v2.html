@@ -1,0 +1,130 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Serviços — Busque Torres</title><style>*{box-sizing:border-box}body{margin:0;background:#f2f6fb;color:#102e56;font:16px system-ui,Arial}header{background:#082c59;color:#fff;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}header strong{font-size:22px}header a{color:#fff;text-decoration:none}main{max-width:960px;margin:auto;padding:24px 16px}.intro{background:#0e5295;color:white;padding:24px;border-radius:16px}.intro h1{margin:0 0 8px}.pagination{display:flex;align-items:center;justify-content:center;gap:14px;margin:24px 0;flex-wrap:wrap}.pagination button{background:#185f9e}.pagination button:disabled{background:#b4c1ce}input,select{padding:12px;border:1px solid #cbd7e4;border-radius:10px;font:inherit;flex:1;min-width:150px}.card{background:#fff;border-radius:15px;padding:22px;margin:14px 0;box-shadow:0 5px 20px #1734540c}.badge{display:inline-block;background:#e9f3ff;color:#175b9d;padding:6px 11px;border-radius:30px;font-size:13px}.card h2{margin:12px 0 8px}.meta{color:#667b93;font-size:14px}button,.btn{display:inline-block;background:#fa7a20;color:#fff;border:0;padding:12px 17px;border-radius:10px;font-weight:800;cursor:pointer;text-decoration:none}button:disabled{background:#a7b2bf;cursor:not-allowed}.back{background:none;color:#185f9e;padding:0;margin-bottom:15px}.photos{display:flex;gap:12px;flex-wrap:wrap}.photo{height:120px;min-width:140px;display:grid;place-items:center;background:#e9eff6;border:1px dashed #b7c6d7;border-radius:10px;color:#6b7e93}.locked{background:#f5f7fa;border:1px solid #dce5ed;border-radius:12px;padding:18px;margin:18px 0}.locked p{margin:8px 0}.notice{font-size:13px;color:#647a90;line-height:1.5}.hidden{display:none}@media(max-width:550px){header strong{font-size:18px}.photo{flex:1}}.premium{border:2px solid #e8bd54;background:linear-gradient(120deg,#fffaf0,#fff)}.crown{display:inline-block;background:#fff0c1;color:#865300;border-radius:30px;padding:6px 11px;font-size:13px;font-weight:800}.sectionTitle{margin:26px 0 10px}</style><style>@media(max-width:600px){header{padding:13px 12px;flex-wrap:wrap}header a{font-size:14px}main{padding:15px 10px}.intro,.card,.locked{padding:16px}.card h2{overflow-wrap:anywhere}button,.btn{max-width:100%;min-height:44px}#checkout{width:calc(100% - 20px)!important;max-width:440px;max-height:90dvh;overflow-y:auto;padding:16px!important}#checkout input,#checkout textarea{width:100%;min-width:0;font-size:16px}#paymentBox{overflow-wrap:anywhere}.photo{min-width:0;width:100%;height:auto;min-height:120px}.pagination{gap:8px}}</style><style>/* Formulário do modal: sempre em coluna, inclusive no desktop */#checkout label{display:block;width:100%;margin:13px 0 5px;font-weight:650}#checkout input,#checkout textarea{display:block;width:100%;min-width:0;max-width:100%;margin:0 0 9px;flex:none}#checkout button{margin:8px 6px 8px 0}#checkout details{display:block;width:100%}#checkout summary{cursor:pointer}#checkout #paymentBox{width:100%;overflow-wrap:anywhere}#checkout #paymentBox textarea{min-height:80px}#checkout #unlocked{overflow-wrap:anywhere}#checkout{color:#102e56;background:#fff}#checkout::backdrop{background:rgba(6,19,37,.58)}@media(max-width:550px){#checkout{margin:auto;padding:16px!important}#checkout input{font-size:16px}}</style><style>
+/* Lista única inspirada na disposição da Rede de Talentos: coroa lateral no Premium */
+#cards .card{position:relative;min-height:126px;margin:8px 0;padding:17px 18px;border:1px solid #d6dde7;border-radius:9px;background:#fff;box-shadow:0 2px 5px rgba(15,41,74,.04)}
+#cards .card h2{font-size:1.05rem;line-height:1.3;margin:0 0 6px;color:#102e56}
+#cards .card p{margin:4px 0;font-size:.82rem;line-height:1.4}
+#cards .card .meta{font-size:.72rem;color:#697b8e;margin-top:9px}
+#cards .card button{margin-top:9px;padding:9px 14px;font-size:.78rem;border-radius:18px}
+#cards .card.premium{padding-left:77px;border:1px solid #d5b26b;background:linear-gradient(110deg,#fff9ed 0%,#fff 45%);box-shadow:0 3px 12px rgba(175,117,23,.08)}
+#cards .premium-ribbon{position:absolute;top:0;left:11px;width:48px;height:66px;background:linear-gradient(145deg,#ffd778,#ee9d18);clip-path:polygon(0 0,100% 0,100% 100%,50% 80%,0 100%);display:flex;justify-content:center;align-items:flex-start;padding-top:10px;filter:drop-shadow(0 2px 2px rgba(110,69,5,.14))}
+#cards .premium-ribbon svg{width:36px;height:36px;overflow:visible;filter:drop-shadow(0 2px 2px rgba(112,68,7,.18))}
+#cards .premium-label{display:inline-block;font-size:.64rem;font-weight:900;color:#a56a0d;letter-spacing:.07em;margin-bottom:4px}
+@media(max-width:550px){#cards .card{padding:14px}#cards .card.premium{padding-left:66px}#cards .premium-ribbon{left:9px;width:43px;height:60px}#cards .premium-ribbon svg{width:32px;height:32px}}
+</style><style>header .return-home{display:inline-flex;align-items:center;justify-content:center;padding:9px 13px;border:1px solid rgba(255,255,255,.58);border-radius:10px;background:rgba(255,255,255,.13);font-size:13px;font-weight:800;white-space:nowrap}header .return-home:hover{background:rgba(255,255,255,.25)}@media(max-width:600px){header .return-home{font-size:12px;padding:9px 10px}header nav{width:100%;justify-content:space-between}}</style><style>.saved-contact-footer{margin:28px 0 14px;padding:15px 16px;border:1px solid #dbe4ee;border-radius:12px;background:#fff}.saved-contact-footer h3{margin:0 0 5px;font-size:15px}.saved-contact-footer .notice{margin:4px 0 10px}.saved-contact-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.saved-contact-actions>button{padding:9px 13px;font-size:13px}.saved-purchase-buttons{display:flex;flex-wrap:wrap;gap:7px;align-items:center;flex:1}.saved-purchase-buttons button{padding:9px 13px;font-size:13px;margin:0!important}.saved-purchase-buttons:empty{display:none}</style><style>
+/* Confirmação visível do desbloqueio, inclusive em telas pequenas */
+#unlocked,#inlineContact{background:linear-gradient(120deg,#e6f3ff,#f6fbff);border:2px solid #3282d3;border-radius:14px;padding:17px;margin:14px 0;box-shadow:0 5px 18px rgba(24,95,158,.13)}
+#unlocked h3,#lockedTitle{color:#09529c}
+#unlocked #contactName,#unlocked #contactPhone,#inlineName,#inlinePhone{font-weight:900;color:#064e96;font-size:1.3rem;line-height:1.4;overflow-wrap:anywhere}
+#unlocked #contactName{font-size:1.5rem;margin:9px 0}
+#unlocked #contactPhone{padding:8px 10px;background:#d6ebff;border-radius:8px}
+#inlineContact p{margin:10px 0}
+#unlocked:before,#inlineContact:before{content:"✓ PAGAMENTO APROVADO — CONTATO LIBERADO";display:block;color:#075eac;font-weight:900;font-size:.82rem;letter-spacing:.02em;margin-bottom:10px}
+#contactWhatsapp,#inlineWhatsapp{display:inline-flex;align-items:center;justify-content:center;text-align:center;margin-top:8px}
+</style></head><body><header><a href="index.html" aria-label="Voltar ao Busque Torres" style="font-weight:800;font-size:22px">◉ Busque <span style="color:#ff8928">Torres</span></a><nav style="display:flex;align-items:center;gap:13px;flex-wrap:wrap"><a href="busque-ajuda-preview.html">Solicitar serviço</a></nav></header><main><section class="intro"><span class="badge">BUSQUE SERVIÇOS • TORRES</span><h1>Oportunidades de serviços</h1><p>Encontre pedidos em Torres, veja os detalhes e escolha os trabalhos que interessam a você.</p></section><section id="listing"><h2 class="sectionTitle">Oportunidades disponíveis</h2><div id="cards"></div><nav id="pagination" class="pagination" aria-label="Páginas de oportunidades" hidden><button id="prevPage" type="button">← Anterior</button><span id="pageInfo"></span><button id="nextPage" type="button">Próxima →</button></nav><section class="saved-contact-footer" aria-label="Contatos adquiridos"><h3>Seus contatos adquiridos</h3><p class="notice">Consulte os contatos que você já desbloqueou neste navegador.</p><div class="saved-contact-actions"><button id="openRecovery" type="button">Meus contatos</button><div id="savedPurchases" class="notice saved-purchase-buttons"></div></div></section></section><section id="detail" class="hidden"><button class="back" id="back">← Voltar às oportunidades</button><div class="card"><span class="badge" id="status"></span><h1 id="title"></h1><p class="meta" id="meta"></p><h3>Descrição do serviço</h3><p id="description"></p><h3>Fotos do serviço</h3><div class="photos" id="servicePhotos"><p class="notice">Carregando fotos...</p></div><div class="locked"><h3 id="lockedTitle">🔒 Dados do solicitante</h3><div id="lockedFields"><p>🔒 Nome: protegido</p><p>🔒 Endereço completo: protegido</p><p>🔒 WhatsApp: protegido</p></div><div id="inlineContact" hidden><p><strong>🔓 Nome:</strong> <span id="inlineName"></span></p><p><strong>🔓 Endereço:</strong> <span id="inlineAddress"></span></p><p><strong>🔓 WhatsApp:</strong> <span id="inlinePhone"></span></p><a id="inlineWhatsapp" class="btn" target="_blank" rel="noopener noreferrer">Entrar em contato pelo WhatsApp</a></div><button id="buyContact">Desbloquear contato — R$ 3,50</button><p class="notice" id="lockedNote">Após o pagamento, seus dados serão liberados aqui. A compra fica salva neste navegador.</p></div></div></section></main><dialog id="checkout" style="border:0;border-radius:16px;padding:24px;max-width:440px;width:92%;box-shadow:0 12px 45px #0004"><button id="closeCheckout" style="float:right;background:#60758b">Fechar</button><h2>Desbloquear contato</h2><p>Pagamento único de <strong>R$ 3,50</strong>. Sem cadastro.</p><label>Seu nome<input id="buyerName" autocomplete="name"></label><label>Seu WhatsApp<input id="buyerPhone" inputmode="tel"></label><label>E-mail para pagamento<input id="buyerEmail" type="email" autocomplete="email"></label><button id="generatePix">Gerar PIX</button><p id="paymentInfo" role="status"></p><div id="paymentBox" hidden><img id="pixImage" alt="QR Code PIX" style="width:220px;max-width:100%;display:block;margin:auto"><textarea id="pixText" readonly style="width:100%;min-height:80px"></textarea><button id="copyPix">Copiar código PIX</button><p><strong>Guarde a chave e o número da compra:</strong></p><input id="paymentReference" readonly style="width:100%;font-size:12px"><input id="accessKey" readonly style="width:100%;font-size:12px"><button id="copyKey">Copiar chave</button><button id="verifyPix">Verificar pagamento</button></div><details style="margin-top:16px"><summary>Já paguei — recuperar contato</summary><p class="notice">Informe o número da compra e a chave que você guardou.</p><label>Número da compra<input id="recoverPayment" autocomplete="off"></label><label>Chave de acesso<input id="recoverKey" autocomplete="off"></label><button id="recoverButton">Recuperar contato</button></details><div id="unlocked" hidden><h3>🔓 Contato liberado</h3><p id="contactName"></p><p id="contactAddress"></p><p id="contactPhone"></p><a id="contactWhatsapp" class="btn" target="_blank" rel="noopener noreferrer">Entrar em contato pelo WhatsApp</a></div></dialog><script>
+const endpoint='https://xwkmsqawiimouilldwit.supabase.co/functions/v1/busque-servicos-etapa1';
+const $=id=>document.getElementById(id);
+let jobs=[];let selectedJob=null;let page=1;const PAGE_SIZE=7;
+const escapeDate=v=>new Date(v).toLocaleDateString('pt-BR');
+const unlockedByJob=new Map();
+function savedItems(){try{const a=JSON.parse(localStorage.getItem('busque_servicos_compras')||'[]');return Array.isArray(a)?a:[]}catch(_){return []}}
+function paintContact(j){const p=j&&unlockedByJob.get(j.id);$('inlineContact').hidden=!p;$('lockedFields').hidden=!!p;$('buyContact').hidden=!!p;$('lockedNote').hidden=!!p;$('lockedTitle').textContent=p?'🔓 Dados do solicitante liberados':'🔒 Dados do solicitante';if(!p)return;$('inlineName').textContent=p.nome||'Solicitante';$('inlineAddress').textContent=p.endereco||'Não informado';$('inlinePhone').textContent=p.whatsapp||'';$('inlineWhatsapp').href=p.link;}
+async function restoreJobContact(j){if(!j)return;const candidates=savedItems().filter(x=>(!x.pedido||x.pedido===j.id)&&x.pagamento&&x.chave);for(const item of candidates){try{const p=await callFunction('busque-servicos-contato',{pagamento_id:item.pagamento,chave_acesso:item.chave});if(p.pedido_id!==j.id)continue;const link=whatsappLink(p.whatsapp);unlockedByJob.set(j.id,{...p,link});if(selectedJob?.id===j.id)paintContact(j);return}catch(_){}}}
+function whatsappLink(phone){const d=String(phone||'').replace(/[^0-9]/g,'');const full=d.startsWith('55')?d:'55'+d;if(!/^55\d{10,11}$/.test(full))throw Error('WhatsApp inválido no cadastro do solicitante.');return 'https://wa.me/'+full;}
+function list(){
+ $('cards').replaceChildren();
+ const ordered=[...jobs].sort((a,b)=>Number(b.premium)-Number(a.premium));
+ const totalPages=Math.max(1,Math.ceil(ordered.length/PAGE_SIZE));
+ page=Math.min(Math.max(1,page),totalPages);
+ function card(j){
+  const el=document.createElement('article');el.className='card';
+  const badge=document.createElement('span');badge.className=j.premium?'premium-label':'badge';
+  badge.textContent=j.premium?'DESTAQUE PREMIUM':'Vagas: '+Math.max(0,j.limit-j.occupied)+' de '+j.limit;
+  const title=document.createElement('h2');title.textContent=j.title;
+  const p=document.createElement('p');p.textContent=j.text;
+  const meta=document.createElement('p');meta.className='meta';meta.textContent=j.area+' • Publicado em '+escapeDate(j.published)+' • Válido até '+escapeDate(j.expires);
+  const btn=document.createElement('button');btn.textContent='Ver oportunidade';btn.onclick=()=>show(jobs.indexOf(j));
+  if(j.premium){el.classList.add('premium');const ribbon=document.createElement('div');ribbon.className='premium-ribbon';ribbon.setAttribute('aria-label','Anúncio Premium');ribbon.innerHTML='<svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="crownGold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff7bd"/><stop offset=".48" stop-color="#fff"/><stop offset="1" stop-color="#ffe9a2"/></linearGradient></defs><path d="M7 15 15 22 24 8 33 22 41 15 37 35H11Z" fill="url(#crownGold)" stroke="#a86c10" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 35h26v5H11z" rx="2" fill="#fff9e4" stroke="#a86c10" stroke-width="1.5"/><circle cx="7" cy="14" r="3" fill="#fff7d2" stroke="#b17b19"/><circle cx="24" cy="7" r="3" fill="#fff7d2" stroke="#b17b19"/><circle cx="41" cy="14" r="3" fill="#fff7d2" stroke="#b17b19"/><path d="M16 29h16" stroke="#e8a83e" stroke-width="1.5" stroke-linecap="round"/><path d="M24 22 27 27 24 32 21 27Z" fill="#ffb447" stroke="#a86c10" stroke-width=".8"/></svg>';el.append(ribbon)}
+  el.append(badge,title,p,meta,btn);return el;
+ }
+ ordered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE).forEach(j=>$('cards').append(card(j)));
+ if(!$('cards').children.length){const p=document.createElement('p');p.className='notice';p.textContent='Nenhuma oportunidade disponível no momento.';$('cards').append(p)}
+ $('pagination').hidden=totalPages===1;
+ $('pageInfo').textContent='Página '+page+' de '+totalPages;
+ $('prevPage').disabled=page===1;$('nextPage').disabled=page===totalPages;
+}
+$('prevPage').onclick=()=>{if(page>1){page--;list();window.scrollTo(0,0)}};
+$('nextPage').onclick=()=>{if(page<Math.ceil(jobs.length/PAGE_SIZE)){page++;list();window.scrollTo(0,0)}};
+async function show(i){const j=jobs[i];selectedJob=j;paintContact(j);restoreJobContact(j);$('title').textContent=j.title;$('description').textContent=j.text;$('meta').textContent=j.area+' • Válido até '+escapeDate(j.expires);$('status').textContent='Vagas disponíveis: '+Math.max(0,j.limit-j.occupied)+' de '+j.limit;$('listing').classList.add('hidden');$('detail').classList.remove('hidden');window.scrollTo(0,0);const box=$('servicePhotos');box.replaceChildren();const note=document.createElement('p');note.className='notice';note.textContent='Carregando fotos...';box.append(note);try{const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public_photos',pedido_id:j.id})});const data=await res.json();if(selectedJob!==j)return;box.replaceChildren();if(!res.ok)throw Error('Fotos indisponíveis');if(!data.fotos?.length){note.textContent='Este serviço não possui fotos.';box.append(note)}else for(const url of data.fotos){const img=document.createElement('img');img.src=url;img.alt='Foto enviada pelo solicitante';img.loading='lazy';img.style.cssText='max-width:100%;width:220px;height:160px;object-fit:cover;border-radius:10px';box.append(img)}}catch(_){if(selectedJob!==j)return;box.replaceChildren();note.textContent='Não foi possível carregar as fotos.';box.append(note)}}
+$('back').onclick=()=>{$('detail').classList.add('hidden');$('listing').classList.remove('hidden')};
+
+async function carregar(){
+ try{
+  const resp=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public_list'})});
+  if(!resp.ok)throw Error('Consulta indisponível');
+  const data=await resp.json();
+  jobs=(data.pedidos||[]).map(p=>({id:p.id,title:p.titulo,text:p.descricao,area:p.bairro,limit:p.limite_orcamentos,occupied:p.orcamentos_ocupados||0,premium:p.premium===true,published:p.aprovado_em,expires:p.expira_em}));
+  list();
+ }catch(e){$('cards').replaceChildren();const p=document.createElement('p');p.className='notice';p.textContent='Não foi possível carregar as oportunidades. Tente novamente mais tarde.';$('cards').append(p)}
+}
+let currentPayment="",currentKey="",poll=null,pollStop=null,verifying=false;
+const base='https://xwkmsqawiimouilldwit.supabase.co/functions/v1/';
+function msg(t){$('paymentInfo').textContent=t}
+$('buyContact').onclick=()=>{
+ if(!selectedJob?.id)return;
+ if(selectedJob.occupied>=selectedJob.limit){alert('Esta oportunidade não possui vagas.');return}
+ $('checkout').showModal();
+};
+function showSaved(){const box=$('savedPurchases');box.replaceChildren();let all=[];try{all=JSON.parse(localStorage.getItem('busque_servicos_compras')||'[]')}catch(_){};if(!Array.isArray(all)||!all.length){box.textContent='Nenhuma compra salva neste navegador.';return}for(const item of all){if(!item.pagamento||!item.chave)continue;const b=document.createElement('button');b.type='button';b.textContent='Consultar: '+String(item.titulo||'Contato adquirido');b.style.margin='5px';b.onclick=()=>{currentPayment=item.pagamento;currentKey=item.chave;$('recoverPayment').value=currentPayment;$('recoverKey').value=currentKey;$('checkout').showModal();msg('Consultando pagamento...');verify(false)};box.append(b)}}$('openRecovery').onclick=()=>{showSaved();$('savedPurchases').scrollIntoView({behavior:'smooth',block:'center'})};
+$('closeCheckout').onclick=()=>{$('checkout').close();if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop)};
+async function callFunction(name,payload){
+ const r=await fetch(base+name,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ const j=await r.json();if(!r.ok)throw Error(j.error||'Serviço indisponível');return j;
+}
+$('generatePix').onclick=async()=>{
+ const btn=$('generatePix');try{
+  const nome=$('buyerName').value.trim(),tel=$('buyerPhone').value.replace(/[^0-9]/g,''),email=$('buyerEmail').value.trim();
+  if(nome.length<2||tel.length<10||tel.length>13||!/^\S+@\S+\.\S+$/.test(email))throw Error('Preencha nome, WhatsApp e e-mail válidos.');
+  btn.disabled=true;msg('Preparando PIX...');
+  const j=await callFunction('busque-servicos-pix',{pedido_id:selectedJob.id,tipo:'desbloqueio_contato',profissional_nome:nome,profissional_whatsapp:tel,email_pagador:email});
+  currentPayment=j.referencia;currentKey=j.chave_acesso;
+  if(!currentPayment||!currentKey)throw Error('Resposta de pagamento incompleta.');
+  try{const saved=JSON.parse(localStorage.getItem('busque_servicos_compras')||'[]');const all=Array.isArray(saved)?saved:[];if(!all.some(x=>x.pagamento===currentPayment))all.push({pagamento:currentPayment,chave:currentKey,pedido:selectedJob.id,titulo:selectedJob.title,criadoEm:new Date().toISOString()});localStorage.setItem('busque_servicos_compras',JSON.stringify(all));localStorage.setItem('busque_servicos_ultima_compra',JSON.stringify({pagamento:currentPayment,chave:currentKey}))}catch(_){}
+  $('accessKey').value=currentKey;$('paymentReference').value=currentPayment;$('pixText').value=j.qr_code||'';
+  $('pixImage').hidden=!j.qr_code_base64;
+  if(j.qr_code_base64)$('pixImage').src='data:image/png;base64,'+j.qr_code_base64;
+  $('paymentBox').hidden=false;msg('PIX gerado. Após pagar, o contato aparecerá aqui.');
+  if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=setInterval(()=>verify(true),12000);pollStop=setTimeout(()=>{clearInterval(poll);poll=null;msg("Se pagou, clique em Verificar pagamento. A chave permanece válida.")},720000);
+ }catch(e){msg(e.message)}finally{btn.disabled=false}
+};
+async function verify(silent=false){
+ if(verifying)return;
+ $('unlocked').hidden=true;
+ $('contactWhatsapp').removeAttribute('href');
+ if(!/^[0-9a-f-]{36}$/i.test(currentPayment)||!/^[0-9a-f]{64}$/.test(currentKey)){if(!silent)msg('Confira o número da compra e a chave de acesso.');return;}
+ verifying=true;
+ try{
+  const j=await callFunction('busque-servicos-status-pagamento',{pagamento_id:currentPayment,chave_acesso:currentKey});
+  if(j.liberado){
+   const p=await callFunction('busque-servicos-contato',{pagamento_id:currentPayment,chave_acesso:currentKey});
+   const link=whatsappLink(p.whatsapp);
+   $('contactName').textContent=String(p.nome||'Solicitante');
+   $('contactWhatsapp').href=link;
+   $('contactAddress').textContent='Endereço: '+(p.endereco||'Não informado');$('contactPhone').textContent='WhatsApp: '+String(p.whatsapp||'');
+   const purchased=savedItems().find(x=>x.pagamento===currentPayment);if(p.pedido_id){unlockedByJob.set(p.pedido_id,{...p,link});if(selectedJob?.id===p.pedido_id)paintContact(selectedJob)}
+   $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
+   if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
+  }else if(!silent)msg(j.status==='aprovado'?'Pagamento confirmado, aguardando liberação do contato.':'Pagamento ainda não confirmado: '+(j.status||'pendente')+'.');
+ }catch(e){if(!silent)msg(e.message)}finally{verifying=false}
+}
+$('verifyPix').onclick=()=>verify(false);
+$('recoverButton').onclick=()=>{
+ if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
+ currentPayment=$('recoverPayment').value.trim();currentKey=$('recoverKey').value.trim().toLowerCase();
+ $('unlocked').hidden=true;$('paymentBox').hidden=true;
+ msg('Consultando sua compra...');verify(false);
+};
+try{const last=JSON.parse(localStorage.getItem('busque_servicos_ultima_compra')||'null');if(last?.pagamento&&last?.chave){$('recoverPayment').value=last.pagamento;$('recoverKey').value=last.chave}}catch(_){}
+$('copyPix').onclick=()=>navigator.clipboard.writeText($('pixText').value).then(()=>msg('Código copiado.')).catch(()=>msg('Copie o código manualmente.'));
+$('copyKey').onclick=()=>navigator.clipboard.writeText(currentKey).then(()=>msg('Chave copiada.')).catch(()=>msg('Copie a chave manualmente.'));
+showSaved();carregar();
+</script></body></html>
