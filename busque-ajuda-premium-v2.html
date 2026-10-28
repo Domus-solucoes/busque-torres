@@ -6,7 +6,7 @@ const escapeDate=v=>new Date(v).toLocaleDateString('pt-BR');
 const unlockedByJob=new Map();
 function savedItems(){try{const a=JSON.parse(localStorage.getItem('busque_servicos_compras')||'[]');return Array.isArray(a)?a:[]}catch(_){return []}}
 function paintContact(j){const p=j&&unlockedByJob.get(j.id);$('inlineContact').hidden=!p;$('lockedFields').hidden=!!p;$('buyContact').hidden=!!p;$('lockedNote').hidden=!!p;$('lockedTitle').textContent=p?'🔓 Dados do solicitante liberados':'🔒 Dados do solicitante';if(!p)return;$('inlineName').textContent=p.nome||'Solicitante';$('inlineAddress').textContent=p.endereco||'Não informado';$('inlinePhone').textContent=p.whatsapp||'';$('inlineWhatsapp').href=p.link;}
-async function restoreJobContact(j){if(!j)return;const candidates=savedItems().filter(x=>x.pedido===j.id&&x.pagamento&&x.chave);for(const item of candidates){try{const p=await callFunction('busque-servicos-contato',{pagamento_id:item.pagamento,chave_acesso:item.chave});const link=whatsappLink(p.whatsapp);unlockedByJob.set(j.id,{...p,link});if(selectedJob?.id===j.id)paintContact(j);return}catch(_){}}}
+async function restoreJobContact(j){if(!j)return;const candidates=savedItems().filter(x=>(!x.pedido||x.pedido===j.id)&&x.pagamento&&x.chave);for(const item of candidates){try{const p=await callFunction('busque-servicos-contato',{pagamento_id:item.pagamento,chave_acesso:item.chave});if(p.pedido_id!==j.id)continue;const link=whatsappLink(p.whatsapp);unlockedByJob.set(j.id,{...p,link});if(selectedJob?.id===j.id)paintContact(j);return}catch(_){}}}
 function whatsappLink(phone){const d=String(phone||'').replace(/[^0-9]/g,'');const full=d.startsWith('55')?d:'55'+d;if(!/^55\d{10,11}$/.test(full))throw Error('WhatsApp inválido no cadastro do solicitante.');return 'https://wa.me/'+full;}
 function list(){
  $('cards').replaceChildren();$('premiumCards').replaceChildren();
@@ -90,7 +90,7 @@ async function verify(silent=false){
    $('contactName').textContent=String(p.nome||'Solicitante');
    $('contactWhatsapp').href=link;
    $('contactAddress').textContent='Endereço: '+(p.endereco||'Não informado');$('contactPhone').textContent='WhatsApp: '+String(p.whatsapp||'');
-   const purchased=savedItems().find(x=>x.pagamento===currentPayment);if(purchased?.pedido){unlockedByJob.set(purchased.pedido,{...p,link});if(selectedJob?.id===purchased.pedido)paintContact(selectedJob)}
+   const purchased=savedItems().find(x=>x.pagamento===currentPayment);if(p.pedido_id){unlockedByJob.set(p.pedido_id,{...p,link});if(selectedJob?.id===p.pedido_id)paintContact(selectedJob)}
    $('unlocked').hidden=false;$('paymentBox').hidden=true;msg('Pagamento confirmado! Contato liberado.');
    if(poll)clearInterval(poll);if(pollStop)clearTimeout(pollStop);poll=null;pollStop=null;
   }else if(!silent)msg(j.status==='aprovado'?'Pagamento confirmado, aguardando liberação do contato.':'Pagamento ainda não confirmado: '+(j.status||'pendente')+'.');
