@@ -965,6 +965,15 @@
 #busqueServicosToggle:hover{background:rgba(255,245,233,.45)}
 @keyframes busqueServicosGlow{0%{background-position:0% 35%;opacity:.7}100%{background-position:100% 70%;opacity:1}}
 @media(prefers-reduced-motion:reduce){#busqueServicosToggle:before{animation:none}}
+
+/* BUSQUE SERVIÇOS — chamada permanente sobre a imagem de Torres */
+.hero-servicos-callout{position:absolute;z-index:5;left:max(16px,calc((100% - 1180px)/2));bottom:16px;max-width:min(440px,calc(100% - 32px));padding:13px 16px;border-radius:16px;background:rgba(5,23,45,.88);border:1px solid rgba(255,209,96,.7);box-shadow:0 10px 28px rgba(0,0,0,.24);color:#fff;backdrop-filter:blur(5px)}
+.hero-servicos-callout strong{display:block;font-size:clamp(1rem,2vw,1.4rem);line-height:1.15;font-weight:900}
+.hero-servicos-callout strong span{color:#ffd166}
+.hero-servicos-callout p{margin:5px 0 10px;font-size:.83rem;line-height:1.35}
+.hero-servicos-callout a{display:inline-block;background:#f4bf47;color:#10253d;border-radius:999px;padding:9px 14px;text-decoration:none;font-weight:900;font-size:.79rem}
+.hero-servicos-callout a:hover,.hero-servicos-callout a:focus-visible{background:#ffdb80}
+@media(max-width:640px){.hero-servicos-callout{left:10px;bottom:9px;max-width:calc(100% - 20px);padding:9px 11px;border-radius:12px}.hero-servicos-callout strong{font-size:1rem}.hero-servicos-callout p{font-size:.7rem;margin:3px 0 7px}.hero-servicos-callout a{padding:7px 11px;font-size:.7rem}}
 </style></head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
@@ -978,6 +987,11 @@
       </button>
       <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog" aria-label="Abrir planos e valores">PLANOS</button>
     </div>
+  </div>
+  <div class="hero-servicos-callout" aria-label="Divulgação do Busque Serviços">
+    <strong>PRECISA DE UM SERVIÇO? <span>ANUNCIE GRÁTIS!</span></strong>
+    <p>Conte o que você precisa e receba propostas de profissionais.</p>
+    <a href="busque-ajuda-preview.html">SOLICITAR UM SERVIÇO →</a>
   </div>
 </header>
 
