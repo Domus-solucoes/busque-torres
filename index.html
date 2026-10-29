@@ -2108,6 +2108,15 @@ registrarMetrica("visita_site",null,"index");
   button.addEventListener('click',()=>{
     const open=details.hidden;
     details.hidden=!open;
+    if(open){
+      try{
+        fetch(`${BUSQUE_SUPABASE_URL}/rest/v1/rpc/registrar_acesso_busque_servicos`,{
+          method:'POST',keepalive:true,
+          headers:{apikey:BUSQUE_SUPABASE_KEY,Authorization:`Bearer ${BUSQUE_SUPABASE_KEY}`,'Content-Type':'application/json'},
+          body:'{}'
+        }).catch(()=>{});
+      }catch(_){/* Métrica não interfere na navegação */}
+    }
     button.setAttribute('aria-expanded',String(open));
     if(arrow)arrow.textContent=open?'⌃':'⌄';
   });
