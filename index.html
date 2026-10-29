@@ -966,14 +966,18 @@
 @keyframes busqueServicosGlow{0%{background-position:0% 35%;opacity:.7}100%{background-position:100% 70%;opacity:1}}
 @media(prefers-reduced-motion:reduce){#busqueServicosToggle:before{animation:none}}
 
-/* BUSQUE SERVIÇOS — chamada permanente sobre a imagem de Torres */
-.hero-servicos-callout{position:absolute;z-index:5;left:max(16px,calc((100% - 1180px)/2));bottom:16px;max-width:min(440px,calc(100% - 32px));padding:13px 16px;border-radius:16px;background:rgba(5,23,45,.88);border:1px solid rgba(255,209,96,.7);box-shadow:0 10px 28px rgba(0,0,0,.24);color:#fff;backdrop-filter:blur(5px)}
-.hero-servicos-callout strong{display:block;font-size:clamp(1rem,2vw,1.4rem);line-height:1.15;font-weight:900}
-.hero-servicos-callout strong span{color:#ffd166}
-.hero-servicos-callout p{margin:5px 0 10px;font-size:.83rem;line-height:1.35}
-.hero-servicos-callout a{display:inline-block;background:#f4bf47;color:#10253d;border-radius:999px;padding:9px 14px;text-decoration:none;font-weight:900;font-size:.79rem}
-.hero-servicos-callout a:hover,.hero-servicos-callout a:focus-visible{background:#ffdb80}
-@media(max-width:640px){.hero-servicos-callout{left:50%;transform:translateX(-50%);bottom:48px;max-width:calc(100% - 28px);width:max-content;padding:9px 11px;border-radius:12px}.hero-servicos-callout strong{font-size:1rem}.hero-servicos-callout p{font-size:.7rem;margin:3px 0 7px}.hero-servicos-callout a{padding:7px 11px;font-size:.7rem}}
+/* BUSQUE SERVIÇOS — destaque integrado ao topo; sem sobrepor a busca */
+.hero-servicos-callout{position:absolute;z-index:5;left:50%;transform:translateX(-50%);top:44%;bottom:auto;width:min(560px,calc(100% - 40px));max-width:none;padding:20px 24px;border-radius:20px;text-align:center;background:linear-gradient(115deg,rgba(8,29,59,.94),rgba(17,61,102,.92));border:2px solid #ffd166;box-shadow:0 16px 38px rgba(0,0,0,.32);color:#fff;backdrop-filter:blur(5px)}
+.hero-servicos-callout strong{display:block;font-size:clamp(1.45rem,2.1vw,2.15rem);line-height:1.14;font-weight:950;text-shadow:0 2px 5px rgba(0,0,0,.3)}
+.hero-servicos-callout strong span{display:block;color:#ffda59;font-size:1.12em}
+.hero-servicos-callout p{margin:9px 0 13px;font-size:.95rem;line-height:1.4}
+.hero-servicos-callout a{display:inline-block;background:linear-gradient(135deg,#ffdd68,#f2ae28);color:#10253d;border-radius:999px;padding:12px 24px;text-decoration:none;font-weight:950;font-size:.96rem;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+.hero-servicos-callout a:hover,.hero-servicos-callout a:focus-visible{background:#ffe58c}
+@keyframes servicosDestaquePulse{0%,100%{transform:scale(1);box-shadow:0 6px 18px rgba(0,0,0,.2)}50%{transform:scale(1.055);box-shadow:0 0 0 7px rgba(255,211,88,.18)}}
+.hero-servicos-callout a{animation:servicosDestaquePulse .85s ease-in-out 3}
+@media(min-width:641px) and (max-height:760px){.hero-servicos-callout{top:36%;padding:12px 20px}.hero-servicos-callout strong{font-size:1.45rem}.hero-servicos-callout p{margin:5px 0 8px}.hero-servicos-callout a{padding:9px 20px}}
+@media(max-width:640px){.hero-servicos-callout{left:50%;transform:translateX(-50%);top:auto;bottom:48px;width:calc(100% - 28px);max-width:none;padding:13px 12px;border-radius:15px;background:linear-gradient(120deg,rgba(4,37,78,.96),rgba(13,81,126,.96));border:2px solid #ffcf48}.hero-servicos-callout strong{font-size:1.16rem}.hero-servicos-callout strong span{font-size:1.22em}.hero-servicos-callout p{font-size:.76rem;margin:6px 0 9px}.hero-servicos-callout a{padding:10px 16px;font-size:.85rem}}
+@media(prefers-reduced-motion:reduce){.hero-servicos-callout a{animation:none}}
 </style></head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
