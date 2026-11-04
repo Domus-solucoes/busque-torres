@@ -8,7 +8,28 @@ async function login(){const email=el('emailAdmin').value,password=el('senhaAdmi
 async function api(action,payload={}){if(!session)throw Error('Faça login.');const r=await fetch(fn,{method:'POST',headers:{apikey,Authorization:'Bearer '+session,'Content-Type':'application/json'},body:JSON.stringify({action,...payload})});const data=await r.json();if(!r.ok)throw Error(data.error||'Erro na operação');return data}
 async function carregar(){pedidos=(await api('list')).pedidos||[];render();await carregarFinanceiro()}
 async function revisar(id,status){if(!confirm(status==='aprovado'?'Aprovar este pedido?':'Rejeitar este pedido?'))return;try{await api('review',{id,status});await carregar()}catch(e){alert(e.message)}}
-function render(){for(const [id,status] of [['pendentes','pendente'],['aprovados','aprovado'],['rejeitados','rejeitado']])el(id).textContent=pedidos.filter(p=>p.status===status).length;el('lista').replaceChildren();for(const p of pedidos.filter(p=>el('filtro').value==='todos'||p.status===el('filtro').value)){const div=document.createElement('article');div.className='item';const h=document.createElement('h3');h.textContent=p.titulo;const desc=document.createElement('p');desc.textContent=p.descricao;const meta=document.createElement('small');meta.textContent=p.bairro+' • '+p.status+' • '+new Date(p.criado_em).toLocaleString('pt-BR')+(p.expira_em?' • Expira: '+new Date(p.expira_em).toLocaleString('pt-BR'):'');const contact=document.createElement('p');contact.textContent='Solicitante: '+p.nome_solicitante+' | WhatsApp: '+p.whatsapp+(p.endereco_privado?' | Endereço: '+p.endereco_privado:'');div.append(h,desc,meta,contact);if(p.status==='pendente'){for(const [label,status,cls] of [['Aprovar','aprovado',''],['Rejeitar','rejeitado','alt']]){const button=document.createElement('button');button.textContent=label;button.className=cls;button.onclick=()=>revisar(p.id,status);div.append(button)}}el('lista').append(div)}}
+function editarPedido(p){
+ const div=document.createElement('div');div.className='item';div.style.background='#f7faff';
+ const form=document.createElement('form');form.style.display='grid';form.style.gap='10px';
+ const campos=[['titulo','Título',120],['descricao','Descrição',2000],['bairro','Bairro',100],['nome_solicitante','Nome do solicitante',100],['whatsapp','WhatsApp',20],['endereco_privado','Endereço (privado)',180]];
+ const inputs={};
+ for(const [key,label,max] of campos){
+  const wrapper=document.createElement('label');wrapper.style.display='grid';wrapper.style.gap='5px';wrapper.textContent=label;
+  const input=key==='descricao'?document.createElement('textarea'):document.createElement('input');
+  input.value=p[key]||'';input.maxLength=max;input.required=key!=='endereco_privado';input.style.cssText='width:100%;box-sizing:border-box;padding:10px;border:1px solid #cad3df;border-radius:8px;font:inherit';
+  if(key==='descricao')input.rows=4;
+  wrapper.append(input);form.append(wrapper);inputs[key]=input;
+ }
+ const buttons=document.createElement('div');const salvar=document.createElement('button');salvar.type='submit';salvar.textContent='Salvar correções';
+ const cancelar=document.createElement('button');cancelar.type='button';cancelar.className='alt';cancelar.textContent='Cancelar';cancelar.onclick=()=>div.remove();
+ const erro=document.createElement('p');erro.setAttribute('role','alert');erro.style.color='#b42338';buttons.append(salvar,cancelar);form.append(buttons,erro);div.append(form);
+ form.onsubmit=async e=>{e.preventDefault();salvar.disabled=true;erro.textContent='';try{
+  const dados=Object.fromEntries(Object.entries(inputs).map(([k,v])=>[k,v.value.trim()]));
+  await api('edit_pending',{id:p.id,...dados});await carregar();
+ }catch(ex){erro.textContent=ex.message;salvar.disabled=false}};
+ return div;
+}
+function render(){for(const [id,status] of [['pendentes','pendente'],['aprovados','aprovado'],['rejeitados','rejeitado']])el(id).textContent=pedidos.filter(p=>p.status===status).length;el('lista').replaceChildren();for(const p of pedidos.filter(p=>el('filtro').value==='todos'||p.status===el('filtro').value)){const div=document.createElement('article');div.className='item';const h=document.createElement('h3');h.textContent=p.titulo;const desc=document.createElement('p');desc.textContent=p.descricao;const meta=document.createElement('small');meta.textContent=p.bairro+' • '+p.status+' • '+new Date(p.criado_em).toLocaleString('pt-BR')+(p.expira_em?' • Expira: '+new Date(p.expira_em).toLocaleString('pt-BR'):'');const contact=document.createElement('p');contact.textContent='Solicitante: '+p.nome_solicitante+' | WhatsApp: '+p.whatsapp+(p.endereco_privado?' | Endereço: '+p.endereco_privado:'');div.append(h,desc,meta,contact);if(p.status==='pendente'){const editar=document.createElement('button');editar.type='button';editar.className='alt';editar.textContent='Editar pedido';editar.onclick=()=>{const aberto=div.querySelector('.editor-pendente');if(aberto){aberto.remove();return}const painel=editarPedido(p);painel.classList.add('editor-pendente');div.append(painel)};div.append(editar);for(const [label,status,cls] of [['Aprovar','aprovado',''],['Rejeitar','rejeitado','alt']]){const button=document.createElement('button');button.textContent=label;button.className=cls;button.onclick=()=>revisar(p.id,status);div.append(button)}}el('lista').append(div)}}
 async function carregarFinanceiro(){
  const r=await fetch(url+'/functions/v1/busque-servicos-financeiro-admin',{method:'POST',headers:{apikey,Authorization:'Bearer '+session,'Content-Type':'application/json'},body:'{}'});
  const j=await r.json();if(!r.ok)throw Error(j.error||'Não foi possível carregar financeiro.');
