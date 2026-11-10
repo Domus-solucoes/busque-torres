@@ -1637,11 +1637,46 @@ function prepararOrdemNormais(){const seed=normalSeed();normalOrder=allCompanies
 function normalCompanyRow(company){const info=categoryInfo[company.categoria]||{name:"Empresa"};const subtitle=company.subcategoria||info.name||"Empresa local";const a=document.createElement("a");a.className="normal-company-row";a.href=profileUrl(company);a.setAttribute("aria-label",`Abrir perfil de ${company.nome}`);a.innerHTML=`<span class="normal-company-name">${escapeHtml(company.nome)}</span><span class="normal-company-sep">—</span><span class="normal-company-subtitle">${escapeHtml(subtitle)}</span>`;return a}
 function renderNormalCompanies(){if(!normalOrder.length)prepararOrdemNormais();const section=$("normalCompaniesSection"),grid=$("normalCompanyCards"),count=$("normalCompaniesCount"),more=$("loadMoreCompanies");const total=normalOrder.length;if(!total){section.hidden=true;grid.replaceChildren();count.textContent="";more.hidden=true;return}section.hidden=false;const visible=normalOrder.slice(0,normalVisible);grid.replaceChildren(...visible.map(normalCompanyRow));count.textContent=`${total} empresa${total===1?"":"s"}`;more.hidden=visible.length>=total;more.textContent=visible.length<total?`Ver mais empresas (${total-visible.length})`:"Todas as empresas exibidas"}
 function renderHome(){const master=obterDestaquesMaster(),fixos=obterDestaquesFixos();$("featuredCards").replaceChildren(...fixos.map((company,index)=>card(company,index<3)));$("featuredCount").textContent=fixos.length?`${fixos.length} destaque${fixos.length===1?"":"s"}`:"Nenhum destaque ativo";$("featuredSection").querySelector(".section-note").textContent=fixos.length?"Empresas em evidência na cidade.":"Os primeiros anúncios Destaque aparecerão aqui.";prepararOrdemNormais();renderNormalCompanies();atualizarBannersMaster(master)}
+// Encaminhamento contextual para o mural de vagas, sem ocultar resultados de empresas.
+function buscaIndicaVagas(valor){
+  const termo=String(valor||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+  return /\b(vagas?|empregos?|trabalhos?|contrat(?:acao|ando|ar)|curricul[oa]s?|jovem aprendiz|oportunidades?|estagio|estagios|recrutamento)\b/.test(termo);
+}
+function abrirVagasDaBusca(){
+  $("smartSearchSuggestions").hidden=true;
+  registrarMetrica("clicou_temos_vagas",null,"busca");
+  registrarMetrica("abriu_vagas",null,"busca");
+  openJobs();
+}
+function atualizarAtalhoVagas(){
+  const cards=$("cards");if(!cards)return;
+  let aviso=$("atalhoVagasBusca");
+  if(!aviso){
+    aviso=document.createElement("div");aviso.id="atalhoVagasBusca";
+    aviso.style.cssText="margin:0 0 18px;padding:18px 20px;border:1px solid #dce5f0;border-radius:14px;background:#f3f7fd;color:#122a45;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap";
+    const texto=document.createElement("div");
+    const titulo=document.createElement("strong");titulo.textContent="💼 Procurando emprego?";titulo.style.cssText="display:block;font-size:17px;margin-bottom:4px";
+    const detalhe=document.createElement("span");detalhe.textContent="Veja as oportunidades disponíveis no TEMOS VAGAS.";
+    texto.append(titulo,detalhe);
+    const botao=document.createElement("button");botao.type="button";botao.textContent="VER VAGAS DISPONÍVEIS";botao.style.cssText="background:#0d2b4d;color:#fff;border:0;border-radius:9px;padding:12px 16px;font-weight:700;cursor:pointer";
+    botao.addEventListener("click",abrirVagasDaBusca);aviso.append(texto,botao);
+    cards.parentElement.insertBefore(aviso,cards);
+  }
+  aviso.hidden=!buscaIndicaVagas($("searchInput").value);
+  aviso.style.display=aviso.hidden?"none":"flex";
+}
 function updateSmartSuggestions(){
   const panel=$("smartSearchSuggestions"),input=$("searchInput");
   if(!panel||!input||!window.BusqueBuscaInteligente)return;
   const suggestions=BusqueBuscaInteligente.suggestions(input.value).filter(item=>item.score>=24);
   panel.replaceChildren();
+  const vaga=buscaIndicaVagas(input.value);
+  if(vaga){
+    const btn=document.createElement("button");btn.type="button";btn.className="smart-search-option";
+    const titulo=document.createElement("strong");titulo.textContent="💼 TEMOS VAGAS — Ver oportunidades";
+    const detalhe=document.createElement("small");detalhe.textContent="Acesse as vagas de emprego disponíveis no Busque Torres";
+    btn.append(titulo,detalhe);btn.addEventListener("click",abrirVagasDaBusca);panel.append(btn);
+  }
   suggestions.forEach(item=>{
     const button=document.createElement("button");button.type="button";button.className="smart-search-option";
     const title=document.createElement("strong");title.textContent=item.sub;
@@ -1653,9 +1688,10 @@ function updateSmartSuggestions(){
     });
     panel.append(button);
   });
-  panel.hidden=!suggestions.length;input.setAttribute("aria-expanded",String(Boolean(suggestions.length)));
+  panel.hidden=!(suggestions.length||vaga);input.setAttribute("aria-expanded",String(Boolean(suggestions.length||vaga)));
 }
 function renderSearch(){
+  atualizarAtalhoVagas();
   const hasQuery=Boolean(query),hasCategory=selected!=="todos";
   const remoteReady=hasQuery&&searchRemoteQuery===query&&Array.isArray(searchRemoteCompanies);
   let list=remoteReady?[...searchRemoteCompanies]:[...allCompanies()];
