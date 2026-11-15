@@ -1256,13 +1256,13 @@ body.bt-black-2026 .promo-day-nudge{background:#111;color:#ffd34b;border-color:#
 </style>
 <script>
 (function(){
- const start=Date.parse('2026-11-16T00:00:00-03:00'),end=Date.parse('2026-12-01T00:00:00-03:00');
+ const start=Date.parse('2026-11-15T00:00:00-03:00'),end=Date.parse('2026-12-01T00:00:00-03:00');
  if(Date.now()<start||Date.now()>=end)return;
  document.body.classList.add('bt-black-2026');
  const trigger=document.getElementById('promoDayTrigger'),nudge=document.getElementById('promoDayNudge');
  if(!trigger)return;
  trigger.setAttribute('aria-label','Abrir promoções da Black Friday');
- if(nudge)nudge.textContent='🖤 BLACK FRIDAY';
+ if(nudge){nudge.textContent='🖤 BLACK FRIDAY';new MutationObserver(()=>{if(nudge.textContent!=='🖤 BLACK FRIDAY')nudge.textContent='🖤 BLACK FRIDAY'}).observe(nudge,{childList:true,characterData:true,subtree:true})}
  const fire=trigger.querySelector('.promo-day-fire');if(fire)fire.textContent='';
  const panelTitle=document.querySelector('.promo-day-kicker');if(panelTitle)panelTitle.textContent='🖤 BLACK FRIDAY';
  const cta=document.getElementById('promoDayCta');
