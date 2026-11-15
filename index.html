@@ -1247,6 +1247,9 @@ body.bt-black-2026 .promo-day-trigger{background:linear-gradient(145deg,#080808,
 body.bt-black-2026 .promo-day-fire{font-size:0!important;animation:none!important}
 body.bt-black-2026 .promo-day-fire:after{content:"BLACK";font-size:12px;font-weight:1000;color:#ffcd39;letter-spacing:-.4px}
 body.bt-black-2026 .promo-day-nudge{background:#111;color:#ffd34b;border-color:#ffd34b}
+body.bt-black-2026 .promo-day-card.real img{object-fit:contain!important;background:#0b1725}
+body.bt-black-2026 .promo-day-self-price{display:none!important}
+body.bt-black-2026 .promo-day-self-title{color:#ffcf49}
 .bt-black-spotlight{position:fixed;inset:0;z-index:970;background:rgba(0,0,0,.92);pointer-events:none;opacity:0;transition:opacity .35s}
 .bt-black-spotlight.active{opacity:1}
 .bt-black-spotlight.focus{background:radial-gradient(circle 77px at var(--bx) var(--by),transparent 65%,rgba(0,0,0,.92) 100%)}
@@ -2076,6 +2079,7 @@ registrarMetrica("visita_site",null,"index");
       dot.textContent=todayCount?String(todayCount):'';
       dot.title=todayCount?`${todayCount} promoção(ões) ativa(s) hoje`:'';
       nudge.textContent=document.body.classList.contains('bt-black-2026')?'🖤 BLACK FRIDAY':(todayCount?'🔥 Promoções de hoje':'🔥 Promoção do Dia');
+    if(document.body.classList.contains('bt-black-2026')){const t=selfPromo.querySelector('.promo-day-self-title'),c=selfPromo.querySelector('.promo-day-self-copy');if(t)t.textContent='🖤 Sua empresa na Black Friday';if(c)c.textContent='Cadastre o banner da sua oferta gratuitamente. Exclusivo para empresas ativas do Busque Torres, mediante aprovação.'}
     if(currentPromos.length){
       selfPromo.hidden=true;
       carousel.hidden=false;
