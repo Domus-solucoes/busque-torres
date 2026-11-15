@@ -1271,7 +1271,7 @@ body.bt-black-2026 .promo-day-self-title{color:#ffcf49}
  const cta=document.getElementById('promoDayCta');
  // O checkout legado continua ativo: não anunciar gratuidade até integrar a regra no servidor.
  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- try{if(localStorage.getItem('bt_black_intro_2026'))return;localStorage.setItem('bt_black_intro_2026','1')}catch(e){return}
+ try{const key='bt_black_intro_2026',last=Number(localStorage.getItem(key)||0),now=Date.now(),interval=30*60*1000;if(last&&Number.isFinite(last)&&now-last>=0&&now-last<interval)return;localStorage.setItem(key,String(now))}catch(e){return}
  setTimeout(()=>{
   if(document.body.classList.contains('modal-open')||document.body.classList.contains('search-mode'))return;
   const rect=trigger.getBoundingClientRect(),overlay=document.createElement('div');
