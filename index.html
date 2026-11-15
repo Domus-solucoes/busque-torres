@@ -2070,12 +2070,12 @@ registrarMetrica("visita_site",null,"index");
   }
 
   function renderToday(promos){
-    currentPromos=Array.isArray(promos)?promos.slice(0,4):[];
+    currentPromos=Array.isArray(promos)?promos.slice(0,document.body.classList.contains('bt-black-2026')?5:4):[];
       const todayCount=currentPromos.length;
       dot.hidden=todayCount===0;
       dot.textContent=todayCount?String(todayCount):'';
       dot.title=todayCount?`${todayCount} promoção(ões) ativa(s) hoje`:'';
-      nudge.textContent=todayCount?'🔥 Promoções de hoje':'🔥 Promoção do Dia';
+      nudge.textContent=document.body.classList.contains('bt-black-2026')?'🖤 BLACK FRIDAY':(todayCount?'🔥 Promoções de hoje':'🔥 Promoção do Dia');
     if(currentPromos.length){
       selfPromo.hidden=true;
       carousel.hidden=false;
@@ -2097,7 +2097,7 @@ registrarMetrica("visita_site",null,"index");
 
     // A vitrine de hoje nunca depende da disponibilidade de amanhã.
     // O CTA nasce visível; só é ocultado quando o backend confirma lotação (0 vagas).
-    if(availableTomorrow===0){
+    if(availableTomorrow===0&&!document.body.classList.contains('bt-black-2026')){
       cta.hidden=true;
       cta.disabled=true;
       return;
@@ -2105,7 +2105,7 @@ registrarMetrica("visita_site",null,"index");
 
     cta.hidden=false;
     cta.disabled=false;
-    cta.textContent='COLOCAR MINHA PROMOÇÃO';
+    cta.textContent=document.body.classList.contains('bt-black-2026')?'🖤 CADASTRAR MINHA BLACK FRIDAY':'COLOCAR MINHA PROMOÇÃO';
 
   }
 
