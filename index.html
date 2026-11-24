@@ -980,6 +980,27 @@
 @media(min-width:641px) and (max-height:760px){.hero-servicos-callout{top:36%;padding:12px 20px}.hero-servicos-callout strong{font-size:1.45rem}.hero-servicos-callout p{margin:5px 0 8px}.hero-servicos-callout a{padding:9px 20px}}
 @media(max-width:640px){.hero-servicos-callout{left:50%;transform:translateX(-50%);top:auto;bottom:48px;width:calc(100% - 28px);max-width:none;padding:13px 12px;border-radius:15px;background:linear-gradient(120deg,rgba(4,37,78,.96),rgba(13,81,126,.96));border:2px solid #ffcf48}.hero-servicos-callout strong{font-size:1.16rem}.hero-servicos-callout strong span{font-size:1.22em}.hero-servicos-callout p{font-size:.76rem;margin:6px 0 9px}.hero-servicos-callout a{padding:10px 16px;font-size:.85rem}}
 @media(prefers-reduced-motion:reduce){.hero-servicos-callout a{animation:none}}
+</style><style id="bt-natal-style">
+.hero-servicos-callout,#busqueServicosStrip{display:none!important}
+body.bt-natal .hero{height:350px!important;min-height:350px!important;padding:16px 0 45px!important;background:#081b33!important}
+body.bt-natal .hero-city-art,body.bt-natal .hero-city-shade,body.bt-natal .hero:before{display:none!important}
+body.bt-natal .home-nav{position:relative!important;top:auto!important;left:auto!important;transform:none!important;z-index:8!important}
+body.bt-natal .search-wrap{display:block!important}
+#bt-natal{position:absolute;inset:0;overflow:hidden;background:linear-gradient(145deg,#081b33,#24536c);pointer-events:none;color:white;text-align:center}
+#bt-natal .bt-brand{position:absolute;top:65px;left:0;right:0;font-size:26px;font-weight:950;letter-spacing:-.7px}
+#bt-natal .bt-greeting{position:absolute;top:103px;left:0;right:0;font:bold 34px Georgia,serif;color:#ffe4a0;animation:bt-reveal .8s 4.7s both}
+#bt-natal .bt-actor{position:absolute;bottom:37px;left:50%;width:155px;height:160px;transform:translateX(-50%);animation:bt-enter 2.7s ease-out both}
+#bt-natal .bt-wave{transform-box:fill-box;transform-origin:top center;animation:bt-wave .45s 2.7s 4 alternate}
+#bt-natal .bt-step{transform-box:fill-box;transform-origin:top;animation:bt-step .34s 8 alternate}
+#bt-natal .bt-step2{transform-box:fill-box;transform-origin:top;animation:bt-step .34s 8 alternate-reverse}
+#bt-natal .bt-gift{position:absolute;bottom:38px;width:22px;height:22px;animation:bt-drop 1.4s var(--delay) both}
+@keyframes bt-enter{from{left:-90px}to{left:50%}}
+@keyframes bt-wave{from{transform:rotate(0)}to{transform:rotate(-65deg)}}
+@keyframes bt-step{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}
+@keyframes bt-reveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bt-drop{0%{opacity:0;transform:translateY(-105px) rotate(-25deg)}15%{opacity:1}100%{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){body.bt-natal .hero{height:320px!important;min-height:320px!important}#bt-natal .bt-brand{top:58px;font-size:23px}#bt-natal .bt-greeting{top:89px;font-size:29px}#bt-natal .bt-actor{height:145px;width:145px;bottom:36px}}
+@media(prefers-reduced-motion:reduce){#bt-natal *,#bt-natal *:before{animation:none!important}}
 </style></head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
@@ -994,12 +1015,27 @@
       <button class="plans-btn" id="openPlans" type="button" aria-haspopup="dialog" aria-label="Abrir planos e valores">PLANOS</button>
     </div>
   </div>
-  <div class="hero-servicos-callout" aria-label="Divulgação do Busque Serviços">
-    <strong>PRECISA DE UM SERVIÇO? <span>ANUNCIE GRÁTIS!</span></strong>
-    <p>Conte o que você precisa e receba propostas de profissionais.</p>
-    <a href="busque-servicos.html">SOLICITAR UM SERVIÇO →</a>
-  </div>
-</header>
+  <div id="bt-natal" hidden role="img" aria-label="Busque Torres deseja Feliz Natal"></div>
+</header><script id="bt-natal-script">
+(function(){
+const now=new Date();if(now.getMonth()!==11&&!(now.getMonth()===10&&now.getDate()>=24))return;
+if(now.getMonth()===11&&now.getDate()>25)return;
+const stage=document.getElementById('bt-natal');if(!stage)return;
+document.body.classList.add('bt-natal');stage.hidden=false;
+const hat='<path d="M58 44Q55 8 91 6Q125 2 151 30L128 26L137 48Z" fill="#d74750" stroke="#96323d" stroke-width="2.5"/><circle cx="151" cy="30" r="10" fill="#fff4e6"/><rect x="53" y="37" width="88" height="15" rx="7" fill="#fff4e6"/>';
+const eyes='<g fill="#382a24"><ellipse cx="68" cy="76" rx="6" ry="8"/><ellipse cx="132" cy="76" rx="6" ry="8"/></g><g fill="white"><circle cx="70" cy="73" r="2"/><circle cx="134" cy="73" r="2"/></g><g fill="#e7a08b"><ellipse cx="58" cy="92" rx="9" ry="5"/><ellipse cx="142" cy="92" rx="9" ry="5"/></g>';
+const gift='<rect x="3" y="10" width="24" height="19" rx="3" fill="#d94b52"/><path d="M15 10V29M3 17H27" stroke="#ffdc8a" stroke-width="4"/><path d="M15 10Q0 -4 5 7Q9 12 15 10Q30 -4 25 7Q21 12 15 10" fill="#ffdc8a"/>';
+const cap='<g stroke="#754b30" stroke-width="2.5" stroke-linejoin="round"><path class="bt-step" d="M54 181Q45 210 70 208Q85 208 80 181Z" fill="#98643e"/><path class="bt-step2" d="M118 181Q110 210 138 208Q156 208 143 181Z" fill="#98643e"/><path d="M62 100Q32 114 29 153Q25 199 99 201Q172 202 172 158Q171 120 137 102Z" fill="#b98551"/><ellipse cx="101" cy="157" rx="52" ry="38" fill="#d7ab78" stroke="none"/><path d="M42 124Q24 131 23 155Q24 168 36 165Q48 163 52 144" fill="#b98551"/><path class="bt-wave" d="M156 123Q178 127 182 148Q186 163 174 167Q161 170 151 145" fill="#b98551"/><ellipse cx="59" cy="44" rx="12" ry="15" fill="#a37146"/><ellipse cx="140" cy="43" rx="12" ry="15" fill="#a37146"/><path d="M55 51Q73 37 100 38Q127 37 145 51Q157 63 157 88L154 112Q149 132 100 134Q51 132 46 112L43 88Q43 63 55 51Z" fill="#c99a68"/><path d="M74 81Q100 74 126 81L132 111Q130 124 100 125Q70 124 68 111Z" fill="#ac7950" stroke="none"/><path d="M80 89Q87 83 93 89M107 89Q113 83 120 89" stroke="#69452f" stroke-width="5" fill="none"/><path d="M87 110Q100 121 113 110" fill="none"/><path d="M55 128Q100 144 145 128L141 143Q100 157 59 142Z" fill="#bc3946"/><path d="M125 141L142 177L123 182L111 147" fill="#d74750"/></g>'+eyes+hat;
+const seal='<g stroke="#617c85" stroke-width="2.5"><ellipse cx="100" cy="150" rx="60" ry="55" fill="#9caeb3"/><ellipse cx="100" cy="158" rx="39" ry="40" fill="#dce4df" stroke="none"/><path class="bt-step" d="M70 183Q37 195 46 205Q65 215 91 195" fill="#9caeb3"/><path class="bt-step2" d="M120 183Q153 195 154 205Q135 215 109 195" fill="#9caeb3"/><path d="M47 125Q16 149 29 164Q42 174 59 143" fill="#9caeb3"/><path class="bt-wave" d="M153 125Q181 142 183 161Q168 174 145 143" fill="#9caeb3"/><ellipse cx="100" cy="86" rx="59" ry="51" fill="#b8c7c9"/><ellipse cx="100" cy="106" rx="33" ry="22" fill="#f3e9d8" stroke="none"/><path d="M91 96Q100 91 109 96L100 105Z" fill="#34464e"/><path d="M86 110Q100 124 114 110M74 104L48 98M74 110L47 115M126 104L152 98M126 110L153 115" fill="none" stroke-linecap="round"/></g>'+eyes+hat;
+const santa='<g stroke="#96323b" stroke-width="2.5"><path class="bt-step" d="M57 180H86V204H50Q43 196 57 180" fill="#26303b"/><path class="bt-step2" d="M115 180H143Q157 196 150 204H115Z" fill="#26303b"/><ellipse cx="100" cy="148" rx="55" ry="48" fill="#d74650"/><path d="M49 154H151V169H49Z" fill="#303039"/><rect x="89" y="152" width="22" height="19" rx="3" fill="#e6b84b"/><path d="M45 129L25 151" stroke="#d74650" stroke-width="20" stroke-linecap="round"/><path class="bt-wave" d="M150 125L178 147" stroke="#d74650" stroke-width="20" stroke-linecap="round"/><circle cx="100" cy="83" r="48" fill="#ffd0aa"/><path d="M55 87Q38 120 70 135Q100 153 130 135Q162 120 145 87Q100 112 55 87" fill="#fff6e7" stroke="#d9cdbb"/><path d="M87 110Q100 123 113 110" fill="#934644"/></g>'+eyes+'<circle cx="100" cy="93" r="8" fill="#e9a38a"/>'+hat;
+const balloon='<path d="M100 4C5 4 7 80 47 108L77 132H123L153 108C193 80 195 4 100 4Z" fill="#d74650" stroke="#96323b" stroke-width="3"/><path d="M100 4C36 4 39 80 65 108L83 132H117L135 108C161 80 164 4 100 4Z" fill="#f4d38a"/><path d="M100 4C62 4 65 80 86 132H114C135 80 138 4 100 4Z" fill="#d74650"/><path d="M76 132L65 184M124 132L135 184" stroke="#d8c099" stroke-width="3"/><g transform="translate(56 112) scale(.45)">'+santa+'</g><path d="M60 181H140L132 210H68Z" fill="#c4945e" stroke="#805a36" stroke-width="3"/><path d="M65 191H135M69 201H132M85 182V209M100 182V210M115 182V209" stroke="#9b6c40" stroke-width="2"/>';
+const scenes=[seal,cap,santa+'<g transform="translate(13 147) scale(1.35)">'+gift+'</g>',balloon];
+let last=-1;try{last=Number(localStorage.getItem('bt-natal-last')??-1)}catch(e){}
+const choices=scenes.map((_,i)=>i).filter(i=>i!==last);const pick=choices[Math.floor(Math.random()*choices.length)];try{localStorage.setItem('bt-natal-last',String(pick))}catch(e){}
+const bg='<svg viewBox="0 0 600 350" preserveAspectRatio="xMidYMid slice" style="position:absolute;width:100%;height:100%;inset:0"><path d="M0 0Q150 60 300 0Q450 60 600 0" stroke="#b69a58" stroke-width="2" fill="none"/>'+Array.from({length:12},(_,i)=>'<circle cx="'+(25+i*50)+'" cy="'+(8+25*Math.sin((i%6+.5)*Math.PI/6))+'" r="4" fill="#ffda87"/>').join('')+'<path d="M0 275Q150 245 300 275T600 265V350H0Z" fill="#12374b"/><path d="M0 310Q150 280 300 310T600 300V350H0Z" fill="#0a293e"/>'+ (pick===3?Array.from({length:10},(_,i)=>'<g transform="translate('+(i*62)+' '+(270-i%3*10)+')"><rect width="50" height="40" fill="#a8a49a"/><path d="M-3 0L25 -20L53 0" fill="#a64949"/><path d="M10 10h10v12H10zM30 10h10v12H30z" fill="#ffe2a0"/></g>').join(''):'<g transform="translate(55 190)"><path d="M37 0L8 49H20L-3 84H13L-13 118H85L59 84H75L52 49H65Z" fill="#286550"/><path d="M37 -13L41 -3L52 -2L44 5L46 16L37 10L27 16L30 5L22 -2L33 -3Z" fill="#ffdb88"/><circle cx="25" cy="55" r="5" fill="#ffdb88"/><circle cx="50" cy="83" r="5" fill="#d84b53"/></g>')+'</svg>';
+stage.innerHTML=bg+'<div class="bt-brand">BUSQUE <span style="color:#e6b84b">TORRES</span></div><div class="bt-greeting">Feliz Natal!</div><svg class="bt-actor" viewBox="0 0 200 220" aria-hidden="true">'+scenes[pick]+'</svg>'+(pick===3?[12,27,45,66,83].map((x,i)=>'<svg class="bt-gift" style="left:'+x+'%;--delay:'+(1+i*.65)+'s" viewBox="0 0 30 30">'+gift+'</svg>').join(''):'');
+})();
+</script>
 
 <div class="search-wrap">
   <div class="search">
@@ -1419,6 +1455,7 @@ async function btCachedRpc(cacheKey,ttlMs,rpcName,params={}){
 }
 
 async function loadHeroBanner(){
+  if(document.body.classList.contains("bt-natal"))return;
   const img=$("heroCityArt");
   document.body.classList.remove("hero-promo","hero-custom-banner");
   try{
