@@ -1151,7 +1151,7 @@
         <button class="jobs-close" id="closeJobs" type="button" aria-label="Fechar vagas">×</button>
       </div>
     </div>
-    <div class="jobs-list" id="jobsList"></div><div class="empty jobs-empty" id="jobsEmpty"><h3>Nenhuma vaga disponível no momento</h3><p>Novas oportunidades aparecerão aqui após a aprovação.</p></div>
+    <div class="job-mode" style="margin:12px 16px"><button type="button" id="jobsNormalTab" class="active">Vagas da cidade</button><button type="button" id="jobsSineTab">VAGAS SINE</button></div><div id="jobsSineContent" hidden style="padding:20px;white-space:pre-wrap;overflow-wrap:anywhere"></div><div class="jobs-list" id="jobsList"></div><div class="empty jobs-empty" id="jobsEmpty"><h3>Nenhuma vaga disponível no momento</h3><p>Novas oportunidades aparecerão aqui após a aprovação.</p></div>
   </div>
 </div>
 
@@ -1186,8 +1186,8 @@
     <form class="job-form" id="jobForm" novalidate>
       <div class="job-form-grid">
         <div class="job-mode" aria-label="Modo de publicação"><button id="jobModeManual" class="active" type="button">Preencher a vaga</button><button id="jobModeImage" type="button">Usar arte pronta</button></div>
-        <div class="image-mode-note" id="jobImageModeNote">Envie a arte pronta da vaga. Para publicar, serão obrigatórios somente empresa, WhatsApp, tempo do anúncio e a imagem. Você pode usar uma única arte com várias vagas.</div>
-        <div class="job-field"><label for="jobCompany">Empresa</label><input id="jobCompany" name="empresa" maxlength="90" required placeholder="Nome da empresa"></div>
+        <div class="image-mode-note" id="jobImageModeNote">Envie somente o banner da vaga. As informações e o contato devem estar na imagem.</div>
+        <div class="job-field job-manual-field"><label for="jobCompany">Empresa</label><input id="jobCompany" name="empresa" maxlength="90" required placeholder="Nome da empresa"></div>
         <div class="job-field job-manual-field"><label for="jobRole">Cargo</label><input id="jobRole" name="cargo" maxlength="90" required placeholder="Ex.: Vendedor(a)"></div>
         <div class="job-field job-manual-field"><label for="jobSalaryInput">Salário</label><input id="jobSalaryInput" name="salario" maxlength="60" placeholder="Ex.: R$ 2.000 ou A combinar"></div>
         <div class="job-field job-manual-field"><label for="jobLocationInput">Local da vaga</label><input id="jobLocationInput" name="local" maxlength="100" required placeholder="Cidade, localidade, bairro ou endereço"><small>Pode ser em uma cidade ou localidade próxima da região atendida.</small></div>
@@ -1195,7 +1195,7 @@
         <div class="job-field job-manual-field"><label for="jobContractInput">Tipo de contratação</label><select id="jobContractInput" name="contrato" required><option value="">Selecione</option><option>CLT</option><option>Temporário</option><option>Estágio</option><option>Jovem Aprendiz</option><option>Freelancer</option><option>Autônomo</option><option>Outro</option></select></div>
         <div class="job-field full job-manual-field"><label for="jobDescriptionInput">Descrição da vaga</label><textarea id="jobDescriptionInput" name="descricao" minlength="20" maxlength="900" required placeholder="Explique as principais atividades da função."></textarea></div>
         <div class="job-field full job-manual-field"><label for="jobRequirementsInput">Requisitos</label><textarea id="jobRequirementsInput" name="requisitos" maxlength="700" required placeholder="Informe um requisito por linha."></textarea></div>
-        <div class="job-field"><label for="jobWhatsappInput">WhatsApp para receber currículos</label><input id="jobWhatsappInput" name="whatsapp" type="tel" inputmode="numeric" maxlength="16" required placeholder="(51) 99999-9999"><small>Informe DDD e número.</small></div>
+        <div class="job-field job-manual-field"><label for="jobWhatsappInput">WhatsApp para receber currículos</label><input id="jobWhatsappInput" name="whatsapp" type="tel" inputmode="numeric" maxlength="16" required placeholder="(51) 99999-9999"><small>Informe DDD e número.</small></div>
         <div class="job-field job-manual-field"><label for="jobEmailInput">E-mail</label><input id="jobEmailInput" name="email" type="email" maxlength="120" placeholder="Opcional"></div>
         <div class="job-image-box"><label for="jobImageInput"><strong>Imagem da vaga</strong> <span style="color:#667085;font-weight:600">(opcional no formulário normal; obrigatória em “Usar arte pronta”)</span></label><input id="jobImageInput" type="file" accept="image/jpeg,image/png,image/webp"><small>JPG, PNG ou WebP. A imagem será otimizada antes do envio.</small><div class="job-image-preview" id="jobImagePreview"><img id="jobImagePreviewImg" alt="Pré-visualização da vaga"><div class="job-image-preview-actions"><button id="jobImageRemove" type="button">Remover imagem</button></div></div></div>
         <div class="job-duration">
@@ -1537,11 +1537,14 @@ function allCompanies(){return registeredCompanies}
 function profileUrl(company){return `empresa.html?id=${encodeURIComponent(company.id)}`}
 function abrirPerfil(company){window.location.href=profileUrl(company)}
 
-function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map((j,index)=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}" data-job-pos="${index+1}">${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span></button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
+function isBannerJob(j){return !!j.imagem&&j.cargo==="Vagas disponíveis"&&j.descricao==="Confira as oportunidades na imagem publicada."}
+function renderJobs(){const list=$("jobsList"),empty=$("jobsEmpty");$("jobsCount").textContent=String(JOBS.length);list.innerHTML=JOBS.map((j,index)=>`<button class="job-item" type="button" data-job-id="${escapeJob(j.id)}" data-job-pos="${index+1}">${isBannerJob(j)?`<img src="${escapeJob(j.imagem)}" alt="Banner de vaga" loading="lazy" style="width:100%;height:auto;max-height:none;object-fit:contain;grid-column:1/-1">`:`${j.imagem?`<div class="job-item-media"><img src="${j.imagem}" alt="Imagem da vaga ${escapeJob(j.cargo)}" loading="lazy"></div>`:""}<div class="job-item-content"><h3>${escapeJob(j.cargo)}</h3><p><strong>${escapeJob(j.empresa)}</strong><br>${escapeJob(j.local)} • ${escapeJob(j.salario)}</p></div><span class="job-item-tag">Ver vaga</span>`}</button>`).join("");empty.classList.toggle("show",JOBS.length===0)}
 function formatDateBR(date){return new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",timeZone:"UTC"}).format(date)}
 function renderRotationDates(){const box=$("rotationList");if(!box)return;const anchor=Date.UTC(2026,8,11),day=86400000,now=new Date(),today=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate());let index=Math.max(0,Math.floor((today-anchor)/(7*day)));let start=anchor+index*7*day;if(start+6*day<today)start+=7*day;box.innerHTML=Array.from({length:4},(_,i)=>{const s=new Date(start+i*7*day),e=new Date(start+(i*7+6)*day);return `<div class="rotation-item">${formatDateBR(s)} a ${formatDateBR(e)}<small>3 posições Destaque + 4 posições MASTER</small></div>`}).join("")}
 function openPlans(){renderRotationDates();$("plansOverlay").classList.add("open");document.body.classList.add("modal-open")}
 function closePlans(){$("plansOverlay").classList.remove("open");if(!$("jobsOverlay").classList.contains("open")&&!$("jobFormLayer").classList.contains("open")&&!$("jobDetailLayer").classList.contains("open"))document.body.classList.remove("modal-open")}
+async function showJobsSine(on){$("jobsNormalTab").classList.toggle("active",!on);$("jobsSineTab").classList.toggle("active",on);$("jobsList").style.display=on?"none":"";$("jobsEmpty").style.display=on?"none":"";$("jobsSineContent").hidden=!on;if(on){const box=$("jobsSineContent");box.textContent="Carregando...";try{const rows=await BusqueAPI.select("vagas_sine_torres","select=texto&id=eq.1");box.textContent=rows?.[0]?.texto||"Nenhuma lista do SINE publicada no momento."}catch(e){box.textContent="Não foi possível carregar as vagas do SINE."}}}
+$("jobsNormalTab").addEventListener("click",()=>showJobsSine(false));$("jobsSineTab").addEventListener("click",()=>showJobsSine(true));
 function openJobs(){$("jobsOverlay").classList.add("open");document.body.classList.add("modal-open");if(!jobsLoaded)loadJobs()}
 function closeJobs(){$("jobsOverlay").classList.remove("open");document.body.classList.remove("modal-open")}
 function descriptionBlocks(value){
@@ -1558,13 +1561,13 @@ function renderJobDescription(value){
   const box=$("jobDescription");
   box.replaceChildren(...descriptionBlocks(value).map(text=>{const paragraph=document.createElement("p");paragraph.textContent=text;return paragraph}));
 }
-function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;void BusqueAPI.rpc("registrar_acesso_vaga",{p_vaga_id:j.id}).catch(error=>console.warn("Contagem da vaga indisponível.",error?.message||error));$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;const iw=$("jobDetailImageWrap"),ii=$("jobDetailImage");if(j.imagem){ii.src=j.imagem;ii.alt=`Imagem da vaga ${j.cargo}`;iw.hidden=false}else{ii.removeAttribute("src");iw.hidden=true}renderJobDescription(j.descricao);$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");const apply=$("jobApply");apply.hidden=false;apply.style.display="";if(onlyDigits(j.whatsapp)){apply.href=whatsappUrl(j.whatsapp,`Olá, vim do ${SITE.name} e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);apply.textContent="Enviar currículo pelo WhatsApp"}else if(j.email){apply.href=`mailto:${j.email}?subject=${encodeURIComponent(`Currículo — ${j.cargo}`)}`;apply.textContent="Enviar currículo por e-mail"}else{apply.removeAttribute("href");apply.hidden=true;apply.style.display="none"}$("jobDetailLayer").classList.add("open")}
+function openJobDetail(id){const j=JOBS.find(x=>String(x.id)===String(id));if(!j)return;void BusqueAPI.rpc("registrar_acesso_vaga",{p_vaga_id:j.id}).catch(error=>console.warn("Contagem da vaga indisponível.",error?.message||error));$("jobDetailTitle").textContent=j.cargo;$("jobDetailCompany").textContent=j.empresa;$("jobSalary").textContent=j.salario;$("jobLocation").textContent=j.local;$("jobSchedule").textContent=j.horario;$("jobContract").textContent=j.contrato;const iw=$("jobDetailImageWrap"),ii=$("jobDetailImage");if(j.imagem){ii.src=j.imagem;ii.alt=`Imagem da vaga ${j.cargo}`;iw.hidden=false}else{ii.removeAttribute("src");iw.hidden=true}const bannerOnly=isBannerJob(j);document.querySelectorAll("#jobDetailLayer .job-detail-top,#jobDetailLayer .job-info-grid,#jobDetailLayer .job-section").forEach(el=>el.style.display=bannerOnly?"none":"");renderJobDescription(j.descricao);$("jobRequirements").innerHTML=j.requisitos.map(r=>`<li>${escapeJob(r)}</li>`).join("");const apply=$("jobApply");apply.hidden=false;apply.style.display="";if(bannerOnly){apply.removeAttribute("href");apply.hidden=true;apply.style.display="none"}else if(onlyDigits(j.whatsapp)){apply.href=whatsappUrl(j.whatsapp,`Olá, vim do ${SITE.name} e tenho interesse na vaga de ${j.cargo} anunciada pela ${j.empresa}.`);apply.textContent="Enviar currículo pelo WhatsApp"}else if(j.email){apply.href=`mailto:${j.email}?subject=${encodeURIComponent(`Currículo — ${j.cargo}`)}`;apply.textContent="Enviar currículo por e-mail"}else{apply.removeAttribute("href");apply.hidden=true;apply.style.display="none"}$("jobDetailLayer").classList.add("open")}
 function closeJobDetail(){$("jobDetailLayer").classList.remove("open")}
-function openJobForm(){$("jobFormLayer").classList.add("open");document.body.classList.add("modal-open");$("jobCompany").focus()}
+function openJobForm(){$("jobFormLayer").classList.add("open");document.body.classList.add("modal-open");$(jobPublishMode==="image"?"jobImageInput":"jobCompany").focus()}
 function closeJobForm(){$("jobFormLayer").classList.remove("open");$("jobFormMessage").className="job-form-message";$("jobFormMessage").textContent="";if(!$("jobsOverlay").classList.contains("open"))document.body.classList.remove("modal-open")}
 function showJobFormMessage(type,text){const el=$("jobFormMessage");el.className=`job-form-message show ${type}`;el.textContent=text;el.scrollIntoView({behavior:"smooth",block:"nearest"})}
 
-function setJobMode(mode){jobPublishMode=mode==="image"?"image":"manual";$("jobModeManual").classList.toggle("active",jobPublishMode==="manual");$("jobModeImage").classList.toggle("active",jobPublishMode==="image");$("jobImageModeNote").classList.toggle("show",jobPublishMode==="image");document.querySelectorAll(".job-manual-field").forEach(el=>el.classList.toggle("image-mode-hidden",jobPublishMode==="image"));const requiredIds=["jobRole","jobLocationInput","jobContractInput","jobDescriptionInput","jobRequirementsInput"];requiredIds.forEach(id=>{const el=$(id);if(el)el.required=jobPublishMode==="manual"});if(jobPublishMode==="image"){$("jobRole").value="Vagas disponíveis";$("jobLocationInput").value=SITE.cityUf;$("jobContractInput").value="Outro";$("jobDescriptionInput").value="Confira as oportunidades na imagem publicada.";$("jobRequirementsInput").value="Consulte a imagem da vaga."}else{if($("jobRole").value==="Vagas disponíveis")$("jobRole").value="";if($("jobLocationInput").value===SITE.cityUf)$("jobLocationInput").value="";if($("jobContractInput").value==="Outro")$("jobContractInput").value="";if($("jobDescriptionInput").value==="Confira as oportunidades na imagem publicada.")$("jobDescriptionInput").value="";if($("jobRequirementsInput").value==="Consulte a imagem da vaga.")$("jobRequirementsInput").value=""}}
+function setJobMode(mode){jobPublishMode=mode==="image"?"image":"manual";$("jobModeManual").classList.toggle("active",jobPublishMode==="manual");$("jobModeImage").classList.toggle("active",jobPublishMode==="image");$("jobImageModeNote").classList.toggle("show",jobPublishMode==="image");document.querySelectorAll(".job-manual-field").forEach(el=>el.classList.toggle("image-mode-hidden",jobPublishMode==="image"));$("jobWhatsappInput").setCustomValidity("");const requiredIds=["jobCompany","jobWhatsappInput","jobRole","jobLocationInput","jobContractInput","jobDescriptionInput","jobRequirementsInput"];requiredIds.forEach(id=>{const el=$(id);if(el)el.required=jobPublishMode==="manual"});if(jobPublishMode==="image"){$("jobCompany").value="Vaga com banner";$("jobWhatsappInput").value="";$("jobRole").value="Vagas disponíveis";$("jobLocationInput").value=SITE.cityUf;$("jobContractInput").value="Outro";$("jobDescriptionInput").value="Confira as oportunidades na imagem publicada.";$("jobRequirementsInput").value="Consulte a imagem da vaga."}else{if($("jobCompany").value==="Vaga com banner")$("jobCompany").value="";if($("jobRole").value==="Vagas disponíveis")$("jobRole").value="";if($("jobLocationInput").value===SITE.cityUf)$("jobLocationInput").value="";if($("jobContractInput").value==="Outro")$("jobContractInput").value="";if($("jobDescriptionInput").value==="Confira as oportunidades na imagem publicada.")$("jobDescriptionInput").value="";if($("jobRequirementsInput").value==="Consulte a imagem da vaga.")$("jobRequirementsInput").value=""}}
 function resetJobImage(){jobImageData="";$("jobImageInput").value="";$("jobImagePreviewImg").removeAttribute("src");$("jobImagePreview").classList.remove("show")}
 async function compressJobImage(file){if(!file||!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Use uma imagem JPG, PNG ou WebP.");if(file.size>8*1024*1024)throw new Error("A imagem deve ter no máximo 8 MB.");const src=await new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=()=>fail(new Error("Não foi possível ler a imagem."));r.readAsDataURL(file)});const img=await new Promise((ok,fail)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>fail(new Error("Não foi possível abrir a imagem."));i.src=src});const max=1000,scale=Math.min(1,max/img.width,max/img.height),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale));const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);let out=c.toDataURL("image/webp",.64);if(!out.startsWith("data:image/webp"))out=c.toDataURL("image/jpeg",.64);return out}
 $("jobModeManual").addEventListener("click",()=>setJobMode("manual"));
@@ -1584,7 +1587,7 @@ $("jobForm").addEventListener("submit",async e=>{
   const submit=$("jobSubmit");
 
   if(!form.checkValidity()){form.reportValidity();return}
-  const whatsappError=whatsappValidationMessage(form.whatsapp.value);
+  const whatsappError=jobPublishMode==="manual"?whatsappValidationMessage(form.whatsapp.value):"";
   if(whatsappError){
     $("jobWhatsappInput").setCustomValidity(whatsappError);
     showJobFormMessage("error",whatsappError);
@@ -1612,17 +1615,17 @@ $("jobForm").addEventListener("submit",async e=>{
   }
 
   const payload={
-    p_empresa_nome:form.empresa.value.trim(),
+    p_empresa_nome:jobPublishMode==="image"?"Vaga com banner":form.empresa.value.trim(),
     p_cargo:form.cargo.value.trim(),
     p_local:form.local.value.trim(),
     p_contrato:form.contrato.value,
     p_descricao:description,
     p_requisitos:form.requisitos.value.trim(),
-    p_whatsapp:phone,
+    p_whatsapp:jobPublishMode==="image"?"":phone,
     p_duracao_dias:Number(duration.value),
     p_salario:form.salario.value.trim()?formatSalary(form.salario.value):null,
     p_horario:form.horario.value.trim()||null,
-    p_email:form.email.value.trim()||null,
+    p_email:jobPublishMode==="image"?null:form.email.value.trim()||null,
     p_imagem_url:jobImageData||null
   };
 
