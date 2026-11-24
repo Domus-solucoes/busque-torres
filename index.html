@@ -1011,6 +1011,27 @@ body.bt-natal .search-wrap{display:block!important}
 #bt-natal.bt-play .bt-step2{animation:bt-step .34s 8 alternate-reverse!important}
 #bt-natal.bt-play .bt-gift{animation:bt-drop 1.4s var(--delay) both!important}
 
+
+#bt-natal .bt-actor{filter:drop-shadow(0 5px 3px rgba(0,0,0,.18))}
+#bt-natal.bt-play .bt-eat{animation:bt-eat .55s 2.7s 4 alternate both}
+#bt-natal.bt-play .bt-hug{animation:bt-hug .7s 2.7s 3 alternate both}
+#bt-natal.bt-play .bt-twinkle{animation:bt-twinkle .6s 2.7s 4 alternate both}
+#bt-natal.bt-play .bt-kiss{animation:bt-kiss 1.8s 2.8s both}
+#bt-natal.bt-play .bt-balance{animation:bt-balance .55s 2.7s 4 alternate both}
+#bt-natal.bt-play .bt-pop{animation:bt-pop 1s 2.7s both}
+#bt-natal.bt-play .bt-ring{animation:bt-ring .22s 2.7s 9 alternate both}
+#bt-natal.bt-play .bt-magic{animation:bt-magic 1.8s 2.7s both}
+#bt-natal.bt-play .bt-dance{animation:bt-dance .42s 2.7s 5 alternate both}
+#bt-natal .bt-ring,#bt-natal .bt-dance,#bt-natal .bt-hug{transform-box:fill-box;transform-origin:center}
+@keyframes bt-eat{from{transform:translateY(0)}to{transform:translateY(-30px)}}
+@keyframes bt-hug{from{transform:scale(.88)}to{transform:scale(1.05)}}
+@keyframes bt-twinkle{from{opacity:.15}to{opacity:1}}
+@keyframes bt-kiss{0%{opacity:0;transform:translate(0,0)}20%{opacity:1}100%{opacity:1;transform:translate(25px,-38px)}}
+@keyframes bt-balance{from{transform:translate(-10px,-5px)}to{transform:translate(10px,-24px)}}
+@keyframes bt-pop{from{transform:translateY(85px) scale(.75)}to{transform:translateY(0) scale(1)}}
+@keyframes bt-ring{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+@keyframes bt-magic{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(-35px)}}
+@keyframes bt-dance{from{transform:rotate(-9deg) translateY(0)}to{transform:rotate(9deg) translateY(-9px)}}
 </style></head>
 <body>
 <!-- BUSQUE TORRES: METRICA FOGUINHO EDGE+RPC FALLBACK -->
@@ -1039,11 +1060,26 @@ const cap='<g stroke="#754b30" stroke-width="2.5" stroke-linejoin="round"><path 
 const seal='<g stroke="#617c85" stroke-width="2.5"><ellipse cx="100" cy="150" rx="60" ry="55" fill="#9caeb3"/><ellipse cx="100" cy="158" rx="39" ry="40" fill="#dce4df" stroke="none"/><path class="bt-step" d="M70 183Q37 195 46 205Q65 215 91 195" fill="#9caeb3"/><path class="bt-step2" d="M120 183Q153 195 154 205Q135 215 109 195" fill="#9caeb3"/><path d="M47 125Q16 149 29 164Q42 174 59 143" fill="#9caeb3"/><path class="bt-wave" d="M153 125Q181 142 183 161Q168 174 145 143" fill="#9caeb3"/><ellipse cx="100" cy="86" rx="59" ry="51" fill="#b8c7c9"/><ellipse cx="100" cy="106" rx="33" ry="22" fill="#f3e9d8" stroke="none"/><path d="M91 96Q100 91 109 96L100 105Z" fill="#34464e"/><path d="M86 110Q100 124 114 110M74 104L48 98M74 110L47 115M126 104L152 98M126 110L153 115" fill="none" stroke-linecap="round"/></g>'+eyes+hat;
 const santa='<g stroke="#96323b" stroke-width="2.5"><path class="bt-step" d="M57 180H86V204H50Q43 196 57 180" fill="#26303b"/><path class="bt-step2" d="M115 180H143Q157 196 150 204H115Z" fill="#26303b"/><ellipse cx="100" cy="148" rx="55" ry="48" fill="#d74650"/><path d="M49 154H151V169H49Z" fill="#303039"/><rect x="89" y="152" width="22" height="19" rx="3" fill="#e6b84b"/><path d="M45 129L25 151" stroke="#d74650" stroke-width="20" stroke-linecap="round"/><path class="bt-wave" d="M150 125L178 147" stroke="#d74650" stroke-width="20" stroke-linecap="round"/><circle cx="100" cy="83" r="48" fill="#ffd0aa"/><path d="M55 87Q38 120 70 135Q100 153 130 135Q162 120 145 87Q100 112 55 87" fill="#fff6e7" stroke="#d9cdbb"/><path d="M87 110Q100 123 113 110" fill="#934644"/></g>'+eyes+'<circle cx="100" cy="93" r="8" fill="#e9a38a"/>'+hat;
 const balloon='<path d="M100 4C5 4 7 80 47 108L77 132H123L153 108C193 80 195 4 100 4Z" fill="#d74650" stroke="#96323b" stroke-width="3"/><path d="M100 4C36 4 39 80 65 108L83 132H117L135 108C161 80 164 4 100 4Z" fill="#f4d38a"/><path d="M100 4C62 4 65 80 86 132H114C135 80 138 4 100 4Z" fill="#d74650"/><path d="M76 132L65 184M124 132L135 184" stroke="#d8c099" stroke-width="3"/><g transform="translate(56 112) scale(.45)">'+santa+'</g><path d="M60 181H140L132 210H68Z" fill="#c4945e" stroke="#805a36" stroke-width="3"/><path d="M65 191H135M69 201H132M85 182V209M100 182V210M115 182V209" stroke="#9b6c40" stroke-width="2"/>';
-const scenes=[seal,cap,santa+'<g transform="translate(13 147) scale(1.35)">'+gift+'</g>',balloon];
+
+const prop=(cls,content)=>'<g class="'+cls+'">'+content+'</g>';
+const sparkle='<g fill="#ffe4a0"><path d="M25 65l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/><path d="M170 40l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><circle cx="180" cy="110" r="3"/></g>';
+const present='<g transform="translate(65 139) scale(2.3)">'+gift+'</g>';
+const panettone='<g transform="translate(72 130)"><path d="M0 20Q-8 -4 12 -12Q28 -24 44 -12Q64 -4 56 20Z" fill="#e4a35a" stroke="#8d542d" stroke-width="2"/><path d="M0 20H56L51 48H5Z" fill="#a94a35"/><path d="M12 23L15 45M28 23V45M44 23L41 45" stroke="#eac17c" stroke-width="3"/><g fill="#75402a"><circle cx="12" cy="7" r="3"/><circle cx="32" cy="-4" r="3"/><circle cx="45" cy="9" r="3"/></g></g>';
+const tree='<g transform="translate(145 103) scale(.7)"><rect x="24" y="100" width="13" height="22" fill="#97603b"/><path d="M30 0L0 45H12L-10 80H5L-20 112H80L55 80H70L48 45H60Z" fill="#286b50" stroke="#164b39" stroke-width="2"/><g fill="#ffd478"><circle cx="15" cy="45" r="5"/><circle cx="42" cy="68" r="5"/><circle cx="12" cy="96" r="5"/></g><g fill="#e65b60"><circle cx="35" cy="35" r="5"/><circle cx="20" cy="75" r="5"/><circle cx="52" cy="98" r="5"/></g><path d="M30 -12L34 -2L45 0L37 7L39 17L30 11L21 17L23 7L15 0L26 -2Z" fill="#ffdb88"/></g>';
+const heart='<path d="M0 9C-16 -8 -30 8 -19 22L0 40L19 22C30 8 16 -8 0 9Z" fill="#ef7180" stroke="#ffb5b5" stroke-width="2"/>';
+const ball='<g transform="translate(100 23)"><circle r="23" fill="#d74650" stroke="#f9d584" stroke-width="3"/><path d="M-21 -8Q0 8 21 -8M-21 8Q0 24 21 8" stroke="#f9d584" stroke-width="5" fill="none"/><rect x="-6" y="-28" width="12" height="6" rx="2" fill="#f9d584"/></g>';
+const box='<g><rect x="30" y="154" width="140" height="58" rx="5" fill="#bd3547" stroke="#f6cf7a" stroke-width="2"/><path d="M90 154H110V212H90Z" fill="#f6cf7a"/><rect x="23" y="145" width="154" height="16" rx="4" fill="#e45c60" stroke="#f6cf7a" stroke-width="2"/></g>';
+const bell='<g transform="translate(158 125)"><path d="M-18 28Q-9 19 -9 3Q-9 -12 4 -12Q17 -12 17 3Q17 19 26 28Z" fill="#efbc4f" stroke="#a97929" stroke-width="2"/><ellipse cx="4" cy="28" rx="22" ry="5" fill="#ffdf85"/><circle cx="4" cy="33" r="5" fill="#c98b2d"/></g>';
+const magic='<g transform="translate(100 135)">'+heart+'</g>';
+const scenes=[seal,cap,santa+'<g transform="translate(13 147) scale(1.35)">'+gift+'</g>',balloon,
+cap+prop('bt-eat',panettone),cap+prop('bt-hug',present),cap+tree+prop('bt-twinkle',sparkle),
+seal+prop('bt-kiss','<g transform="translate(145 82) scale(.65)">'+heart+'</g>'),seal+prop('bt-balance',ball),prop('bt-pop',seal)+box,
+santa+prop('bt-ring',bell),santa+present+prop('bt-magic',magic+sparkle),prop('bt-dance',santa)+prop('bt-twinkle',sparkle)];
+
 let last=-1;try{last=Number(localStorage.getItem('bt-natal-last')??-1)}catch(e){}
 const choices=scenes.map((_,i)=>i).filter(i=>i!==last);const pick=choices[Math.floor(Math.random()*choices.length)];try{localStorage.setItem('bt-natal-last',String(pick))}catch(e){}
 const bg='<svg viewBox="0 0 600 350" preserveAspectRatio="xMidYMid slice" style="position:absolute;width:100%;height:100%;inset:0"><path d="M0 0Q150 60 300 0Q450 60 600 0" stroke="#b69a58" stroke-width="2" fill="none"/>'+Array.from({length:12},(_,i)=>'<circle cx="'+(25+i*50)+'" cy="'+(8+25*Math.sin((i%6+.5)*Math.PI/6))+'" r="4" fill="#ffda87"/>').join('')+'<path d="M0 275Q150 245 300 275T600 265V350H0Z" fill="#12374b"/><path d="M0 310Q150 280 300 310T600 300V350H0Z" fill="#0a293e"/>'+ (pick===3?Array.from({length:10},(_,i)=>'<g transform="translate('+(i*62)+' '+(270-i%3*10)+')"><rect width="50" height="40" fill="#a8a49a"/><path d="M-3 0L25 -20L53 0" fill="#a64949"/><path d="M10 10h10v12H10zM30 10h10v12H30z" fill="#ffe2a0"/></g>').join(''):'<g transform="translate(55 190)"><path d="M37 0L8 49H20L-3 84H13L-13 118H85L59 84H75L52 49H65Z" fill="#286550"/><path d="M37 -13L41 -3L52 -2L44 5L46 16L37 10L27 16L30 5L22 -2L33 -3Z" fill="#ffdb88"/><circle cx="25" cy="55" r="5" fill="#ffdb88"/><circle cx="50" cy="83" r="5" fill="#d84b53"/></g>')+'</svg>';
-stage.innerHTML=bg+'<div class="bt-brand">BUSQUE <span style="color:#e6b84b">TORRES</span></div><div class="bt-greeting">Feliz Natal!</div><svg class="bt-actor" viewBox="0 0 200 220" aria-hidden="true">'+scenes[pick]+'</svg>'+(pick===3?[12,27,45,66,83].map((x,i)=>'<svg class="bt-gift" style="left:'+x+'%;--delay:'+(1+i*.65)+'s" viewBox="0 0 30 30">'+gift+'</svg>').join(''):'');
+stage.innerHTML=bg+'<svg viewBox="0 0 600 350" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%"><g fill="#ffe4a0" opacity=".7"><path d="M90 105l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM510 145l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><circle cx="145" cy="155" r="2"/><circle cx="455" cy="115" r="2"/><circle cx="380" cy="190" r="2"/></g><g transform="translate(480 270) scale(1.3)">'+gift+'</g><g transform="translate(445 285) scale(.9)">'+gift+'</g></svg>'+'<div class="bt-brand">BUSQUE <span style="color:#e6b84b">TORRES</span></div><div class="bt-greeting">Feliz Natal!</div><svg class="bt-actor" viewBox="0 0 200 220" aria-hidden="true">'+scenes[pick]+'</svg>'+(pick===3?[12,27,45,66,83].map((x,i)=>'<svg class="bt-gift" style="left:'+x+'%;--delay:'+(1+i*.65)+'s" viewBox="0 0 30 30">'+gift+'</svg>').join(''):'');
 const replay=document.createElement('button');replay.type='button';replay.className='bt-replay';replay.textContent='↻ Animar';replay.setAttribute('aria-label','Reproduzir animação de Natal');stage.appendChild(replay);stage.removeAttribute('role');stage.removeAttribute('aria-label');
 function play(){stage.classList.remove('bt-play');void stage.offsetWidth;stage.classList.add('bt-play');}
 replay.addEventListener('click',play);
