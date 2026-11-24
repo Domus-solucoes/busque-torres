@@ -1049,6 +1049,8 @@ body.bt-natal .search-wrap{display:block!important}
   <div id="bt-natal" hidden role="img" aria-label="Busque Torres deseja Feliz Natal"></div>
 </header><script id="bt-natal-script">
 (function(){
+// Suspensao temporaria para diagnostico de desempenho.
+return;
 const now=new Date();if(now.getMonth()!==11&&!(now.getMonth()===10&&now.getDate()>=24))return;
 if(now.getMonth()===11&&now.getDate()>25)return;
 const stage=document.getElementById('bt-natal');if(!stage)return;
