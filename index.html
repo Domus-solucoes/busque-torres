@@ -1047,7 +1047,7 @@ stage.innerHTML=bg+'<div class="bt-brand">BUSQUE <span style="color:#e6b84b">TOR
 const replay=document.createElement('button');replay.type='button';replay.className='bt-replay';replay.textContent='↻ Animar';replay.setAttribute('aria-label','Reproduzir animação de Natal');stage.appendChild(replay);stage.removeAttribute('role');stage.removeAttribute('aria-label');
 function play(){stage.classList.remove('bt-play');void stage.offsetWidth;stage.classList.add('bt-play');}
 replay.addEventListener('click',play);
-function autoPlay(){if(document.visibilityState==='hidden')return;document.removeEventListener('visibilitychange',autoPlay);if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(()=>requestAnimationFrame(play));}
+function autoPlay(){if(document.visibilityState==='hidden')return;document.removeEventListener('visibilitychange',autoPlay);requestAnimationFrame(()=>requestAnimationFrame(play));}
 if(document.readyState==='complete')autoPlay();else window.addEventListener('load',autoPlay,{once:true});
 document.addEventListener('visibilitychange',autoPlay);
 })();
