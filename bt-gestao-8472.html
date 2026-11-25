@@ -1276,7 +1276,7 @@ body{background:var(--bg);color:var(--text)}
   function mascotCampaignHtml(){
     const date=d=>{const p=String(d||"").split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:d};
     const campaigns=mascotCampaigns.map(x=>{
-      const isNatal=x.diretorio==="natal",hasPreview=isNatal||x.inicio>="2027-01-01",available=hasPreview;
+      const isNatal=x.diretorio==="natal",hasPreview=isNatal||x.diretorio==="reveillon"||x.inicio>="2027-01-01",available=hasPreview;
       const source=isNatal?"mascotes-preview.html":("mascotes-especiais.html?campanha="+encodeURIComponent(x.diretorio));
       const badge=x.ativa?"Cadastrada":"Desativada";
       return '<article class="bt-mascotes-date"><div><strong>'+safe(x.titulo)+'</strong><div class="bt-mascotes-sub">'+date(x.inicio)+' a '+date(x.fim)+' · '+safe(badge)+'</div><small>'+safe(x.mensagem||"")+'</small></div><button type="button" data-mascot-preview="'+safe(source)+'" '+(!available?'disabled title="Prévia ainda não produzida"':'')+'>'+(available?'▶ Ver animações':'Em produção')+'</button></article>';
