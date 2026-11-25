@@ -83,7 +83,7 @@ function render(campaign){
  const choice=PREVIEW?((campaign&&EVENTS[campaign])?{animal:PREVIEW.animal==="lobo"?"lobo":"capi",variant:Math.max(0,Math.min(3,Number(PREVIEW.variant)||0)),theme:0}:{animal:PREVIEW.animal==="lobo"?"lobo":"capi",id:Math.max(0,Math.min(449,Number(PREVIEW.id)||0)),variant:Math.max(0,Math.min(449,Number(PREVIEW.id)||0))%5,theme:Math.floor(Math.max(0,Math.min(449,Number(PREVIEW.id)||0))/5)}):choose(pool,"bt-mascotes-ciclo:"+TODAY+":"+(campaign||"normal"));
  let kind,caption,symbol;
  if(event){[caption,kind,symbol]=event}
- else {const month=Number(TODAY.slice(5,7));kind=SEASONS[month-1];caption=THEMES[choice.theme];symbol=ICONS[choice.theme]}
+ else {const month=PREVIEW?Math.max(1,Math.min(12,Number(PREVIEW.month)||1)):Number(TODAY.slice(5,7));kind=SEASONS[month-1];caption=THEMES[choice.theme];symbol=ICONS[choice.theme]}
  const art=mainSVG(kind,caption,choice.animal,choice.theme,null,symbol,choice.variant);
  stage.hidden=false;
  document.body.classList.add("bt-natal");
@@ -99,9 +99,9 @@ function render(campaign){
 async function findCampaign(){
  // Calendario em cache curto: a agenda pode ser alterada pelo administrador.
  let items=null;const key="bt-mascotes-campanhas-cache-v2";
- try{const c=JSON.parse(sessionStorage.getItem(key)||"null");if(c&&Date.now()-c.at<3600000)items=c.rows}catch{}
+ try{const c=JSON.parse(sessionStorage.getItem(key)||"null");if(c&&c.day===TODAY&&Date.now()-c.at<3600000)items=c.rows}catch{}
  if(!items&&typeof BusqueAPI!=="undefined"){
-   try{items=await Promise.race([BusqueAPI.select("mascotes_campanhas","select=inicio,fim,ativa,prioridade,diretorio&ativa=eq.true&inicio=lte."+TODAY+"&fim=gte."+TODAY),new Promise((_,reject)=>setTimeout(()=>reject(Error("calendar timeout")),1800))]);try{sessionStorage.setItem(key,JSON.stringify({at:Date.now(),rows:items}))}catch{}}catch{items=null}
+   try{items=await Promise.race([BusqueAPI.select("mascotes_campanhas","select=inicio,fim,ativa,prioridade,diretorio&ativa=eq.true&inicio=lte."+TODAY+"&fim=gte."+TODAY),new Promise((_,reject)=>setTimeout(()=>reject(Error("calendar timeout")),1800))]);try{sessionStorage.setItem(key,JSON.stringify({at:Date.now(),day:TODAY,rows:items}))}catch{}}catch{items=null}
  }
  if(Array.isArray(items)){
  const valid=items.filter(x=>x.ativa&&x.inicio<=TODAY&&x.fim>=TODAY&&EVENTS[x.diretorio]);valid.sort((a,b)=>Number(b.prioridade)-Number(a.prioridade));if(valid.length)return valid[0].diretorio;
