@@ -1,0 +1,58 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prévia · Mascotes Especiais 2027</title><style>
+*{box-sizing:border-box}body{margin:0;padding:12px;background:#f5f8fb;color:#1c3955;font:14px system-ui,Arial,sans-serif}main{max-width:940px;margin:auto}.bar{display:flex;flex-wrap:wrap;gap:9px;align-items:end;margin:10px 0}.bar label{font-size:12px;font-weight:bold;flex:1;min-width:190px;display:grid;gap:4px}.bar select,.bar button{border:1px solid #cdd9e6;background:white;color:#244767;border-radius:8px;padding:10px;font:inherit;cursor:pointer;min-height:42px}.bar button:hover{background:#e8f0f8}.stage{border-radius:12px;overflow:hidden;box-shadow:0 8px 24px #17375422;background:#d9e7ee}.stage svg{display:block;width:100%;height:auto;aspect-ratio:600/350}.hint{font-size:12px;line-height:1.5;color:#5e7184}.status{font-size:13px;font-weight:700;margin:10px 0}.small{display:inline-block;padding:4px 8px;border-radius:25px;background:#e9f0f8;color:#3e607d;font-size:12px}@media(max-width:500px){.bar button{flex:1}}</style></head><body><main>
+<span class="small">2027 · Especiais em SVG · Prévia técnica</span><div class="bar"><label>Campanha<select id="theme"></select></label><label>Personagem e ação<select id="variant"></select></label><button id="repeat" type="button">↻ Animar novamente</button></div><div class="stage" id="stage"></div><div class="status" id="status"></div><p class="hint">Cada campanha possui oito variações: quatro da capivara e quatro do lobo-marinho. As cenas abaixo são versões especiais de prévia, criadas em SVG vetorial com movimentos finitos. A programação pública de exibição ainda não foi alterada.</p>
+<script>
+const events=[
+["Dia de Navegantes","navegantes","2027-01-30","2027-02-02","Homenagem ao mar","#60b5dd","#166c94","⛵"],
+["Carnaval","carnaval","2027-02-03","2027-02-09","Viva o Carnaval!","#ffb962","#e26077","🎉"],
+["Dia da Mulher","mulher","2027-03-05","2027-03-08","Dia Internacional da Mulher","#eaa2cb","#8b5bb5","🌸"],
+["Páscoa","pascoa","2027-03-21","2027-03-28","Feliz Páscoa!","#d9aeec","#7f70c6","🥚"],
+["Povos Indígenas","povos-indigenas","2027-04-17","2027-04-19","Respeito aos povos originários","#b3d695","#4d8865","🍃"],
+["Balonismo de Torres","balonismo","2027-04-21","2027-04-25","Torres nas alturas!","#93cafa","#348dc5","🎈"],
+["Dia do Trabalhador","trabalhador","2027-05-01","2027-05-01","Feliz Dia do Trabalhador!","#a4c4ed","#4874a5","⭐"],
+["Dia das Mães","maes","2027-05-03","2027-05-09","Feliz Dia das Mães!","#f7b4c6","#d15c8e","♥"],
+["Aniversário de Torres","torres","2027-05-17","2027-05-21","Parabéns, Torres!","#97cde2","#317d9e","🎂"],
+["Dia do Meio Ambiente","meio-ambiente","2027-06-05","2027-06-05","Cuidar é preservar","#b0dba2","#538c5f","🌱"],
+["Dia dos Namorados","namorados","2027-06-06","2027-06-12","Feliz Dia dos Namorados!","#ffc1c8","#d45c78","♥"],
+["São João","sao-joao","2027-06-18","2027-06-24","Viva São João!","#ffca76","#c98043","🌽"],
+["Dia do Amigo","amigo","2027-07-20","2027-07-20","Feliz Dia do Amigo!","#a2d6e2","#4390a6","♥"],
+["Dia dos Pais","pais","2027-08-02","2027-08-08","Feliz Dia dos Pais!","#9cc9ee","#4f82bd","⭐"],
+["Folclore","folclore","2027-08-22","2027-08-22","Viva o folclore brasileiro!","#e6ca83","#a37b45","🎵"],
+["Independência","independencia","2027-09-07","2027-09-07","7 de Setembro","#a8dcaa","#4b916b","★"],
+["Semana Farroupilha","farroupilha","2027-09-13","2027-09-20","Viva a tradição gaúcha!","#d8b181","#9b683f","🧉"],
+["Primavera","primavera","2027-09-21","2027-09-23","Bem-vinda, primavera!","#c2e7a2","#7aaf62","🌼"],
+["Dia das Crianças","criancas","2027-10-05","2027-10-12","Feliz Dia das Crianças!","#a7d9ef","#e79e54","🪁"],
+["Halloween","halloween","2027-10-29","2027-10-31","Diversão de arrepiar!","#e8b38c","#9a68a2","🎃"],
+["Consciência Negra","consciencia-negra","2027-11-20","2027-11-20","Respeito, história e igualdade","#dfbc8e","#8e6847","✦"],
+["Black Friday","black-friday","2027-11-26","2027-11-26","Confira as novidades!","#a7c0d7","#465979","✦"],
+["Natal 2027","natal-2027","2027-12-01","2027-12-25","Feliz Natal!","#bbd1df","#d34e5e","🎁"],
+["Réveillon 2028","reveillon-2028","2027-12-26","2028-01-01","Feliz 2028!","#afd7e6","#7c83be","✦"]
+];
+const theme=document.querySelector("#theme"),variant=document.querySelector("#variant");
+events.forEach((e,i)=>theme.add(new Option(e[0]+" · "+e[2].slice(8)+"/"+e[2].slice(5,7)+" a "+e[3].slice(8)+"/"+e[3].slice(5,7),i)));
+for(let i=0;i<8;i++)variant.add(new Option((i<4?"Capivara":"Lobo-marinho")+" · "+["dança e comemora","apresenta surpresa","salta e acena","brinca com o cenário"][i%4],i));
+function esc(s){return String(s).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[ch]))}
+function generate(e,num){
+ const cap=num<4,step=num%4,bright=e[5],accent=e[6],symbol=e[7];
+ const motions=[
+ '<animateTransform attributeName="transform" type="rotate" values="-7;8;-8;7;0" keyTimes="0;.25;.5;.75;1" dur="2.9s" begin="2.05s" fill="freeze"/>',
+ '<animateTransform attributeName="transform" type="translate" values="0 20;0 0;0 -15;0 0;0 -5" dur="3.1s" begin="2s" fill="freeze"/>',
+ '<animateTransform attributeName="transform" type="translate" values="0 0;0 -24;0 0;0 -18;0 0" dur="2.8s" begin="2s" fill="freeze"/>',
+ '<animateTransform attributeName="transform" type="rotate" values="10;-10;12;-12;0" dur="3.1s" begin="2s" fill="freeze"/>'
+ ];
+ const sky='<defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="'+bright+'"/><stop offset="1" stop-color="#effaff"/></linearGradient></defs><rect width="600" height="350" fill="url(#sky)"/><circle cx="516" cy="73" r="36" fill="#fff3c3" opacity=".85"/><g fill="#fff" opacity=".85"><ellipse cx="130" cy="70" rx="70" ry="18"/><ellipse cx="400" cy="95" rx="54" ry="15"/></g><path d="M0 286Q150 257 300 286T600 278V350H0Z" fill="'+accent+'" opacity=".24"/><path d="M0 313Q150 288 300 313T600 306V350H0Z" fill="#487e70" opacity=".2"/><g fill="'+accent+'" opacity=".24"><circle cx="66" cy="240" r="7"/><circle cx="510" cy="240" r="8"/></g>';
+ const whisk=cap?'':'<g stroke="#6b7d85" stroke-width="2.3" stroke-linecap="round"><path d="M-28 21l-28 -6M-28 26l-29 8M28 21l28 -6M28 26l29 8"/></g>';
+ const head=cap?'<ellipse cx="-39" cy="-53" rx="13" ry="15" fill="#a37146"/><ellipse cx="39" cy="-53" rx="13" ry="15" fill="#a37146"/><ellipse cy="-20" rx="59" ry="50" fill="#d6a675" stroke="#754b30" stroke-width="2.5"/><ellipse cy="12" rx="34" ry="20" fill="#b9895c"/>':'<ellipse cy="-18" rx="57" ry="50" fill="#c4d3d5" stroke="#627c85" stroke-width="2.5"/><ellipse cy="11" rx="32" ry="21" fill="#f4e9dc"/><path d="M-8 8L0 15L8 8Z" fill="#445a61"/>';
+ const body=cap?'<ellipse cy="66" rx="58" ry="58" fill="#bd8959" stroke="#754b30" stroke-width="2.5"/><ellipse cy="80" rx="37" ry="36" fill="#e1b889"/><ellipse cx="-39" cy="114" rx="20" ry="10" fill="#98643e"/><ellipse cx="39" cy="114" rx="20" ry="10" fill="#98643e"/>':'<ellipse cy="66" rx="58" ry="59" fill="#91a8b1" stroke="#637e87" stroke-width="2.5"/><ellipse cy="75" rx="37" ry="41" fill="#e1e9e7"/><path d="M-33 112Q-64 133-78 121Q-88 111-56 104" fill="#91a8b1"/><path d="M33 112Q64 133 78 121Q88 111 56 104" fill="#91a8b1"/>';
+ const bodyColor=cap?'#bd8959':'#91a8b1';
+ const face='<g fill="#382e2d"><ellipse cx="-29" cy="-29" rx="7" ry="9"/><ellipse cx="29" cy="-29" rx="7" ry="9"/></g><g fill="#fff"><circle cx="-27" cy="-32" r="2.6"/><circle cx="31" cy="-32" r="2.6"/></g><g fill="#edaa9d"><ellipse cx="-41" cy="-11" rx="8" ry="4.5"/><ellipse cx="41" cy="-11" rx="8" ry="4.5"/></g><path d="M-12 18Q0 31 12 18" stroke="#694b44" stroke-width="2.8" fill="none" stroke-linecap="round"/>'+whisk+'<g fill="#382e2d" opacity="0"><ellipse cx="-29" cy="-29" rx="8" ry="1.5"/><ellipse cx="29" cy="-29" rx="8" ry="1.5"/><animate attributeName="opacity" values="0;0;1;0;0;1;0" keyTimes="0;.42;.46;.5;.8;.84;1" dur="5.5s" fill="freeze"/></g>';
+ const arms='<g transform="translate(-48 54)"><path d="M0 0Q-29 20-19 54Q-3 58 12 21" fill="'+bodyColor+'" stroke="#65706b" stroke-width="2"><animateTransform attributeName="transform" type="rotate" values="-12;16;-12;16;0" begin="2s" dur="2.8s" fill="freeze"/></path></g><g transform="translate(48 54)"><g><path d="M0 0Q32 13 19 52Q4 57-11 22" fill="'+bodyColor+'" stroke="#65706b" stroke-width="2"/><animateTransform attributeName="transform" type="rotate" values="0;-32;15;-26;0" begin="2.1s" dur="2.8s" fill="freeze"/></g></g>';
+ const icon='<g transform="translate(105 -45)"><circle r="33" fill="#fff" fill-opacity=".92" stroke="'+accent+'" stroke-width="2"/><text y="10" font-size="30" text-anchor="middle">'+esc(symbol)+'</text><animateTransform attributeName="transform" type="translate" additive="sum" values="0 0;0 -25;0 0;0 -15;0 0" begin="2s" dur="3.2s" fill="freeze"/></g>';
+ const bits=Array.from({length:9},(_,i)=>'<g transform="translate('+(i*64+25)+' '+(85+i%3*28)+')"><path d="M0 -6L2 -2L7 0L2 2L0 7L-2 2L-7 0L-2 -2Z" fill="'+(i%2?accent:'#fff3bb')+'"><animateTransform attributeName="transform" type="rotate" values="0;65;125;180" begin="'+(1.8+i*.11)+'s" dur="2.3s" fill="freeze"/></path><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.2;.7;1" begin="1.8s" dur="3s" fill="freeze"/></g>').join('');
+ const movement=(num%2?'<animateTransform attributeName="transform" type="translate" values="230 0;0 0;0 0" keyTimes="0;.38;1" dur="5.5s" fill="freeze"/>':'<animateTransform attributeName="transform" type="translate" values="-230 0;0 0;0 0" keyTimes="0;.38;1" dur="5.5s" fill="freeze"/>');
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" role="img" aria-label="'+esc(e[0]+' - '+(cap?'capivara':'lobo-marinho'))+'">'+sky+bits+'<text x="300" y="45" text-anchor="middle" fill="#183c59" font-size="23" font-weight="900" font-family="Arial,sans-serif">'+esc(e[4])+'</text><g transform="translate(280 198)"><g>'+movement+'<g>'+motions[step]+body+head+arms+face+icon+'</g></g></g><text x="300" y="335" text-anchor="middle" fill="#1f5671" font-size="12" font-weight="bold" font-family="Arial,sans-serif">BUSQUE TORRES</text></svg>';
+}
+function render(){const e=events[+theme.value||0],v=+variant.value||0;document.querySelector("#stage").innerHTML=generate(e,v);document.querySelector("#status").textContent=e[0]+" · "+(v<4?"Capivara":"Lobo-marinho")+" · Variação "+(v%4+1)+" de 4";}
+theme.onchange=()=>{variant.value="0";render()};variant.onchange=render;document.querySelector("#repeat").onclick=render;
+const par=new URLSearchParams(location.search),requested=events.findIndex(x=>x[1]===par.get("campanha"));theme.value=String(requested<0?0:requested);render();
+</script></main></body></html>
