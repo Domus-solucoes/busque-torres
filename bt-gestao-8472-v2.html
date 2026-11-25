@@ -794,6 +794,16 @@ body{background:var(--bg);color:var(--text)}
 .bt-v2-note{display:inline-flex;align-items:center;gap:8px;color:#536174;font-size:12px;margin:0 0 14px}.bt-v2-note a{color:#24517e;text-decoration:underline}
 @media(max-width:680px){#adminApp .workspace{padding:14px}#adminApp .record-top{padding:14px}#adminApp .cards{padding:10px;gap:14px}#adminApp .action{min-height:38px}#adminApp .page-intro h1{font-size:23px}}
 </style>
+<style id="bt-v2-responsive">
+#adminApp .record-title,#adminApp .hero-actions,#adminApp .section-head>*{min-width:0}
+#adminApp .record-title{overflow-wrap:anywhere}
+#adminApp .content-shell table{max-width:100%}
+#adminApp .content-shell :is(input,select,textarea){max-width:100%}
+@media(min-width:981px){#adminApp .workspace{padding:28px clamp(20px,3vw,48px)}#adminApp .sidebar-nav{overscroll-behavior:contain}}
+@media(max-width:980px){#adminApp .app-main{min-width:0}#adminApp .workspace{min-width:0}#adminApp .sidebar{max-width:88vw}#adminApp .topbar-inner{gap:8px}#adminApp .record-details{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){#adminApp .workspace{padding:12px 12px calc(90px + env(safe-area-inset-bottom))}#adminApp .hero-actions{flex-wrap:wrap;align-items:end}#adminApp .city-switch{min-width:0;flex:1 1 150px}#adminApp .record-top,#adminApp .section-head{flex-wrap:wrap}#adminApp .actions{gap:8px;padding:12px}#adminApp .action{min-height:44px;padding:10px 12px}#adminApp .record-details{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 12px 12px}#adminApp .detail{overflow-wrap:anywhere}#adminApp .content-shell{min-width:0}#adminApp input,#adminApp textarea,#adminApp select{font-size:16px}#adminApp .mobile-bottom-item{min-height:48px}#adminApp .admin-shortcuts-grid button{min-height:72px}#adminApp .bt-v2-note{flex-wrap:wrap}#sineEditorDialog{max-height:85dvh;overflow:auto}#sineEditorDialog button{min-height:44px}}
+@media(max-width:360px){#adminApp .record-details{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
   <section id="loginPage" class="login-page">
