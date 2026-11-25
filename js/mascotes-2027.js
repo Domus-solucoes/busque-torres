@@ -57,12 +57,21 @@ function localCalendar(date){
  const matching=a.filter(x=>date>=x[0]&&date<=x[1]);return matching.length?matching[matching.length-1][2]:null;
 }
 function choose(list,key){
- let queue=[];try{queue=JSON.parse(localStorage.getItem(key)||"[]")}catch{}
+ let queue=[],last=null;
+ try{
+   const saved=JSON.parse(localStorage.getItem(key)||"null");
+   if(Array.isArray(saved))queue=saved;
+   else if(saved){queue=saved.queue;last=saved.last}
+ }catch{}
  if(!Array.isArray(queue)||!queue.length||queue.some(x=>!Number.isInteger(x)||x<0||x>=list.length)){
  queue=Array.from({length:list.length},(_,i)=>i);
  for(let i=queue.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[queue[i],queue[j]]=[queue[j],queue[i]]}
+   if(queue.length>1&&queue[0]===last){
+     const next=1+Math.floor(Math.random()*(queue.length-1));
+     [queue[0],queue[next]]=[queue[next],queue[0]];
+   }
  }
- const pos=queue.shift();try{localStorage.setItem(key,JSON.stringify(queue))}catch{}
+ const pos=queue.shift();try{localStorage.setItem(key,JSON.stringify({queue,last:pos}))}catch{}
  return list[pos];
 }
 function normalSet(day){
@@ -94,7 +103,7 @@ function render(campaign){
  svg.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
  stage.querySelector(".bt-replay").addEventListener("click",()=>{try{svg.setCurrentTime(0);svg.unpauseAnimations()}catch{}});
  const reduce=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
- if(reduce){/* movimento nao infinito; permite reproduzir manualmente */}
+ if(reduce){svg.pauseAnimations();svg.setCurrentTime(5.8)}
 }
 async function findCampaign(){
  // Calendario em cache curto: a agenda pode ser alterada pelo administrador.
