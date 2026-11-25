@@ -3,7 +3,8 @@
    Nao carrega a biblioteca inteira; constroi apenas 1 SVG a cada acesso. */
 (()=>{"use strict";
 const TODAY=(()=>{const d=new Intl.DateTimeFormat("en-US",{timeZone:"America/Sao_Paulo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const part=k=>d.find(x=>x.type===k).value;return part("year")+"-"+part("month")+"-"+part("day")})();
-if(TODAY<"2026-12-26")return;
+let PREVIEW=window.BT_MASCOTES_PREVIEW||null;
+if(!PREVIEW&&TODAY<"2026-12-26")return;
 const stage=document.getElementById("bt-natal");if(!stage)return;
 const THEMES=["café","chimarrão","sorvete","melancia","bola","presente","livro","violão","flores","coração","estrela","guarda-chuva","pipa","balão","câmera","bicicleta","skate","prancha","coco","pizza","pipoca","chapéu","óculos","medalha","folha","concha","barco","tambor","lua","peixe","farol","castelo de areia","caiaque","pesca","mergulho","piquenique","borboletas","jardinagem","balonismo","corrida","patins","basquete","tênis","cinema","pintura","música","chocolate quente","tricô","fotografia","aventura","mar","pôr do sol","arco-íris","amigos","passeio","praça","sanfona","festa","cachoeira","livraria","conchas na praia","bodyboard","caranguejo","frisbee","girassóis","joaninhas","estrelas do céu","robô","carrinhos","origami","quebra-cabeça","futebol","boliche","musculação","peteca","maracas","flauta","chá","panquecas","cupcakes","patinete","jogo de tabuleiro","desenho","acampamento","dança","coração de flores","skate na praia","aventura na lagoa","artesanato","passeio ao farol"];
 const ICONS=["☕","🧉","🍦","🍉","⚽","🎁","📖","🎸","🌷","♥","★","☂","🪁","🎈","📷","🚲","🛹","🏄","🥥","🍕","🍿","👒","🕶","🏅","🍃","🐚","⛵","🥁","☾","🐟","⚓","🏖","🛶","🐟","🐬","🧺","🦋","🌱","🎈","🏃","⛸","🏀","🎾","🎬","🎨","♫","☕","🧶","📸","✦","🌊","☀","🌈","♥","🚶","🌳","♫","🎉","💧","📚","🐚","🏄","🦀","🥏","🌻","🐞","★","🤖","🚗","✧","🧩","⚽","🎳","🏋","🏸","♫","♫","🍵","🥞","🧁","🛴","🎲","✎","⛺","♫","♥","🛹","⛵","✂","⚓"];
@@ -36,12 +37,13 @@ function body(animal){
  return content+arm(-52,-1)+arm(52,1);
 }
 function mainSVG(kind,caption,animal,index,accent,symbol,variant,year){
- const v=variant%4,offset=v%2?250:-250,accentColor=accent||"#efb958";
+ const v=variant%5,offset=v%2?250:-250,accentColor=accent||"#efb958";
  const poses=[
  '0;0;-7;8;-4;0',
  '0;-10;7;-8;10;0',
  '0;7;-6;9;-8;0',
- '0;-14;11;-11;8;0'
+ '0;-14;11;-11;8;0',
+ '0;15;-13;17;-15;0'
  ];
  const energy='<g opacity=".85">'+Array.from({length:7},(_,i)=>'<circle cx="'+(65+i*74)+'" cy="'+(113+(i%3)*24)+'" r="'+(3+i%3)+'" fill="'+(i%2?"#fff0bb":"#ffe6f2")+'"><animate attributeName="opacity" values="0;1;0" begin="'+(2+i*.22)+'s" dur="1.4s" fill="freeze"/><animateTransform attributeName="transform" type="translate" values="0 22;0 -24;0 -50" begin="'+(2+i*.22)+'s" dur="2s" fill="freeze"/></circle>').join("")+'</g>';
  const label=caption.length>35?20:caption.length>25?24:29;
@@ -78,7 +80,7 @@ function normalSet(day){
 function render(campaign){
  const event=campaign&&EVENTS[campaign]||null;
  const pool=event?Array.from({length:8},(_,i)=>({animal:i<4?"capi":"lobo",variant:i%4,theme:i})):normalSet(TODAY);
- const choice=choose(pool,"bt-mascotes-ciclo:"+TODAY+":"+(campaign||"normal"));
+ const choice=PREVIEW?((campaign&&EVENTS[campaign])?{animal:PREVIEW.animal==="lobo"?"lobo":"capi",variant:Math.max(0,Math.min(3,Number(PREVIEW.variant)||0)),theme:0}:{animal:PREVIEW.animal==="lobo"?"lobo":"capi",id:Math.max(0,Math.min(449,Number(PREVIEW.id)||0)),variant:Math.max(0,Math.min(449,Number(PREVIEW.id)||0))%5,theme:Math.floor(Math.max(0,Math.min(449,Number(PREVIEW.id)||0))/5)}):choose(pool,"bt-mascotes-ciclo:"+TODAY+":"+(campaign||"normal"));
  let kind,caption,symbol;
  if(event){[caption,kind,symbol]=event}
  else {const month=Number(TODAY.slice(5,7));kind=SEASONS[month-1];caption=THEMES[choice.theme];symbol=ICONS[choice.theme]}
@@ -104,7 +106,8 @@ async function findCampaign(){
  if(Array.isArray(items)){
  const valid=items.filter(x=>x.ativa&&x.inicio<=TODAY&&x.fim>=TODAY&&EVENTS[x.diretorio]);valid.sort((a,b)=>Number(b.prioridade)-Number(a.prioridade));if(valid.length)return valid[0].diretorio;
  }
+ if(Array.isArray(items))return null;
  return localCalendar(TODAY);
 }
-if(TODAY>="2026-12-26")findCampaign().then(render).catch(()=>render(localCalendar(TODAY)));
+if(PREVIEW){window.BT_MASCOTES_RENDER=config=>{PREVIEW=config||{};render(PREVIEW.campaign||null)};render(PREVIEW.campaign||null)}else findCampaign().then(render).catch(()=>render(localCalendar(TODAY)));
 })();
