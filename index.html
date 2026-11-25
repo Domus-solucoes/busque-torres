@@ -1364,22 +1364,6 @@ body.bt-black-2026 .promo-day-self-title{color:#ffcf49}
  const panelTitle=document.querySelector('.promo-day-kicker');if(panelTitle)panelTitle.textContent='🖤 BLACK FRIDAY';
  const cta=document.getElementById('promoDayCta');
  // O checkout legado continua ativo: não anunciar gratuidade até integrar a regra no servidor.
- if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- try{const key='bt_black_intro_2026',last=Number(localStorage.getItem(key)||0),now=Date.now(),interval=30*60*1000;if(last&&Number.isFinite(last)&&now-last>=0&&now-last<interval)return}catch(e){return}
- setTimeout(()=>{
-  if(document.body.classList.contains('modal-open')||document.body.classList.contains('search-mode')||document.visibilityState==='hidden')return;
-  try{localStorage.setItem('bt_black_intro_2026',String(Date.now()))}catch(e){}
-  const rect=trigger.getBoundingClientRect(),overlay=document.createElement('div');
-  overlay.className='bt-black-spotlight';overlay.style.setProperty('--bx',(rect.left+rect.width/2)+'px');overlay.style.setProperty('--by',(rect.top+rect.height/2)+'px');
-  document.body.appendChild(overlay);
-  const tip=document.createElement('div');tip.className='bt-black-tip';tip.innerHTML='<button type="button" aria-label="Fechar apresentação">×</button>🖤 A Black Friday chegou! Veja as promoções.';
-  const dismiss=()=>{overlay.remove();tip.remove()};
-  tip.querySelector('button').addEventListener('click',dismiss);
-  trigger.addEventListener('click',dismiss,{once:true});
-  requestAnimationFrame(()=>overlay.classList.add('active'));
-  setTimeout(()=>{overlay.classList.add('focus');document.body.appendChild(tip)},650);
-  setTimeout(dismiss,4000);
- },950);
 })();
 </script>
 <footer class="site-footer"><div><b>Busque Torres</b><br>Tudo o que você procura em um só lugar.</div><div class="footer-instagram"><a class="instagram-link" href="https://www.instagram.com/busque_torres?stkn=MXQ0MTdkMGR6NmxnZw==" target="_blank" rel="noopener noreferrer" aria-label="Seguir o Busque Torres no Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg><span>@busque_torres</span></a></div><div class="access-counter"><button class="access-counter-btn" id="openAccessCounter" type="button">📊 Acessos do Busque Torres</button></div><nav aria-label="Links institucionais"><a href="contato.html">Contato</a><a href="privacidade.html">Política de Privacidade</a><a href="termos.html">Termos de Uso</a><a href="politica-comercial.html">Política Comercial</a><a href="politica-conteudo.html">Política de Conteúdo</a><a href="cadastro.html">Anuncie sua empresa</a><button type="button" id="footerOpenJobs">Anuncie sua vaga</button></nav><small>© 2026 Busque Torres · Desenvolvido por <b>DOMUS SISTEMAS</b></small></footer>
